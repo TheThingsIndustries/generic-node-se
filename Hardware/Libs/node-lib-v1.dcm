@@ -57,6 +57,12 @@ K LoRa, LoRaWAN, STM32
 F https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf
 $ENDCMP
 #
+$CMP TCXO-xxxMHz
+D 3.3V CMOS SMD Crystal Clock Oscillator, Abracon
+K 3.3V CMOS SMD Crystal Clock Oscillator
+F http://www.abracon.com/Oscillators/ASV.pdf
+$ENDCMP
+#
 $CMP TPS62840
 D 750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
 K step-down dc-dc buck regulator ultra-low operating quiescent
