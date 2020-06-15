@@ -1,4 +1,4 @@
-18807975171694232
+18809570724692701
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -82837,6 +82837,13 @@ Integrated Circuit
 0
 6
 6
+node-lib-v1
+WLCSP-20-P3_1.994x1.609mm_Layout5x4_P0.4mm
+WLCSP-20-P3, https://www.n-redc.co.jp/en/design-support/package/wlcsp-20-p3.html
+WLCSP-20-P3
+0
+20
+20
 node-lib-v1
 keystone-PN53
 AA battery holder clip SMD

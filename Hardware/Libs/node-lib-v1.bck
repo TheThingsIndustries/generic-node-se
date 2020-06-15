@@ -1,9 +1,9 @@
 EESchema-DOCLIB  Version 2.0
 #
-$CMP Battery_Cell
-D Single-cell battery
-K battery cell
-F ~
+$CMP ASE-xxxMHz
+D 3.3V CMOS SMD Crystal Clock Oscillator, Abracon
+K 3.3V CMOS SMD Crystal Clock Oscillator
+F http://www.abracon.com/Oscillators/ASV.pdf
 $ENDCMP
 #
 $CMP Battery_Cell+
@@ -61,6 +61,12 @@ $CMP STM32WLxx_QFN48
 D Ultra-low-power, Dual-Core Arm® Cortex®-M4 and M0+ @48 MHz with 256 Kbytes of Flash memory, 64 Kbytes of SRAM. LoRa®, (G)FSK, (G)MSK, BPSK modulations. AES 256-bit
 K LoRa, LoRaWAN, STM32
 F https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf
+$ENDCMP
+#
+$CMP TCXO-xxxMHz
+D 3.3V CMOS SMD Crystal Clock Oscillator, Abracon
+K 3.3V CMOS SMD Crystal Clock Oscillator
+F http://www.abracon.com/Oscillators/ASV.pdf
 $ENDCMP
 #
 $CMP TPS62840
