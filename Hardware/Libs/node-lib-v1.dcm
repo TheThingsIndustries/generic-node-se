@@ -1,5 +1,16 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP ANT_M620720
+D Antennas Ceramic Chip ANTENNA ISM Freq: 868 915MHz
+F http://www.mouser.com/datasheet/2/40/AVX-E_M620720-1480138.pdf
+$ENDCMP
+#
+$CMP ANT_METAL_1002427
+D 868, 915 MHz Antenna
+K Antenna
+F http://datasheets.avx.com/ethertronics/AVX-E_1002427.pdf
+$ENDCMP
+#
 $CMP Battery_Cell+
 D Single-cell battery
 K battery cell
