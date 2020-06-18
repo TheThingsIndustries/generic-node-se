@@ -1,3 +1,7 @@
+# KiCAD files
+*.sch-bak
+*.kicad_pcb-bak
+
 # Prerequisites
 *.d
 
