@@ -14,7 +14,7 @@
  */
 
 /**
- * @file node_bsp.h
+ * @file STNODE_bsp.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
