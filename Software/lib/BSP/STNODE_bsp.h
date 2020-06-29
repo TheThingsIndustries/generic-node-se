@@ -36,7 +36,7 @@ typedef enum
 {
   LED1 = 0,
   LED2 = 1,
-  /* Color led aliases */
+  /* Color LED aliases */
   LED_RED = LED1,
   LED_BLUE = LED2
 } Led_TypeDef;
@@ -52,12 +52,24 @@ typedef enum
   BUTTON_MODE_EXTI = 1
 } ButtonMode_TypeDef;
 
+typedef enum
+{
+  LOAD_SWITCH1 = 0,
+  LOAD_SWITCH2 = 1,
+  LOAD_SWITCH3 = 2,
+  /* Load Switch aliases */
+  LOAD_SWITCH_SENSORS = LOAD_SWITCH1,
+  LOAD_SWITCH_FLASH = LOAD_SWITCH2,
+  LOAD_SWITCH_SECURE_ELEMENT = LOAD_SWITCH3
+} Load_Switch_TypeDef;
+
 /**
  * HAL defines
  * Configure below for any pin change
  */
 
 #define LEDn 2
+
 #define LED1_PIN GPIO_PIN_15
 #define LED1_GPIO_PORT GPIOB
 #define LED1_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
@@ -72,6 +84,7 @@ typedef enum
 #define LEDx_GPIO_CLK_DISABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_ENABLE() /* All Led on same port */
 
 #define BUTTONn 1
+
 #define BUTTON_SW1_PIN GPIO_PIN_0
 #define BUTTON_SW1_GPIO_PORT GPIOA
 #define BUTTON_SW1_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
@@ -82,6 +95,26 @@ typedef enum
 #else
 #define BUTTON_SW1_EXTI_IRQn EXTI0_IRQn
 #endif
+
+#define LOAD_SWITCHn 3
+
+#define LOAD_SWITCHx_GPIO_CLK_ENABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_ENABLE()  /* All load switches on same port */
+#define LOAD_SWITCHx_GPIO_CLK_DISABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_ENABLE() /* All load switches on same port */
+
+#define LOAD_SWITCH1_PIN GPIO_PIN_15
+#define LOAD_SWITCH1_GPIO_PORT GPIOB
+#define LOAD_SWITCH1_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define LOAD_SWITCH1_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+
+#define LOAD_SWITCH2_PIN GPIO_PIN_9
+#define LOAD_SWITCH2_GPIO_PORT GPIOB
+#define LOAD_SWITCH2_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define LOAD_SWITCH2_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+
+#define LOAD_SWITCH3_PIN GPIO_PIN_9
+#define LOAD_SWITCH3_GPIO_PORT GPIOB
+#define LOAD_SWITCH3_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define LOAD_SWITCH3_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 
 // TODO: Add commuincation defines here like I2C and SPI and UART
 
@@ -101,6 +134,13 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button);
 int32_t BSP_PB_GetState(Button_TypeDef Button);
 void BSP_PB_Callback(Button_TypeDef Button);
 void BSP_PB_IRQHandler(Button_TypeDef Button);
+
+int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch );
+int32_t BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
+int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch);
+int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
+int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
+int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
 
 /* #ifdef __cplusplus
 }
