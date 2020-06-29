@@ -23,10 +23,11 @@
 
 static GPIO_TypeDef *LED_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT};
 static const uint16_t LED_PIN[LEDn] = {LED1_PIN, LED2_PIN};
-static GPIO_TypeDef *BUTTON_PORT[BUTTONn] = {button_sw1_gpio_port};
+static GPIO_TypeDef *BUTTON_PORT[BUTTONn] = {BUTTON_SW1_GPIO_PORT};
 static const uint16_t BUTTON_PIN[BUTTONn] = {BUTTON_SW1_PIN};
 static const IRQn_Type BUTTON_IRQn[BUTTONn] = {BUTTON_SW1_EXTI_IRQn};
-
+static GPIO_TypeDef *LOAD_SWITCH_PORT[LOAD_SWITCHn] = {LOAD_SWITCH1_GPIO_PORT, LOAD_SWITCH2_GPIO_PORT, LOAD_SWITCH3_GPIO_PORT};
+static const uint16_t LOAD_SWITCH_PIN[LOAD_SWITCHn] = {LOAD_SWITCH1_PIN, LOAD_SWITCH2_PIN, LOAD_SWITCH3_PIN};
 /**
  * LED APIs
  */
@@ -254,4 +255,119 @@ static void BUTTON_SW1_EXTI_Callback(void)
   BSP_PB_Callback(BUTTON_SW1);
 }
 
+/**
+ * Load Switches control APIs
+ */
+
+/**
+  * @brief  Configures load switch GPIO.
+  * @param  loadSwitch: Load Switch to be configured.
+  *         This parameter can be one of the following values:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @retval BSP status
+  */
+
+int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
+{
+  GPIO_InitTypeDef gpio_init_structure = {0};
+
+  /* Enable the GPIO_LOAD_SWITCH Clock */
+  LOAD_SWITCHx_GPIO_CLK_ENABLE(loadSwitch); //TODO fix this if the clock port is not the same for all the pins
+
+  /* Configure the GPIO_LOAD_SWITCH pin */
+  gpio_init_structure.Pin = LOAD_SWITCH_PIN[loadSwitch];
+  gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure.Pull = GPIO_NOPULL;
+  gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+
+  HAL_GPIO_Init(LOAD_SWITCH_PORT[loadSwitch], &gpio_init_structure);
+  HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
+
+  return BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  DeInit Load Switches.
+  * @param  loadSwitch: Load Switch to be de-init.
+  *         This parameter can be one of the following values:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @note Load Switch DeInit does not disable the GPIO clock nor disable the Mfx
+  * @retval BSP status
+  */
+int32_t BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
+{
+  /* Turn off Load Switch */
+  HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
+
+  /* DeInit the GPIO_LOAD_SWITCH pin */
+  HAL_GPIO_DeInit(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
+
+  return BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Turns selected Load Switch On.
+  * @param  loadSwitch: Specifies the Load Switch to be set on.
+  *         This parameter can be one of the following values:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @retval BSP status
+  */
+int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch)
+{
+  HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_SET);
+
+  return BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Turns selected Load Switch Off.
+  * @param  loadSwitch: Specifies the Load Switch to be set off.
+  *         This parameter can be one of the following values:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @retval BSP status
+  */
+int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
+{
+  HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
+
+  return BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Toggles the selected Load Switch.
+  * @param  loadSwitch: Specifies the Load Switch to be toggled.
+  *         This parameter can be one of the following values:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @retval BSP status
+  */
+int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
+{
+  HAL_GPIO_TogglePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
+
+  return BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Get the status of the selected Load Switch.
+  * @param  loadSwitch Specifies the Load Switch to get its state.
+  *         This parameter can be one of following parameters:
+  *            @arg LOAD_SWITCH1
+  *            @arg LOAD_SWITCH2
+  *            @arg LOAD_SWITCH3
+  * @retval Load Switch status
+  */
+int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
+{
+  return (int32_t)HAL_GPIO_ReadPin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
+}
 // TODO: Add communication init like UART and SPI and I2C if needed.
