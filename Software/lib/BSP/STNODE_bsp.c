@@ -19,7 +19,17 @@
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
-#include "node_bsp.h"
+#include "STNODE_bsp.h"
+
+static GPIO_TypeDef *LED_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT};
+static const uint16_t LED_PIN[LEDn] = {LED1_PIN, LED2_PIN};
+static GPIO_TypeDef *BUTTON_PORT[BUTTONn] = {button_sw1_gpio_port};
+static const uint16_t BUTTON_PIN[BUTTONn] = {BUTTON_SW1_PIN};
+static const IRQn_Type BUTTON_IRQn[BUTTONn] = {BUTTON_SW1_EXTI_IRQn};
+
+/**
+ * LED APIs
+ */
 
 /**
   * @brief  Configures LED GPIO.
@@ -27,7 +37,6 @@
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
-  *            @arg LED3
   * @retval BSP status
   */
 int32_t BSP_LED_Init(Led_TypeDef Led)
@@ -120,7 +129,6 @@ int32_t BSP_LED_Toggle(Led_TypeDef Led)
   *         This parameter can be one of following parameters:
   *            @arg LED1
   *            @arg LED2
-  *            @arg LED3
   * @retval LED status
   */
 int32_t BSP_LED_GetState(Led_TypeDef Led)
@@ -129,12 +137,14 @@ int32_t BSP_LED_GetState(Led_TypeDef Led)
 }
 
 /**
+ * Push button APIs
+ */
+
+/**
   * @brief  Configures Button GPIO and EXTI Line.
   * @param  Button: Specifies the Button to be configured.
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  *           @arg BUTTON_SW2
-  *           @arg BUTTON_SW3
   * @param  ButtonMode: Specifies Button mode.
   *   This parameter can be one of following parameters:
   *     @arg BUTTON_MODE_GPIO: Button will be used as simple IO
@@ -185,8 +195,6 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
   * @param  Button: Button to be configured
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  *           @arg BUTTON_SW2
-  *           @arg BUTTON_SW3
   * @note PB DeInit does not disable the GPIO clock
   * @retval BSP status
   */
@@ -203,8 +211,6 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
   * @param  Button: Specifies the Button to be checked.
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  *           @arg BUTTON_SW2
-  *           @arg BUTTON_SW3
   * @retval The Button GPIO pin value.
   */
 int32_t BSP_PB_GetState(Button_TypeDef Button)
@@ -227,8 +233,6 @@ void BSP_PB_IRQHandler(Button_TypeDef Button)
   * @param  Button: Specifies the Button to be checked.
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  *           @arg BUTTON_SW2
-  *           @arg BUTTON_SW3
   * @retval None.
   */
 __weak void BSP_PB_Callback(Button_TypeDef Button)
