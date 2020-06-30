@@ -116,6 +116,11 @@ typedef enum
 #define LOAD_SWITCH3_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 #define LOAD_SWITCH3_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 
+#define VBAT_PIN GPIO_PIN_15
+#define VBAT_PORT GPIOB
+#define VBAT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define VBAT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+
 // TODO: Add commuincation defines here like I2C and SPI and UART
 
 /**
@@ -135,12 +140,18 @@ int32_t BSP_PB_GetState(Button_TypeDef Button);
 void BSP_PB_Callback(Button_TypeDef Button);
 void BSP_PB_IRQHandler(Button_TypeDef Button);
 
-int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch );
+int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
 int32_t BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
 int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch);
 int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
 int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
 int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
+
+int32_t BSP_BM_Init();
+int32_t BSP_BM_DeInit();
+int32_t BSP_BM_Enable();
+int32_t BSP_BM_Disable();
+int32_t BSP_BM_GetState();
 
 /* #ifdef __cplusplus
 }
