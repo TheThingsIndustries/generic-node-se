@@ -138,7 +138,7 @@ int32_t BSP_LED_GetState(Led_TypeDef Led)
 }
 
 /**
- * Push button APIs
+ * Push button (PB) APIs
  */
 
 /**
@@ -249,14 +249,13 @@ __weak void BSP_PB_Callback(Button_TypeDef Button)
   * @brief  Button SW1 EXTI line detection callback.
   * @retval None
   */
-
 static void BUTTON_SW1_EXTI_Callback(void)
 {
   BSP_PB_Callback(BUTTON_SW1);
 }
 
 /**
- * Load Switches control APIs
+ * Load Switches (LS) control APIs
  */
 
 /**
@@ -268,7 +267,6 @@ static void BUTTON_SW1_EXTI_Callback(void)
   *            @arg LOAD_SWITCH3
   * @retval BSP status
   */
-
 int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
@@ -370,4 +368,62 @@ int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
 {
   return (int32_t)HAL_GPIO_ReadPin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
 }
+
+/**
+ * Battery Monitoring (BM) APIs
+ */
+
+int32_t BSP_BM_Init() //TODO: Add ADC read APIs
+{
+  GPIO_InitTypeDef gpio_init_structure = {0};
+
+  /* Enable the VBAT PORT Clock */
+  VBAT_GPIO_CLK_ENABLE();
+
+  /* Configure the VBAT pin */
+  gpio_init_structure.Pin = VBAT_PIN;
+  gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure.Pull = GPIO_NOPULL;
+  gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+
+  HAL_GPIO_Init(VBAT_PORT, &gpio_init_structure);
+  HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
+
+  //TODO: Add ADC init here
+
+  return BSP_ERROR_NONE;
+}
+
+int32_t BSP_BM_DeInit()
+{
+  /* Turn off VBAT pin */
+  HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
+
+  /* DeInit the VBAT pin */
+  HAL_GPIO_DeInit(VBAT_PORT, VBAT_PIN);
+
+  //TODO: Add ADC Deinit here
+
+  return BSP_ERROR_NONE;
+}
+
+int32_t BSP_BM_Enable()
+{
+  HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_SET);
+
+  return BSP_ERROR_NONE;
+}
+
+int32_t BSP_BM_Disable()
+{
+  HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
+
+  return BSP_ERROR_NONE;
+}
+
+int32_t BSP_BM_GetState()
+{
+  return (int32_t)HAL_GPIO_ReadPin(VBAT_PORT, VBAT_PIN);
+}
+
 // TODO: Add communication init like UART and SPI and I2C if needed.
