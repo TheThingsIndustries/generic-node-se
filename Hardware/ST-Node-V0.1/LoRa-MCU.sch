@@ -19,7 +19,7 @@ U 1 1 5EA76256
 P 2650 5950
 F 0 "U9" H 3450 6167 60  0000 C CNB
 F 1 "STM32WLxx_QFN48" H 3450 6047 79  0000 C CNB
-F 2 "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.45x5.45mm_ThermalVias" H 3450 3550 60  0001 C CNN
+F 2 "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.45x5.45mm" H 3450 3550 60  0001 C CNN
 F 3 "https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf" H 2350 5250 60  0001 C CNN
 F 4 "STM32WLxx_QFN48" H 2650 5950 50  0001 C CNN "MPN"
 	1    2650 5950
@@ -935,25 +935,25 @@ Wire Wire Line
 $Comp
 L Device:C C25
 U 1 1 5ED1DE4C
-P 1750 1275
-F 0 "C25" H 1865 1321 50  0000 L CNN
-F 1 "100nF" H 1825 1200 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 1788 1125 50  0001 C CNN
-F 3 "~" H 1750 1275 50  0001 C CNN
-F 4 "CC0402KRX7R7BB104" H 1750 1275 50  0001 C CNN "MPN"
-	1    1750 1275
+P 2150 1275
+F 0 "C25" H 2265 1321 50  0000 L CNN
+F 1 "100nF" H 2225 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2188 1125 50  0001 C CNN
+F 3 "~" H 2150 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 2150 1275 50  0001 C CNN "MPN"
+	1    2150 1275
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:C C27
 U 1 1 5ED1E17D
-P 2125 1275
-F 0 "C27" H 2240 1321 50  0000 L CNN
-F 1 "100nF" H 2200 1200 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 2163 1125 50  0001 C CNN
-F 3 "~" H 2125 1275 50  0001 C CNN
-F 4 "CC0402KRX7R7BB104" H 2125 1275 50  0001 C CNN "MPN"
-	1    2125 1275
+P 1725 1275
+F 0 "C27" H 1825 1275 50  0000 L CNN
+F 1 "100nF" H 1800 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1763 1125 50  0001 C CNN
+F 3 "~" H 1725 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 1725 1275 50  0001 C CNN "MPN"
+	1    1725 1275
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -964,32 +964,16 @@ Connection ~ 975  1075
 Wire Wire Line
 	975  1075 975  1125
 Wire Wire Line
-	1750 1125 1750 1075
+	1725 1125 1725 1075
 Wire Wire Line
-	1750 1075 1350 1075
-Connection ~ 1350 1075
-Wire Wire Line
-	2125 1125 2125 1075
-Wire Wire Line
-	2125 1075 1750 1075
-Connection ~ 1750 1075
-Wire Wire Line
-	2125 1425 2125 1500
-Wire Wire Line
-	2125 1500 1750 1500
+	1725 1425 1725 1500
 Connection ~ 975  1500
 Wire Wire Line
 	975  1500 975  1525
 Wire Wire Line
 	1350 1425 1350 1500
-Connection ~ 1350 1500
 Wire Wire Line
 	1350 1500 975  1500
-Wire Wire Line
-	1750 1425 1750 1500
-Connection ~ 1750 1500
-Wire Wire Line
-	1750 1500 1350 1500
 $Comp
 L Device:C C23
 U 1 1 5ED3A35C
@@ -1028,7 +1012,7 @@ Wire Wire Line
 	1425 6625 1425 6600
 Text Notes 1150 1050 0    50   ~ 0
 44
-Text Notes 1875 1050 0    50   ~ 0
+Text Notes 1700 1050 0    50   ~ 0
 11
 Wire Wire Line
 	11175 6125 11175 6550
@@ -1645,7 +1629,7 @@ Text GLabel 4750 6450 2    49   Output ~ 10
 VDDSMPS
 Wire Wire Line
 	4750 6450 4550 6450
-Text GLabel 9550 2075 2    59   Output ~ 12
+Text GLabel 11025 1700 0    59   Input ~ 12
 VDDSMPS
 $Comp
 L Device:C C41
@@ -1741,8 +1725,6 @@ Wire Wire Line
 	4550 6250 4750 6250
 Text GLabel 15275 1725 1    59   Output ~ 12
 VDDPA
-Text GLabel 8325 2125 0    59   Input ~ 12
-VDDRF
 Connection ~ 9275 2075
 $Comp
 L Device:C C65
@@ -2361,7 +2343,7 @@ Wire Wire Line
 Wire Wire Line
 	12450 1850 12350 1850
 Wire Wire Line
-	11025 1850 11150 1850
+	11125 1850 11150 1850
 Wire Wire Line
 	11025 1700 11150 1700
 Text GLabel 12450 1850 2    59   Input ~ 12
@@ -2396,10 +2378,8 @@ Wire Wire Line
 	12475 1700 12350 1700
 Text GLabel 12475 1700 2    59   Output ~ 12
 VDDPA
-Text GLabel 11025 1850 0    59   Input ~ 12
+Text GLabel 11125 1850 0    59   Input ~ 12
 VDDRF1V55
-Text GLabel 11025 1700 0    59   Input ~ 12
-VDDRF
 $Comp
 L node-lib-v1:NX3L1T3157GM U12
 U 1 1 5EA96694
@@ -2703,4 +2683,49 @@ Text Notes 14475 6325 0    59   ~ 0
 P1
 Text Notes 15100 6325 0    59   ~ 0
 P2
+Text Notes 8425 2050 0    59   ~ 0
+Close to 46 (VDDSMPS)
+Text GLabel 2150 950  1    59   Output ~ 12
+VDDRF
+Text Notes 2175 1075 0    50   ~ 0
+28
+Wire Wire Line
+	1725 1075 1350 1075
+Connection ~ 1350 1075
+Wire Wire Line
+	1725 1500 1350 1500
+Connection ~ 1350 1500
+$Comp
+L Device:R_Small R27
+U 1 1 5EF97B02
+P 1950 1075
+F 0 "R27" V 2025 1075 50  0000 C CNN
+F 1 "0R" V 1950 1075 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 1950 1075 50  0001 C CNN
+F 3 "~" H 1950 1075 50  0001 C CNN
+F 4 "RC0402FR-070RL" V 1950 1075 50  0001 C CNN "MPN"
+	1    1950 1075
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1850 1075 1725 1075
+Connection ~ 1725 1075
+Wire Wire Line
+	2150 950  2150 1075
+Wire Wire Line
+	2150 1425 2150 1500
+Wire Wire Line
+	2150 1500 1725 1500
+Connection ~ 1725 1500
+Wire Wire Line
+	2050 1075 2150 1075
+Connection ~ 2150 1075
+Wire Wire Line
+	2150 1075 2150 1125
+Text GLabel 9550 2075 2    59   Output ~ 12
+VDDSMPS
+Text Label 4850 8050 0    59   ~ 0
+RFI_P
+Text GLabel 8225 2075 0    59   Input ~ 12
+VDDRF
 $EndSCHEMATC
