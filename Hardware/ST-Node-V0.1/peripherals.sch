@@ -979,4 +979,40 @@ Wire Wire Line
 	5300 5750 5175 5750
 Wire Wire Line
 	4600 5750 4675 5750
+$Comp
+L Connector_Generic:Conn_01x04 J3
+U 1 1 5EF3C2B8
+P 4925 7175
+F 0 "J3" H 5005 7167 50  0000 L CNN
+F 1 "Grove_I2C" H 5005 7076 50  0000 L CNN
+F 2 "Connector:NS-Tech_Grove_1x04_P2mm_Vertical" H 4925 7175 50  0001 C CNN
+F 3 "~" H 4925 7175 50  0001 C CNN
+	1    4925 7175
+	1    0    0    -1  
+$EndComp
+Text HLabel 4650 7175 0    50   BiDi ~ 10
+SDA
+Text HLabel 4650 7075 0    50   Input ~ 10
+SCL
+Text HLabel 4650 7275 0    50   Input ~ 10
+VCC_SENSORS
+$Comp
+L power:GND #PWR091
+U 1 1 5EF3D9FD
+P 4650 7375
+F 0 "#PWR091" H 4650 7125 50  0001 C CNN
+F 1 "GND" V 4650 7175 50  0000 C CNN
+F 2 "" H 4650 7375 50  0001 C CNN
+F 3 "" H 4650 7375 50  0001 C CNN
+	1    4650 7375
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4725 7375 4650 7375
+Wire Wire Line
+	4650 7275 4725 7275
+Wire Wire Line
+	4650 7175 4725 7175
+Wire Wire Line
+	4650 7075 4725 7075
 $EndSCHEMATC
