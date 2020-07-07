@@ -53,12 +53,12 @@ set(MCU_SPEC  cortex-m4)
 # Below commands are for fetching the path to the system and startup files
 # If execute_process is not able to locate the files properly
 # then directly set the STARTUP_FILE and SYSTEM_FILE to the required files
-execute_process(COMMAND
-    bash "-c" "echo -n startup_${MCU}.s | awk '{print tolower($0)}'"
-    OUTPUT_VARIABLE STARTUP_FILE_NAME
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-set(STARTUP_FILE ${MCU_DIR}/Source/Templates/gcc/${STARTUP_FILE_NAME})
+# execute_process(COMMAND
+#     bash "-c" "echo -n startup_${MCU}.s | awk '{print tolower($0)}'"
+#     OUTPUT_VARIABLE STARTUP_FILE_NAME
+#     OUTPUT_STRIP_TRAILING_WHITESPACE
+#     )
+set(STARTUP_FILE ${MCU_DIR}/Source/Templates/gcc/startup_stm32wle5xx.s)
 set(SYSTEM_FILE  ${MCU_DIR}/Source/Templates/system_stm32wlxx.c)
 
 # Set the Highspeed external clock value (HSE) in MHz
