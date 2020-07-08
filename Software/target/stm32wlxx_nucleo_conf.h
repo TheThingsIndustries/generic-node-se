@@ -22,7 +22,7 @@
 #define STM32WLXX_NUCLEO_CONF_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -51,15 +51,15 @@ extern "C" {
 
 /* IRQ priorities */
 #define BSP_BUTTON_SWx_IT_PRIORITY         15U
-
+   
 /* Radio maximum wakeup time (in ms) */
-#define RF_WAKEUP_TIME                     10U
+#define RF_WAKEUP_TIME                     100U
 
 /* Indicates whether or not TCXO is supported by the board
  * 0: TCXO not supported
  * 1: TCXO supported
  */
-#define IS_TCXO_SUPPORTED                   1U
+#define IS_TCXO_SUPPORTED                   0U
 
 /* Indicates whether or not DCDC is supported by the board
  * 0: DCDC not supported
