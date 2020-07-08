@@ -6,11 +6,11 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
+  * the "License"; You may not use this file except in compliance with the 
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
@@ -33,30 +33,30 @@
   * @brief This is the list of modules to be used in the HAL driver
   */
 #define HAL_MODULE_ENABLED
-#define HAL_ADC_MODULE_ENABLED
-//#define HAL_COMP_MODULE_ENABLED
-//#define HAL_CRC_MODULE_ENABLED
-//#define HAL_CRYP_MODULE_ENABLED
-//#define HAL_DAC_MODULE_ENABLED
-//#define HAL_GTZC_MODULE_ENABLED
-//#define HAL_HSEM_MODULE_ENABLED
-//#define HAL_I2C_MODULE_ENABLED
-//#define HAL_I2S_MODULE_ENABLED
-//#define HAL_IPCC_MODULE_ENABLED
-//#define HAL_IRDA_MODULE_ENABLED
-//#define HAL_IWDG_MODULE_ENABLED
-#define HAL_LPTIM_MODULE_ENABLED
-//#define HAL_PKA_MODULE_ENABLED
-//#define HAL_RNG_MODULE_ENABLED
-#define HAL_RTC_MODULE_ENABLED
-//#define HAL_SMARTCARD_MODULE_ENABLED
-//#define HAL_SMBUS_MODULE_ENABLED
-#define HAL_SPI_MODULE_ENABLED
-#define HAL_SUBGHZ_MODULE_ENABLED
-//#define HAL_TIM_MODULE_ENABLED
-#define HAL_UART_MODULE_ENABLED
-#define HAL_USART_MODULE_ENABLED
-//#define HAL_WWDG_MODULE_ENABLED
+/*#define HAL_ADC_MODULE_ENABLED   */
+/*#define HAL_COMP_MODULE_ENABLED   */
+/*#define HAL_CRC_MODULE_ENABLED   */
+/*#define HAL_CRYP_MODULE_ENABLED   */
+/*#define HAL_DAC_MODULE_ENABLED   */
+/*#define HAL_GTZC_MODULE_ENABLED   */
+/*#define HAL_HSEM_MODULE_ENABLED   */
+/*#define HAL_I2C_MODULE_ENABLED   */
+/*#define HAL_I2S_MODULE_ENABLED   */
+/*#define HAL_IPCC_MODULE_ENABLED   */
+/*#define HAL_IRDA_MODULE_ENABLED   */
+/*#define HAL_IWDG_MODULE_ENABLED   */
+/*#define HAL_LPTIM_MODULE_ENABLED   */
+/*#define HAL_PKA_MODULE_ENABLED   */
+/*#define HAL_RNG_MODULE_ENABLED   */
+/*#define HAL_RTC_MODULE_ENABLED   */
+/*#define HAL_SMARTCARD_MODULE_ENABLED   */
+/*#define HAL_SMBUS_MODULE_ENABLED   */
+/*#define HAL_SPI_MODULE_ENABLED   */
+/*#define HAL_SUBGHZ_MODULE_ENABLED   */
+/*#define HAL_TIM_MODULE_ENABLED   */
+/*#define HAL_UART_MODULE_ENABLED   */
+/*#define HAL_USART_MODULE_ENABLED   */
+/*#define HAL_WWDG_MODULE_ENABLED   */
 #define HAL_EXTI_MODULE_ENABLED
 #define HAL_CORTEX_MODULE_ENABLED
 #define HAL_DMA_MODULE_ENABLED
@@ -150,7 +150,6 @@
 #define LSE_STARTUP_TIMEOUT                 5000UL      /*!< Time out for LSE start up, in ms */
 #endif /* LSE_STARTUP_TIMEOUT */
 
-
 /* Tip: To avoid modifying this file each time you need to use different HSE,
    ===  you can define the HSE value in your toolchain compiler preprocessor. */
 
@@ -184,7 +183,6 @@
 /* ################## CRYP peripheral configuration ########################## */
 
 #define USE_HAL_CRYP_SUSPEND_RESUME         1U
-
 
 /* Includes ------------------------------------------------------------------*/
 /**
@@ -239,23 +237,23 @@
 #endif /* HAL_HSEM_MODULE_ENABLED */
 
 #ifdef HAL_I2C_MODULE_ENABLED
-  #include "stm32wlxx_hal_i2c.h"
+ #include "stm32wlxx_hal_i2c.h"
 #endif /* HAL_I2C_MODULE_ENABLED */
 
 #ifdef HAL_I2S_MODULE_ENABLED
-  #include "stm32wlxx_hal_i2s.h"
+#include "stm32wlxx_hal_i2s.h"
 #endif /* HAL_I2S_MODULE_ENABLED */
 
 #ifdef HAL_IPCC_MODULE_ENABLED
-  #include "stm32wlxx_hal_ipcc.h"
+ #include "stm32wlxx_hal_ipcc.h"
 #endif /* HAL_IPCC_MODULE_ENABLED */
 
 #ifdef HAL_IRDA_MODULE_ENABLED
-  #include "stm32wlxx_hal_irda.h"
+ #include "stm32wlxx_hal_irda.h"
 #endif /* HAL_IRDA_MODULE_ENABLED */
 
 #ifdef HAL_IWDG_MODULE_ENABLED
-  #include "stm32wlxx_hal_iwdg.h"
+ #include "stm32wlxx_hal_iwdg.h"
 #endif /* HAL_IWDG_MODULE_ENABLED */
 
 #ifdef HAL_LPTIM_MODULE_ENABLED
@@ -267,7 +265,7 @@
 #endif /* HAL_PKA_MODULE_ENABLED */
 
 #ifdef HAL_PWR_MODULE_ENABLED
-  #include "stm32wlxx_hal_pwr.h"
+ #include "stm32wlxx_hal_pwr.h"
 #endif /* HAL_PWR_MODULE_ENABLED */
 
 #ifdef HAL_RCC_MODULE_ENABLED
@@ -279,39 +277,39 @@
 #endif /* HAL_RNG_MODULE_ENABLED */
 
 #ifdef HAL_RTC_MODULE_ENABLED
-  #include "stm32wlxx_hal_rtc.h"
+ #include "stm32wlxx_hal_rtc.h"
 #endif /* HAL_RTC_MODULE_ENABLED */
 
 #ifdef HAL_SMARTCARD_MODULE_ENABLED
-  #include "stm32wlxx_hal_smartcard.h"
+ #include "stm32wlxx_hal_smartcard.h"
 #endif /* HAL_SMARTCARD_MODULE_ENABLED */
 
 #ifdef HAL_SMBUS_MODULE_ENABLED
-  #include "stm32wlxx_hal_smbus.h"
+ #include "stm32wlxx_hal_smbus.h"
 #endif /* HAL_SMBUS_MODULE_ENABLED */
 
 #ifdef HAL_SPI_MODULE_ENABLED
-  #include "stm32wlxx_hal_spi.h"
+ #include "stm32wlxx_hal_spi.h"
 #endif /* HAL_SPI_MODULE_ENABLED */
 
 #ifdef HAL_SUBGHZ_MODULE_ENABLED
-  #include "stm32wlxx_hal_subghz.h"
+ #include "stm32wlxx_hal_subghz.h"
 #endif /* HAL_SUBGHZ_MODULE_ENABLED */
 
 #ifdef HAL_TIM_MODULE_ENABLED
-  #include "stm32wlxx_hal_tim.h"
+ #include "stm32wlxx_hal_tim.h"
 #endif /* HAL_TIM_MODULE_ENABLED */
 
 #ifdef HAL_UART_MODULE_ENABLED
-  #include "stm32wlxx_hal_uart.h"
+ #include "stm32wlxx_hal_uart.h"
 #endif /* HAL_UART_MODULE_ENABLED */
 
 #ifdef HAL_USART_MODULE_ENABLED
-  #include "stm32wlxx_hal_usart.h"
+ #include "stm32wlxx_hal_usart.h"
 #endif /* HAL_USART_MODULE_ENABLED */
 
 #ifdef HAL_WWDG_MODULE_ENABLED
-  #include "stm32wlxx_hal_wwdg.h"
+ #include "stm32wlxx_hal_wwdg.h"
 #endif /* HAL_WWDG_MODULE_ENABLED */
 
 /* Exported macro ------------------------------------------------------------*/
