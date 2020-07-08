@@ -21,6 +21,9 @@
  */
 #include "STNODE_bsp.h"
 
+typedef void (* BSP_EXTI_LineCallback) (void);
+EXTI_HandleTypeDef hpb_exti[BUTTONn];
+
 static GPIO_TypeDef *LED_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT};
 static const uint16_t LED_PIN[LEDn] = {LED1_PIN, LED2_PIN};
 static GPIO_TypeDef *BUTTON_PORT[BUTTONn] = {BUTTON_SW1_GPIO_PORT};
@@ -28,6 +31,9 @@ static const uint16_t BUTTON_PIN[BUTTONn] = {BUTTON_SW1_PIN};
 static const IRQn_Type BUTTON_IRQn[BUTTONn] = {BUTTON_SW1_EXTI_IRQn};
 static GPIO_TypeDef *LOAD_SWITCH_PORT[LOAD_SWITCHn] = {LOAD_SWITCH1_GPIO_PORT, LOAD_SWITCH2_GPIO_PORT, LOAD_SWITCH3_GPIO_PORT};
 static const uint16_t LOAD_SWITCH_PIN[LOAD_SWITCHn] = {LOAD_SWITCH1_PIN, LOAD_SWITCH2_PIN, LOAD_SWITCH3_PIN};
+
+static void BUTTON_SW1_EXTI_Callback(void);
+
 /**
  * LED APIs
  */
@@ -54,7 +60,7 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
 
   HAL_GPIO_Init(LED_PORT[Led], &gpio_init_structure);
-  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET); /* LEDs are active low*/
 
   return BSP_ERROR_NONE;
 }
@@ -89,7 +95,7 @@ int32_t BSP_LED_DeInit(Led_TypeDef Led)
   */
 int32_t BSP_LED_On(Led_TypeDef Led)
 {
-  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
 
   return BSP_ERROR_NONE;
 }
@@ -104,7 +110,7 @@ int32_t BSP_LED_On(Led_TypeDef Led)
   */
 int32_t BSP_LED_Off(Led_TypeDef Led)
 {
-  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET);
 
   return BSP_ERROR_NONE;
 }
@@ -156,9 +162,9 @@ int32_t BSP_LED_GetState(Led_TypeDef Led)
 int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
-  static BSP_EXTI_LineCallback button_callback[BUTTONn] = {BUTTON_SW1_EXTI_Callback, BUTTON_SW2_EXTI_Callback, BUTTON_SW3_EXTI_Callback};
-  static uint32_t button_interrupt_priority[BUTTONn] = {BSP_BUTTON_SWx_IT_PRIORITY, BSP_BUTTON_SWx_IT_PRIORITY, BSP_BUTTON_SWx_IT_PRIORITY};
-  static const uint32_t button_exti_line[BUTTONn] = {BUTTON_SW1_EXTI_LINE, BUTTON_SW2_EXTI_LINE, BUTTON_SW3_EXTI_LINE};
+  static BSP_EXTI_LineCallback button_callback[BUTTONn] = {BUTTON_SW1_EXTI_Callback};
+  static uint32_t button_interrupt_priority[BUTTONn] = {BSP_BUTTON_SWx_IT_PRIORITY};
+  static const uint32_t button_exti_line[BUTTONn] = {BUTTON_SW1_EXTI_LINE};
 
   /* Enable the BUTTON Clock */
   BUTTONx_GPIO_CLK_ENABLE(Button);
