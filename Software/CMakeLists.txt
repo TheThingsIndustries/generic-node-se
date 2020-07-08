@@ -339,6 +339,7 @@ if(TARGET_GROUP STREQUAL production)
     file(GLOB MAIN_SRC
         "app/LoRaWAN/*.c"
         "target/*.c"
+        "lib/BSP/*.c"
         )
     set(SOURCES
         ${MAIN_SRC}
@@ -352,6 +353,7 @@ if(TARGET_GROUP STREQUAL production)
         PUBLIC
         ${PROJECT_SOURCE_DIR}/target
         ${PROJECT_SOURCE_DIR}/app/LoRaWAN
+        ${PROJECT_SOURCE_DIR}/lib/BSP
         )
     target_link_libraries(${PROJECT_NAME}.elf
         PUBLIC
