@@ -280,38 +280,38 @@ if(TARGET_GROUP STREQUAL production)
     #-------------------
     # LoRaWAN library
     #-------------------
-    file(GLOB LORAWAN_SRC
-        "${LORAWAN_DIR}/Crypto/*.c"
-        "${LORAWAN_DIR}/Mac/*.c"
-        "${LORAWAN_DIR}/Mac/region/*.c"
-        "${LORAWAN_DIR}/Patterns/Basic/*.c"
-        "${LORAWAN_DIR}/Utilities/*.c"
-        "${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/*.c"
-        )
-    add_library(lorawan STATIC
-        ${LORAWAN_SRC}
-        )
-    target_include_directories(lorawan
-        PUBLIC
-        ${HAL_DIR}/Inc
-        ${MCU_DIR}/Include
-        ${CMSIS_DIR}/Core/Include
-        ${LORAWAN_DIR}/Crypto
-        ${LORAWAN_DIR}/Mac
-        ${LORAWAN_DIR}/Mac/region
-        ${LORAWAN_DIR}/Patterns/Basic
-        ${LORAWAN_DIR}/Utilities
-        ${LORAWAN_DIR}/SubGHz_Phy
-        ${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
-        PRIVATE
-        ${PROJECT_SOURCE_DIR}/target
-        ${PROJECT_SOURCE_DIR}/app/LoRaWAN
-        )
-    target_compile_definitions(lorawan
-        PUBLIC
-        ${MCU}
-        # HSE_VALUE=${HSE_VAL}
-        )
+    # file(GLOB LORAWAN_SRC
+    #     "${LORAWAN_DIR}/Crypto/*.c"
+    #     "${LORAWAN_DIR}/Mac/*.c"
+    #     "${LORAWAN_DIR}/Mac/region/*.c"
+    #     "${LORAWAN_DIR}/Patterns/Basic/*.c"
+    #     "${LORAWAN_DIR}/Utilities/*.c"
+    #     "${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/*.c"
+    #     )
+    # add_library(lorawan STATIC
+    #     ${LORAWAN_SRC}
+    #     )
+    # target_include_directories(lorawan
+    #     PUBLIC
+    #     ${HAL_DIR}/Inc
+    #     ${MCU_DIR}/Include
+    #     ${CMSIS_DIR}/Core/Include
+    #     ${LORAWAN_DIR}/Crypto
+    #     ${LORAWAN_DIR}/Mac
+    #     ${LORAWAN_DIR}/Mac/region
+    #     ${LORAWAN_DIR}/Patterns/Basic
+    #     ${LORAWAN_DIR}/Utilities
+    #     ${LORAWAN_DIR}/SubGHz_Phy
+    #     ${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
+    #     PRIVATE
+    #     ${PROJECT_SOURCE_DIR}/target
+    #     ${PROJECT_SOURCE_DIR}/app/LoRaWAN
+    #     )
+    # target_compile_definitions(lorawan
+    #     PUBLIC
+    #     ${MCU}
+    #     # HSE_VALUE=${HSE_VAL}
+    #     )
 
     #-------------------
     # FreeRTOS library
@@ -337,7 +337,7 @@ if(TARGET_GROUP STREQUAL production)
     # Main elf
     #-------------------
     file(GLOB MAIN_SRC
-        "app/LoRaWAN/*.c"
+        "app/basic/*.c"
         "target/*.c"
         "lib/BSP/*.c"
         )
@@ -352,14 +352,14 @@ if(TARGET_GROUP STREQUAL production)
     target_include_directories(${PROJECT_NAME}.elf
         PUBLIC
         ${PROJECT_SOURCE_DIR}/target
-        ${PROJECT_SOURCE_DIR}/app/LoRaWAN
+        ${PROJECT_SOURCE_DIR}/app/basic
         ${PROJECT_SOURCE_DIR}/lib/BSP
         )
     target_link_libraries(${PROJECT_NAME}.elf
         PUBLIC
         # rtos
         hal
-        lorawan
+        # lorawan
         # ${MODULES_USED}
         )
     target_compile_definitions(${PROJECT_NAME}.elf
