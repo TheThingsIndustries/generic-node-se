@@ -32,7 +32,7 @@
 #endif
 
 /**
- * HW aliases for the board comnponents
+ * HW aliases for the board components
  */
 
 typedef enum
