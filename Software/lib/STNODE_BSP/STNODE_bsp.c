@@ -21,7 +21,7 @@
  */
 #include "STNODE_bsp.h"
 
-typedef void (* BSP_EXTI_LineCallback) (void);
+typedef void (* STNODE_BSP_EXTI_LineCallback) (void);
 EXTI_HandleTypeDef hpb_exti[BUTTONn];
 
 static GPIO_TypeDef *LED_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT};
@@ -44,9 +44,9 @@ static void BUTTON_SW1_EXTI_Callback(void);
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LED_Init(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_Init(Led_TypeDef Led)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
 
@@ -62,7 +62,7 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   HAL_GPIO_Init(LED_PORT[Led], &gpio_init_structure);
   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET); /* LEDs are active low*/
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -72,17 +72,17 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   *            @arg LED1
   *            @arg LED2
   * @note Led DeInit does not disable the GPIO clock nor disable the Mfx
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LED_DeInit(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_DeInit(Led_TypeDef Led)
 {
   /* Turn off LED */
-  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET); /* LEDs are active low*/
 
   /* DeInit the GPIO_LED pin */
   HAL_GPIO_DeInit(LED_PORT[Led], LED_PIN[Led]);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -91,13 +91,13 @@ int32_t BSP_LED_DeInit(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LED_On(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_On(Led_TypeDef Led)
 {
   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -106,13 +106,13 @@ int32_t BSP_LED_On(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LED_Off(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_Off(Led_TypeDef Led)
 {
   HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_SET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -121,13 +121,13 @@ int32_t BSP_LED_Off(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LED_Toggle(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_Toggle(Led_TypeDef Led)
 {
   HAL_GPIO_TogglePin(LED_PORT[Led], LED_PIN[Led]);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -136,9 +136,9 @@ int32_t BSP_LED_Toggle(Led_TypeDef Led)
   *         This parameter can be one of following parameters:
   *            @arg LED1
   *            @arg LED2
-  * @retval LED status
+  * @return LED status
   */
-int32_t BSP_LED_GetState(Led_TypeDef Led)
+int32_t STNODE_BSP_LED_GetState(Led_TypeDef Led)
 {
   return (int32_t)HAL_GPIO_ReadPin(LED_PORT[Led], LED_PIN[Led]);
 }
@@ -157,13 +157,13 @@ int32_t BSP_LED_GetState(Led_TypeDef Led)
   *     @arg BUTTON_MODE_GPIO: Button will be used as simple IO
   *     @arg BUTTON_MODE_EXTI: Button will be connected to EXTI line with interrupt
   *                            generation capability
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
+int32_t STNODE_BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
-  static BSP_EXTI_LineCallback button_callback[BUTTONn] = {BUTTON_SW1_EXTI_Callback};
-  static uint32_t button_interrupt_priority[BUTTONn] = {BSP_BUTTON_SWx_IT_PRIORITY};
+  static STNODE_BSP_EXTI_LineCallback button_callback[BUTTONn] = {BUTTON_SW1_EXTI_Callback};
+  static uint32_t button_interrupt_priority[BUTTONn] = {STNODE_BSP_BUTTON_SWx_IT_PRIORITY};
   static const uint32_t button_exti_line[BUTTONn] = {BUTTON_SW1_EXTI_LINE};
 
   /* Enable the BUTTON Clock */
@@ -194,7 +194,7 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
     HAL_NVIC_EnableIRQ((BUTTON_IRQn[Button]));
   }
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -203,14 +203,14 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
   * @note PB DeInit does not disable the GPIO clock
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_PB_DeInit(Button_TypeDef Button)
+int32_t STNODE_BSP_PB_DeInit(Button_TypeDef Button)
 {
   HAL_NVIC_DisableIRQ((BUTTON_IRQn[Button]));
   HAL_GPIO_DeInit(BUTTON_PORT[Button], BUTTON_PIN[Button]);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -218,9 +218,9 @@ int32_t BSP_PB_DeInit(Button_TypeDef Button)
   * @param  Button: Specifies the Button to be checked.
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  * @retval The Button GPIO pin value.
+  * @return The Button GPIO pin value.
   */
-int32_t BSP_PB_GetState(Button_TypeDef Button)
+int32_t STNODE_BSP_PB_GetState(Button_TypeDef Button)
 {
   return (int32_t)HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]);
 }
@@ -228,9 +228,9 @@ int32_t BSP_PB_GetState(Button_TypeDef Button)
 /**
   * @brief  This function handles Push-Button interrupt requests.
   * @param  Button Specifies the pin connected EXTI line
-  * @retval None
+  * @return None
   */
-void BSP_PB_IRQHandler(Button_TypeDef Button)
+void STNODE_BSP_PB_IRQHandler(Button_TypeDef Button)
 {
   HAL_EXTI_IRQHandler(&hpb_exti[Button]);
 }
@@ -240,9 +240,9 @@ void BSP_PB_IRQHandler(Button_TypeDef Button)
   * @param  Button: Specifies the Button to be checked.
   *         This parameter can be one of following parameters:
   *           @arg BUTTON_SW1
-  * @retval None.
+  * @return None.
   */
-__weak void BSP_PB_Callback(Button_TypeDef Button)
+__weak void STNODE_BSP_PB_Callback(Button_TypeDef Button)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(Button);
@@ -253,11 +253,11 @@ __weak void BSP_PB_Callback(Button_TypeDef Button)
 
 /**
   * @brief  Button SW1 EXTI line detection callback.
-  * @retval None
+  * @return None
   */
 static void BUTTON_SW1_EXTI_Callback(void)
 {
-  BSP_PB_Callback(BUTTON_SW1);
+  STNODE_BSP_PB_Callback(BUTTON_SW1);
 }
 
 /**
@@ -271,9 +271,9 @@ static void BUTTON_SW1_EXTI_Callback(void)
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
 
@@ -289,7 +289,7 @@ int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
   HAL_GPIO_Init(LOAD_SWITCH_PORT[loadSwitch], &gpio_init_structure);
   HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -300,9 +300,9 @@ int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
   * @note Load Switch DeInit does not disable the GPIO clock nor disable the Mfx
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
 {
   /* Turn off Load Switch */
   HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
@@ -310,7 +310,7 @@ int32_t BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
   /* DeInit the GPIO_LOAD_SWITCH pin */
   HAL_GPIO_DeInit(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -320,13 +320,13 @@ int32_t BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_On(Load_Switch_TypeDef loadSwitch)
 {
   HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_SET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -336,13 +336,13 @@ int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch)
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
 {
   HAL_GPIO_WritePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch], GPIO_PIN_RESET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -352,13 +352,13 @@ int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
-  * @retval BSP status
+  * @return STNODE_BSP status
   */
-int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
 {
   HAL_GPIO_TogglePin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
 /**
@@ -368,9 +368,9 @@ int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
   *            @arg LOAD_SWITCH3
-  * @retval Load Switch status
+  * @return Load Switch status
   */
-int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
+int32_t STNODE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
 {
   return (int32_t)HAL_GPIO_ReadPin(LOAD_SWITCH_PORT[loadSwitch], LOAD_SWITCH_PIN[loadSwitch]);
 }
@@ -379,7 +379,12 @@ int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
  * Battery Monitoring (BM) APIs
  */
 
-int32_t BSP_BM_Init() //TODO: Add ADC read APIs
+/**
+ * @brief Configure battery monitoring control GPIO and ADC pin.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_BM_Init(void)
 {
   GPIO_InitTypeDef gpio_init_structure = {0};
 
@@ -395,12 +400,17 @@ int32_t BSP_BM_Init() //TODO: Add ADC read APIs
   HAL_GPIO_Init(VBAT_PORT, &gpio_init_structure);
   HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
 
-  //TODO: Add ADC init here
+  //TODO: Add ADC init here, see https://github.com/TheThingsIndustries/st-node/issues/29
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
-int32_t BSP_BM_DeInit()
+/**
+ * @brief DeInit BM pins configurations.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_BM_DeInit(void)
 {
   /* Turn off VBAT pin */
   HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
@@ -408,28 +418,43 @@ int32_t BSP_BM_DeInit()
   /* DeInit the VBAT pin */
   HAL_GPIO_DeInit(VBAT_PORT, VBAT_PIN);
 
-  //TODO: Add ADC Deinit here
+  //TODO: Add ADC Deinit here, see https://github.com/TheThingsIndustries/st-node/issues/29
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
-int32_t BSP_BM_Enable()
+/**
+ * @brief Enable battery monitoring PIN.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_BM_Enable(void)
 {
   HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_SET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
-int32_t BSP_BM_Disable()
+/**
+ * @brief Disable battery monitoring PIN.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_BM_Disable(void)
 {
   HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
 
-  return BSP_ERROR_NONE;
+  return STNODE_BSP_ERROR_NONE;
 }
 
-int32_t BSP_BM_GetState()
+/**
+ * @brief Get the state of battery monitoring PIN.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_BM_GetState(void)
 {
   return (int32_t)HAL_GPIO_ReadPin(VBAT_PORT, VBAT_PIN);
 }
 
-// TODO: Add communication init like UART and SPI and I2C if needed.
+// TODO: Add communication init like UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
