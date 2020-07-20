@@ -20,17 +20,16 @@
  *
  */
 
-#ifndef NODE_BSP_H
-#define NODE_BSP_H
+#ifndef STNODE_BSP_H
+#define STNODE_BSP_H
 
+#include "STNODE_bsp_error.h"
+#include "STNODE_bsp_conf.h"
+#include "stm32wlxx_hal.h"
 
-// TODO: Define conf and error files
-#include "stm32wlxx_nucleo_errno.h"
-#include "stm32wlxx_nucleo_conf.h"
-
-/* #ifdef __cplusplus
-extern "C" {
-#endif */
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
 /**
  * HW aliases for the board comnponents
@@ -84,11 +83,23 @@ typedef enum
 #define LED2_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 #define LED2_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
 
-#define LEDx_GPIO_CLK_ENABLE(__INDEX__)    do { if ((__INDEX__) == LED1) LED1_GPIO_CLK_ENABLE(); else \
-                                              if ((__INDEX__) == LED2) LED2_GPIO_CLK_ENABLE();} while(0)
+#define LEDx_GPIO_CLK_ENABLE(__INDEX__) \
+  do                                    \
+  {                                     \
+    if ((__INDEX__) == LED1)            \
+      LED1_GPIO_CLK_ENABLE();           \
+    else if ((__INDEX__) == LED2)       \
+      LED2_GPIO_CLK_ENABLE();           \
+  } while (0)
 
-#define LEDx_GPIO_CLK_DISABLE(__INDEX__)    do { if ((__INDEX__) == LED1) LED1_GPIO_CLK_DISABLE(); else \
-                                              if ((__INDEX__) == LED2) LED2_GPIO_CLK_DISABLE();} while(0)
+#define LEDx_GPIO_CLK_DISABLE(__INDEX__) \
+  do                                     \
+  {                                      \
+    if ((__INDEX__) == LED1)             \
+      LED1_GPIO_CLK_DISABLE();           \
+    else if ((__INDEX__) == LED2)        \
+      LED2_GPIO_CLK_DISABLE();           \
+  } while (0)
 
 #define BUTTONn 1
 
@@ -100,14 +111,14 @@ typedef enum
 #ifdef CORE_CM0PLUS
 #define BUTTON_SW1_EXTI_IRQn EXTI3_0_IRQn
 #else
-#define BUTTON_SW1_EXTI_IRQn EXTI3_IRQn  //TODO: Check this again if not functional
+#define BUTTON_SW1_EXTI_IRQn EXTI3_IRQn
 #endif
 
-#define BUTTONx_GPIO_CLK_ENABLE(__INDEX__)    BUTTON_SW1_GPIO_CLK_ENABLE();
+#define BUTTONx_GPIO_CLK_ENABLE(__INDEX__) BUTTON_SW1_GPIO_CLK_ENABLE();
 
 #define LOAD_SWITCHn 3
 
-#define LOAD_SWITCHx_GPIO_CLK_ENABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_ENABLE()  /* All load switches on same port */
+#define LOAD_SWITCHx_GPIO_CLK_ENABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_ENABLE()   /* All load switches on same port */
 #define LOAD_SWITCHx_GPIO_CLK_DISABLE(__INDEX__) __HAL_RCC_GPIOB_CLK_DISABLE() /* All load switches on same port */
 
 #define LOAD_SWITCH1_PIN GPIO_PIN_12
@@ -130,40 +141,40 @@ typedef enum
 #define VBAT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 #define VBAT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
 
-// TODO: Add commuincation defines here like I2C and SPI and UART
+// TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 /**
  * BSP APIs
  */
 
-int32_t BSP_LED_Init(Led_TypeDef Led);
-int32_t BSP_LED_DeInit(Led_TypeDef Led);
-int32_t BSP_LED_On(Led_TypeDef Led);
-int32_t BSP_LED_Off(Led_TypeDef Led);
-int32_t BSP_LED_Toggle(Led_TypeDef Led);
-int32_t BSP_LED_GetState(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_Init(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_DeInit(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_On(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_Off(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_Toggle(Led_TypeDef Led);
+int32_t STNODE_BSP_LED_GetState(Led_TypeDef Led);
 
-int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
-int32_t BSP_PB_DeInit(Button_TypeDef Button);
-int32_t BSP_PB_GetState(Button_TypeDef Button);
-void BSP_PB_Callback(Button_TypeDef Button);
-void BSP_PB_IRQHandler(Button_TypeDef Button);
+int32_t STNODE_BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
+int32_t STNODE_BSP_PB_DeInit(Button_TypeDef Button);
+int32_t STNODE_BSP_PB_GetState(Button_TypeDef Button);
+void STNODE_BSP_PB_Callback(Button_TypeDef Button);
+void STNODE_BSP_PB_IRQHandler(Button_TypeDef Button);
 
-int32_t BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
-int32_t BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
-int32_t BSP_LS_On(Load_Switch_TypeDef loadSwitch);
-int32_t BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
-int32_t BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
-int32_t BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_On(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
+int32_t STNODE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
 
-int32_t BSP_BM_Init();
-int32_t BSP_BM_DeInit();
-int32_t BSP_BM_Enable();
-int32_t BSP_BM_Disable();
-int32_t BSP_BM_GetState();
+int32_t STNODE_BSP_BM_Init();
+int32_t STNODE_BSP_BM_DeInit();
+int32_t STNODE_BSP_BM_Enable();
+int32_t STNODE_BSP_BM_Disable();
+int32_t STNODE_BSP_BM_GetState();
 
-/* #ifdef __cplusplus
+#ifdef __cplusplus
 }
-#endif */
+#endif
 
-#endif // NODE_BSP_H
+#endif /* STNODE_BSP_H */
