@@ -10,16 +10,25 @@
 #  limitations under the License.
 
 #-----------------------------
-# Compiler and generic options
+# Compiler/Toolchain options
 #-----------------------------
+# Important: TOOLCHAIN_PREFIX must be configured as it's system and user dependant
+# MAC OSX and Linux Example -> set(TOOLCHAIN_PREFIX "/Users/USER/opt/gcc-arm-none-eabi-6-2017-q2-update/")
+# Windows Example -> set(TOOLCHAIN_PREFIX "C:/Program Files (x86)/GNU Tools ARM Embedded/6 2017-q2-update/")
+set(TOOLCHAIN_PREFIX "")
+
+if(NOT TOOLCHAIN_PREFIX)
+    message(FATAL_ERROR "[ERRR] TOOLCHAIN_PREFIX not specified, please update the with compiler toolchain location")
+endif()
+
 set(CROSS_TOOLCHAIN arm-none-eabi-)
-set(TOOLCHAIN_PREFIX "/Users/ahmedelsalahy/opt/gcc-arm-none-eabi-6-2017-q2-update/")
 set(TOOLCHAIN_BIN_DIR ${TOOLCHAIN_PREFIX}/bin)
 set(TOOLCHAIN_INC_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/include)
 set(TOOLCHAIN_LIB_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/lib)
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_CROSSCOMPILING 1)
+set(SEMIHOSTING 1)
 
 if (WIN32)
 set (TOOLCHAIN_EXT ".exe")
@@ -47,8 +56,3 @@ endfunction()
 function(create_bin_output TARGET)
     add_custom_target(${TARGET}.bin ALL DEPENDS ${TARGET}.elf COMMAND ${CMAKE_OBJCOPY} -Obinary ${TARGET}.elf ${TARGET}.bin)
 endfunction()
-
-#set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-#set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-#set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-#set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
