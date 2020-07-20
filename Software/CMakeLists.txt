@@ -46,12 +46,12 @@ set(LINKER_SCRIPT ${MCU_DIR}/stm32wle5xx_flash.ld)
 #-------------------
 # HAL Setup
 #-------------------
-set(HAL_DIR components/STM32WLxx_HAL_Driver) #TODO:improve path
+set(HAL_DIR target/STM32WLxx_HAL_Driver)
 #-------------------
 # CMSIS Setup
 #-------------------
 # Set the path to the CMSIS folder
-set(CMSIS_DIR target/CMSIS)
+set(CMSIS_DIR target/STM32WLxx_HAL_Driver/CMSIS)
 #-------------------
 # General Flags
 #-------------------
@@ -210,7 +210,7 @@ if(TARGET_GROUP STREQUAL production)
     file(GLOB MAIN_SRC
         "app/basic/*.c"
         "target/*.c"
-        "lib/BSP/*.c"
+        "lib/STNODE_BSP/*.c"
         )
     set(SOURCES
         ${MAIN_SRC}
@@ -224,7 +224,7 @@ if(TARGET_GROUP STREQUAL production)
         PUBLIC
         ${PROJECT_SOURCE_DIR}/target
         ${PROJECT_SOURCE_DIR}/app/basic
-        ${PROJECT_SOURCE_DIR}/lib/BSP
+        ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
         )
     target_link_libraries(${PROJECT_NAME}.elf
         PUBLIC

@@ -22,9 +22,8 @@
 
 #include "STNODE_BSP.h"
 
-static GPIO_InitTypeDef GPIO_InitStruct;
 static void SystemClock_Config(void);
-static void Error_Handler(void)
+static void Error_Handler(void);
 
     int main(void)
 {
