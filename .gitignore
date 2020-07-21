@@ -73,8 +73,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Large libraries
-Software/components/CMSIS/*
-
 # Build folder
 Software/build/*
