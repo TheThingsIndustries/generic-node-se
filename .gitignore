@@ -74,5 +74,4 @@ Mkfile.old
 dkms.conf
 
 # Build folder
-build/*
-components/CMSIS/*
+Software/build/*
