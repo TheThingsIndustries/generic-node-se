@@ -14,18 +14,23 @@
  */
 
 /**
- * @file STNODE_bsp.c
+ * @file main.c
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#include "STNODE_BSP.h"
+#include "app.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
-    int main(void)
+void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
+{
+  APP_PPRINTF("\r\n DEBUG_USART data received \r\n");
+}
+
+int main(void)
 {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -34,6 +39,12 @@ static void Error_Handler(void);
 
   STNODE_BSP_LED_Init(LED_BLUE);
   STNODE_BSP_LED_Init(LED_RED);
+
+  UTIL_ADV_TRACE_Init();
+  UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
+  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
+
+  APP_PPRINTF("\r\n Starting STNODE basic app \r\n");
 
   while (1)
   {
@@ -92,10 +103,7 @@ static void SystemClock_Config(void)
   */
 static void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   while (1)
   {
   }
-  /* USER CODE END Error_Handler_Debug */
 }
