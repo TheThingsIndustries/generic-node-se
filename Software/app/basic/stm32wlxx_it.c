@@ -172,5 +172,15 @@ void SysTick_Handler(void)
 
 /* USER CODE BEGIN 1 */
 
+void USART2_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&STNODE_BSP_debug_usart);
+}
+
+void DMA1_Channel5_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(STNODE_BSP_debug_usart.hdmatx);
+}
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
