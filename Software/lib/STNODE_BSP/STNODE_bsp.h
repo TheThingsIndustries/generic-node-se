@@ -31,6 +31,8 @@
  extern "C" {
 #endif
 
+extern UART_HandleTypeDef STNODE_BSP_debug_usart;
+
 /**
  * HW aliases for the board components
  */
@@ -141,6 +143,41 @@ typedef enum
 #define VBAT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 #define VBAT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
 
+#define DEBUG_USART USART2
+#define DEBUG_USART_BAUDRATE 115200
+#define DEBUG_USART_PERIPH_CLK         RCC_PERIPHCLK_USART2
+#define DEBUG_USART_SOURCE_CLK         RCC_USART2CLKSOURCE_SYSCLK
+
+#define DEBUG_USART_CLK_ENABLE()        __HAL_RCC_USART2_CLK_ENABLE()
+#define DEBUG_USART_CLK_DISABLE()       __HAL_RCC_USART2_CLK_DISABLE()
+
+#define DEBUG_USART_TX_PIN GPIO_PIN_2
+#define DEBUG_USART_TX_GPIO_PORT GPIOA
+#define DEBUG_USART_RX_PIN GPIO_PIN_3
+#define DEBUG_USART_RX_GPIO_PORT GPIOA
+
+#define DEBUG_USART_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+#define DEBUG_USART_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define DEBUG_USART_TX_AF                     GPIO_AF7_USART2
+#define DEBUG_USART_RX_AF                     GPIO_AF7_USART2
+
+#define DEBUG_USART_EXTI_WAKEUP               LL_EXTI_LINE_27
+
+#define DEBUG_USART_DMA_CLK_ENABLE()                __HAL_RCC_DMA1_CLK_ENABLE()
+#define DEBUG_USART_DMAMUX_CLK_ENABLE()              __HAL_RCC_DMAMUX1_CLK_ENABLE()
+
+#define DEBUG_USART_TX_DMA_REQUEST             DMA_REQUEST_USART2_TX
+#define DEBUG_USART_TX_DMA_CHANNEL             DMA1_Channel5
+
+#define DEBUG_USART_DMA_TX_IRQn                DMA1_Channel5_IRQn
+#define DEBUG_USART_DMA_TX_IRQHandler          DMA1_Channel5_IRQHandler
+
+#define DEBUG_USART_IRQn                      USART2_IRQn
+
+#define DEBUG_USART_PRIORITY 0
+#define DEBUG_USART_DMA_PRIORITY 0
+
 // TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 /**
@@ -172,6 +209,9 @@ int32_t STNODE_BSP_BM_DeInit();
 int32_t STNODE_BSP_BM_Enable();
 int32_t STNODE_BSP_BM_Disable();
 int32_t STNODE_BSP_BM_GetState();
+
+int32_t STNODE_BSP_USART_Init(void);
+int32_t STNODE_BSP_UART_DMA_Init(void);
 
 #ifdef __cplusplus
 }

@@ -211,6 +211,7 @@ if(TARGET_GROUP STREQUAL production)
         "app/basic/*.c"
         "target/*.c"
         "lib/STNODE_BSP/*.c"
+        "lib/Utilities/*.c"
         )
     set(SOURCES
         ${MAIN_SRC}
@@ -223,8 +224,10 @@ if(TARGET_GROUP STREQUAL production)
     target_include_directories(${PROJECT_NAME}.elf
         PUBLIC
         ${PROJECT_SOURCE_DIR}/target
+        ${PROJECT_SOURCE_DIR}/app
         ${PROJECT_SOURCE_DIR}/app/basic
         ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
+        ${PROJECT_SOURCE_DIR}/lib/Utilities
         )
     target_link_libraries(${PROJECT_NAME}.elf
         PUBLIC

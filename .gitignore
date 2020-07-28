@@ -75,3 +75,6 @@ dkms.conf
 
 # Build folder
 Software/build/*
+
+# Visual Studio Code IDE files
+.vscode/
