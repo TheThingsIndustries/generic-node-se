@@ -33,6 +33,7 @@ static GPIO_TypeDef *LOAD_SWITCH_PORT[LOAD_SWITCHn] = {LOAD_SWITCH1_GPIO_PORT, L
 static const uint16_t LOAD_SWITCH_PIN[LOAD_SWITCHn] = {LOAD_SWITCH1_PIN, LOAD_SWITCH2_PIN, LOAD_SWITCH3_PIN};
 
 static void BUTTON_SW1_EXTI_Callback(void);
+UART_HandleTypeDef STNODE_BSP_debug_usart;
 
 /**
  * LED APIs
@@ -455,6 +456,54 @@ int32_t STNODE_BSP_BM_Disable(void)
 int32_t STNODE_BSP_BM_GetState(void)
 {
   return (int32_t)HAL_GPIO_ReadPin(VBAT_PORT, VBAT_PIN);
+}
+
+/**
+ * @brief Init the UART interface for debugging.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_USART_Init(void)
+{
+  STNODE_BSP_debug_usart.Instance        = DEBUG_USART;
+  STNODE_BSP_debug_usart.Init.BaudRate   = DEBUG_USART_BAUDRATE;
+  STNODE_BSP_debug_usart.Init.WordLength = UART_WORDLENGTH_8B;
+  STNODE_BSP_debug_usart.Init.StopBits   = UART_STOPBITS_1;
+  STNODE_BSP_debug_usart.Init.Parity     = UART_PARITY_NONE;
+  STNODE_BSP_debug_usart.Init.Mode       = UART_MODE_TX_RX;
+  STNODE_BSP_debug_usart.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+  STNODE_BSP_debug_usart.Init.OverSampling = UART_OVERSAMPLING_16;
+
+  if (HAL_UART_Init(&STNODE_BSP_debug_usart) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  /* In StopMode: Need UART in FIFO mode so characters are displayed on Hyperterminal */
+  HAL_UARTEx_EnableFifoMode(&STNODE_BSP_debug_usart);
+  return STNODE_BSP_ERROR_NONE;
+}
+
+/**
+ * @brief Enable DMA controller clock.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_UART_DMA_Init(void)
+{
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+#ifdef HAL_ADC_MODULE_ENABLED
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+#endif
+  /* DMA1_Channel7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
+
+  return STNODE_BSP_ERROR_NONE;
 }
 
 // TODO: Add communication init like UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30

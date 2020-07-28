@@ -1,0 +1,139 @@
+/**
+  ******************************************************************************
+  * @file  : usart_if.c
+  * @author  MCD Application Team
+  * @brief   interfaces UART MX driver for hyperterminal communication
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "usart_if.h"
+
+/* Private typedef -----------------------------------------------------------*/
+const UTIL_ADV_TRACE_Driver_s UTIL_TraceDriver =
+{
+  vcom_Init,
+  vcom_DeInit,
+  vcom_ReceiveInit,
+  vcom_Trace_DMA,
+};
+/* Private define ------------------------------------------------------------*/
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+/* Uart Handle */
+extern UART_HandleTypeDef STNODE_BSP_debug_usart;
+#define UartHandle STNODE_BSP_debug_usart
+uint8_t charRx;
+
+/* Private function prototypes -----------------------------------------------*/
+/**
+* @brief  TX complete callback
+* @param  None
+* @return None
+*/
+static void (*TxCpltCallback)(void*);
+/**
+* @brief  RX complete callback
+* @param  char sent by user
+* @return None
+*/
+static void (*RxCpltCallback)(uint8_t *rxChar, uint16_t size, uint8_t error);
+
+/* Functions Definition ------------------------------------------------------*/
+
+UTIL_ADV_TRACE_Status_t vcom_Init(void (*cb)(void *))
+{
+  TxCpltCallback = cb;
+  STNODE_BSP_UART_DMA_Init();
+  STNODE_BSP_USART_Init();
+  return UTIL_ADV_TRACE_OK;
+}
+
+UTIL_ADV_TRACE_Status_t vcom_DeInit(void)
+{
+  /*##-1- Reset peripherals ##################################################*/
+  __HAL_RCC_USART2_FORCE_RESET();
+  __HAL_RCC_USART2_RELEASE_RESET();
+
+  /*##-2- MspDeInit ##################################################*/
+  HAL_UART_MspDeInit(&UartHandle);
+
+  /*##-3- Disable the NVIC for DMA ###########################################*/
+  /* temorary while waiting CR 50840: MX implementation of  MX_DMA_DeInit() */
+  /* For the time being user should change mannualy the channel according to the MX settings */
+  /* USER CODE BEGIN 1 */
+  HAL_NVIC_DisableIRQ(DMA1_Channel5_IRQn);
+
+  return UTIL_ADV_TRACE_OK;
+  /* USER CODE END 1 */
+}
+
+void vcom_Trace(uint8_t *p_data, uint16_t size)
+{
+  HAL_UART_Transmit(&UartHandle, p_data, size, 1000);
+}
+
+UTIL_ADV_TRACE_Status_t vcom_Trace_DMA(uint8_t *p_data, uint16_t size)
+{
+  HAL_UART_Transmit_DMA(&UartHandle, p_data, size);
+  return UTIL_ADV_TRACE_OK;
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+  /* buffer transmission complete*/
+  TxCpltCallback(NULL);
+}
+
+UTIL_ADV_TRACE_Status_t vcom_ReceiveInit(void (*RxCb)(uint8_t *rxChar, uint16_t size, uint8_t error))
+{
+  UART_WakeUpTypeDef WakeUpSelection;
+
+  /*record call back*/
+  RxCpltCallback = RxCb;
+
+  /*Set wakeUp event on start bit*/
+  WakeUpSelection.WakeUpEvent = UART_WAKEUP_ON_STARTBIT;
+
+  HAL_UARTEx_StopModeWakeUpSourceConfig(&UartHandle, WakeUpSelection);
+
+  /* Make sure that no UART transfer is on-going */
+  while (__HAL_UART_GET_FLAG(&UartHandle, USART_ISR_BUSY) == SET);
+
+  /* Make sure that UART is ready to receive)   */
+  while (__HAL_UART_GET_FLAG(&UartHandle, USART_ISR_REACK) == RESET);
+
+  /* Enable USART interrupt */
+  __HAL_UART_ENABLE_IT(&UartHandle, UART_IT_WUF);
+
+  /*Enable wakeup from stop mode*/
+  HAL_UARTEx_EnableStopMode(&UartHandle);
+
+  /*Start LPUART receive on IT*/
+  HAL_UART_Receive_IT(&UartHandle, &charRx, 1);
+
+  return UTIL_ADV_TRACE_OK;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+  if ((NULL != RxCpltCallback) && (HAL_UART_ERROR_NONE == UartHandle->ErrorCode))
+  {
+    RxCpltCallback(&charRx, 1, 0);
+  }
+  HAL_UART_Receive_IT(UartHandle, &charRx, 1);
+}
+
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
