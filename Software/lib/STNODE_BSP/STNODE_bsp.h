@@ -32,6 +32,7 @@
 #endif
 
 extern UART_HandleTypeDef STNODE_BSP_debug_usart;
+extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 
 /**
  * HW aliases for the board components
@@ -178,6 +179,27 @@ typedef enum
 #define DEBUG_USART_PRIORITY 0
 #define DEBUG_USART_DMA_PRIORITY 0
 
+#define SENSOR_I2C1                  I2C1
+#define SENSOR_I2C1_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
+#define SENSOR_I2C1_TIMOUT           100U //Read and write operattions timeout in ms
+#define SENSOR_I2C1_PERIPH_CLK      RCC_PERIPHCLK_I2C1
+#define SENSOR_I2C1_SOURCE_CLK      RCC_I2C1CLKSOURCE_SYSCLK
+
+#define SENSOR_I2C1_CLK_ENABLE()    __HAL_RCC_I2C1_CLK_ENABLE()
+#define SENSOR_I2C1_CLK_DISABLE()   __HAL_RCC_I2C1_CLK_DISABLE()
+
+#define SENSOR_I2C1_SDA_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+#define SENSOR_I2C1_SCL_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define SENSOR_I2C1_FORCE_RESET()              __HAL_RCC_I2C1_FORCE_RESET()
+#define SENSOR_I2C1_RELEASE_RESET()            __HAL_RCC_I2C1_RELEASE_RESET()
+
+#define SENSOR_I2C1_SCL_PIN                    GPIO_PIN_9
+#define SENSOR_I2C1_SCL_GPIO_PORT              GPIOA
+#define SENSOR_I2C1_SDA_PIN                    GPIO_PIN_10
+#define SENSOR_I2C1_SDA_GPIO_PORT              GPIOA
+#define SENSOR_I2C1_SCL_SDA_AF                 GPIO_AF4_I2C1
+
 // TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 /**
@@ -212,6 +234,8 @@ int32_t STNODE_BSP_BM_GetState();
 
 int32_t STNODE_BSP_USART_Init(void);
 int32_t STNODE_BSP_UART_DMA_Init(void);
+
+int32_t STNODE_BSP_Sensor_I2C1_Init(void);
 
 #ifdef __cplusplus
 }
