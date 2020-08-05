@@ -110,6 +110,54 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
     }
 }
 
+void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
+{
+    GPIO_InitTypeDef GPIO_InitStruct;
+    RCC_PeriphCLKInitTypeDef RCC_PeriphCLKInitStruct;
+
+    if (i2cHandle->Instance == SENSOR_I2C1)
+    {
+        RCC_PeriphCLKInitStruct.PeriphClockSelection = SENSOR_I2C1_PERIPH_CLK;
+        RCC_PeriphCLKInitStruct.I2c1ClockSelection = SENSOR_I2C1_SOURCE_CLK;
+        HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphCLKInitStruct);
+
+        SENSOR_I2C1_SDA_GPIO_CLK_ENABLE();
+        SENSOR_I2C1_SCL_GPIO_CLK_ENABLE();
+        SENSOR_I2C1_CLK_ENABLE();
+
+        GPIO_InitStruct.Pin = SENSOR_I2C1_SCL_PIN;
+        GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Alternate = SENSOR_I2C1_SCL_SDA_AF;
+        HAL_GPIO_Init(SENSOR_I2C1_SCL_GPIO_PORT, &GPIO_InitStruct);
+
+        GPIO_InitStruct.Pin = SENSOR_I2C1_SDA_PIN;
+        GPIO_InitStruct.Alternate = SENSOR_I2C1_SCL_SDA_AF;
+        HAL_GPIO_Init(SENSOR_I2C1_SDA_GPIO_PORT, &GPIO_InitStruct);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
+void HAL_I2C_MspDeInit(I2C_HandleTypeDef *i2cHandle)
+{
+    if (i2cHandle->Instance == SENSOR_I2C1)
+    {
+        SENSOR_I2C1_FORCE_RESET();
+        SENSOR_I2C1_RELEASE_RESET();
+
+        HAL_GPIO_DeInit(SENSOR_I2C1_SCL_GPIO_PORT, SENSOR_I2C1_SCL_PIN);
+        HAL_GPIO_DeInit(SENSOR_I2C1_SDA_GPIO_PORT, SENSOR_I2C1_SDA_PIN);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
 static void msp_error_handler()
 {
     while (1)

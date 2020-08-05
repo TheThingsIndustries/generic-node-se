@@ -32,7 +32,9 @@ void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 
 int main(void)
 {
-
+  int32_t temperature = 0;
+  int32_t humidity = 0;
+  int16_t status = 0;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   SystemClock_Config();
@@ -45,6 +47,28 @@ int main(void)
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
 
   APP_PPRINTF("\r\n Starting STNODE basic app \r\n");
+
+  STNODE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+  STNODE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+  HAL_Delay(100);
+
+  STNODE_BSP_Sensor_I2C1_Init();
+  HAL_Delay(100);
+  sensirion_i2c_init();
+  if (SHTC3_probe() != SHTC3_STATUS_OK)
+  {
+    APP_PPRINTF("\r\n Failed to initialize SHTC3 tempreture Sensor\r\n");
+  }
+  status = SHTC3_measure_blocking_read(&temperature, &humidity);
+  if (status == SHTC3_STATUS_OK)
+  {
+    //Remove the division by 1000 to observe the higher resolution
+    APP_PPRINTF("\r\n Measured Temperature: %d'C & Relative Humidity: %d\% \r\n", temperature/1000, humidity/1000);
+  }
+  else
+  {
+    APP_PPRINTF("\r\n Failed to read data from SHTC3 sensor \r\n");
+  }
 
   while (1)
   {
