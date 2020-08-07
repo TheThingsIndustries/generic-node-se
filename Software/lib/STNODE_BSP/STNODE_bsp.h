@@ -33,6 +33,7 @@
 
 extern UART_HandleTypeDef STNODE_BSP_debug_usart;
 extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
+extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
 
 /**
  * HW aliases for the board components
@@ -146,8 +147,8 @@ typedef enum
 
 #define DEBUG_USART USART2
 #define DEBUG_USART_BAUDRATE 115200
-#define DEBUG_USART_PERIPH_CLK         RCC_PERIPHCLK_USART2
-#define DEBUG_USART_SOURCE_CLK         RCC_USART2CLKSOURCE_SYSCLK
+#define DEBUG_USART_PERIPH_CLK RCC_PERIPHCLK_USART2
+#define DEBUG_USART_SOURCE_CLK RCC_USART2CLKSOURCE_SYSCLK //If adjusted, Update Usart2ClockSelection in STNODE_msp.c
 
 #define DEBUG_USART_CLK_ENABLE()        __HAL_RCC_USART2_CLK_ENABLE()
 #define DEBUG_USART_CLK_DISABLE()       __HAL_RCC_USART2_CLK_DISABLE()
@@ -200,6 +201,25 @@ typedef enum
 #define SENSOR_I2C1_SDA_GPIO_PORT              GPIOA
 #define SENSOR_I2C1_SCL_SDA_AF                 GPIO_AF4_I2C1
 
+#define FLASH_SPI SPI1
+#define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_256
+#define Flash_SPI_TIMOUT 100U        //Read and write operattions timeout in ms
+
+#define FLASH_SPI_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
+#define FLASH_SPI_CLK_DISABLE() __HAL_RCC_SPI1_CLK_DISABLE()
+
+#define FLASH_SPI_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define FLASH_SPI_FORCE_RESET() __HAL_RCC_SPI1_FORCE_RESET()
+#define FLASH_SPI_RELEASE_RESET() __HAL_RCC_SPI1_RELEASE_RESET()
+
+#define FLASH_SPI_GPIO_PORT GPIOA
+#define FLASH_SPI_CS_PIN GPIO_PIN_4
+#define FLASH_SPI_SCK_PIN GPIO_PIN_5
+#define FLASH_SPI_MISO_PIN GPIO_PIN_6
+#define FLASH_SPI_MOSI_PIN GPIO_PIN_7
+
+#define FLASH_SPI_AF GPIO_AF5_SPI1
 // TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 /**
@@ -236,6 +256,8 @@ int32_t STNODE_BSP_USART_Init(void);
 int32_t STNODE_BSP_UART_DMA_Init(void);
 
 int32_t STNODE_BSP_Sensor_I2C1_Init(void);
+
+  int32_t STNODE_BSP_Flash_SPI_Init(void);
 
 #ifdef __cplusplus
 }
