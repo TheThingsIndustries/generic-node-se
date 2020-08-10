@@ -35,6 +35,7 @@ static const uint16_t LOAD_SWITCH_PIN[LOAD_SWITCHn] = {LOAD_SWITCH1_PIN, LOAD_SW
 static void BUTTON_SW1_EXTI_Callback(void);
 UART_HandleTypeDef STNODE_BSP_debug_usart;
 I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
+SPI_HandleTypeDef STNODE_BSP_flash_spi;
 
 /**
  * LED APIs
@@ -534,6 +535,30 @@ int32_t STNODE_BSP_Sensor_I2C1_Init(void)
     return STNODE_BSP_ERROR_NO_INIT;
   }
 
+  return STNODE_BSP_ERROR_NONE;
+}
+
+int32_t STNODE_BSP_Flash_SPI_Init(void)
+{
+  /* FLASH_SPI parameter configuration*/
+  STNODE_BSP_flash_spi.Instance = FLASH_SPI;
+  STNODE_BSP_flash_spi.Init.Mode = SPI_MODE_MASTER;
+  STNODE_BSP_flash_spi.Init.Direction = SPI_DIRECTION_2LINES;
+  STNODE_BSP_flash_spi.Init.DataSize = SPI_DATASIZE_8BIT;
+  STNODE_BSP_flash_spi.Init.CLKPolarity = SPI_POLARITY_LOW;
+  STNODE_BSP_flash_spi.Init.CLKPhase = SPI_PHASE_1EDGE;
+  STNODE_BSP_flash_spi.Init.NSS = SPI_NSS_SOFT; //TODO: USE HW NSS, see https://github.com/TheThingsIndustries/st-node/issues/40
+  STNODE_BSP_flash_spi.Init.BaudRatePrescaler = FLASH_SPI_BAUDRATE;
+  STNODE_BSP_flash_spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  STNODE_BSP_flash_spi.Init.TIMode = SPI_TIMODE_DISABLE;
+  STNODE_BSP_flash_spi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  STNODE_BSP_flash_spi.Init.CRCPolynomial = 7;
+  STNODE_BSP_flash_spi.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  STNODE_BSP_flash_spi.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  if (HAL_SPI_Init(&STNODE_BSP_flash_spi) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
   return STNODE_BSP_ERROR_NONE;
 }
 
