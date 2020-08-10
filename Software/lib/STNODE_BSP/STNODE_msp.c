@@ -26,7 +26,7 @@ static void msp_error_handler();
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef gpio_init_structure = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
     if (uartHandle->Instance == DEBUG_USART)
@@ -45,19 +45,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
             msp_error_handler();
         }
 
-        GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
-        HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
+        gpio_init_structure.Pin = DEBUG_USART_TX_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+        gpio_init_structure.Pull = GPIO_PULLUP;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        gpio_init_structure.Alternate = DEBUG_USART_TX_AF;
+        HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &gpio_init_structure);
 
-        GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
-        HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct);
+        gpio_init_structure.Pin = DEBUG_USART_RX_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+        gpio_init_structure.Pull = GPIO_NOPULL;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        gpio_init_structure.Alternate = DEBUG_USART_RX_AF;
+        HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &gpio_init_structure);
 
         /* Configure the DMA handler for Transmission process */
         hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
@@ -112,7 +112,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 
 void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
 {
-    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef gpio_init_structure;
     RCC_PeriphCLKInitTypeDef RCC_PeriphCLKInitStruct;
 
     if (i2cHandle->Instance == SENSOR_I2C1)
@@ -125,16 +125,16 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         SENSOR_I2C1_SCL_GPIO_CLK_ENABLE();
         SENSOR_I2C1_CLK_ENABLE();
 
-        GPIO_InitStruct.Pin = SENSOR_I2C1_SCL_PIN;
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-        GPIO_InitStruct.Pull = GPIO_PULLUP;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = SENSOR_I2C1_SCL_SDA_AF;
-        HAL_GPIO_Init(SENSOR_I2C1_SCL_GPIO_PORT, &GPIO_InitStruct);
+        gpio_init_structure.Pin = SENSOR_I2C1_SCL_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_OD;
+        gpio_init_structure.Pull = GPIO_PULLUP;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        gpio_init_structure.Alternate = SENSOR_I2C1_SCL_SDA_AF;
+        HAL_GPIO_Init(SENSOR_I2C1_SCL_GPIO_PORT, &gpio_init_structure);
 
-        GPIO_InitStruct.Pin = SENSOR_I2C1_SDA_PIN;
-        GPIO_InitStruct.Alternate = SENSOR_I2C1_SCL_SDA_AF;
-        HAL_GPIO_Init(SENSOR_I2C1_SDA_GPIO_PORT, &GPIO_InitStruct);
+        gpio_init_structure.Pin = SENSOR_I2C1_SDA_PIN;
+        gpio_init_structure.Alternate = SENSOR_I2C1_SCL_SDA_AF;
+        HAL_GPIO_Init(SENSOR_I2C1_SDA_GPIO_PORT, &gpio_init_structure);
     }
     else
     {
@@ -151,6 +151,64 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef *i2cHandle)
 
         HAL_GPIO_DeInit(SENSOR_I2C1_SCL_GPIO_PORT, SENSOR_I2C1_SCL_PIN);
         HAL_GPIO_DeInit(SENSOR_I2C1_SDA_GPIO_PORT, SENSOR_I2C1_SDA_PIN);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
+void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
+{
+    GPIO_InitTypeDef gpio_init_structure = {0};
+    if (spiHandle->Instance == FLASH_SPI)
+    {
+        /* Peripheral clock enable */
+        FLASH_SPI_CLK_ENABLE();
+        FLASH_SPI_GPIO_CLK_ENABLE();
+
+        /*Configure GPIO pin Output Level */
+        HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_RESET);
+
+        gpio_init_structure.Pin = FLASH_SPI_CS_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+        gpio_init_structure.Pull = GPIO_NOPULL;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(FLASH_SPI_GPIO_PORT, &gpio_init_structure);
+        HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_SET);
+
+        gpio_init_structure.Pin = FLASH_SPI_MISO_PIN | FLASH_SPI_SCK_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+        gpio_init_structure.Pull = GPIO_NOPULL;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_LOW;
+        gpio_init_structure.Alternate = FLASH_SPI_AF;
+        HAL_GPIO_Init(FLASH_SPI_GPIO_PORT, &gpio_init_structure);
+
+        gpio_init_structure.Pin = FLASH_SPI_MOSI_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+        gpio_init_structure.Pull = GPIO_PULLDOWN;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_LOW;
+        gpio_init_structure.Alternate = FLASH_SPI_AF;
+        HAL_GPIO_Init(FLASH_SPI_GPIO_PORT, &gpio_init_structure);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle)
+{
+    if (spiHandle->Instance == FLASH_SPI)
+    {
+        /* Reset peripherals */
+        FLASH_SPI_FORCE_RESET();
+        FLASH_SPI_RELEASE_RESET();
+
+        /* Peripheral clock disable */
+        FLASH_SPI_CLK_DISABLE();
+
+        HAL_GPIO_DeInit(FLASH_SPI_GPIO_PORT, FLASH_SPI_MISO_PIN | FLASH_SPI_MOSI_PIN | FLASH_SPI_SCK_PIN | FLASH_SPI_CS_PIN);
     }
     else
     {
