@@ -22,8 +22,17 @@
 
 #include "app.h"
 
+#define NUMBER_TEMPRETURE_SENSOR_READ 5
+#define TEMPRETURE_SENSOR_READ_INTERVAL 1000
+
+#define NUMBER_ACCLEROMETER_READ 5
+#define ACCELEROMETER_READ_INTERVAL 1000
+
 static void SystemClock_Config(void);
 static void Error_Handler(void);
+
+void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
+void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
@@ -32,9 +41,7 @@ void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 
 int main(void)
 {
-  int32_t temperature = 0;
-  int32_t humidity = 0;
-  int16_t status = 0;
+  int16_t status;
   MxChip mxic;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
@@ -55,41 +62,29 @@ int main(void)
 
   STNODE_BSP_Sensor_I2C1_Init();
   HAL_Delay(100);
-  sensirion_i2c_init();
-  if (SHTC3_probe() != SHTC3_STATUS_OK)
-  {
-    APP_PPRINTF("\r\n Failed to initialize SHTC3 tempreture Sensor\r\n");
-  }
-  status = SHTC3_measure_blocking_read(&temperature, &humidity);
-  if (status == SHTC3_STATUS_OK)
-  {
-    //Remove the division by 1000 to observe the higher resolution
-    APP_PPRINTF("\r\n Measured Temperature: %d'C & Relative Humidity: %d\% \r\n", temperature/1000, humidity/1000);
-  }
-  else
-  {
-    APP_PPRINTF("\r\n Failed to read data from SHTC3 sensor \r\n");
-  }
+
+  tempreture_sensor_read_data_polling(NUMBER_TEMPRETURE_SENSOR_READ, TEMPRETURE_SENSOR_READ_INTERVAL);
+  accelerometer_read_data_polling(NUMBER_ACCLEROMETER_READ, ACCELEROMETER_READ_INTERVAL);
 
   STNODE_BSP_LS_Init(LOAD_SWITCH_FLASH);
   STNODE_BSP_LS_On(LOAD_SWITCH_FLASH);
   HAL_Delay(100);
 
-    status = MX25R16_Init(&mxic);
-    if (status != MXST_SUCCESS)
-    {
-        APP_PPRINTF("\r\n Failed to init external SPI flash (MX25R1635F)\r\n");
-    }
+  status = MX25R16_Init(&mxic);
+  if (status != MXST_SUCCESS)
+  {
+    APP_PPRINTF("\r\n Failed to init external SPI flash (MX25R1635F)\r\n");
+  }
 
-    status = MxSimpleTest(&mxic);
-    if (status == MXST_SUCCESS)
-    {
-        APP_PPRINTF("\r\n Simple external SPI flash (MX25R1635F) test passed!\r\n");
-    }
-    else
-    {
-        APP_PPRINTF("\r\n Simple external SPI flash test (MX25R1635F) failed, check UART logs for more details\r\n");
-    }
+  status = MxSimpleTest(&mxic);
+  if (status == MXST_SUCCESS)
+  {
+    APP_PPRINTF("\r\n Simple external SPI flash (MX25R1635F) test passed!\r\n");
+  }
+  else
+  {
+    APP_PPRINTF("\r\n Simple external SPI flash test (MX25R1635F) failed, check UART logs for more details\r\n");
+  }
 
   while (1)
   {
