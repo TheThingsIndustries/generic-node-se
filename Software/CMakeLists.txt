@@ -213,7 +213,6 @@ if(TARGET_GROUP STREQUAL production)
         "lib/STNODE_BSP/*.c"
         "lib/Utilities/*.c"
         "lib/SHTC3/*.c"
-        "lib/MX25R1635/*.c"
         )
     set(SOURCES
         ${MAIN_SRC}
@@ -231,7 +230,6 @@ if(TARGET_GROUP STREQUAL production)
         ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
         ${PROJECT_SOURCE_DIR}/lib/Utilities
         ${PROJECT_SOURCE_DIR}/lib/SHTC3
-        ${PROJECT_SOURCE_DIR}/lib/MX25R1635
         )
     target_link_libraries(${PROJECT_NAME}.elf
         PUBLIC

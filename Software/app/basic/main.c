@@ -35,7 +35,6 @@ int main(void)
   int32_t temperature = 0;
   int32_t humidity = 0;
   int16_t status = 0;
-  MxChip mxic;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   SystemClock_Config();
@@ -70,26 +69,6 @@ int main(void)
   {
     APP_PPRINTF("\r\n Failed to read data from SHTC3 sensor \r\n");
   }
-
-  STNODE_BSP_LS_Init(LOAD_SWITCH_FLASH);
-  STNODE_BSP_LS_On(LOAD_SWITCH_FLASH);
-  HAL_Delay(100);
-
-    status = MX25R16_Init(&mxic);
-    if (status != MXST_SUCCESS)
-    {
-        APP_PPRINTF("\r\n Failed to init external SPI flash (MX25R1635F)\r\n");
-    }
-
-    status = MxSimpleTest(&mxic);
-    if (status == MXST_SUCCESS)
-    {
-        APP_PPRINTF("\r\n Simple external SPI flash (MX25R1635F) test passed!\r\n");
-    }
-    else
-    {
-        APP_PPRINTF("\r\n Simple external SPI flash test (MX25R1635F) failed, check UART logs for more details\r\n");
-    }
 
   while (1)
   {
