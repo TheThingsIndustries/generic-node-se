@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -112,9 +112,9 @@ typedef struct
 #define HAL_DMAMUX1_SYNC_EXTI15           LL_DMAMUX_SYNC_EXTI_LINE15     /*!< Synchronization signal from EXTI Line15 */
 #define HAL_DMAMUX1_SYNC_DMAMUX1_CH0_EVT  LL_DMAMUX_SYNC_DMAMUX_CH0      /*!< Synchronization signal from DMAMUX channel0 Event */
 #define HAL_DMAMUX1_SYNC_DMAMUX1_CH1_EVT  LL_DMAMUX_SYNC_DMAMUX_CH1      /*!< Synchronization signal from DMAMUX channel1 Event */
-#define HAL_DMAMUX1_SYNC_LPTIM1_OUT       LL_DMAMUX_SYNC_LPTIM1_OUT      /*!< Synchronization signal from LPTIM1 Ouput */
-#define HAL_DMAMUX1_SYNC_LPTIM2_OUT       LL_DMAMUX_SYNC_LPTIM2_OUT      /*!< Synchronization signal from LPTIM2 Ouput */
-#define HAL_DMAMUX1_SYNC_LPTIM3_OUT       LL_DMAMUX_SYNC_LPTIM3_OUT      /*!< Synchronization signal from LPTIM3 Ouput */
+#define HAL_DMAMUX1_SYNC_LPTIM1_OUT       LL_DMAMUX_SYNC_LPTIM1_OUT      /*!< Synchronization signal from LPTIM1 Output */
+#define HAL_DMAMUX1_SYNC_LPTIM2_OUT       LL_DMAMUX_SYNC_LPTIM2_OUT      /*!< Synchronization signal from LPTIM2 Output */
+#define HAL_DMAMUX1_SYNC_LPTIM3_OUT       LL_DMAMUX_SYNC_LPTIM3_OUT      /*!< Synchronization signal from LPTIM3 Output */
 
 #define HAL_DMAMUX1_MAX_SYNC              HAL_DMAMUX1_SYNC_LPTIM3_OUT
 /**
@@ -154,9 +154,9 @@ typedef struct
 #define HAL_DMAMUX1_REQ_GEN_EXTI15           LL_DMAMUX_REQ_GEN_EXTI_LINE15  /*!< Request signal generation from EXTI Line15 */
 #define HAL_DMAMUX1_REQ_GEN_DMAMUX1_CH0_EVT  LL_DMAMUX_REQ_GEN_DMAMUX_CH0   /*!< Request signal generation from DMAMUX channel0 Event */
 #define HAL_DMAMUX1_REQ_GEN_DMAMUX1_CH1_EVT  LL_DMAMUX_REQ_GEN_DMAMUX_CH1   /*!< Request signal generation from DMAMUX channel1 Event */
-#define HAL_DMAMUX1_REQ_GEN_LPTIM1_OUT       LL_DMAMUX_REQ_GEN_LPTIM1_OUT   /*!< Request signal generation from LPTIM1 Ouput */
-#define HAL_DMAMUX1_REQ_GEN_LPTIM2_OUT       LL_DMAMUX_REQ_GEN_LPTIM2_OUT   /*!< Request signal generation from LPTIM2 Ouput */
-#define HAL_DMAMUX1_REQ_GEN_LPTIM3_OUT       LL_DMAMUX_REQ_GEN_LPTIM3_OUT   /*!< Request signal generation from LPTIM3 Ouput */
+#define HAL_DMAMUX1_REQ_GEN_LPTIM1_OUT       LL_DMAMUX_REQ_GEN_LPTIM1_OUT   /*!< Request signal generation from LPTIM1 Output */
+#define HAL_DMAMUX1_REQ_GEN_LPTIM2_OUT       LL_DMAMUX_REQ_GEN_LPTIM2_OUT   /*!< Request signal generation from LPTIM2 Output */
+#define HAL_DMAMUX1_REQ_GEN_LPTIM3_OUT       LL_DMAMUX_REQ_GEN_LPTIM3_OUT   /*!< Request signal generation from LPTIM3 Output */
 
 #define HAL_DMAMUX1_MAX_REQ_GEN              HAL_DMAMUX1_REQ_GEN_LPTIM3_OUT
 /**

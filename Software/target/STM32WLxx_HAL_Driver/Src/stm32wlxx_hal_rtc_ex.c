@@ -97,7 +97,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -369,7 +369,8 @@ HAL_StatusTypeDef HAL_RTCEx_DeactivateInternalTimeStamp(RTC_HandleTypeDef *hrtc)
   */
 HAL_StatusTypeDef HAL_RTCEx_GetTimeStamp(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *sTimeStamp, RTC_DateTypeDef *sTimeStampDate, uint32_t Format)
 {
-  uint32_t tmptime, tmpdate;
+  uint32_t tmptime;
+  uint32_t tmpdate;
   UNUSED(hrtc);
 
   sTimeStamp->SubSeconds = READ_REG(RTC->TSSSR);
@@ -585,15 +586,21 @@ HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer(RTC_HandleTypeDef *hrtc, uint32_t Wak
   * @param  hrtc RTC handle
   * @param  WakeUpCounter Wake up counter
   * @param  WakeUpClock Wake up clock
+  * @param  WakeUpAutoClr Wake up auto clear value (look at WUTOCLR in reference manual)
+  *                       - No effect if WakeUpAutoClr is set to zero
+  *                       - This feature is meaningful in case of Low power mode to avoid any RTC software execution after Wake Up.
+  *                         That is why when WakeUpAutoClr is set, EXTI is configured as EVENT instead of Interrupt to avoid useless IRQ handler execution.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock)
+HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock, uint32_t WakeUpAutoClr)
 {
   uint32_t tickstart;
 
   /* Check the parameters */
   assert_param(IS_RTC_WAKEUP_CLOCK(WakeUpClock));
   assert_param(IS_RTC_WAKEUP_COUNTER(WakeUpCounter));
+  /* (0x0000<=WUTOCLR<=WUT) */
+  assert_param(WakeUpAutoClr <= WakeUpCounter);
 
   /* Process Locked */
   __HAL_LOCK(hrtc);
@@ -632,14 +639,23 @@ HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t 
     }
   }
 
-  /* Configure the Wakeup Timer counter */
-  WRITE_REG(RTC->WUTR, WakeUpCounter);
+  /* Configure the Wakeup Timer counter and auto clear value */
+  WRITE_REG(RTC->WUTR, (uint32_t)(WakeUpCounter | (WakeUpAutoClr << RTC_WUTR_WUTOCLR_Pos)));
 
   /* Configure the clock source */
   MODIFY_REG(RTC->CR, RTC_CR_WUCKSEL, (uint32_t)WakeUpClock);
 
-  /* RTC WakeUpTimer Interrupt Configuration: EXTI configuration */
-  __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_IT();
+  /* In case of WUT autoclr, the IRQ handler should not be called */
+  if (WakeUpAutoClr != 0U)
+  {
+    /* RTC WakeUpTimer EXTI Configuration: Event configuration */
+    __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_EVENT();
+  }
+  else
+  {
+    /* RTC WakeUpTimer EXTI Configuration: Interrupt configuration */
+    __HAL_RTC_WAKEUPTIMER_EXTI_ENABLE_IT();
+  }
 
   /* Configure the Interrupt in the RTC_CR register and Enable the Wakeup Timer*/
   SET_BIT(RTC->CR, (RTC_CR_WUTIE | RTC_CR_WUTE));
@@ -724,7 +740,6 @@ uint32_t HAL_RTCEx_GetWakeUpTimer(RTC_HandleTypeDef *hrtc)
   */
 void HAL_RTCEx_WakeUpTimerIRQHandler(RTC_HandleTypeDef *hrtc)
 {
-  /* Get the pending status of the WAKEUPTIMER Interrupt */
   if (READ_BIT(RTC->MISR, RTC_MISR_WUTMF) != 0U)
   {
     /* Clear the WAKEUPTIMER interrupt pending bit */
@@ -1360,7 +1375,7 @@ void HAL_RTCEx_SSRUIRQHandler(RTC_HandleTypeDef *hrtc)
 {
   if ((RTC->MISR & RTC_MISR_SSRUMF) != 0u)
   {
-    /* Immediatly clear flags */
+    /* Immediately clear flags */
     RTC->SCR = RTC_SCR_CSSRUF;
 
     /* SSRU callback */
@@ -1546,6 +1561,9 @@ HAL_StatusTypeDef HAL_RTCEx_SetTamper(RTC_HandleTypeDef *hrtc, RTC_TamperTypeDef
     __HAL_RTC_WRITEPROTECTION_ENABLE(hrtc);
   }
 
+  /* Store in the handle the Tamper enabled */
+  SET_BIT(hrtc->IsEnabled.TampFeatures, sTamper->Tamper);
+
   /* Control register 1 */
   SET_BIT(TAMP->CR1, sTamper->Tamper);
 
@@ -1614,6 +1632,9 @@ HAL_StatusTypeDef HAL_RTCEx_SetTamper_IT(RTC_HandleTypeDef *hrtc, RTC_TamperType
   /* Interrupt enable register */
   SET_BIT(TAMP->IER, sTamper->Tamper);
 
+  /* Store in the handle the Tamper enabled */
+  SET_BIT(hrtc->IsEnabled.TampFeatures, sTamper->Tamper);
+
   /* Control register 1 */
   SET_BIT(TAMP->CR1, sTamper->Tamper);
 
@@ -1646,6 +1667,9 @@ HAL_StatusTypeDef HAL_RTCEx_DeactivateTamper(RTC_HandleTypeDef *hrtc, uint32_t T
 
   /* Clear tamper interrupt and event flags (WO register) */
   WRITE_REG(TAMP->SCR, Tamper);
+
+  /* Store in the handle the Tamper disabled */
+  CLEAR_BIT(hrtc->IsEnabled.TampFeatures, Tamper);
 
   return HAL_OK;
 }
@@ -1719,6 +1743,9 @@ HAL_StatusTypeDef HAL_RTCEx_SetInternalTamper(RTC_HandleTypeDef *hrtc, RTC_Inter
     SET_BIT(TAMP->CR3, (sIntTamper->IntTamper >> 16U)); /* Shift of 16 bit to manage ITAMP on MSB part of CR3 */
   }
 
+  /* Store in the handle the Internal Tamper enabled */
+  SET_BIT(hrtc->IsEnabled.TampFeatures, sIntTamper->IntTamper);
+
   /* Control register 1 */
   SET_BIT(TAMP->CR1, sIntTamper->IntTamper);
 
@@ -1762,6 +1789,9 @@ HAL_StatusTypeDef HAL_RTCEx_SetInternalTamper_IT(RTC_HandleTypeDef *hrtc, RTC_In
     SET_BIT(TAMP->CR3, (sIntTamper->IntTamper >> 16U));  /* Shift of 16 bit to manage ITAMP on MSB part of CR3 */
   }
 
+  /* Store in the handle the Internal Tamper enabled */
+  SET_BIT(hrtc->IsEnabled.TampFeatures, sIntTamper->IntTamper);
+
   /* Control register 1 */
   SET_BIT(TAMP->CR1, sIntTamper->IntTamper);
 
@@ -1788,6 +1818,9 @@ HAL_StatusTypeDef HAL_RTCEx_DeactivateInternalTamper(RTC_HandleTypeDef *hrtc, ui
 
   /* Clear internal tamper interrupt */
   WRITE_REG(TAMP->SCR, IntTamper);
+
+  /* Store in the handle the internal Tamper disabled */
+  CLEAR_BIT(hrtc->IsEnabled.TampFeatures, IntTamper);
 
   return HAL_OK;
 }
@@ -1834,8 +1867,7 @@ HAL_StatusTypeDef HAL_RTCEx_PollForInternalTamperEvent(RTC_HandleTypeDef *hrtc, 
   */
 void HAL_RTCEx_TamperIRQHandler(RTC_HandleTypeDef *hrtc)
 {
-  /* Get interrupt status */
-  uint32_t tmp = READ_REG(TAMP->MISR);
+  uint32_t tmp = READ_REG(TAMP->MISR) & READ_REG(hrtc->IsEnabled.TampFeatures);
 
   /* Immediately clear flags */
   WRITE_REG(TAMP->SCR, tmp);
@@ -1898,6 +1930,18 @@ void HAL_RTCEx_TamperIRQHandler(RTC_HandleTypeDef *hrtc)
 #else
     /* Internal Tamper5 callback */
     HAL_RTCEx_InternalTamper5EventCallback(hrtc);
+#endif
+  }
+
+  /* Check Internal Tamper6 status */
+  if ((tmp & RTC_INT_TAMPER_6) == RTC_INT_TAMPER_6)
+  {
+#if (USE_HAL_RTC_REGISTER_CALLBACKS == 1)
+    /* Call Internal Tamper 6 Event registered Callback */
+    hrtc->InternalTamper6EventCallback(hrtc);
+#else
+    /* Internal Tamper6 callback */
+    HAL_RTCEx_InternalTamper6EventCallback(hrtc);
 #endif
   }
 
@@ -1988,6 +2032,21 @@ __weak void HAL_RTCEx_InternalTamper5EventCallback(RTC_HandleTypeDef *hrtc)
 
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_RTCEx_InternalTamper5EventCallback could be implemented in the user file
+   */
+}
+
+/**
+  * @brief  Internal Tamper 6 callback.
+  * @param  hrtc RTC handle
+  * @retval None
+  */
+__weak void HAL_RTCEx_InternalTamper6EventCallback(RTC_HandleTypeDef *hrtc)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hrtc);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_RTCEx_InternalTamper6EventCallback could be implemented in the user file
    */
 }
 

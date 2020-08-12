@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -40,8 +40,8 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /** @defgroup RCCEx_Private_Constants RCCEx Private Constants
- * @{
- */
+  * @{
+  */
 #define __LSCO1_CLK_ENABLE()   __HAL_RCC_GPIOA_CLK_ENABLE()
 #define LSCO1_GPIO_PORT        GPIOA
 #define LSCO1_PIN              GPIO_PIN_2
@@ -53,8 +53,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /** @defgroup RCCEx_Private_Functions RCCEx Private Functions
- * @{
- */
+  * @{
+  */
 static uint32_t          RCC_PLL_GetFreqDomain_P(void);
 static uint32_t          RCC_PLL_GetFreqDomain_Q(void);
 /**
@@ -68,8 +68,8 @@ static uint32_t          RCC_PLL_GetFreqDomain_Q(void);
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group1 Extended Peripheral Control functions
- *  @brief  Extended Peripheral Control functions
- *
+  *  @brief  Extended Peripheral Control functions
+  *
 @verbatim
  ===============================================================================
                 ##### Extended Peripheral Control functions  #####
@@ -346,10 +346,11 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
 void HAL_RCCEx_GetPeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClkInit)
 {
   /* Set all possible values for the extended clock type parameter------------*/
-  PeriphClkInit->PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2 | RCC_PERIPHCLK_I2S2 | RCC_PERIPHCLK_LPUART1 | \
+  PeriphClkInit->PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2 | RCC_PERIPHCLK_I2S2    | \
                                         RCC_PERIPHCLK_I2C1   | RCC_PERIPHCLK_I2C2   | RCC_PERIPHCLK_I2C3    | \
                                         RCC_PERIPHCLK_LPTIM1 | RCC_PERIPHCLK_LPTIM2 | RCC_PERIPHCLK_LPTIM3  | \
-                                        RCC_PERIPHCLK_RNG    | RCC_PERIPHCLK_ADC    | RCC_PERIPHCLK_RTC;
+                                        RCC_PERIPHCLK_RNG    | RCC_PERIPHCLK_ADC    | RCC_PERIPHCLK_RTC     | \
+                                        RCC_PERIPHCLK_LPUART1;
 
   /* Get the USART1 clock source ---------------------------------------------*/
   PeriphClkInit->Usart1ClockSelection   = __HAL_RCC_GET_USART1_SOURCE();
@@ -417,471 +418,480 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
 {
   uint32_t frequency = 0U;
   uint32_t srcclk;
-  
+
   /* Check the parameters */
   assert_param(IS_RCC_PERIPHCLOCK(PeriphClk));
-  
+
   switch (PeriphClk)
   {
-  case RCC_PERIPHCLK_RTC:
-    
-    /* Get the current RTC source */
-    srcclk = LL_RCC_GetRTCClockSource();
-    
-    switch (srcclk)
-    {
-    case LL_RCC_RTC_CLKSOURCE_LSE:                /* LSE clock used as RTC clock source */
-      if (LL_RCC_LSE_IsReady() == 1U)
+    case RCC_PERIPHCLK_RTC:
+
+      /* Get the current RTC source */
+      srcclk = LL_RCC_GetRTCClockSource();
+
+      switch (srcclk)
       {
-        frequency = LSE_VALUE;
+        case LL_RCC_RTC_CLKSOURCE_LSE:                /* LSE clock used as RTC clock source */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_RTC_CLKSOURCE_LSI:                /* LSI clock used as RTC clock source */
+          if (LL_RCC_LSI_IsReady() == 1U)
+          {
+            if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
+            {
+              frequency = LSI_VALUE / 128U;
+            }
+            else
+            {
+              frequency = LSI_VALUE;
+            }
+          }
+          break;
+
+        case LL_RCC_RTC_CLKSOURCE_HSE_DIV32:          /* HSE/32 clock used as RTC clock source */
+          frequency = HSE_VALUE / 32U;
+          break;
+
+        case LL_RCC_RTC_CLKSOURCE_NONE:               /* No clock used as RTC clock source */
+        default:
+          /* No clock source, frequency default init at 0 */
+          break;
       }
       break;
-      
-    case LL_RCC_RTC_CLKSOURCE_LSI:                /* LSI clock used as RTC clock source */
-      if (LL_RCC_LSI_IsReady() == 1U)
+
+    case RCC_PERIPHCLK_RNG:
+
+      /* Get the current RTC source */
+      srcclk = LL_RCC_GetRNGClockSource(LL_RCC_RNG_CLKSOURCE);
+
+      switch (srcclk)
       {
-        if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
-        {
-          frequency = LSI_VALUE / 128U;
-        }
-        else
-        {
-          frequency = LSI_VALUE;
-        }
+        case LL_RCC_RNG_CLKSOURCE_PLL:                /* PLL clock used as RNG clock source */
+          if (LL_RCC_PLL_IsReady() == 1U)
+          {
+            frequency = RCC_PLL_GetFreqDomain_Q();
+          }
+          break;
+
+        case LL_RCC_RNG_CLKSOURCE_LSI:                /* LSI clock used as RNG clock source */
+          if (LL_RCC_LSI_IsReady() == 1U)
+          {
+            if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
+            {
+              frequency = LSI_VALUE / 128U;
+            }
+            else
+            {
+              frequency = LSI_VALUE;
+            }
+          }
+          break;
+
+        case LL_RCC_RNG_CLKSOURCE_LSE:                /* LSE clock used as RNG clock source */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_RNG_CLKSOURCE_MSI:                  /* MSI clock used as RNG clock source */
+        default:
+          if (LL_RCC_MSI_IsReady() == 1U)
+          {
+            frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSI_IsEnabledRangeSelect(),
+                                               ((LL_RCC_MSI_IsEnabledRangeSelect() == 1U) ?
+                                                LL_RCC_MSI_GetRange() :
+                                                LL_RCC_MSI_GetRangeAfterStandby()));
+          }
+          break;
       }
       break;
-      
-    case LL_RCC_RTC_CLKSOURCE_HSE_DIV32:          /* HSE/32 clock used as RTC clock source */
-      frequency = HSE_VALUE / 32U;
+
+    case RCC_PERIPHCLK_USART1:
+
+      /* Get the current USART1 source */
+      srcclk = LL_RCC_GetUSARTClockSource(LL_RCC_USART1_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_USART1_CLKSOURCE_SYSCLK:          /* USART1 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_USART1_CLKSOURCE_HSI:             /* USART1 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_USART1_CLKSOURCE_LSE:             /* USART1 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_USART1_CLKSOURCE_PCLK2:           /* USART1 Clock is PCLK2 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK2_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB2Prescaler());
+          break;
+      }
       break;
-      
-    case LL_RCC_RTC_CLKSOURCE_NONE:               /* No clock used as RTC clock source */
+
+    case RCC_PERIPHCLK_USART2:
+
+      /* Get the current USART2 source */
+      srcclk = LL_RCC_GetUSARTClockSource(LL_RCC_USART2_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_USART2_CLKSOURCE_SYSCLK:          /* USART2 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_USART2_CLKSOURCE_HSI:             /* USART2 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_USART2_CLKSOURCE_LSE:             /* USART2 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_USART2_CLKSOURCE_PCLK1:           /* USART2 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_LPUART1:
+
+      /* Get the current LPUART1 source */
+      srcclk = LL_RCC_GetLPUARTClockSource(LL_RCC_LPUART1_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_LPUART1_CLKSOURCE_SYSCLK:         /* LPUART1 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_LPUART1_CLKSOURCE_HSI:            /* LPUART1 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPUART1_CLKSOURCE_LSE:            /* LPUART1 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPUART1_CLKSOURCE_PCLK1:          /* LPUART1 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+
+      break;
+
+    case RCC_PERIPHCLK_ADC:
+
+      /* Get the current ADC source */
+      srcclk = LL_RCC_GetADCClockSource(LL_RCC_ADC_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_ADC_CLKSOURCE_HSI:                /* HSI Osc. used as ADC clock source  */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+
+        case LL_RCC_ADC_CLKSOURCE_SYSCLK:             /* SYSCLK clock used as ADC clock source */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_ADC_CLKSOURCE_PLL:                /* PLL clock used as ADC clock source */
+          if (LL_RCC_PLL_IsReady() == 1U)
+          {
+            frequency = RCC_PLL_GetFreqDomain_P();
+          }
+          break;
+
+        case LL_RCC_ADC_CLKSOURCE_NONE:               /* No clock used as ADC clock source */
+        default:
+          /* No clock source, frequency default init at 0 */
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_I2C1:
+
+      /* Get the current I2C1 source */
+      srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C1_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_I2C1_CLKSOURCE_SYSCLK:            /* I2C1 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_I2C1_CLKSOURCE_HSI:               /* I2C1 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_I2C1_CLKSOURCE_PCLK1:             /* I2C1 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_I2C2:
+
+      /* Get the current I2C2 source */
+      srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C2_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_I2C2_CLKSOURCE_SYSCLK:            /* I2C2 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_I2C2_CLKSOURCE_HSI:               /* I2C2 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_I2C2_CLKSOURCE_PCLK1:             /* I2C2 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_I2C3:
+
+      /* Get the current I2C3 source */
+      srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C3_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_I2C3_CLKSOURCE_SYSCLK:            /* I2C3 Clock is System Clock */
+          frequency = HAL_RCC_GetSysClockFreq();
+          break;
+
+        case LL_RCC_I2C3_CLKSOURCE_HSI:               /* I2C3 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_I2C3_CLKSOURCE_PCLK1:             /* I2C3 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_I2S2:
+
+      /* Get the current I2S2 source */
+      srcclk = LL_RCC_GetI2SClockSource(LL_RCC_I2S2_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_I2S2_CLKSOURCE_PIN:          /* I2S2 Clock is External clock */
+          frequency = EXTERNAL_CLOCK_VALUE;
+          break;
+
+        case LL_RCC_I2S2_CLKSOURCE_HSI:               /* I2S2 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_I2S2_CLKSOURCE_PLL:               /* I2S2 Clock is PLL */
+        default:
+          frequency = RCC_PLL_GetFreqDomain_Q();
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_LPTIM1:
+
+      /* Get the current LPTIM1 source */
+      srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_LPTIM1_CLKSOURCE_LSI:             /* LPTIM1 Clock is LSI Osc. */
+          if (LL_RCC_LSI_IsReady() == 1U)
+          {
+            if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
+            {
+              frequency = LSI_VALUE / 128U;
+            }
+            else
+            {
+              frequency = LSI_VALUE;
+            }
+          }
+          break;
+
+        case LL_RCC_LPTIM1_CLKSOURCE_HSI:             /* LPTIM1 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM1_CLKSOURCE_LSE:             /* LPTIM1 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM1_CLKSOURCE_PCLK1:           /* LPTIM1 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+      break;
+
+    case RCC_PERIPHCLK_LPTIM2:
+
+      /* Get the current LPTIM2 source */
+      srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_LPTIM2_CLKSOURCE_LSI:             /* LPTIM2 Clock is LSI Osc. */
+          if (LL_RCC_LSI_IsReady() == 1U)
+          {
+            if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
+            {
+              frequency = LSI_VALUE / 128U;
+            }
+            else
+            {
+              frequency = LSI_VALUE;
+            }
+          }
+          break;
+
+        case LL_RCC_LPTIM2_CLKSOURCE_HSI:             /* LPTIM2 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM2_CLKSOURCE_LSE:             /* LPTIM2 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM2_CLKSOURCE_PCLK1:           /* LPTIM2 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+
+      break;
+
+    case RCC_PERIPHCLK_LPTIM3:
+
+      /* Get the current LPTIM3 source */
+      srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM3_CLKSOURCE);
+
+      switch (srcclk)
+      {
+        case LL_RCC_LPTIM3_CLKSOURCE_LSI:             /* LPTIM3 Clock is LSI Osc. */
+          if (LL_RCC_LSI_IsReady() == 1U)
+          {
+            if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
+            {
+              frequency = LSI_VALUE / 128U;
+            }
+            else
+            {
+              frequency = LSI_VALUE;
+            }
+          }
+          break;
+
+        case LL_RCC_LPTIM3_CLKSOURCE_HSI:             /* LPTIM3 Clock is HSI Osc. */
+          if (LL_RCC_HSI_IsReady() == 1U)
+          {
+            frequency = HSI_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM3_CLKSOURCE_LSE:             /* LPTIM3 Clock is LSE Osc. */
+          if (LL_RCC_LSE_IsReady() == 1U)
+          {
+            frequency = LSE_VALUE;
+          }
+          break;
+
+        case LL_RCC_LPTIM3_CLKSOURCE_PCLK1:           /* LPTIM3 Clock is PCLK1 */
+        default:
+          frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
+                                                                        LL_RCC_GetAHBPrescaler()), \
+                                               LL_RCC_GetAPB1Prescaler());
+          break;
+      }
+
+      break;
+
     default:
-      /* No clock source, frequency default init at 0 */
+      /* Unknown periphclk, frequency default init at 0 */
       break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_RNG:
-    
-    /* Get the current RTC source */
-    srcclk = LL_RCC_GetRNGClockSource(LL_RCC_RNG_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_RNG_CLKSOURCE_PLL:                /* PLL clock used as RNG clock source */
-      if (LL_RCC_PLL_IsReady() == 1U)
-      {
-        frequency = RCC_PLL_GetFreqDomain_Q();
-      }
-      break;
-      
-    case LL_RCC_RNG_CLKSOURCE_LSI:                /* LSI clock used as RNG clock source */
-      if (LL_RCC_LSI_IsReady() == 1U)
-      {
-        if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
-        {
-          frequency = LSI_VALUE / 128U;
-        }
-        else
-        {
-          frequency = LSI_VALUE;
-        }
-      }
-      break;
-      
-    case LL_RCC_RNG_CLKSOURCE_LSE:                /* LSE clock used as RNG clock source */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_RNG_CLKSOURCE_MSI:                  /* MSI clock used as RNG clock source */
-    default:
-      if (LL_RCC_MSI_IsReady() == 1U)
-      {
-        frequency = __LL_RCC_CALC_MSI_FREQ(LL_RCC_MSI_IsEnabledRangeSelect(),
-                                           ((LL_RCC_MSI_IsEnabledRangeSelect() == 1U) ?
-                                           LL_RCC_MSI_GetRange() :
-                                           LL_RCC_MSI_GetRangeAfterStandby()));
-      }
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_USART1:
-    
-    /* Get the current USART1 source */
-    srcclk = LL_RCC_GetUSARTClockSource(LL_RCC_USART1_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_USART1_CLKSOURCE_SYSCLK:          /* USART1 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_USART1_CLKSOURCE_HSI:             /* USART1 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_USART1_CLKSOURCE_LSE:             /* USART1 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_USART1_CLKSOURCE_PCLK2:           /* USART1 Clock is PCLK2 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK2_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB2Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_USART2:
-    
-    /* Get the current USART2 source */
-    srcclk = LL_RCC_GetUSARTClockSource(LL_RCC_USART2_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_USART2_CLKSOURCE_SYSCLK:          /* USART2 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_USART2_CLKSOURCE_HSI:             /* USART2 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_USART2_CLKSOURCE_LSE:             /* USART2 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_USART2_CLKSOURCE_PCLK1:           /* USART2 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_LPUART1:
-    
-    /* Get the current LPUART1 source */
-    srcclk = LL_RCC_GetLPUARTClockSource(LL_RCC_LPUART1_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_LPUART1_CLKSOURCE_SYSCLK:         /* LPUART1 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_LPUART1_CLKSOURCE_HSI:            /* LPUART1 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPUART1_CLKSOURCE_LSE:            /* LPUART1 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPUART1_CLKSOURCE_PCLK1:          /* LPUART1 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    
-    break;
-    
-  case RCC_PERIPHCLK_ADC:
-    
-    /* Get the current ADC source */
-    srcclk = LL_RCC_GetADCClockSource(LL_RCC_ADC_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_ADC_CLKSOURCE_HSI:                /* HSI Osc. used as ADC clock source  */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-      
-    case LL_RCC_ADC_CLKSOURCE_SYSCLK:             /* SYSCLK clock used as ADC clock source */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_ADC_CLKSOURCE_PLL:                /* PLL clock used as ADC clock source */
-      if (LL_RCC_PLL_IsReady() == 1U)
-      {
-        frequency = RCC_PLL_GetFreqDomain_P();
-      }
-      break;
-      
-    case LL_RCC_ADC_CLKSOURCE_NONE:               /* No clock used as ADC clock source */
-    default:
-      /* No clock source, frequency default init at 0 */
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_I2C1:
-    
-    /* Get the current I2C1 source */
-    srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C1_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_I2C1_CLKSOURCE_SYSCLK:            /* I2C1 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_I2C1_CLKSOURCE_HSI:               /* I2C1 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_I2C1_CLKSOURCE_PCLK1:             /* I2C1 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_I2C2:
-    
-    /* Get the current I2C2 source */
-    srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C2_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_I2C2_CLKSOURCE_SYSCLK:            /* I2C2 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_I2C2_CLKSOURCE_HSI:               /* I2C2 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_I2C2_CLKSOURCE_PCLK1:             /* I2C2 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_I2C3:
-    
-    /* Get the current I2C3 source */
-    srcclk = LL_RCC_GetI2CClockSource(LL_RCC_I2C3_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_I2C3_CLKSOURCE_SYSCLK:            /* I2C3 Clock is System Clock */
-      frequency = HAL_RCC_GetSysClockFreq();
-      break;
-      
-    case LL_RCC_I2C3_CLKSOURCE_HSI:               /* I2C3 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_I2C3_CLKSOURCE_PCLK1:             /* I2C3 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_I2S2:
-    
-    /* Get the current I2S2 source */
-    srcclk = LL_RCC_GetI2SClockSource(LL_RCC_I2S2_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_I2S2_CLKSOURCE_PIN:          /* I2S2 Clock is External clock */
-      frequency = EXTERNAL_CLOCK_VALUE;
-      break;
-      
-    case LL_RCC_I2S2_CLKSOURCE_HSI:               /* I2S2 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_I2S2_CLKSOURCE_PLL:               /* I2S2 Clock is PLL */
-    default:
-      frequency = RCC_PLL_GetFreqDomain_Q();
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_LPTIM1:
-    
-    /* Get the current LPTIM1 source */
-    srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_LPTIM1_CLKSOURCE_LSI:             /* LPTIM1 Clock is LSI Osc. */
-      if (LL_RCC_LSI_IsReady() == 1U)
-      {
-        if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
-        {
-          frequency = LSI_VALUE / 128U;
-        }
-        else
-        {
-          frequency = LSI_VALUE;
-        }
-      }
-      break;
-      
-    case LL_RCC_LPTIM1_CLKSOURCE_HSI:             /* LPTIM1 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM1_CLKSOURCE_LSE:             /* LPTIM1 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM1_CLKSOURCE_PCLK1:           /* LPTIM1 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    break;
-    
-  case RCC_PERIPHCLK_LPTIM2:
-    
-    /* Get the current LPTIM2 source */
-    srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_LPTIM2_CLKSOURCE_LSI:             /* LPTIM2 Clock is LSI Osc. */
-      if (LL_RCC_LSI_IsReady() == 1U)
-      {
-        if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
-        {
-          frequency = LSI_VALUE / 128U;
-        }
-        else
-        {
-          frequency = LSI_VALUE;
-        }
-      }
-      break;
-      
-    case LL_RCC_LPTIM2_CLKSOURCE_HSI:             /* LPTIM2 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM2_CLKSOURCE_LSE:             /* LPTIM2 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM2_CLKSOURCE_PCLK1:           /* LPTIM2 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    
-    break;
-    
-  case RCC_PERIPHCLK_LPTIM3:
-    
-    /* Get the current LPTIM3 source */
-    srcclk = LL_RCC_GetLPTIMClockSource(LL_RCC_LPTIM3_CLKSOURCE);
-    
-    switch (srcclk)
-    {
-    case LL_RCC_LPTIM3_CLKSOURCE_LSI:             /* LPTIM3 Clock is LSI Osc. */
-      if (LL_RCC_LSI_IsReady() == 1U)
-      {
-        if (LL_RCC_LSI_GetPrediv() == LL_RCC_LSI_PREDIV_128)
-        {
-          frequency = LSI_VALUE / 128U;
-        }
-        else
-        {
-          frequency = LSI_VALUE;
-        }
-      }
-      break;
-      
-    case LL_RCC_LPTIM3_CLKSOURCE_HSI:             /* LPTIM3 Clock is HSI Osc. */
-      if (LL_RCC_HSI_IsReady() == 1U)
-      {
-        frequency = HSI_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM3_CLKSOURCE_LSE:             /* LPTIM3 Clock is LSE Osc. */
-      if (LL_RCC_LSE_IsReady() == 1U)
-      {
-        frequency = LSE_VALUE;
-      }
-      break;
-      
-    case LL_RCC_LPTIM3_CLKSOURCE_PCLK1:           /* LPTIM3 Clock is PCLK1 */
-    default:
-      frequency = __LL_RCC_CALC_PCLK1_FREQ(__LL_RCC_CALC_HCLK1_FREQ(HAL_RCC_GetSysClockFreq(), \
-        LL_RCC_GetAHBPrescaler()), LL_RCC_GetAPB1Prescaler());
-      break;
-    }
-    
-    break;
-    
-  default:
-    /* Unknown periphclk, frequency default init at 0 */
-    break;
   }
-  
+
   return (frequency);
 }
 
@@ -890,8 +900,8 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)
   */
 
 /** @defgroup RCCEx_Exported_Functions_Group2 Extended Clock management functions
- *  @brief  Extended Clock management functions
- *
+  *  @brief  Extended Clock management functions
+  *
 @verbatim
  ===============================================================================
                 ##### Extended clock management functions  #####
@@ -1096,8 +1106,8 @@ void HAL_RCCEx_DisableMSIPLLMode(void)
   */
 
 /** @addtogroup RCCEx_Private_Functions
- * @{
- */
+  * @{
+  */
 
 /**
   * @brief  Return PLL clock (PLLPCLK) frequency used for ADC domain
