@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -326,7 +326,7 @@ typedef struct
   * @}
   */
 
-#if defined (DUAL_CORE)
+#if defined(DMA_CCR_SECM)
 /** @defgroup DMA_LL_CHANNEL_SEC_MODE CHANNEL SECURITY MODE
   * @{
   */
@@ -354,16 +354,18 @@ typedef struct
   * @}
   */
 
-#endif /* DUAL_CORE */
-/** @defgroup DMA_LL_SEC_PRIVILEDGE_MODE PRIVILEDGE MODE
+#endif /* DMA_CCR_SECM */
+#if defined(DMA_CCR_PRIV)
+/** @defgroup DMA_LL_SEC_PRIVILEGE_MODE PRIVILEGE MODE
   * @{
   */
-#define LL_DMA_CHANNEL_NPRIV              0x00000000U             /*!< Disable priviledge */
-#define LL_DMA_CHANNEL_PRIV               DMA_CCR_PRIV            /*!< Enable  priviledge */
+#define LL_DMA_CHANNEL_NPRIV              0x00000000U             /*!< Disable privilege */
+#define LL_DMA_CHANNEL_PRIV               DMA_CCR_PRIV            /*!< Enable  privilege */
 /**
   * @}
   */
 
+#endif /* DMA_CCR_PRIV */
 /**
   * @}
   */
@@ -526,7 +528,7 @@ __STATIC_INLINE uint32_t LL_DMA_IsEnabledChannel(DMA_TypeDef *DMAx, uint32_t Cha
                     DMA_CCR_EN) == (DMA_CCR_EN)) ? 1UL : 0UL);
 }
 
-#if defined (DUAL_CORE)
+#if defined(DMA_CCR_SECM)
 /**
   * @brief  Configure all secure parameters link to DMA transfer.
   * @rmtoll CCR          SECM          LL_DMA_ConfigChannelSecure\n
@@ -580,8 +582,8 @@ __STATIC_INLINE uint32_t LL_DMA_GetConfigChannelSecure(DMA_TypeDef *DMAx, uint32
   return (READ_BIT(((DMA_Channel_TypeDef *)(dma_base_addr + CHANNEL_OFFSET_TAB[Channel]))->CCR,
                    DMA_CCR_SECM | DMA_CCR_SSEC | DMA_CCR_DSEC));
 }
-#endif /* DUAL_CORE */
 
+#endif /* DMA_CCR_SECM */
 /**
   * @brief  Configure all parameters link to DMA transfer.
   * @rmtoll CCR          DIR           LL_DMA_ConfigTransfer\n
@@ -962,7 +964,7 @@ __STATIC_INLINE uint32_t LL_DMA_GetChannelPriorityLevel(DMA_TypeDef *DMAx, uint3
                    DMA_CCR_PL));
 }
 
-#if defined (DUAL_CORE)
+#if defined(DMA_CCR_SECM)
 /**
   * @brief  Enable the DMA Channel secure attribute.
   * @rmtoll CCR          SECM          LL_DMA_EnableChannelSecure\n
@@ -1145,7 +1147,8 @@ __STATIC_INLINE uint32_t LL_DMA_IsEnabledChannelDestSecure(DMA_TypeDef *DMAx, ui
   return ((READ_BIT(((DMA_Channel_TypeDef *)(dma_base_addr + CHANNEL_OFFSET_TAB[Channel]))->CCR,
                     DMA_CCR_DSEC) == (DMA_CCR_DSEC)) ? 1UL : 0UL);
 }
-#endif /* DUAL_CORE */
+#endif /* DMA_CCR_SECM */
+#if defined(DMA_CCR_PRIV)
 
 /**
   * @brief  Enable the privilege attribute on DMA channel.
@@ -1208,6 +1211,7 @@ __STATIC_INLINE uint32_t LL_DMA_IsEnabledChannelPrivilege(DMA_TypeDef *DMAx, uin
                     DMA_CCR_PRIV) == (DMA_CCR_PRIV)) ? 1UL : 0UL);
 }
 
+#endif /* DMA_CCR_PRIV */
 /**
   * @brief  Set Number of data to transfer.
   * @note   This action has no effect if
@@ -1258,7 +1262,7 @@ __STATIC_INLINE uint32_t LL_DMA_GetDataLength(DMA_TypeDef *DMAx, uint32_t Channe
 /**
   * @brief  Configure the Source and Destination addresses.
   * @note   This API must not be called when the DMA channel is enabled.
-  * @note   Each peripheral using DMA provides an API to get directly the register adress (LL_PPP_DMA_GetRegAddr).
+  * @note   Each peripheral using DMA provides an API to get directly the register address (LL_PPP_DMA_GetRegAddr).
   * @rmtoll CPAR         PA            LL_DMA_ConfigAddresses\n
   *         CMAR         MA            LL_DMA_ConfigAddresses
   * @param  DMAx DMAx Instance
@@ -1492,7 +1496,7 @@ __STATIC_INLINE uint32_t LL_DMA_GetM2MDstAddress(DMA_TypeDef *DMAx, uint32_t Cha
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR1
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR2
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR3
-  *         @arg @ref LL_DMAMUX_REQ_ADC1
+  *         @arg @ref LL_DMAMUX_REQ_ADC
   *         @arg @ref LL_DMAMUX_REQ_DAC_OUT1
   *         @arg @ref LL_DMAMUX_REQ_SPI1_RX
   *         @arg @ref LL_DMAMUX_REQ_SPI1_TX
@@ -1558,7 +1562,7 @@ __STATIC_INLINE void LL_DMA_SetPeriphRequest(DMA_TypeDef *DMAx, uint32_t Channel
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR1
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR2
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR3
-  *         @arg @ref LL_DMAMUX_REQ_ADC1
+  *         @arg @ref LL_DMAMUX_REQ_ADC
   *         @arg @ref LL_DMAMUX_REQ_DAC_OUT1
   *         @arg @ref LL_DMAMUX_REQ_SPI1_RX
   *         @arg @ref LL_DMAMUX_REQ_SPI1_TX

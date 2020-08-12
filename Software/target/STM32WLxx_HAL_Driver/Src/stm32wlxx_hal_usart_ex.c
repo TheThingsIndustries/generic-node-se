@@ -28,7 +28,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -57,10 +57,10 @@
 /** @defgroup USARTEx_Private_Constants USARTEx Private Constants
   * @{
   */
-/* UART RX FIFO depth */
+/* USART RX FIFO depth */
 #define RX_FIFO_DEPTH 8U
 
-/* UART TX FIFO depth */
+/* USART TX FIFO depth */
 #define TX_FIFO_DEPTH 8U
 /**
   * @}
@@ -243,7 +243,7 @@ HAL_StatusTypeDef HAL_USARTEx_DisableSlaveMode(USART_HandleTypeDef *husart)
   /* Restore USART configuration */
   WRITE_REG(husart->Instance->CR1, tmpcr1);
 
-  husart->SlaveMode = USART_SLAVEMODE_ENABLE;
+  husart->SlaveMode = USART_SLAVEMODE_DISABLE;
 
   husart->State = HAL_USART_STATE_READY;
 
@@ -476,7 +476,6 @@ HAL_StatusTypeDef HAL_USARTEx_SetRxFifoThreshold(USART_HandleTypeDef *husart, ui
 
   return HAL_OK;
 }
-
 /**
   * @}
   */

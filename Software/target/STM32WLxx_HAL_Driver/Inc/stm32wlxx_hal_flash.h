@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -116,7 +116,7 @@ typedef struct
                                         This parameter must be aligned on 1kB boundary */
   uint32_t HideProtectionStartAddr;/*!< Hide Protection area start address (used for OPTIONBYTE_SECURE_MODE)
                                         This parameter must be aligned on 2kB boundary */
-  uint32_t SecureMode;             /*!< Secure mode activated or desactivated.
+  uint32_t SecureMode;             /*!< Secure mode activated or deactivated.
                                         This parameter can be a value of @ref FLASH_OB_SECURITY_MODE */
   uint32_t SUBGHZSPISecureAccess;  /*!< Sub-GHz radio SPI security access enabled or disabled (used for OPTIONBYTE_SUBGHZSPI_SECURE_ACCESS).
                                         This parameter can be a value of @ref FLASH_OB_SUBGHZSPI_SECURE_ACCESS */

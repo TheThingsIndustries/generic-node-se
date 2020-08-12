@@ -21,7 +21,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -56,7 +56,7 @@
  * @brief STM32WLxx HAL Driver version number
    */
 #define __STM32WLxx_HAL_VERSION_MAIN   (0x00U) /*!< [31:24] main version */
-#define __STM32WLxx_HAL_VERSION_SUB1   (0x04U) /*!< [23:16] sub1 version */
+#define __STM32WLxx_HAL_VERSION_SUB1   (0x07U) /*!< [23:16] sub1 version */
 #define __STM32WLxx_HAL_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define __STM32WLxx_HAL_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 #define __STM32WLxx_HAL_VERSION         ((__STM32WLxx_HAL_VERSION_MAIN << 24U)\
@@ -557,7 +557,7 @@ void HAL_DBGMCU_DisableDBGSleepMode(void)
 
 /**
   * @brief  Enable the Debug Module during STOP mode
-  * @note  This functionnality does not influence CPU2 operation, CPU2 cannot be debugged
+  * @note  This functionality does not influence CPU2 operation, CPU2 cannot be debugged
   *        in Stop mode even when this bit is enabled
   * @retval None
   */
@@ -577,7 +577,7 @@ void HAL_DBGMCU_DisableDBGStopMode(void)
 
 /**
   * @brief  Enable the Debug Module during STANDBY mode
-  * @note  This functionnality does not influence CPU2 operation, CPU2 cannot be debugged
+  * @note  This functionality does not influence CPU2 operation, CPU2 cannot be debugged
   *        in Standby mode even when this bit is enabled
   * @retval None
   */
@@ -639,14 +639,31 @@ void HAL_SYSCFG_SRAM2Erase(void)
   *                                                This requires VDDA equal to or higher than 2.4 V.
   *            @arg @ref SYSCFG_VREFBUF_VOLTAGE_SCALE1 : VREF_OUT1 around 2.5 V.
   *                                                This requires VDDA equal to or higher than 2.8 V.
+  * @note   Retrieve the TrimmingValue from factory located at
+  *         VREFBUF_SC0_CAL_ADDR or VREFBUF_SC1_CAL_ADDR addresses.
   * @retval None
   */
 void HAL_SYSCFG_VREFBUF_VoltageScalingConfig(uint32_t VoltageScaling)
 {
+  uint32_t TrimmingValue;
+
   /* Check the parameters */
   assert_param(IS_SYSCFG_VREFBUF_VOLTAGE_SCALE(VoltageScaling));
-
+  
   LL_VREFBUF_SetVoltageScaling(VoltageScaling);
+  
+  /* Restrieve Calibration data and store them into trimming field */
+  if (VoltageScaling == SYSCFG_VREFBUF_VOLTAGE_SCALE0)
+  {
+    TrimmingValue = ((uint32_t) *VREFBUF_SC0_CAL_ADDR) & 0x3FU;
+  }
+  else
+  {
+    TrimmingValue = ((uint32_t) *VREFBUF_SC1_CAL_ADDR) & 0x3FU;
+  }
+  assert_param(IS_SYSCFG_VREFBUF_TRIMMING(TrimmingValue));
+
+  HAL_SYSCFG_VREFBUF_TrimmingConfig(TrimmingValue);
 }
 
 /**
@@ -668,6 +685,12 @@ void HAL_SYSCFG_VREFBUF_HighImpedanceConfig(uint32_t Mode)
 
 /**
   * @brief Tune the Internal Voltage Reference buffer (VREFBUF).
+  * @note  Each VrefBuf voltage scale is calibrated in production for each device,
+  *        data stored in flash memory.
+  *        Function @ref HAL_SYSCFG_VREFBUF_VoltageScalingConfig retrieves and 
+  *        applies this calibration data as trimming value at each scale change.
+  *        Therefore, optionally, function @ref HAL_SYSCFG_VREFBUF_TrimmingConfig
+  *        can be used in a second time to fine tune the trimming.
   * @param TrimmingValue specifies trimming code for VREFBUF calibration
   *          This parameter can be a number between Min_Data = 0x00 and Max_Data = 0x3F
   * @retval None
@@ -739,7 +762,7 @@ void HAL_SYSCFG_DisableIOAnalogSwitchBooster(void)
 #if defined(DUAL_CORE)
 /**
   * @brief  Enable Additional Interrupt Mask
-  * @note   This interface is an additionnal interrupt masking interface
+  * @note   This interface is an additional interrupt masking interface
   *         up to the EXTI interface
   * @param  Interrupt Pointer to a SYSCFG_InterruptTypeDef structure that contains
   *                   the Interrupt Mask configuration
@@ -765,7 +788,7 @@ void HAL_SYSCFG_EnableIT(SYSCFG_InterruptTypeDef *Interrupt)
 
 /**
   * @brief  Disable Additional Interrupt Mask
-  * @note   This interface is an additionnal interrupt masking interface
+  * @note   This interface is an additional interrupt masking interface
   *         up to the EXTI interface
   * @param  Interrupt Pointer to a SYSCFG_InterruptTypeDef structure that contains
   *                   the Interrupt Mask configuration

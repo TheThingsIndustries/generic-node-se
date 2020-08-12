@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -88,9 +88,9 @@ TIMEx_BreakInputConfigTypeDef;
   * @{
   */
 #define TIM_TIM1_ETR_GPIO           0x00000000U                                           /* !< TIM1_ETR is not connected to I/O      */
-#define TIM_TIM1_ETR_ADC1_AWD1      TIM1_OR1_ETR_ADC1_RMP_0                               /* !< TIM1_ETR is connected to ADC1 AWD1    */
-#define TIM_TIM1_ETR_ADC1_AWD2      TIM1_OR1_ETR_ADC1_RMP_1                               /* !< TIM1_ETR is connected to ADC1 AWD2    */
-#define TIM_TIM1_ETR_ADC1_AWD3      (TIM1_OR1_ETR_ADC1_RMP_0 | TIM1_OR1_ETR_ADC1_RMP_1)   /* !< TIM1_ETR is connected to ADC1 AWD3    */
+#define TIM_TIM1_ETR_ADC_AWD1       TIM1_OR1_ETR_ADC_RMP_0                                /* !< TIM1_ETR is connected to ADC AWD1    */
+#define TIM_TIM1_ETR_ADC_AWD2       TIM1_OR1_ETR_ADC_RMP_1                                /* !< TIM1_ETR is connected to ADC AWD2    */
+#define TIM_TIM1_ETR_ADC_AWD3       (TIM1_OR1_ETR_ADC_RMP_0 | TIM1_OR1_ETR_ADC_RMP_1)     /* !< TIM1_ETR is connected to ADC AWD3    */
 #define TIM_TIM1_ETR_COMP1          TIM1_AF1_ETRSEL_0                                     /* !< TIM1_ETR is connected to COMP1 output */
 #define TIM_TIM1_ETR_COMP2          TIM1_AF1_ETRSEL_1                                     /* !< TIM1_ETR is connected to COMP2 output */
 
@@ -176,28 +176,28 @@ TIMEx_BreakInputConfigTypeDef;
 /** @defgroup TIMEx_Private_Macros TIM Extended Private Macros
   * @{
   */
-#define IS_TIM_REMAP(__INSTANCE__, __REMAP__)                                             \
-          ((((__INSTANCE__) == TIM1)  && ((((__REMAP__) & 0xFFFC3FECU) == 0x00000000U)))  \
-        || (((__INSTANCE__) == TIM2)  && ((((__REMAP__) & 0xFFFC3FF1U) == 0x00000000U)))  \
-        || (((__INSTANCE__) == TIM16) && ((((__REMAP__) & 0xFFFFFFFCU) == 0x00000000U)))  \
-        || (((__INSTANCE__) == TIM17) && ((((__REMAP__) & 0xFFFFFFFCU) == 0x00000000U))))
+#define IS_TIM_REMAP(__INSTANCE__, __REMAP__)                                        \
+  ((((__INSTANCE__) == TIM1)  && ((((__REMAP__) & 0xFFFC3FECU) == 0x00000000U)))     \
+   || (((__INSTANCE__) == TIM2)  && ((((__REMAP__) & 0xFFFC3FF1U) == 0x00000000U)))  \
+   || (((__INSTANCE__) == TIM16) && ((((__REMAP__) & 0xFFFFFFFCU) == 0x00000000U)))  \
+   || (((__INSTANCE__) == TIM17) && ((((__REMAP__) & 0xFFFFFFFCU) == 0x00000000U))))
 
 #define IS_TIM_BREAKINPUT(__BREAKINPUT__)               \
-          (((__BREAKINPUT__) == TIM_BREAKINPUT_BRK)  || \
-           ((__BREAKINPUT__) == TIM_BREAKINPUT_BRK2))
+  (((__BREAKINPUT__) == TIM_BREAKINPUT_BRK)  || \
+   ((__BREAKINPUT__) == TIM_BREAKINPUT_BRK2))
 
 #define IS_TIM_BREAKINPUTSOURCE(__SOURCE__)                \
-          (((__SOURCE__) == TIM_BREAKINPUTSOURCE_BKIN)  || \
-           ((__SOURCE__) == TIM_BREAKINPUTSOURCE_COMP1) || \
-           ((__SOURCE__) == TIM_BREAKINPUTSOURCE_COMP2))
+  (((__SOURCE__) == TIM_BREAKINPUTSOURCE_BKIN)  || \
+   ((__SOURCE__) == TIM_BREAKINPUTSOURCE_COMP1) || \
+   ((__SOURCE__) == TIM_BREAKINPUTSOURCE_COMP2))
 
 #define IS_TIM_BREAKINPUTSOURCE_STATE(__STATE__)             \
-          (((__STATE__) == TIM_BREAKINPUTSOURCE_DISABLE)  || \
-           ((__STATE__) == TIM_BREAKINPUTSOURCE_ENABLE))
+  (((__STATE__) == TIM_BREAKINPUTSOURCE_DISABLE)  || \
+   ((__STATE__) == TIM_BREAKINPUTSOURCE_ENABLE))
 
 #define IS_TIM_BREAKINPUTSOURCE_POLARITY(__POLARITY__)                 \
-            (((__POLARITY__) == TIM_BREAKINPUTSOURCE_POLARITY_LOW)  || \
-             ((__POLARITY__) == TIM_BREAKINPUTSOURCE_POLARITY_HIGH))
+  (((__POLARITY__) == TIM_BREAKINPUTSOURCE_POLARITY_LOW)  || \
+   ((__POLARITY__) == TIM_BREAKINPUTSOURCE_POLARITY_HIGH))
 
 /**
   * @}
@@ -333,6 +333,7 @@ void HAL_TIMEx_Break2Callback(TIM_HandleTypeDef *htim);
   */
 /* Extended Peripheral State functions  ***************************************/
 HAL_TIM_StateTypeDef HAL_TIMEx_HallSensor_GetState(TIM_HandleTypeDef *htim);
+HAL_TIM_ChannelStateTypeDef HAL_TIMEx_GetChannelNState(TIM_HandleTypeDef *htim,  uint32_t ChannelN);
 /**
   * @}
   */

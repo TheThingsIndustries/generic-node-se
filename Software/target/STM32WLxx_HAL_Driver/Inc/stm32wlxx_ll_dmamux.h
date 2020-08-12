@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -129,7 +129,7 @@ extern "C" {
 #define LL_DMAMUX_REQ_GENERATOR1          0x00000002U  /*!< DMAMUX request generator 1 */
 #define LL_DMAMUX_REQ_GENERATOR2          0x00000003U  /*!< DMAMUX request generator 2 */
 #define LL_DMAMUX_REQ_GENERATOR3          0x00000004U  /*!< DMAMUX request generator 3 */
-#define LL_DMAMUX_REQ_ADC1                0x00000005U  /*!< DMAMUX ADC1 request        */
+#define LL_DMAMUX_REQ_ADC                 0x00000005U  /*!< DMAMUX ADC request         */
 #define LL_DMAMUX_REQ_DAC_OUT1            0x00000006U  /*!< DMAMUX DAC OUT request     */
 #define LL_DMAMUX_REQ_SPI1_RX             0x00000007U  /*!< DMAMUX SPI1 RX request     */
 #define LL_DMAMUX_REQ_SPI1_TX             0x00000008U  /*!< DMAMUX SPI1 TX request     */
@@ -226,9 +226,9 @@ extern "C" {
 #define LL_DMAMUX_SYNC_EXTI_LINE15        (DMAMUX_CxCR_SYNC_ID_3 | DMAMUX_CxCR_SYNC_ID_2 | DMAMUX_CxCR_SYNC_ID_1 | DMAMUX_CxCR_SYNC_ID_0) /*!< Synchronization signal from EXTI Line15 */
 #define LL_DMAMUX_SYNC_DMAMUX_CH0         DMAMUX_CxCR_SYNC_ID_4                                                                           /*!< Synchronization signal from DMAMUX channel0 Event */
 #define LL_DMAMUX_SYNC_DMAMUX_CH1         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_0)                                                 /*!< Synchronization signal from DMAMUX channel1 Event */
-#define LL_DMAMUX_SYNC_LPTIM1_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_1)                                                 /*!< Synchronization signal from LPTIM1 Ouput */
-#define LL_DMAMUX_SYNC_LPTIM2_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_1 | DMAMUX_CxCR_SYNC_ID_0)                         /*!< Synchronization signal from LPTIM2 Ouput */
-#define LL_DMAMUX_SYNC_LPTIM3_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_2)                                                 /*!< Synchronization signal from LPTIM3 Ouput */
+#define LL_DMAMUX_SYNC_LPTIM1_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_1)                                                 /*!< Synchronization signal from LPTIM1 Output */
+#define LL_DMAMUX_SYNC_LPTIM2_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_1 | DMAMUX_CxCR_SYNC_ID_0)                         /*!< Synchronization signal from LPTIM2 Output */
+#define LL_DMAMUX_SYNC_LPTIM3_OUT         (DMAMUX_CxCR_SYNC_ID_4 | DMAMUX_CxCR_SYNC_ID_2)                                                 /*!< Synchronization signal from LPTIM3 Output */
 /**
   * @}
   */
@@ -276,9 +276,9 @@ extern "C" {
 #define LL_DMAMUX_REQ_GEN_EXTI_LINE15     (DMAMUX_RGxCR_SIG_ID_3 | DMAMUX_RGxCR_SIG_ID_2 | DMAMUX_RGxCR_SIG_ID_1 | DMAMUX_RGxCR_SIG_ID_0) /*!< Request signal generation from EXTI Line15 */
 #define LL_DMAMUX_REQ_GEN_DMAMUX_CH0      DMAMUX_RGxCR_SIG_ID_4                                                                           /*!< Request signal generation from DMAMUX channel0 Event */
 #define LL_DMAMUX_REQ_GEN_DMAMUX_CH1      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_0)                                                 /*!< Request signal generation from DMAMUX channel1 Event */
-#define LL_DMAMUX_REQ_GEN_LPTIM1_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_1)                                                 /*!< Request signal generation from LPTIM1 Ouput */
-#define LL_DMAMUX_REQ_GEN_LPTIM2_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_1 | DMAMUX_RGxCR_SIG_ID_0)                         /*!< Request signal generation from LPTIM2 Ouput */
-#define LL_DMAMUX_REQ_GEN_LPTIM3_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_2)                                                 /*!< Request signal generation from LPTIM3 Ouput */
+#define LL_DMAMUX_REQ_GEN_LPTIM1_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_1)                                                 /*!< Request signal generation from LPTIM1 Output */
+#define LL_DMAMUX_REQ_GEN_LPTIM2_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_1 | DMAMUX_RGxCR_SIG_ID_0)                         /*!< Request signal generation from LPTIM2 Output */
+#define LL_DMAMUX_REQ_GEN_LPTIM3_OUT      (DMAMUX_RGxCR_SIG_ID_4 | DMAMUX_RGxCR_SIG_ID_2)                                                 /*!< Request signal generation from LPTIM3 Output */
 /**
   * @}
   */
@@ -354,7 +354,7 @@ extern "C" {
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR1
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR2
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR3
-  *         @arg @ref LL_DMAMUX_REQ_ADC1
+  *         @arg @ref LL_DMAMUX_REQ_ADC
   *         @arg @ref LL_DMAMUX_REQ_DAC_OUT1
   *         @arg @ref LL_DMAMUX_REQ_SPI1_RX
   *         @arg @ref LL_DMAMUX_REQ_SPI1_TX
@@ -427,7 +427,7 @@ __STATIC_INLINE void LL_DMAMUX_SetRequestID(DMAMUX_Channel_TypeDef *DMAMUXx, uin
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR1
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR2
   *         @arg @ref LL_DMAMUX_REQ_GENERATOR3
-  *         @arg @ref LL_DMAMUX_REQ_ADC1
+  *         @arg @ref LL_DMAMUX_REQ_ADC
   *         @arg @ref LL_DMAMUX_REQ_DAC_OUT1
   *         @arg @ref LL_DMAMUX_REQ_SPI1_RX
   *         @arg @ref LL_DMAMUX_REQ_SPI1_TX

@@ -111,6 +111,7 @@
     (+) Tamper3EventCallback         : RTC Tamper 3 Event callback.
     (+) InternalTamper3EventCallback : RTC InternalTamper 3 Event callback.
     (+) InternalTamper5EventCallback : RTC InternalTamper 5 Event callback.
+    (+) InternalTamper8EventCallback : RTC InternalTamper 6 Event callback.
     (+) InternalTamper8EventCallback : RTC InternalTamper 8 Event callback.
     (+) MspInitCallback              : RTC MspInit callback.
     (+) MspDeInitCallback            : RTC MspDeInit callback.
@@ -132,6 +133,7 @@
     (+) Tamper3EventCallback         : RTC Tamper 3 Event callback.
     (+) InternalTamper3EventCallback : RTC Internal Tamper 3 Event callback.
     (+) InternalTamper5EventCallback : RTC Internal Tamper 5 Event callback.
+    (+) InternalTamper8EventCallback : RTC Internal Tamper 6 Event callback.
     (+) InternalTamper8EventCallback : RTC Internal Tamper 8 Event callback.
     (+) MspInitCallback              : RTC MspInit callback.
     (+) MspDeInitCallback            : RTC MspDeInit callback.
@@ -161,7 +163,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -272,6 +274,7 @@ HAL_StatusTypeDef HAL_RTC_Init(RTC_HandleTypeDef *hrtc)
       hrtc->Tamper3EventCallback         =  HAL_RTCEx_Tamper3EventCallback;          /* Legacy weak Tamper3EventCallback     */
       hrtc->InternalTamper3EventCallback =  HAL_RTCEx_InternalTamper3EventCallback;  /* Legacy weak InternalTamper3EventCallback */
       hrtc->InternalTamper5EventCallback =  HAL_RTCEx_InternalTamper5EventCallback;  /* Legacy weak InternalTamper5EventCallback */
+      hrtc->InternalTamper6EventCallback =  HAL_RTCEx_InternalTamper6EventCallback;  /* Legacy weak InternalTamper6EventCallback */
       hrtc->InternalTamper8EventCallback =  HAL_RTCEx_InternalTamper8EventCallback;  /* Legacy weak InternalTamper8EventCallback */
 
       if (hrtc->MspInitCallback == NULL)
@@ -424,12 +427,14 @@ HAL_StatusTypeDef HAL_RTC_DeInit(RTC_HandleTypeDef *hrtc)
   *          @arg @ref HAL_RTC_ALARM_A_EVENT_CB_ID          Alarm A Event Callback ID
   *          @arg @ref HAL_RTC_ALARM_B_EVENT_CB_ID          Alarm B Event Callback ID
   *          @arg @ref HAL_RTC_TIMESTAMP_EVENT_CB_ID        TimeStamp Event Callback ID
+  *          @arg @ref HAL_RTC_SSRU_EVENT_CB_ID             SSRU Callback ID
   *          @arg @ref HAL_RTC_WAKEUPTIMER_EVENT_CB_ID      WakeUp Timer Event Callback ID
   *          @arg @ref HAL_RTC_TAMPER1_EVENT_CB_ID          Tamper 1 Callback ID
   *          @arg @ref HAL_RTC_TAMPER2_EVENT_CB_ID          Tamper 2 Callback ID
   *          @arg @ref HAL_RTC_TAMPER3_EVENT_CB_ID          Tamper 3 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER3_EVENT_CB_ID Internal Tamper 3 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER5_EVENT_CB_ID Internal Tamper 5 Callback ID
+  *          @arg @ref HAL_RTC_INTERNAL_TAMPER6_EVENT_CB_ID Internal Tamper 6 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID Internal Tamper 8 Callback ID
   *          @arg @ref HAL_RTC_MSPINIT_CB_ID                Msp Init callback ID
   *          @arg @ref HAL_RTC_MSPDEINIT_CB_ID              Msp DeInit callback ID
@@ -490,6 +495,10 @@ HAL_StatusTypeDef HAL_RTC_RegisterCallback(RTC_HandleTypeDef *hrtc, HAL_RTC_Call
 
       case HAL_RTC_INTERNAL_TAMPER5_EVENT_CB_ID :
         hrtc->InternalTamper5EventCallback = pCallback;
+        break;
+
+      case HAL_RTC_INTERNAL_TAMPER6_EVENT_CB_ID :
+        hrtc->InternalTamper6EventCallback = pCallback;
         break;
 
       case HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID :
@@ -556,9 +565,10 @@ HAL_StatusTypeDef HAL_RTC_RegisterCallback(RTC_HandleTypeDef *hrtc, HAL_RTC_Call
   *          @arg @ref HAL_RTC_TAMPER3_EVENT_CB_ID          Tamper 3 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER3_EVENT_CB_ID Internal Tamper 3 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER5_EVENT_CB_ID Internal Tamper 5 Callback ID
+  *          @arg @ref HAL_RTC_INTERNAL_TAMPER6_EVENT_CB_ID Internal Tamper 6 Callback ID
   *          @arg @ref HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID Internal Tamper 8 Callback ID
-  *          @arg @ref HAL_RTC_MSPINIT_CB_ID Msp Init callback ID
-  *          @arg @ref HAL_RTC_MSPDEINIT_CB_ID Msp DeInit callback ID
+  *          @arg @ref HAL_RTC_MSPINIT_CB_ID                Msp Init callback ID
+  *          @arg @ref HAL_RTC_MSPDEINIT_CB_ID              Msp DeInit callback ID
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_RTC_UnRegisterCallback(RTC_HandleTypeDef *hrtc, HAL_RTC_CallbackIDTypeDef CallbackID)
@@ -610,6 +620,10 @@ HAL_StatusTypeDef HAL_RTC_UnRegisterCallback(RTC_HandleTypeDef *hrtc, HAL_RTC_Ca
 
       case HAL_RTC_INTERNAL_TAMPER5_EVENT_CB_ID :
         hrtc->InternalTamper5EventCallback = HAL_RTCEx_InternalTamper5EventCallback;        /* Legacy weak InternalTamper5EventCallback         */
+        break;
+
+      case HAL_RTC_INTERNAL_TAMPER6_EVENT_CB_ID :
+        hrtc->InternalTamper6EventCallback = HAL_RTCEx_InternalTamper6EventCallback;        /* Legacy weak InternalTamper6EventCallback         */
         break;
 
       case HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID :
@@ -1042,7 +1056,8 @@ HAL_StatusTypeDef HAL_RTC_GetDate(RTC_HandleTypeDef *hrtc, RTC_DateTypeDef *sDat
   */
 HAL_StatusTypeDef HAL_RTC_SetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sAlarm, uint32_t Format)
 {
-  uint32_t tmpreg = 0, binaryMode;
+  uint32_t tmpreg = 0;
+  uint32_t binaryMode;
 
   __HAL_LOCK(hrtc);
   hrtc->State = HAL_RTC_STATE_BUSY;
@@ -1172,6 +1187,9 @@ HAL_StatusTypeDef HAL_RTC_SetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sA
 
     WRITE_REG(RTC->ALRABINR, sAlarm->AlarmTime.SubSeconds);
 
+    /* Store in the handle the Alarm A enabled */
+    SET_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRAMF);
+
     /* Configure the Alarm state: Enable Alarm */
     SET_BIT(RTC->CR, RTC_CR_ALRAE);
   }
@@ -1191,10 +1209,13 @@ HAL_StatusTypeDef HAL_RTC_SetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sA
     else
     {
       WRITE_REG(RTC->ALRMBR, tmpreg);
-      WRITE_REG(RTC->ALRMBSSR,  sAlarm->AlarmSubSecondMask);
+      WRITE_REG(RTC->ALRMBSSR, sAlarm->AlarmSubSecondMask);
     }
 
     WRITE_REG(RTC->ALRBBINR, sAlarm->AlarmTime.SubSeconds);
+
+    /* Store in the handle the Alarm B enabled */
+    SET_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRBMF);
 
     /* Configure the Alarm state: Enable Alarm */
     SET_BIT(RTC->CR, RTC_CR_ALRBE);
@@ -1229,7 +1250,8 @@ HAL_StatusTypeDef HAL_RTC_SetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sA
   */
 HAL_StatusTypeDef HAL_RTC_SetAlarm_IT(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sAlarm, uint32_t Format)
 {
-  uint32_t tmpreg = 0, binaryMode;
+  uint32_t tmpreg = 0;
+  uint32_t binaryMode;
 
   /* Process Locked */
   __HAL_LOCK(hrtc);
@@ -1359,6 +1381,9 @@ HAL_StatusTypeDef HAL_RTC_SetAlarm_IT(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef 
 
     WRITE_REG(RTC->ALRABINR, sAlarm->AlarmTime.SubSeconds);
 
+    /* Store in the handle the Alarm A enabled */
+    SET_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRAMF);
+
     /* Configure the Alarm interrupt */
     SET_BIT(RTC->CR, RTC_CR_ALRAE | RTC_CR_ALRAIE);
   }
@@ -1380,6 +1405,9 @@ HAL_StatusTypeDef HAL_RTC_SetAlarm_IT(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef 
     }
 
     WRITE_REG(RTC->ALRBBINR, sAlarm->AlarmTime.SubSeconds);
+
+    /* Store in the handle the Alarm B enabled */
+    SET_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRBMF);
 
     /* Configure the Alarm interrupt */
     SET_BIT(RTC->CR, RTC_CR_ALRBE | RTC_CR_ALRBIE);
@@ -1425,11 +1453,17 @@ HAL_StatusTypeDef HAL_RTC_DeactivateAlarm(RTC_HandleTypeDef *hrtc, uint32_t Alar
   {
     /* AlarmA, In case of interrupt mode is used, the interrupt source must disabled */
     CLEAR_BIT(RTC->CR, RTC_CR_ALRAE | RTC_CR_ALRAIE);
+
+    /* Store in the handle the Alarm A disabled */
+    CLEAR_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRAMF);
   }
   else
   {
     /* AlarmB, In case of interrupt mode is used, the interrupt source must disabled */
     CLEAR_BIT(RTC->CR, RTC_CR_ALRBE | RTC_CR_ALRBIE);
+
+    /* Store in the handle the Alarm B disabled */
+    CLEAR_BIT(hrtc->IsEnabled.RtcFeatures, RTC_MISR_ALRBMF);
   }
   /* Enable the write protection for RTC registers */
   __HAL_RTC_WRITEPROTECTION_ENABLE(hrtc);
@@ -1458,7 +1492,8 @@ HAL_StatusTypeDef HAL_RTC_DeactivateAlarm(RTC_HandleTypeDef *hrtc, uint32_t Alar
   */
 HAL_StatusTypeDef HAL_RTC_GetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sAlarm, uint32_t Alarm, uint32_t Format)
 {
-  uint32_t tmpreg, subsecondtmpreg;
+  uint32_t tmpreg;
+  uint32_t subsecondtmpreg;
 
   UNUSED(hrtc);
   /* Check the parameters */
@@ -1519,8 +1554,7 @@ HAL_StatusTypeDef HAL_RTC_GetAlarm(RTC_HandleTypeDef *hrtc, RTC_AlarmTypeDef *sA
   */
 void HAL_RTC_AlarmIRQHandler(RTC_HandleTypeDef *hrtc)
 {
-  /* Get interrupt status */
-  uint32_t tmp = READ_REG(RTC->MISR);
+  uint32_t tmp = READ_REG(RTC->MISR) & READ_REG(hrtc->IsEnabled.RtcFeatures);
 
   if ((tmp & RTC_MISR_ALRAMF) != 0U)
   {

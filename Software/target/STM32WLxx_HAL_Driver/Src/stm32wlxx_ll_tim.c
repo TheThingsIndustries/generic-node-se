@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -268,7 +268,7 @@ void LL_TIM_StructInit(LL_TIM_InitTypeDef *TIM_InitStruct)
   TIM_InitStruct->CounterMode       = LL_TIM_COUNTERMODE_UP;
   TIM_InitStruct->Autoreload        = 0xFFFFFFFFU;
   TIM_InitStruct->ClockDivision     = LL_TIM_CLOCKDIVISION_DIV1;
-  TIM_InitStruct->RepetitionCounter = (uint8_t)0x00;
+  TIM_InitStruct->RepetitionCounter = 0x00000000U;
 }
 
 /**

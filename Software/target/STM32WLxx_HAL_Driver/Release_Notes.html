@@ -38,33 +38,274 @@
 <ul>
 <li>New set of inline function for direct and atomic register access</li>
 <li>One-shot operations that can be used by the HAL drivers or from application level.</li>
-<li>Fully Independant from HAL and can be used in standalone usage (without HAL drivers)</li>
+<li>Fully Independent from HAL and can be used in standalone usage (without HAL drivers)</li>
 <li>Full features coverage of the all the supported peripherals.</li>
 </ul>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section6" checked aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V0.4.0 / 13-December-2019</strong></label>
+<input type="checkbox" id="collapse-section9" checked aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>V0.7.0 / 10-July-2020</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="fourth-alpha-release-used-for-oem-announcement">Fourth Alpha release (Used for OEM announcement)</h3>
-<p>Full LL &amp; HAL Drivers fully compliant with MISRA C 2012 and Code Sonar</p>
+<h3 id="second-beta-release">Second Beta release</h3>
+<ul>
+<li>LL / HAL Drivers frozen</li>
+<li>LL / HAL Drivers GCC compilation validated (with CubeIDE)</li>
+<li>LL / HAL Drivers Quality improvments (MCUAstyle, CodeSpell, Copyright alignment)</li>
+<li>LL / HAL Drivers Maintenance tickets from other Series (see details below)</li>
+</ul>
 <h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.25</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28</li>
+<li>STM32CubeIDE 1.4.0.20rc3-WL-A2</li>
 </ul>
 <h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
 <p>Supported Devices:</p>
 <ul>
+<li>STM32WL55xx</li>
+<li>STM32WL54xx</li>
 <li>STM32WLE5xx</li>
+<li>STM32WLE4xx</li>
 </ul>
+<h2 id="outstanding-bug-list">Outstanding Bug List</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=84406">84406</a></td>
+<td style="text-align: left;">[HAL_LL] Issue with ‘register’ storage class specifier, should be removed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=66617">66617</a></td>
+<td style="text-align: left;">[HAL RTC] HAL_RTC_AlarmIRQHandler() shall not clear no matter which pending bit in dual core</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=86377">86377</a></td>
+<td style="text-align: left;">[HAL_RTC] Missing internal tamper 6 in HAL_RTC API</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=83622">83622</a></td>
+<td style="text-align: left;">[HAL DMA] Privilege feature must put through compilation switch</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=86919">86919</a></td>
+<td style="text-align: left;">[HAL RNG] manage cold reset in case of seed error</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=86920">86920</a></td>
+<td style="text-align: left;">[HAL RNG] Use of NIST HTCR value after characterization</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=84301">84301</a></td>
+<td style="text-align: left;">[HAL SUBGHZ] Radio Opcode declaration missing: Clr_Error command</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=84197">84197</a></td>
+<td style="text-align: left;">[LL TIM] COUNTERMODE defines are inverted for TIM_CR1_CMS in ll_tim.h</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=84705">84705</a></td>
+<td style="text-align: left;">[HAL TIM] Order of disabling in <code>HAL_TIM_IC_Stop_DMA</code> function</td>
+</tr>
+</tbody>
+</table>
 <h2 id="backward-compatibility">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions.</p>
 <h2 id="dependencies">Dependencies</h2>
 <p>None</p>
 <h2 id="known-limitations">Known Limitations</h2>
+<table>
+<caption>Requirements not met or planned in a forthcoming release</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=87680">87680</a></td>
+<td style="text-align: left;">[HAL SPI] problematic timeout management inside SPI DMA xfer complete handler (interrupt context)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=88226">88226</a></td>
+<td style="text-align: left;">[HAL USART] Fix typos introduced in some APIs descriptions</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V0.6.0 / 3-April-2020</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="first-beta-release">First Beta release</h3>
+<ul>
+<li>Full LL &amp; HAL Drivers fully compliant with MISRA C 2012 and Code Sonar</li>
+<li>LL/HAL Drivers Maintenance based on clones from other Series</li>
+<li>Specific STM32WL evolutions, please find few major updates
+<ul>
+<li>SUBGHZ: Align MSPInit with CubeMX and RF team requirement</li>
+<li>RCC: HSE Bypass feature suppressed to be aligned on Reference manual</li>
+<li>ADC: Updates and alignment versus Datasheet regarding temperature Sensor calibration values</li>
+</ul></li>
+</ul>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28</li>
+</ul>
+<h2 id="supported-devices-and-boards-1">Supported Devices and boards</h2>
+<p>Supported Devices:</p>
+<ul>
+<li>STM32WL55xx</li>
+<li>STM32WL54xx</li>
+<li>STM32WLE5xx</li>
+<li>STM32WLE4xx</li>
+</ul>
+<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<p>This release is compatible with the previous versions.</p>
+<h2 id="dependencies-1">Dependencies</h2>
+<p>None</p>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<table>
+<caption>Outstanding bugs list</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=66617">66617</a></td>
+<td style="text-align: left;">[RTC]: HAL_RTC_AlarmIRQHandler() shall not clear no matter which pending bit in dual core</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=77634">77634</a></td>
+<td style="text-align: left;">[I2C]: Reset I2C to ensure a clean initialization</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+<table>
+<caption>Requirements not met or planned in a forthcoming release</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=83605">83605</a></td>
+<td style="text-align: left;">[ALL] Copyright in all LL / HAL Drivers to be updated from 2019 to 2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=83645">83645</a></td>
+<td style="text-align: left;">[ALL] Need to check ALL drivers / ALL Devices compilations using CubeIDE</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V0.5.0 / 10-January-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="fifth-alpha-release-used-for-oem-announcement">Fifth Alpha release (Used for OEM announcement)</h3>
+<ul>
+<li>Full LL &amp; HAL Drivers fully compliant with MISRA C 2012 and Code Sonar</li>
+<li>Implementation of ticket related to ADC index aligned with RM&amp; CubeMx (<a href="https://intbugzilla.st.com/show_bug.cgi?id=72561">72561</a> Align ADC naming without index like indicated in reference Manual)</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.25</li>
+</ul>
+<h2 id="supported-devices-and-boards-2">Supported Devices and boards</h2>
+<p>Supported Devices:</p>
+<ul>
+<li>STM32WLE5xx</li>
+</ul>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<p>This release is compatible with the previous versions.</p>
+<h2 id="dependencies-2">Dependencies</h2>
+<p>None</p>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<table>
+<caption>Outstanding bugs list</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=66617">66617</a></td>
+<td style="text-align: left;">HAL_RTC_AlarmIRQHandler() shall not clear no matter which pending bit in dual core</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=77533">77533</a></td>
+<td style="text-align: left;">[I2C_HAL] Incorrectly enable interrupts in I2C_Enable_IRQ routine when InterruptRequest = I2C_XFER_CPLT_IT</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+<table>
+<caption>Requirements not met or planned in a forthcoming release</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Ticket</th>
+<th style="text-align: left;">Headline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="https://intbugzilla.st.com/show_bug.cgi?id=72392">72392</a></td>
+<td style="text-align: left;">[WL] ADC value from channel TempSensor wrong at 1st read</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V0.4.0 / 13-December-2019</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="fourth-alpha-release-used-for-oem-announcement">Fourth Alpha release (Used for OEM announcement)</h3>
+<p>Full LL &amp; HAL Drivers fully compliant with MISRA C 2012 and Code Sonar</p>
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.25</li>
+</ul>
+<h2 id="supported-devices-and-boards-3">Supported Devices and boards</h2>
+<p>Supported Devices:</p>
+<ul>
+<li>STM32WLE5xx</li>
+</ul>
+<h2 id="backward-compatibility-3">Backward Compatibility</h2>
+<p>This release is compatible with the previous versions.</p>
+<h2 id="dependencies-3">Dependencies</h2>
+<p>None</p>
+<h2 id="known-limitations-3">Known Limitations</h2>
 <table>
 <caption>Outstanding bugs list</caption>
 <thead>
@@ -112,16 +353,16 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V0.3.0 / 27-September-2019</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-4">Main Changes</h2>
 <h3 id="third-alpha-release-use-for-alpha2-program">Third Alpha release (Use for Alpha2 program)</h3>
 <p>Full LL &amp; HAL Drivers including Dual Core Supported</p>
 <p>Note that 100% of LL &amp; HAL Drivers are fully compliant with MISRA C 2012 and Code Sonar</p>
-<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-4">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.25</li>
 </ul>
-<h2 id="supported-devices-and-boards-1">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-4">Supported Devices and boards</h2>
 <p>Supported Devices:</p>
 <ul>
 <li>STM32WL55xx</li>
@@ -129,11 +370,11 @@
 <li>STM32WLE5xx</li>
 <li>STM32WLE4xx</li>
 </ul>
-<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<h2 id="backward-compatibility-4">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions.</p>
-<h2 id="dependencies-1">Dependencies</h2>
+<h2 id="dependencies-4">Dependencies</h2>
 <p>None</p>
-<h2 id="known-limitations-1">Known Limitations</h2>
+<h2 id="known-limitations-4">Known Limitations</h2>
 <table>
 <caption>Outstanding bugs list</caption>
 <thead>
@@ -201,41 +442,41 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V0.2.0 / 21-June-2019</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <h3 id="second-alpha-release-use-for-alpha1-program">Second Alpha release (Use for Alpha1 program)</h3>
 <p>Update of LL &amp; HAL Drivers following Si validation phase</p>
-<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-5">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.25</li>
 </ul>
-<h2 id="supported-devices-and-boards-2">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-5">Supported Devices and boards</h2>
 <p>Supported Devices:</p>
 <ul>
 <li>STM32WL55xx</li>
 </ul>
-<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<h2 id="backward-compatibility-5">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions.</p>
-<h2 id="dependencies-2">Dependencies</h2>
+<h2 id="dependencies-5">Dependencies</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V0.1.0 / 15-February-2019</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="first-alpha-release-for-internal-use-only">First Alpha release (for internal use only)</h3>
 <p>First alpha release of HAL and Low layers drivers to introduce support of <strong>STM32WL55xx</strong>.</p>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-6">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
 </ul>
-<h2 id="supported-devices-and-boards-3">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-6">Supported Devices and boards</h2>
 <p>Supported Devices:</p>
 <ul>
 <li>STM32WL55xx</li>
 </ul>
-<h2 id="backward-compatibility-3">Backward Compatibility</h2>
+<h2 id="backward-compatibility-6">Backward Compatibility</h2>
 <p>None ## Dependencies</p>
 <p>None</p>
 </div>
