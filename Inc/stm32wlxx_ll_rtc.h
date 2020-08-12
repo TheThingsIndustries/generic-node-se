@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -534,6 +534,7 @@ typedef struct
   */
 #define LL_RTC_TAMPER_ITAMP3               TAMP_CR1_ITAMP3E /*!< Internal tamper 3: LSE monitoring */
 #define LL_RTC_TAMPER_ITAMP5               TAMP_CR1_ITAMP5E /*!< Internal tamper 5: RTC calendar overflow */
+#define LL_RTC_TAMPER_ITAMP6               TAMP_CR1_ITAMP6E /*!< Internal tamper 6: JTAG access in RDP level 1 */
 #define LL_RTC_TAMPER_ITAMP8               TAMP_CR1_ITAMP8E /*!< Internal tamper 8: Monotonic counter overflow */
 /**
   * @}
@@ -1414,7 +1415,7 @@ __STATIC_INLINE uint32_t LL_RTC_TIME_GetSecond(RTC_TypeDef *RTCx)
   */
 __STATIC_INLINE void LL_RTC_TIME_Config(RTC_TypeDef *RTCx, uint32_t Format12_24, uint32_t Hours, uint32_t Minutes, uint32_t Seconds)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = Format12_24                                                                                    | \
          (((Hours & 0xF0U) << (RTC_TR_HT_Pos - 4U)) | ((Hours & 0x0FU) << RTC_TR_HU_Pos))     | \
@@ -1442,7 +1443,7 @@ __STATIC_INLINE void LL_RTC_TIME_Config(RTC_TypeDef *RTCx, uint32_t Format12_24,
   */
 __STATIC_INLINE uint32_t LL_RTC_TIME_Get(RTC_TypeDef *RTCx)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = READ_BIT(RTCx->TR, (RTC_TR_HT | RTC_TR_HU | RTC_TR_MNT | RTC_TR_MNU | RTC_TR_ST | RTC_TR_SU));
   return (uint32_t)((((((temp & RTC_TR_HT) >> RTC_TR_HT_Pos) << 4U) | ((temp & RTC_TR_HU) >> RTC_TR_HU_Pos)) << RTC_OFFSET_HOUR)       |  \
@@ -1745,7 +1746,7 @@ __STATIC_INLINE uint32_t LL_RTC_DATE_GetDay(RTC_TypeDef *RTCx)
   */
 __STATIC_INLINE void LL_RTC_DATE_Config(RTC_TypeDef *RTCx, uint32_t WeekDay, uint32_t Day, uint32_t Month, uint32_t Year)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = (WeekDay << RTC_DR_WDU_Pos)                                                        | \
          (((Year & 0xF0U) << (RTC_DR_YT_Pos - 4U)) | ((Year & 0x0FU) << RTC_DR_YU_Pos))   | \
@@ -1773,7 +1774,7 @@ __STATIC_INLINE void LL_RTC_DATE_Config(RTC_TypeDef *RTCx, uint32_t WeekDay, uin
   */
 __STATIC_INLINE uint32_t LL_RTC_DATE_Get(RTC_TypeDef *RTCx)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = READ_BIT(RTCx->DR, (RTC_DR_WDU | RTC_DR_MT | RTC_DR_MU | RTC_DR_DT | RTC_DR_DU | RTC_DR_YT | RTC_DR_YU));
   return (uint32_t)((((temp & RTC_DR_WDU) >> RTC_DR_WDU_Pos) << RTC_OFFSET_WEEKDAY) | \
@@ -2073,7 +2074,7 @@ __STATIC_INLINE uint32_t LL_RTC_ALMA_GetSecond(RTC_TypeDef *RTCx)
   */
 __STATIC_INLINE void LL_RTC_ALMA_ConfigTime(RTC_TypeDef *RTCx, uint32_t Format12_24, uint32_t Hours, uint32_t Minutes, uint32_t Seconds)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = Format12_24 | (((Hours & 0xF0U) << (RTC_ALRMAR_HT_Pos - 4U)) | ((Hours & 0x0FU) << RTC_ALRMAR_HU_Pos))    | \
          (((Minutes & 0xF0U) << (RTC_ALRMAR_MNT_Pos - 4U)) | ((Minutes & 0x0FU) << RTC_ALRMAR_MNU_Pos)) | \
@@ -2472,7 +2473,7 @@ __STATIC_INLINE uint32_t LL_RTC_ALMB_GetSecond(RTC_TypeDef *RTCx)
   */
 __STATIC_INLINE void LL_RTC_ALMB_ConfigTime(RTC_TypeDef *RTCx, uint32_t Format12_24, uint32_t Hours, uint32_t Minutes, uint32_t Seconds)
 {
-  register uint32_t temp;
+  uint32_t temp;
 
   temp = Format12_24 | (((Hours & 0xF0U) << (RTC_ALRMBR_HT_Pos - 4U)) | ((Hours & 0x0FU) << RTC_ALRMBR_HU_Pos))    | \
          (((Minutes & 0xF0U) << (RTC_ALRMBR_MNT_Pos - 4U)) | ((Minutes & 0x0FU) << RTC_ALRMBR_MNU_Pos)) | \
@@ -3135,6 +3136,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_DisableActiveLevel(RTC_TypeDef *RTCx, uint32_
   *         TAMP_CR1       ITAMP2E       LL_RTC_TAMPER_ITAMP_Enable\n
   *         TAMP_CR1       ITAMP3E       LL_RTC_TAMPER_ITAMP_Enable\n
   *         TAMP_CR1       ITAMP5E       LL_RTC_TAMPER_ITAMP_Enable\n
+  *         TAMP_CR1       ITAMP6E       LL_RTC_TAMPER_ITAMP_Enable
   *         TAMP_CR1       ITAMP8E       LL_RTC_TAMPER_ITAMP_Enable
   * @param  RTCx RTC Instance
   * @param  InternalTamper This parameter can be a combination of the following values:
@@ -3154,6 +3156,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_ITAMP_Enable(RTC_TypeDef *RTCx, uint32_t Inte
   *         TAMP_CR1       ITAMP2E       LL_RTC_TAMPER_ITAMP_Disable\n
   *         TAMP_CR1       ITAMP3E       LL_RTC_TAMPER_ITAMP_Disable\n
   *         TAMP_CR1       ITAMP5E       LL_RTC_TAMPER_ITAMP_Disable\n
+  *         TAMP_CR1       ITAMP6E       LL_RTC_TAMPER_ITAMP_Disable
   *         TAMP_CR1       ITAMP8E       LL_RTC_TAMPER_ITAMP_Disable
   * @param  RTCx RTC Instance
   * @param  InternalTamper This parameter can be a combination of the following values:
@@ -3309,7 +3312,7 @@ __STATIC_INLINE uint32_t LL_RTC_WAKEUP_GetAutoReload(RTC_TypeDef *RTCx)
   */
 __STATIC_INLINE void LL_RTC_BKP_SetRegister(RTC_TypeDef *RTCx, uint32_t BackupRegister, uint32_t Data)
 {
-  register uint32_t tmp;
+  uint32_t tmp;
 
   UNUSED(RTCx);
 
@@ -3349,7 +3352,7 @@ __STATIC_INLINE void LL_RTC_BKP_SetRegister(RTC_TypeDef *RTCx, uint32_t BackupRe
   */
 __STATIC_INLINE uint32_t LL_RTC_BKP_GetRegister(RTC_TypeDef *RTCx, uint32_t BackupRegister)
 {
-  register uint32_t tmp;
+  uint32_t tmp;
 
   UNUSED(RTCx);
 
@@ -3899,6 +3902,18 @@ __STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ITAMP5(RTC_TypeDef *RTCx)
 }
 
 /**
+  * @brief  Get internal tamper 6 detection flag.
+  * @rmtoll TAMP_SR          ITAMP6F        LL_RTC_IsActiveFlag_ITAMP6
+  * @param  RTCx RTC Instance
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ITAMP6(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  return ((READ_BIT(TAMP->SR, TAMP_SR_ITAMP6F) == (TAMP_SR_ITAMP6F)) ? 1U : 0U);
+}
+
+/**
   * @brief  Get internal tamper 8 detection flag.
   * @rmtoll TAMP_SR          ITAMP8F        LL_RTC_IsActiveFlag_ITAMP8
   * @param  RTCx RTC Instance
@@ -3968,6 +3983,18 @@ __STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ITAMP5M(RTC_TypeDef *RTCx)
 {
   UNUSED(RTCx);
   return ((READ_BIT(TAMP->MISR, TAMP_MISR_ITAMP5MF) == (TAMP_MISR_ITAMP5MF)) ? 1U : 0U);
+}
+
+/**
+  * @brief  Get internal tamper 6 interrupt masked flag.
+  * @rmtoll TAMP_MISR          ITAMP6MF        LL_RTC_IsActiveFlag_ITAMP6M
+  * @param  RTCx RTC Instance
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ITAMP6M(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  return ((READ_BIT(TAMP->MISR, TAMP_MISR_ITAMP6MF) == (TAMP_MISR_ITAMP6MF)) ? 1U : 0U);
 }
 
 /**
@@ -4041,6 +4068,18 @@ __STATIC_INLINE void LL_RTC_ClearFlag_ITAMP5(RTC_TypeDef *RTCx)
 {
   UNUSED(RTCx);
   WRITE_REG(TAMP->SCR, TAMP_SCR_CITAMP5F);
+}
+
+/**
+  * @brief  Clear internal tamper 6 detection flag.
+  * @rmtoll TAMP_SCR          CITAMP6F         LL_RTC_ClearFlag_ITAMP6
+  * @param  RTCx RTC Instance
+  * @retval None
+  */
+__STATIC_INLINE void LL_RTC_ClearFlag_ITAMP6(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  WRITE_REG(TAMP->SCR, TAMP_SCR_CITAMP6F);
 }
 
 /**
@@ -4356,6 +4395,30 @@ __STATIC_INLINE void LL_RTC_DisableIT_ITAMP5(RTC_TypeDef *RTCx)
 }
 
 /**
+  * @brief  Enable internal tamper 6 interrupt.
+  * @rmtoll TAMP_IER           ITAMP6IE          LL_RTC_EnableIT_ITAMP6
+  * @param  RTCx RTC Instance
+  * @retval None
+  */
+__STATIC_INLINE void LL_RTC_EnableIT_ITAMP6(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  SET_BIT(TAMP->IER, TAMP_IER_ITAMP6IE);
+}
+
+/**
+  * @brief  Disable internal tamper 6 interrupt.
+  * @rmtoll TAMP_IER           TAMP6IE          LL_RTC_DisableIT_ITAMP6
+  * @param  RTCx RTC Instance
+  * @retval None
+  */
+__STATIC_INLINE void LL_RTC_DisableIT_ITAMP6(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  CLEAR_BIT(TAMP->IER, TAMP_IER_ITAMP6IE);
+}
+
+/**
   * @brief  Enable internal tamper 8 interrupt.
   * @rmtoll TAMP_IER           ITAMP8IE          LL_RTC_EnableIT_ITAMP8
   * @param  RTCx RTC Instance
@@ -4366,6 +4429,7 @@ __STATIC_INLINE void LL_RTC_EnableIT_ITAMP8(RTC_TypeDef *RTCx)
   UNUSED(RTCx);
   SET_BIT(TAMP->IER, TAMP_IER_ITAMP8IE);
 }
+
 /**
   * @brief  Disable internal tamper 8 interrupt.
   * @rmtoll TAMP_IER           TAMP8IE          LL_RTC_DisableIT_ITAMP8
@@ -4436,6 +4500,18 @@ __STATIC_INLINE uint32_t LL_RTC_IsEnabledIT_ITAMP5(RTC_TypeDef *RTCx)
 {
   UNUSED(RTCx);
   return ((READ_BIT(TAMP->IER, TAMP_IER_ITAMP5IE) == (TAMP_IER_ITAMP5IE)) ? 1U : 0U);
+}
+
+/**
+  * @brief  Check if internal tamper 6 interrupt is enabled or not.
+  * @rmtoll TAMP_IER           ITAMP6IE        LL_RTC_IsEnabledIT_ITAMP6
+  * @param  RTCx RTC Instance
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RTC_IsEnabledIT_ITAMP6(RTC_TypeDef *RTCx)
+{
+  UNUSED(RTCx);
+  return ((READ_BIT(TAMP->IER, TAMP_IER_ITAMP6IE) == (TAMP_IER_ITAMP6IE)) ? 1U : 0U);
 }
 
 /**

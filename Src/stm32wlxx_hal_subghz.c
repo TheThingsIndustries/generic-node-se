@@ -1,13 +1,13 @@
 /*******************************************************************************
- * @file    stm32wlxx_hal_subghz.c
- * @author  MCD Application Team
- * @brief   SUBGHZ HAL module driver.
- *          This file provides firmware functions to manage the following
- *          functionalities of the SUBGHZ peripheral:
- *           + Initialization and de-initialization functions
- *           + IO operation functions
- *           + Peripheral State and Errors functions
- *
+  * @file    stm32wlxx_hal_subghz.c
+  * @author  MCD Application Team
+  * @brief   SUBGHZ HAL module driver.
+  *          This file provides firmware functions to manage the following
+  *          functionalities of the SUBGHZ peripheral:
+  *           + Initialization and de-initialization functions
+  *           + IO operation functions
+  *           + Peripheral State and Errors functions
+  *
  @verbatim
  ==============================================================================
                        ##### How to use this driver #####
@@ -61,20 +61,40 @@
 
     [..]
      Function @ref HAL_SUBGHZ_RegisterCallback() allows to register following callbacks:
-       (+) MspInitCallback      : callback for Msp Init.
-       (+) MspDeInitCallback    : callback for Msp DeInit.
+       (+) TxCpltCallback           : callback for Tx Completed.
+       (+) RxCpltCallback           : callback for Rx Completed.
+       (+) PreambleDetectedCallback : callback for Preamble detected.
+       (+) SyncWordValidCallback    : callback for Synchro word valid.
+       (+) HeaderValidCallback      : callback for Header valid.
+       (+) HeaderErrorCallback      : callback for Header error.
+       (+) CRCErrorCallback         : callback for CRC Error.
+       (+) RxTxTimeoutCallback      : callback for Rx Tx Timeout.
+       (+) MspInitCallback          : callback for Msp Init.
+       (+) MspDeInitCallback        : callback for Msp DeInit.
      This function takes as parameters the HAL peripheral handle, the Callback ID
      and a pointer to the user callback function.
-
+    [..]
+     For specific callback CADStatusCallback use dedicated register callbacks :
+     @ref HAL_SUBGHZ_RegisterCadStatusCallback().
     [..]
      Use function @ref HAL_SUBGHZ_UnRegisterCallback to reset a callback to the default
      weak function.
      @ref HAL_SUBGHZ_UnRegisterCallback takes as parameters the HAL peripheral handle,
      and the Callback ID.
      This function allows to reset following callbacks:
-       (+) MspInitCallback      : callback for Msp Init.
-       (+) MspDeInitCallback    : callback for Msp DeInit.
-
+       (+) TxCpltCallback           : callback for Tx Completed.
+       (+) RxCpltCallback           : callback for Rx Completed.
+       (+) PreambleDetectedCallback : callback for Preamble detected.
+       (+) SyncWordValidCallback    : callback for Synchro word valid.
+       (+) HeaderValidCallback      : callback for Header valid.
+       (+) HeaderErrorCallback      : callback for Header error.
+       (+) CRCErrorCallback         : callback for CRC Error.
+       (+) RxTxTimeoutCallback      : callback for Rx Tx Timeout.
+       (+) MspInitCallback          : callback for Msp Init.
+       (+) MspDeInitCallback        : callback for Msp DeInit.
+    [..]
+     For specific callback CADStatusCallback use dedicated register callbacks :
+     @ref HAL_SUBGHZ_UnRegisterCadStatusCallback().
     [..]
      MspInit and MspDeInit functions are reset to the legacy weak functions in the
      @ref HAL_SUBGHZ_Init()/ @ref HAL_SUBGHZ_DeInit() only when these callbacks are null
@@ -95,10 +115,10 @@
      not defined, the callback registration feature is not available and all callbacks
      are set to the corresponding weak functions.
 #endif
- ******************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -106,8 +126,8 @@
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
- ******************************************************************************
- */
+  ******************************************************************************
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32wlxx_hal.h"
@@ -131,6 +151,10 @@
 #define SUBGHZ_DUMMY_DATA          0xFFU   /* SUBGHZSPI Dummy Data use for Tx */
 #define SUBGHZ_DEEP_SLEEP_ENABLE   1U      /* SUBGHZ Radio in Deep Sleep      */
 #define SUBGHZ_DEEP_SLEEP_DISABLE  0U      /* SUBGHZ Radio not in Deep Sleep  */
+
+/* SystemCoreClock dividers. Corresponding to time execution of while loop.   */
+#define SUBGHZ_DEFAULT_LOOP_TIME   ((SystemCoreClock*28U)>>19U)
+#define SUBGHZ_RFBUSY_LOOP_TIME    ((SystemCoreClock*24U)>>20U)
 /**
   * @}
   */
@@ -141,12 +165,12 @@
 /** @defgroup SUBGHZ_Private_Functions SUBGHZ Private Functions
   * @{
   */
-HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz);
-HAL_StatusTypeDef SUBGHZ_CheckDeviceReady(SUBGHZ_HandleTypeDef *hsubghz);
-HAL_StatusTypeDef SUBGHZSPI_Init(uint32_t BaudratePrescaler);
-HAL_StatusTypeDef SUBGHZSPI_DeInit(void);
+void              SUBGHZSPI_Init(uint32_t BaudratePrescaler);
+void              SUBGHZSPI_DeInit(void);
 HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data);
 HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pData);
+HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz);
+HAL_StatusTypeDef SUBGHZ_CheckDeviceReady(SUBGHZ_HandleTypeDef *hsubghz);
 /**
   * @}
   */
@@ -157,8 +181,8 @@ HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pDat
   */
 
 /** @defgroup SUBGHZ_Exported_Functions_Group1 Initialization and de-initialization functions
- *  @brief    Initialization and Configuration functions
- *
+  *  @brief    Initialization and Configuration functions
+  *
 @verbatim
  ===============================================================================
               ##### Initialization and de-initialization functions #####
@@ -189,12 +213,17 @@ HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pDat
 HAL_StatusTypeDef HAL_SUBGHZ_Init(SUBGHZ_HandleTypeDef *hsubghz)
 {
   HAL_StatusTypeDef status;
+  __IO uint32_t count;
 
   /* Check the hsubghz handle allocation */
   if (hsubghz == NULL)
   {
     status = HAL_ERROR;
     return status;
+  }
+  else
+  {
+    status = HAL_OK;
   }
 
   assert_param(IS_SUBGHZSPI_BAUDRATE_PRESCALER(hsubghz->Init.BaudratePrescaler));
@@ -205,17 +234,16 @@ HAL_StatusTypeDef HAL_SUBGHZ_Init(SUBGHZ_HandleTypeDef *hsubghz)
     hsubghz->Lock = HAL_UNLOCKED;
 
 #if (USE_HAL_SUBGHZ_REGISTER_CALLBACKS == 1)
-    /* Init the SUBGHZ Callback settings */
-    hsubghz->TxCpltCallback              = HAL_SUBGHZ_TxCpltCallback;               /* Legacy weak TxCpltCallback              */
-    hsubghz->RxCpltCallback              = HAL_SUBGHZ_RxCpltCallback;               /* Legacy weak RxCpltCallback              */
-    hsubghz->PreambleDetectedCallback    = HAL_SUBGHZ_PreambleDetectedCallback;     /* Legacy weak PreambleDetectedCallback    */
-    hsubghz->SyncWordValidCallback       = HAL_SUBGHZ_SyncWordValidCallback;        /* Legacy weak SyncWordValidCallback       */
-    hsubghz->HeaderValidCallback         = HAL_SUBGHZ_HeaderValidCallback;          /* Legacy weak HeaderValidCallback         */
-    hsubghz->HeaderErrorCallback         = HAL_SUBGHZ_HeaderErrorCallback;          /* Legacy weak HeaderErrorCallback         */
-    hsubghz->CRCErrorCallback            = HAL_SUBGHZ_CRCErrorCallback;             /* Legacy weak CRCErrorCallback            */
-    hsubghz->CADDoneCallback             = HAL_SUBGHZ_CADDoneCallback;              /* Legacy weak CADDoneCallback             */
-    hsubghz->CADActivityDetectedCallback = HAL_SUBGHZ_CADActivityDetectedCallback;  /* Legacy weak CADActivityDetectedCallback */
-    hsubghz->RxTxTimeoutCallback         = HAL_SUBGHZ_RxTxTimeoutCallback;          /* Legacy weak RxTxTimeoutCallback         */
+    /* Init the SUBGHZ Legacy weak Callback settings */
+    hsubghz->TxCpltCallback              = HAL_SUBGHZ_TxCpltCallback;
+    hsubghz->RxCpltCallback              = HAL_SUBGHZ_RxCpltCallback;
+    hsubghz->PreambleDetectedCallback    = HAL_SUBGHZ_PreambleDetectedCallback;
+    hsubghz->SyncWordValidCallback       = HAL_SUBGHZ_SyncWordValidCallback;
+    hsubghz->HeaderValidCallback         = HAL_SUBGHZ_HeaderValidCallback;
+    hsubghz->HeaderErrorCallback         = HAL_SUBGHZ_HeaderErrorCallback;
+    hsubghz->CRCErrorCallback            = HAL_SUBGHZ_CRCErrorCallback;
+    hsubghz->CADStatusCallback           = HAL_SUBGHZ_CADStatusCallback;
+    hsubghz->RxTxTimeoutCallback         = HAL_SUBGHZ_RxTxTimeoutCallback;
 
     if (hsubghz->MspInitCallback == NULL)
     {
@@ -232,11 +260,51 @@ HAL_StatusTypeDef HAL_SUBGHZ_Init(SUBGHZ_HandleTypeDef *hsubghz)
 
   hsubghz->State = HAL_SUBGHZ_STATE_BUSY;
 
-  /* Initialize SUBGHZSPI Peripheral */
-  status = SUBGHZSPI_Init(hsubghz->Init.BaudratePrescaler);
+  /* De-asserts the reset signal of the Radio peripheral */
+  LL_RCC_RF_DisableReset();
 
-  hsubghz->DeepSleep = SUBGHZ_DEEP_SLEEP_ENABLE;
-  hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_NONE;
+  /* Verify that Radio in reset status flag is set */
+  count  = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
+
+  do
+  {
+    if (count == 0U)
+    {
+      status  = HAL_ERROR;
+      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
+      break;
+    }
+    count--;
+  } while (LL_RCC_IsRFUnderReset() != 0UL);
+
+  /* Asserts the reset signal of the Radio peripheral */
+  LL_PWR_UnselectSUBGHZSPI_NSS();
+
+#if defined(CM0PLUS)
+  /* Enable EXTI 44 : Radio IRQ ITs for CPU2 */
+  LL_C2_EXTI_EnableIT_32_63(LL_EXTI_LINE_44);
+
+  /* Enable wakeup signal of the Radio peripheral */
+  LL_C2_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_WU_IT);
+#else
+  /* Enable EXTI 44 : Radio IRQ ITs for CPU1 */
+  LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_44);
+
+  /* Enable wakeup signal of the Radio peripheral */
+  LL_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_WU_IT);
+#endif /* CM0PLUS */
+
+  /* Clear Pending Flag */
+  LL_PWR_ClearFlag_RFBUSY();
+
+  if (status == HAL_OK)
+  {
+    /* Initialize SUBGHZSPI Peripheral */
+    SUBGHZSPI_Init(hsubghz->Init.BaudratePrescaler);
+
+    hsubghz->DeepSleep = SUBGHZ_DEEP_SLEEP_ENABLE;
+    hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_NONE;
+  }
   hsubghz->State     = HAL_SUBGHZ_STATE_READY;
 
   return status;
@@ -258,11 +326,15 @@ HAL_StatusTypeDef HAL_SUBGHZ_DeInit(SUBGHZ_HandleTypeDef *hsubghz)
     status = HAL_ERROR;
     return status;
   }
+  else
+  {
+    status = HAL_OK;
+  }
 
   hsubghz->State = HAL_SUBGHZ_STATE_BUSY;
 
   /* DeInitialize SUBGHZSPI Peripheral */
-  status = SUBGHZSPI_DeInit();
+  SUBGHZSPI_DeInit();
 
 #if (USE_HAL_SUBGHZ_REGISTER_CALLBACKS == 1)
   if (hsubghz->MspDeInitCallback == NULL)
@@ -276,6 +348,23 @@ HAL_StatusTypeDef HAL_SUBGHZ_DeInit(SUBGHZ_HandleTypeDef *hsubghz)
   /* DeInit the low level hardware: GPIO, CLOCK, NVIC... */
   HAL_SUBGHZ_MspDeInit(hsubghz);
 #endif /* USE_HAL_SUBGHZ_REGISTER_CALLBACKS */
+
+#if defined(CM0PLUS)
+  /* Disable EXTI 44 : Radio IRQ ITs for CPU2 */
+  LL_C2_EXTI_DisableIT_32_63(LL_EXTI_LINE_44);
+
+  /* Disable wakeup signal of the Radio peripheral */
+  LL_C2_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_NONE);
+#else
+  /* Disable EXTI 44 : Radio IRQ ITs for CPU1 */
+  LL_EXTI_DisableIT_32_63(LL_EXTI_LINE_44);
+
+  /* Disable wakeup signal of the Radio peripheral */
+  LL_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_NONE);
+#endif /* CM0PLUS */
+
+  /* Disable the Radio peripheral  Reset signal */
+  LL_RCC_RF_DisableReset();
 
   hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_NONE;
   hsubghz->State     = HAL_SUBGHZ_STATE_RESET;
@@ -298,44 +387,6 @@ __weak void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef *hsubghz)
             the HAL_SUBGHZ_MspInit should be implemented in the user file
    */
 
-  /* De-asserts the reset signal of the Radio peripheral */
-  LL_RCC_RF_DisableReset();
-
-  /* Verify that Radio in reset status flag is set */
-  while (LL_RCC_IsRFUnderReset() != 0UL) {};
-
-  /* Asserts the reset signal of the Radio peripheral */
-  LL_PWR_UnselectSUBGHZSPI_NSS();
-
-#if defined(CM0PLUS)
-  /* Enable EXTI 44 : Radio IRQ ITs for CPU2 */
-  LL_C2_EXTI_EnableIT_32_63(LL_EXTI_LINE_44);
-
-  /* Enable wakeup signal of the Radio peripheral */
-  LL_C2_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_WU_IT);
-#else
-  /* Enable EXTI 44 : Radio IRQ ITs for CPU1 */
-  LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_44);
-
-  /* Enable wakeup signal of the Radio peripheral */
-  LL_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_WU_IT);
-#endif
-
-  /* Clear Pending Flag */
-  LL_PWR_ClearFlag_RFBUSY();
-
-  /* Enable the SUBGHZSPI peripheral clock */
-  __HAL_RCC_SUBGHZSPI_CLK_ENABLE();
-
-  /* Force the SUBGHZSPI Periheral Clock Reset */
-  __HAL_RCC_SUBGHZSPI_FORCE_RESET();
-
-  /* Release the SUBGHZSPI Periheral Clock Reset */
-  __HAL_RCC_SUBGHZSPI_RELEASE_RESET();
-
-  /* Enable Radio NVIC Interrupt */
-  HAL_NVIC_EnableIRQ(Radio_IRQn);
-
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hsubghz);
 }
@@ -352,35 +403,6 @@ __weak void HAL_SUBGHZ_MspDeInit(SUBGHZ_HandleTypeDef *hsubghz)
             the HAL_SUBGHZ_MspDeInit should be implemented in the user file
    */
 
-#if defined(CM0PLUS)
-  /* Disable EXTI 44 : Radio IRQ ITs for CPU2 */
-  LL_C2_EXTI_DisableIT_32_63(LL_EXTI_LINE_44);
-
-  /* Disable wakeup signal of the Radio peripheral */
-  LL_C2_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_NONE);
-#else
-  /* Disable EXTI 44 : Radio IRQ ITs for CPU1 */
-  LL_EXTI_DisableIT_32_63(LL_EXTI_LINE_44);
-
-  /* Disable wakeup signal of the Radio peripheral */
-  LL_PWR_SetRadioBusyTrigger(LL_PWR_RADIO_BUSY_TRIGGER_NONE);
-#endif
-
-  /* Disable the Radio peripheral  Reset signal */
-  LL_RCC_RF_DisableReset();
-
-  /* Force the SUBGHZSPI Periheral Clock Reset */
-  __HAL_RCC_SUBGHZSPI_FORCE_RESET();
-
-  /* Release the SUBGHZSPI Periheral Clock Reset */
-  __HAL_RCC_SUBGHZSPI_RELEASE_RESET();
-
-  /* Disable the SUBGHZSPI peripheral clock */
-  __HAL_RCC_SUBGHZSPI_CLK_DISABLE();
-
-  /* Disable Radio NVIC Interrupt */
-  HAL_NVIC_DisableIRQ(Radio_IRQn);
-
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hsubghz);
 }
@@ -395,7 +417,9 @@ __weak void HAL_SUBGHZ_MspDeInit(SUBGHZ_HandleTypeDef *hsubghz)
   * @param  pCallback pointer to the Callback function
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_RegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL_SUBGHZ_CallbackIDTypeDef CallbackID, pSUBGHZ_CallbackTypeDef pCallback)
+HAL_StatusTypeDef HAL_SUBGHZ_RegisterCallback(SUBGHZ_HandleTypeDef *hsubghz,
+                                              HAL_SUBGHZ_CallbackIDTypeDef CallbackID,
+                                              pSUBGHZ_CallbackTypeDef pCallback)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -440,14 +464,6 @@ HAL_StatusTypeDef HAL_SUBGHZ_RegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL
 
       case HAL_SUBGHZ_CRC_ERROR_CB_ID :
         hsubghz->CRCErrorCallback = pCallback;
-        break;
-
-      case HAL_SUBGHZ_CAD_DONE_CB_ID :
-        hsubghz->CADDoneCallback = pCallback;
-        break;
-
-      case HAL_SUBGHZ_CAD_ACTIVITY_DETECTED_CB_ID :
-        hsubghz->CADActivityDetectedCallback = pCallback;
         break;
 
       case HAL_SUBGHZ_RX_TX_TIMEOUT_CB_ID :
@@ -515,7 +531,8 @@ HAL_StatusTypeDef HAL_SUBGHZ_RegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL
   * @param  CallbackID ID of the callback to be unregistered
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, HAL_SUBGHZ_CallbackIDTypeDef CallbackID)
+HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCallback(SUBGHZ_HandleTypeDef *hsubghz,
+                                                HAL_SUBGHZ_CallbackIDTypeDef CallbackID)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -553,14 +570,6 @@ HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, H
 
       case HAL_SUBGHZ_CRC_ERROR_CB_ID :
         hsubghz->CRCErrorCallback = HAL_SUBGHZ_CRCErrorCallback;
-        break;
-
-      case HAL_SUBGHZ_CAD_DONE_CB_ID :
-        hsubghz->CADDoneCallback = HAL_SUBGHZ_CADDoneCallback;
-        break;
-
-      case HAL_SUBGHZ_CAD_ACTIVITY_DETECTED_CB_ID :
-        hsubghz->CADActivityDetectedCallback = HAL_SUBGHZ_CADActivityDetectedCallback;
         break;
 
       case HAL_SUBGHZ_RX_TX_TIMEOUT_CB_ID :
@@ -619,14 +628,86 @@ HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, H
 
   return status;
 }
+
+/**
+  * @brief  Register the channel activity detection status SUBGHZ Callback
+  *         To be used instead of the weak HAL_SUBGHZ_AddrCallback() predefined callback
+  * @param  hsubghz Pointer to a SUBGHZ_HandleTypeDef structure that contains
+  *                the configuration information for the specified SUBGHZ.
+  * @param  pCallback pointer to the CAD Status Callback function
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_SUBGHZ_RegisterCadStatusCallback(SUBGHZ_HandleTypeDef *hsubghz,
+                                                       pSUBGHZ_CadStatusCallbackTypeDef pCallback)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  if (pCallback == NULL)
+  {
+    /* Update the error code */
+    hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_INVALID_CALLBACK;
+
+    return HAL_ERROR;
+  }
+  /* Process locked */
+  __HAL_LOCK(hsubghz);
+
+  if (HAL_SUBGHZ_STATE_READY == hsubghz->State)
+  {
+    hsubghz->CADStatusCallback = pCallback;
+  }
+  else
+  {
+    /* Update the error code */
+    hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_INVALID_CALLBACK;
+
+    /* Return error status */
+    status =  HAL_ERROR;
+  }
+
+  /* Release Lock */
+  __HAL_UNLOCK(hsubghz);
+  return status;
+}
+
+/**
+  * @brief  UnRegister the channel activity detection status SUBGHZ Callback
+  * @param  hsubghz Pointer to a SUBGHZ_HandleTypeDef structure that contains
+  *                the configuration information for the specified SUBGHZ.
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCadStatusCallback(SUBGHZ_HandleTypeDef *hsubghz)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  /* Process locked */
+  __HAL_LOCK(hsubghz);
+
+  if (HAL_SUBGHZ_STATE_READY == hsubghz->State)
+  {
+    hsubghz->CADStatusCallback = HAL_SUBGHZ_CADStatusCallback; /* Legacy weak AddrCallback  */
+  }
+  else
+  {
+    /* Update the error code */
+    hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_INVALID_CALLBACK;
+
+    /* Return error status */
+    status =  HAL_ERROR;
+  }
+
+  /* Release Lock */
+  __HAL_UNLOCK(hsubghz);
+  return status;
+}
 #endif /* USE_HAL_SUBGHZ_REGISTER_CALLBACKS */
 /**
   * @}
   */
 
 /** @defgroup SUBGHZ_Exported_Functions_Group2 IO operation functions
- *  @brief   Data transfers functions
- *
+  *  @brief   Data transfers functions
+  *
 @verbatim
   ==============================================================================
                       ##### IO operation functions #####
@@ -673,7 +754,10 @@ HAL_StatusTypeDef HAL_SUBGHZ_UnRegisterCallback(SUBGHZ_HandleTypeDef *hsubghz, H
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_WriteRegisters(SUBGHZ_HandleTypeDef *hsubghz, uint16_t Address, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_WriteRegisters(SUBGHZ_HandleTypeDef *hsubghz,
+                                            uint16_t Address,
+                                            uint8_t *pBuffer,
+                                            uint16_t Size)
 {
   HAL_StatusTypeDef status;
 
@@ -734,7 +818,10 @@ HAL_StatusTypeDef HAL_SUBGHZ_WriteRegisters(SUBGHZ_HandleTypeDef *hsubghz, uint1
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_ReadRegisters(SUBGHZ_HandleTypeDef *hsubghz, uint16_t Address, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_ReadRegisters(SUBGHZ_HandleTypeDef *hsubghz,
+                                           uint16_t Address,
+                                           uint8_t *pBuffer,
+                                           uint16_t Size)
 {
   HAL_StatusTypeDef status;
   uint8_t *pData = pBuffer;
@@ -795,7 +882,9 @@ HAL_StatusTypeDef HAL_SUBGHZ_ReadRegisters(SUBGHZ_HandleTypeDef *hsubghz, uint16
   * @param  Value data
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_WriteRegister(SUBGHZ_HandleTypeDef *hsubghz, uint16_t Address, uint8_t Value)
+HAL_StatusTypeDef HAL_SUBGHZ_WriteRegister(SUBGHZ_HandleTypeDef *hsubghz,
+                                           uint16_t Address,
+                                           uint8_t Value)
 {
   return (HAL_SUBGHZ_WriteRegisters(hsubghz, Address, &Value, 1U));
 }
@@ -809,7 +898,9 @@ HAL_StatusTypeDef HAL_SUBGHZ_WriteRegister(SUBGHZ_HandleTypeDef *hsubghz, uint16
   * @param  pValue pointer to a data
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_ReadRegister(SUBGHZ_HandleTypeDef *hsubghz, uint16_t Address, uint8_t *pValue)
+HAL_StatusTypeDef HAL_SUBGHZ_ReadRegister(SUBGHZ_HandleTypeDef *hsubghz,
+                                          uint16_t Address,
+                                          uint8_t *pValue)
 {
   return (HAL_SUBGHZ_ReadRegisters(hsubghz, Address, pValue, 1U));
 }
@@ -824,11 +915,14 @@ HAL_StatusTypeDef HAL_SUBGHZ_ReadRegister(SUBGHZ_HandleTypeDef *hsubghz, uint16_
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_ExecSetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_RadioSetCmd_t Command, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_ExecSetCmd(SUBGHZ_HandleTypeDef *hsubghz,
+                                        SUBGHZ_RadioSetCmd_t Command,
+                                        uint8_t *pBuffer,
+                                        uint16_t Size)
 {
   HAL_StatusTypeDef status;
 
-  /* LORA Modulation not availbale on STM32WLx4xx devices */
+  /* LORA Modulation not available on STM32WLx4xx devices */
   assert_param(IS_SUBGHZ_MODULATION_SUPPORTED(Command, pBuffer[0]));
 
   if (hsubghz->State == HAL_SUBGHZ_STATE_READY)
@@ -836,7 +930,7 @@ HAL_StatusTypeDef HAL_SUBGHZ_ExecSetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_Ra
     /* Process Locked */
     __HAL_LOCK(hsubghz);
 
-    /* Need to wakeup Radio if already in Sleep at statup */
+    /* Need to wakeup Radio if already in Sleep at startup */
     (void)SUBGHZ_CheckDeviceReady(hsubghz);
 
     if ((Command == RADIO_SET_SLEEP) || (Command == RADIO_SET_RXDUTYCYCLE))
@@ -897,7 +991,10 @@ HAL_StatusTypeDef HAL_SUBGHZ_ExecSetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_Ra
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_ExecGetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_RadioGetCmd_t Command, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_ExecGetCmd(SUBGHZ_HandleTypeDef *hsubghz,
+                                        SUBGHZ_RadioGetCmd_t Command,
+                                        uint8_t *pBuffer,
+                                        uint16_t Size)
 {
   HAL_StatusTypeDef status;
   uint8_t *pData = pBuffer;
@@ -913,6 +1010,8 @@ HAL_StatusTypeDef HAL_SUBGHZ_ExecGetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_Ra
     LL_PWR_SelectSUBGHZSPI_NSS();
 
     (void)SUBGHZSPI_Transmit(hsubghz, (uint8_t)Command);
+
+    /* Use to flush the Status (First byte) receive from SUBGHZ as not use */
     (void)SUBGHZSPI_Transmit(hsubghz, 0x00U);
 
     for (uint16_t i = 0U; i < Size; i++)
@@ -957,7 +1056,10 @@ HAL_StatusTypeDef HAL_SUBGHZ_ExecGetCmd(SUBGHZ_HandleTypeDef *hsubghz, SUBGHZ_Ra
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_WriteBuffer(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Offset, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_WriteBuffer(SUBGHZ_HandleTypeDef *hsubghz,
+                                         uint8_t Offset,
+                                         uint8_t *pBuffer,
+                                         uint16_t Size)
 {
   HAL_StatusTypeDef status;
 
@@ -1014,7 +1116,10 @@ HAL_StatusTypeDef HAL_SUBGHZ_WriteBuffer(SUBGHZ_HandleTypeDef *hsubghz, uint8_t 
   * @param  Size    amount of data to be sent
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_SUBGHZ_ReadBuffer(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Offset, uint8_t *pBuffer, uint16_t Size)
+HAL_StatusTypeDef HAL_SUBGHZ_ReadBuffer(SUBGHZ_HandleTypeDef *hsubghz,
+                                        uint8_t Offset,
+                                        uint8_t *pBuffer,
+                                        uint16_t Size)
 {
   HAL_StatusTypeDef status;
   uint8_t *pData = pBuffer;
@@ -1156,19 +1261,25 @@ void HAL_SUBGHZ_IRQHandler(SUBGHZ_HandleTypeDef *hsubghz)
   if (SUBGHZ_CHECK_IT_SOURCE(itsource, SUBGHZ_IT_CAD_DONE) != RESET)
   {
 #if (USE_HAL_SUBGHZ_REGISTER_CALLBACKS == 1U)
-    hsubghz->CADDoneCallback(hsubghz);
+    /* Channel activity Detected Interrupt */
+    if (SUBGHZ_CHECK_IT_SOURCE(itsource, SUBGHZ_IT_CAD_ACTIVITY_DETECTED) != RESET)
+    {
+      hsubghz->CADStatusCallback(hsubghz, HAL_SUBGHZ_CAD_DETECTED);
+    }
+    else
+    {
+      hsubghz->CADStatusCallback(hsubghz, HAL_SUBGHZ_CAD_CLEAR);
+    }
 #else
-    HAL_SUBGHZ_CADDoneCallback(hsubghz);
-#endif /* USE_HAL_SUBGHZ_REGISTER_CALLBACKS */
-  }
-
-  /* Channel activity Detected Interrupt */
-  if (SUBGHZ_CHECK_IT_SOURCE(itsource, SUBGHZ_IT_CAD_ACTIVITY_DETECTED) != RESET)
-  {
-#if (USE_HAL_SUBGHZ_REGISTER_CALLBACKS == 1U)
-    hsubghz->CADActivityDetectedCallback(hsubghz);
-#else
-    HAL_SUBGHZ_CADActivityDetectedCallback(hsubghz);
+    /* Channel activity Detected Interrupt */
+    if (SUBGHZ_CHECK_IT_SOURCE(itsource, SUBGHZ_IT_CAD_ACTIVITY_DETECTED) != RESET)
+    {
+      HAL_SUBGHZ_CADStatusCallback(hsubghz, HAL_SUBGHZ_CAD_DETECTED);
+    }
+    else
+    {
+      HAL_SUBGHZ_CADStatusCallback(hsubghz, HAL_SUBGHZ_CAD_CLEAR);
+    }
 #endif /* USE_HAL_SUBGHZ_REGISTER_CALLBACKS */
   }
 
@@ -1299,34 +1410,22 @@ __weak void HAL_SUBGHZ_CRCErrorCallback(SUBGHZ_HandleTypeDef *hsubghz)
 }
 
 /**
-  * @brief  Channel activity detection finished callback.
+  * @brief  Channel activity detection status callback.
+  * @note   Unified callback for CAD Done and CAD activity interrupts.
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *               the configuration information for SUBGHZ module.
+  * @param  cadstatus reports whether activity is detected or not
   * @retval None
   */
-__weak void HAL_SUBGHZ_CADDoneCallback(SUBGHZ_HandleTypeDef *hsubghz)
+__weak void HAL_SUBGHZ_CADStatusCallback(SUBGHZ_HandleTypeDef *hsubghz,
+                                         HAL_SUBGHZ_CadStatusTypeDef cadstatus)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hsubghz);
 
+  UNUSED(cadstatus);
   /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_SUBGHZ_CADDoneCallback should be implemented in the user file
-   */
-}
-
-/**
-  * @brief  Channel activity Detected callback.
-  * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
-  *               the configuration information for SUBGHZ module.
-  * @retval None
-  */
-__weak void HAL_SUBGHZ_CADActivityDetectedCallback(SUBGHZ_HandleTypeDef *hsubghz)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(hsubghz);
-
-  /* NOTE : This function should not be modified, when the callback is needed,
-            the HAL_SUBGHZ_CADActivityDetectedCallback should be implemented in the user file
+            the HAL_SUBGHZ_CADStatusCallback should be implemented in the user file
    */
 }
 
@@ -1405,9 +1504,9 @@ uint32_t HAL_SUBGHZ_GetError(SUBGHZ_HandleTypeDef *hsubghz)
 /**
   * @brief  Initializes the SUBGHZSPI peripheral
   * @param  BaudratePrescaler SPI Baudrate prescaler
-  * @retval HAL status
+  * @retval None
   */
-HAL_StatusTypeDef SUBGHZSPI_Init(uint32_t BaudratePrescaler)
+void SUBGHZSPI_Init(uint32_t BaudratePrescaler)
 {
   /* Check the parameters */
   assert_param(IS_SUBGHZ_ALL_INSTANCE(SUBGHZSPI));
@@ -1437,23 +1536,19 @@ HAL_StatusTypeDef SUBGHZSPI_Init(uint32_t BaudratePrescaler)
 
   /* Enable SUBGHZSPI Peripheral */
   SET_BIT(SUBGHZSPI->CR1, SPI_CR1_SPE);
-
-  return HAL_OK;
 }
 
 /**
   * @brief  DeInitializes the SUBGHZSPI peripheral
-  * @retval HAL status
+  * @retval None
   */
-HAL_StatusTypeDef SUBGHZSPI_DeInit(void)
+void  SUBGHZSPI_DeInit(void)
 {
   /* Check the parameters */
   assert_param(IS_SUBGHZ_ALL_INSTANCE(SUBGHZSPI));
 
   /* Disable SUBGHZSPI Peripheral */
   CLEAR_BIT(SUBGHZSPI->CR1, SPI_CR1_SPE);
-
-  return HAL_OK;
 }
 
 /**
@@ -1463,14 +1558,15 @@ HAL_StatusTypeDef SUBGHZSPI_DeInit(void)
   * @param  Data  data to transmit
   * @retval HAL status
   */
-HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data)
+HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz,
+                                     uint8_t Data)
 {
   HAL_StatusTypeDef status = HAL_OK;
   __IO uint32_t count;
 
   /* Handle Tx transmission from SUBGHZSPI peripheral to Radio ****************/
   /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * (SystemCoreClock / 19U / 1000U);
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
 
   /* Wait until TXE flag is set */
   do
@@ -1482,8 +1578,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data
       break;
     }
     count--;
-  }
-  while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
 
   /* Transmit Data*/
 #if defined (__GNUC__)
@@ -1495,7 +1590,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data
 
   /* Handle Rx transmission from SUBGHZSPI peripheral to Radio ****************/
   /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * (SystemCoreClock / 19U / 1000U);
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
 
   /* Wait until RXNE flag is set */
   do
@@ -1507,8 +1602,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data
       break;
     }
     count--;
-  }
-  while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
 
   /* Flush Rx data */
   READ_REG(SUBGHZSPI->DR);
@@ -1523,14 +1617,15 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data
   * @param  pData  pointer on data to receive
   * @retval HAL status
   */
-HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pData)
+HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz,
+                                    uint8_t *pData)
 {
   HAL_StatusTypeDef status = HAL_OK;
   __IO uint32_t count;
 
   /* Handle Tx transmission from SUBGHZSPI peripheral to Radio ****************/
   /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * (SystemCoreClock / 19U / 1000U);
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
 
   /* Wait until TXE flag is set */
   do
@@ -1542,8 +1637,7 @@ HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pDat
       break;
     }
     count--;
-  }
-  while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
 
   /* Transmit Data*/
 #if defined (__GNUC__)
@@ -1555,7 +1649,7 @@ HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pDat
 
   /* Handle Rx transmission from SUBGHZSPI peripheral to Radio ****************/
   /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * (SystemCoreClock / 19U / 1000U);
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
 
   /* Wait until RXNE flag is set */
   do
@@ -1567,8 +1661,7 @@ HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pDat
       break;
     }
     count--;
-  }
-  while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
 
   /* Retrieve pData */
   *pData = (uint8_t)(READ_REG(SUBGHZSPI->DR));
@@ -1611,7 +1704,7 @@ HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz)
   uint32_t mask;
 
   status = HAL_OK;
-  count  = SUBGHZ_DEFAULT_TIMEOUT * (SystemCoreClock / 39U / 1000U);
+  count  = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_RFBUSY_LOOP_TIME;
 
   /* Wait until Busy signal is set */
   do
@@ -1625,8 +1718,7 @@ HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz)
       break;
     }
     count--;
-  }
-  while ((LL_PWR_IsActiveFlag_RFBUSYS()& mask) == 1UL);
+  } while ((LL_PWR_IsActiveFlag_RFBUSYS()& mask) == 1UL);
 
   return status;
 }

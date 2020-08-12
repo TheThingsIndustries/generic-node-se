@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -89,6 +89,17 @@ typedef struct
   uint32_t BinMixBcdU;        /*!< Specifies the BCD calendar update if and only if BinMode = RTC_BINARY_MIX.
                                  This parameter can be a value of @ref RTCEx_Binary_mix_BCDU */
 } RTC_InitTypeDef;
+
+
+/**
+  * @brief  RTC Enabled features Structure definition
+  */
+typedef struct
+{
+  uint32_t RtcFeatures;
+  uint32_t TampFeatures;
+} RTC_IsEnabledDef;
+
 
 /**
   * @brief  RTC Time structure definition
@@ -196,6 +207,8 @@ typedef struct
 
   __IO HAL_RTCStateTypeDef  State;      /*!< Time communication state */
 
+  RTC_IsEnabledDef           IsEnabled; /*!< Flag to avoid treatment of the interrupts activated by the other core  */
+
 #if (USE_HAL_RTC_REGISTER_CALLBACKS == 1)
   void (* AlarmAEventCallback)(struct __RTC_HandleTypeDef *hrtc);                    /*!< RTC Alarm A Event callback            */
   void (* AlarmBEventCallback)(struct __RTC_HandleTypeDef *hrtc);                    /*!< RTC Alarm B Event callback            */
@@ -207,6 +220,7 @@ typedef struct
   void (* Tamper3EventCallback)(struct __RTC_HandleTypeDef *hrtc);                   /*!< RTC Tamper 3 Event callback           */
   void (* InternalTamper3EventCallback)(struct __RTC_HandleTypeDef *hrtc);           /*!< RTC Internal Tamper 3 Event callback  */
   void (* InternalTamper5EventCallback)(struct __RTC_HandleTypeDef *hrtc);           /*!< RTC Internal Tamper 5 Event callback  */
+  void (* InternalTamper6EventCallback)(struct __RTC_HandleTypeDef *hrtc);           /*!< RTC Internal Tamper 6 Event callback  */
   void (* InternalTamper8EventCallback)(struct __RTC_HandleTypeDef *hrtc);           /*!< RTC Internal Tamper 8 Event callback  */
   void (* MspInitCallback)(struct __RTC_HandleTypeDef *hrtc);                        /*!< RTC Msp Init callback                 */
   void (* MspDeInitCallback)(struct __RTC_HandleTypeDef *hrtc);                      /*!< RTC Msp DeInit callback               */
@@ -231,9 +245,10 @@ typedef enum
   HAL_RTC_TAMPER3_EVENT_CB_ID           =  7u,    /*!< RTC Tamper 3 Callback ID           */
   HAL_RTC_INTERNAL_TAMPER3_EVENT_CB_ID  =  8u,    /*!< RTC Internal Tamper 3 Callback ID  */
   HAL_RTC_INTERNAL_TAMPER5_EVENT_CB_ID  =  9u,    /*!< RTC Internal Tamper 5 Callback ID  */
-  HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID  = 10u,    /*!< RTC Internal Tamper 8 Callback ID  */
-  HAL_RTC_MSPINIT_CB_ID                 = 11u,    /*!< RTC Msp Init callback ID           */
-  HAL_RTC_MSPDEINIT_CB_ID               = 12u     /*!< RTC Msp DeInit callback ID         */
+  HAL_RTC_INTERNAL_TAMPER6_EVENT_CB_ID  = 10u,    /*!< RTC Internal Tamper 6 Callback ID  */
+  HAL_RTC_INTERNAL_TAMPER8_EVENT_CB_ID  = 11u,    /*!< RTC Internal Tamper 8 Callback ID  */
+  HAL_RTC_MSPINIT_CB_ID                 = 12u,    /*!< RTC Msp Init callback ID           */
+  HAL_RTC_MSPDEINIT_CB_ID               = 13u     /*!< RTC Msp DeInit callback ID         */
 } HAL_RTC_CallbackIDTypeDef;
 
 /**

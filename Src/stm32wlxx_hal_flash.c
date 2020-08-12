@@ -78,7 +78,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -324,7 +324,7 @@ void HAL_FLASH_IRQHandler(void)
   /* check operation was a program or erase */
   if ((pFlash.ProcedureOnGoing & (FLASH_TYPEPROGRAM_DOUBLEWORD | FLASH_TYPEPROGRAM_FAST)) != 0U)
   {
-    /* return adress being programmed */
+    /* return address being programmed */
     param = pFlash.Address;
   }
   else if ((pFlash.ProcedureOnGoing & (FLASH_TYPEERASE_MASSERASE | FLASH_TYPEERASE_PAGES)) != 0U)

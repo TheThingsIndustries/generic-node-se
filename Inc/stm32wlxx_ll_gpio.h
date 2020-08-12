@@ -6,11 +6,11 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
@@ -69,27 +69,32 @@ typedef struct
   uint32_t Mode;         /*!< Specifies the operating mode for the selected pins.
                               This parameter can be a value of @ref GPIO_LL_EC_MODE.
 
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinMode().*/
+                              GPIO HW configuration can be modified afterwards using
+                              unitary function @ref LL_GPIO_SetPinMode().*/
 
   uint32_t Speed;        /*!< Specifies the speed for the selected pins.
                               This parameter can be a value of @ref GPIO_LL_EC_SPEED.
 
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinSpeed().*/
+                              GPIO HW configuration can be modified afterwards using
+                              unitary function @ref LL_GPIO_SetPinSpeed().*/
 
   uint32_t OutputType;   /*!< Specifies the operating output type for the selected pins.
                               This parameter can be a value of @ref GPIO_LL_EC_OUTPUT.
 
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinOutputType().*/
+                              GPIO HW configuration can be modified afterwards using
+                              unitary function @ref LL_GPIO_SetPinOutputType().*/
 
   uint32_t Pull;         /*!< Specifies the operating Pull-up/Pull down for the selected pins.
                               This parameter can be a value of @ref GPIO_LL_EC_PULL.
 
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetPinPull().*/
+                              GPIO HW configuration can be modified afterwards using
+                              unitary function @ref LL_GPIO_SetPinPull().*/
 
   uint32_t Alternate;    /*!< Specifies the Peripheral to be connected to the selected pins.
                               This parameter can be a value of @ref GPIO_LL_EC_AF.
 
-                              GPIO HW configuration can be modified afterwards using unitary function @ref LL_GPIO_SetAFPin_0_7() and LL_GPIO_SetAFPin_8_15().*/
+                              GPIO HW configuration can be modified afterwards using
+                              unitary function @ref LL_GPIO_SetAFPin_0_7() and LL_GPIO_SetAFPin_8_15().*/
 } LL_GPIO_InitTypeDef;
 
 /**
@@ -122,11 +127,11 @@ typedef struct
 #define LL_GPIO_PIN_14                     GPIO_BSRR_BS14 /*!< Select pin 14 */
 #define LL_GPIO_PIN_15                     GPIO_BSRR_BS15 /*!< Select pin 15 */
 #define LL_GPIO_PIN_ALL                    (GPIO_BSRR_BS0 | GPIO_BSRR_BS1  | GPIO_BSRR_BS2  | \
-                                           GPIO_BSRR_BS3  | GPIO_BSRR_BS4  | GPIO_BSRR_BS5  | \
-                                           GPIO_BSRR_BS6  | GPIO_BSRR_BS7  | GPIO_BSRR_BS8  | \
-                                           GPIO_BSRR_BS9  | GPIO_BSRR_BS10 | GPIO_BSRR_BS11 | \
-                                           GPIO_BSRR_BS12 | GPIO_BSRR_BS13 | GPIO_BSRR_BS14 | \
-                                           GPIO_BSRR_BS15) /*!< Select all pins */
+                                            GPIO_BSRR_BS3  | GPIO_BSRR_BS4  | GPIO_BSRR_BS5  | \
+                                            GPIO_BSRR_BS6  | GPIO_BSRR_BS7  | GPIO_BSRR_BS8  | \
+                                            GPIO_BSRR_BS9  | GPIO_BSRR_BS10 | GPIO_BSRR_BS11 | \
+                                            GPIO_BSRR_BS12 | GPIO_BSRR_BS13 | GPIO_BSRR_BS14 | \
+                                            GPIO_BSRR_BS15) /*!< Select all pins */
 /**
   * @}
   */
@@ -277,7 +282,7 @@ __STATIC_INLINE void LL_GPIO_SetPinMode(GPIO_TypeDef *GPIOx, uint32_t Pin, uint3
   MODIFY_REG(GPIOx->MODER, ((Pin * Pin) * GPIO_MODER_MODE0), ((Pin * Pin) * Mode));
 #else
   MODIFY_REG(GPIOx->MODER, (GPIO_MODER_MODE0 << (POSITION_VAL(Pin) * 2U)), (Mode << (POSITION_VAL(Pin) * 2U)));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -316,7 +321,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetPinMode(GPIO_TypeDef *GPIOx, uint32_t Pin)
 #else
   return (uint32_t)(READ_BIT(GPIOx->MODER,
                              (GPIO_MODER_MODE0 << (POSITION_VAL(Pin) * 2U))) >> (POSITION_VAL(Pin) * 2U));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -388,7 +393,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetPinOutputType(GPIO_TypeDef *GPIOx, uint32_t 
   return (uint32_t)(READ_BIT(GPIOx->OTYPER, Pin) / Pin);
 #else
   return (uint32_t)(READ_BIT(GPIOx->OTYPER, Pin) >> POSITION_VAL(Pin));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -430,7 +435,7 @@ __STATIC_INLINE void LL_GPIO_SetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin, uint
 #else
   MODIFY_REG(GPIOx->OSPEEDR, (GPIO_OSPEEDR_OSPEED0 << (POSITION_VAL(Pin) * 2U)),
              (Speed << (POSITION_VAL(Pin) * 2U)));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -471,7 +476,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetPinSpeed(GPIO_TypeDef *GPIOx, uint32_t Pin)
 #else
   return (uint32_t)(READ_BIT(GPIOx->OSPEEDR,
                              (GPIO_OSPEEDR_OSPEED0 << (POSITION_VAL(Pin) * 2U))) >> (POSITION_VAL(Pin) * 2U));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -508,7 +513,7 @@ __STATIC_INLINE void LL_GPIO_SetPinPull(GPIO_TypeDef *GPIOx, uint32_t Pin, uint3
   MODIFY_REG(GPIOx->PUPDR, ((Pin * Pin) * GPIO_PUPDR_PUPD0), ((Pin * Pin) * Pull));
 #else
   MODIFY_REG(GPIOx->PUPDR, (GPIO_PUPDR_PUPD0 << (POSITION_VAL(Pin) * 2U)), (Pull << (POSITION_VAL(Pin) * 2U)));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -545,7 +550,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetPinPull(GPIO_TypeDef *GPIOx, uint32_t Pin)
 #else
   return (uint32_t)(READ_BIT(GPIOx->PUPDR,
                              (GPIO_PUPDR_PUPD0 << (POSITION_VAL(Pin) * 2U))) >> (POSITION_VAL(Pin) * 2U));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -590,7 +595,7 @@ __STATIC_INLINE void LL_GPIO_SetAFPin_0_7(GPIO_TypeDef *GPIOx, uint32_t Pin, uin
 #else
   MODIFY_REG(GPIOx->AFR[0], (GPIO_AFRL_AFSEL0 << (POSITION_VAL(Pin) * 4U)),
              (Alternate << (POSITION_VAL(Pin) * 4U)));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -632,7 +637,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetAFPin_0_7(GPIO_TypeDef *GPIOx, uint32_t Pin)
 #else
   return (uint32_t)(READ_BIT(GPIOx->AFR[0],
                              (GPIO_AFRL_AFSEL0 << (POSITION_VAL(Pin) * 4U))) >> (POSITION_VAL(Pin) * 4U));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -677,7 +682,7 @@ __STATIC_INLINE void LL_GPIO_SetAFPin_8_15(GPIO_TypeDef *GPIOx, uint32_t Pin, ui
 #else
   MODIFY_REG(GPIOx->AFR[1], (GPIO_AFRH_AFSEL8 << (POSITION_VAL(Pin >> 8U) * 4U)),
              (Alternate << (POSITION_VAL(Pin >> 8U) * 4U)));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 /**
@@ -721,7 +726,7 @@ __STATIC_INLINE uint32_t LL_GPIO_GetAFPin_8_15(GPIO_TypeDef *GPIOx, uint32_t Pin
 #else
   return (uint32_t)(READ_BIT(GPIOx->AFR[1],
                              (GPIO_AFRH_AFSEL8 << (POSITION_VAL(Pin >> 8U) * 4U))) >> (POSITION_VAL(Pin >> 8U) * 4U));
-#endif
+#endif /* CORE_CM0PLUS */
 }
 
 
@@ -989,7 +994,8 @@ __STATIC_INLINE void LL_GPIO_ResetOutputPin(GPIO_TypeDef *GPIOx, uint32_t PinMas
   */
 __STATIC_INLINE void LL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint32_t PinMask)
 {
-  WRITE_REG(GPIOx->ODR, READ_REG(GPIOx->ODR) ^ PinMask);
+  uint32_t odr = READ_REG(GPIOx->ODR);
+  WRITE_REG(GPIOx->BSRR, ((odr & PinMask) << 16u) | (~odr & PinMask));
 }
 
 /**

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -57,8 +57,8 @@ typedef struct
 {
   uint32_t         ClockErrorDetection; /*!< Clock error detection.
                                       This parameter can be one value of @ref RNG_LL_CED.
-
-                                      This parameter can be modified using unitary functions @ref LL_RNG_EnableClkErrorDetect(). */
+                                      This parameter can be modified using unitary
+                                      functions @ref LL_RNG_EnableClkErrorDetect(). */
 } LL_RNG_InitTypeDef;
 
 /**
@@ -80,7 +80,7 @@ typedef struct
   */
 
 /** @defgroup RNG_LL_Clock_Divider_Factor  Value used to configure an internal
- *            programmable divider acting on the incoming RNG clock
+  *            programmable divider acting on the incoming RNG clock
   * @{
   */
 #define LL_RNG_CLKDIV_BY_1       (0x00000000UL)                                                           /*!< No clock division                             */
@@ -610,7 +610,7 @@ __STATIC_INLINE uint32_t LL_RNG_ReadRandData32(RNG_TypeDef *RNGx)
   * @}
   */
 
-#if defined (RNG_VER_3_1) || defined(RNG_VER_3_2)
+#if defined(RNG_VER_3_2) || defined(RNG_VER_3_1) || defined(RNG_VER_3_0)
 /** @defgroup RNG_LL_EF_Health_Test_Control Health Test Control
   * @{
   */
@@ -641,7 +641,7 @@ __STATIC_INLINE uint32_t LL_RNG_GetHealthConfig(RNG_TypeDef *RNGx)
 /**
   * @}
   */
-#endif  /*RNG_VER_3_1 || RNG_VER_3_2*/
+#endif  /* RNG_VER_3_2, RNG_VER_3_1 or RNG_VER_3_0 */
 #if defined(USE_FULL_LL_DRIVER)
 /** @defgroup RNG_LL_EF_Init Initialization and de-initialization functions
   * @{

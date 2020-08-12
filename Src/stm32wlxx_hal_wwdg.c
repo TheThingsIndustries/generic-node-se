@@ -32,12 +32,11 @@
         (++) min time (mS) = 1000 * (Counter - Window) / WWDG clock
         (++) max time (mS) = 1000 * (Counter - 0x40) / WWDG clock
     (+) Typical values:
-        (++) Counter min (T[5;0] = 0x00) @48MHz (PCLK1) with zero prescaler:
-             max timeout before reset: approximately 85.33µs
-        (++) Counter max (T[5;0] = 0x3F) @48MHz (PCLK1) with prescaler dividing by 128:
+        (++) Counter min (T[5;0] = 0x00) at 48MHz (PCLK1) with zero prescaler:
+             max timeout before reset: approximately 85.33us
+        (++) Counter max (T[5;0] = 0x3F) at 48MHz (PCLK1) with prescaler dividing by 128:
              max timeout before reset: approximately 699.05ms
 
-  ==============================================================================
                      ##### How to use this driver #####
   ==============================================================================
 
@@ -67,26 +66,26 @@
   [..]
     The compilation define  USE_HAL_WWDG_REGISTER_CALLBACKS when set to 1 allows
     the user to configure dynamically the driver callbacks. Use Functions
-    @ref HAL_WWDG_RegisterCallback() to register a user callback.
+    HAL_WWDG_RegisterCallback() to register a user callback.
 
-    (+) Function @ref HAL_WWDG_RegisterCallback() allows to register following
+    (+) Function HAL_WWDG_RegisterCallback() allows to register following
         callbacks:
         (++) EwiCallback : callback for Early WakeUp Interrupt.
         (++) MspInitCallback : WWDG MspInit.
     This function takes as parameters the HAL peripheral handle, the Callback ID
     and a pointer to the user callback function.
 
-    (+) Use function @ref HAL_WWDG_UnRegisterCallback() to reset a callback to
-    the default weak (surcharged) function. @ref HAL_WWDG_UnRegisterCallback()
+    (+) Use function HAL_WWDG_UnRegisterCallback() to reset a callback to
+    the default weak (surcharged) function. HAL_WWDG_UnRegisterCallback()
     takes as parameters the HAL peripheral handle and the Callback ID.
     This function allows to reset following callbacks:
         (++) EwiCallback : callback for  Early WakeUp Interrupt.
         (++) MspInitCallback : WWDG MspInit.
 
     [..]
-    When calling @ref HAL_WWDG_Init function, callbacks are reset to the
+    When calling HAL_WWDG_Init function, callbacks are reset to the
     corresponding legacy weak (surcharged) functions:
-    @ref HAL_WWDG_EarlyWakeupCallback() and HAL_WWDG_MspInit() only if they have
+    HAL_WWDG_EarlyWakeupCallback() and HAL_WWDG_MspInit() only if they have
     not been registered before.
 
     [..]
@@ -107,7 +106,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -199,7 +198,7 @@ HAL_StatusTypeDef HAL_WWDG_Init(WWDG_HandleTypeDef *hwwdg)
 #else
   /* Init the low level hardware */
   HAL_WWDG_MspInit(hwwdg);
-#endif
+#endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 
   /* Set WWDG Counter */
   WRITE_REG(hwwdg->Instance->CR, (WWDG_CR_WDGA | hwwdg->Init.Counter));
@@ -244,7 +243,8 @@ __weak void HAL_WWDG_MspInit(WWDG_HandleTypeDef *hwwdg)
   * @param  pCallback pointer to the Callback function
   * @retval status
   */
-HAL_StatusTypeDef HAL_WWDG_RegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWDG_CallbackIDTypeDef CallbackID, pWWDG_CallbackTypeDef pCallback)
+HAL_StatusTypeDef HAL_WWDG_RegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWDG_CallbackIDTypeDef CallbackID,
+                                            pWWDG_CallbackTypeDef pCallback)
 {
   HAL_StatusTypeDef status = HAL_OK;
 
@@ -305,7 +305,7 @@ HAL_StatusTypeDef HAL_WWDG_UnRegisterCallback(WWDG_HandleTypeDef *hwwdg, HAL_WWD
 
   return status;
 }
-#endif
+#endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
 
 /**
   * @}
@@ -373,7 +373,7 @@ void HAL_WWDG_IRQHandler(WWDG_HandleTypeDef *hwwdg)
 #else
       /* Early Wakeup callback */
       HAL_WWDG_EarlyWakeupCallback(hwwdg);
-#endif
+#endif /* USE_HAL_WWDG_REGISTER_CALLBACKS */
     }
   }
 }

@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -149,7 +149,7 @@ HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling(uint32_t VoltageScaling)
 
 /**
   * @brief Enable battery charging.
-  *        When VDD is present, charge the external battery on VBAT thru an internal resistor.
+  *        When VDD is present, charge the external battery on VBAT through an internal resistor.
   * @param ResistorSelection specifies the resistor impedance.
   *          This parameter can be one of the following values:
   *            @arg @ref PWR_BATTERY_CHARGING_RESISTOR_5     5 kOhms resistor
@@ -759,7 +759,7 @@ HAL_StatusTypeDef HAL_PWREx_ConfigPVM(PWR_PVMTypeDef *sConfigPVM)
   assert_param(IS_PWR_PVM_MODE(sConfigPVM->Mode));
 
   /* Configure EXTI lines if so required:
-     scan thru PVMType to detect which PVMx is set and
+     scan through PVMType to detect which PVMx is set and
      configure the corresponding EXTI line accordingly. */
   switch (sConfigPVM->PVMType)
   {

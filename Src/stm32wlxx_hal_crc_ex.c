@@ -11,14 +11,14 @@
             ##### How to use this driver #####
 ================================================================================
     [..]
-         (+) Set user-defined generating polynomial thru HAL_CRCEx_Polynomial_Set()
+         (+) Set user-defined generating polynomial through HAL_CRCEx_Polynomial_Set()
          (+) Configure Input or Output data inversion
 
   @endverbatim
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
