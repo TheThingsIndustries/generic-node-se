@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -184,7 +184,7 @@ typedef struct __DMA_HandleTypeDef
 #define DMA_REQUEST_GENERATOR1       LL_DMAMUX_REQ_GENERATOR1     /*!< DMAMUX request generator 1 */
 #define DMA_REQUEST_GENERATOR2       LL_DMAMUX_REQ_GENERATOR2     /*!< DMAMUX request generator 2 */
 #define DMA_REQUEST_GENERATOR3       LL_DMAMUX_REQ_GENERATOR3     /*!< DMAMUX request generator 3 */
-#define DMA_REQUEST_ADC1             LL_DMAMUX_REQ_ADC1           /*!< DMAMUX ADC1 request        */
+#define DMA_REQUEST_ADC              LL_DMAMUX_REQ_ADC            /*!< DMAMUX ADC request         */
 #define DMA_REQUEST_DAC_OUT1         LL_DMAMUX_REQ_DAC_OUT1       /*!< DMAMUX DAC OUT request     */
 #define DMA_REQUEST_SPI1_RX          LL_DMAMUX_REQ_SPI1_RX        /*!< DMAMUX SPI1 RX request     */
 #define DMA_REQUEST_SPI1_TX          LL_DMAMUX_REQ_SPI1_TX        /*!< DMAMUX SPI1 TX request     */
@@ -313,36 +313,37 @@ typedef struct __DMA_HandleTypeDef
 
 #define DMA_FLAG_GI1                 DMA_ISR_GIF1                       /*!< Global Interrupt flag for Channel 1  */
 #define DMA_FLAG_TC1                 DMA_ISR_TCIF1                      /*!< Transfer Complete flag for Channel 1 */
-#define DMA_FLAG_HT1                 DMA_ISR_HTIF1                      /*!< Half Tranfer flag for Channel 1      */
-#define DMA_FLAG_TE1                 DMA_ISR_TEIF1                      /*!< Tranfer Error flag for Channel 1     */
+#define DMA_FLAG_HT1                 DMA_ISR_HTIF1                      /*!< Half Transfer flag for Channel 1     */
+#define DMA_FLAG_TE1                 DMA_ISR_TEIF1                      /*!< Transfer Error flag for Channel 1    */
 #define DMA_FLAG_GI2                 DMA_ISR_GIF2                       /*!< Global Interrupt flag for Channel 2  */
 #define DMA_FLAG_TC2                 DMA_ISR_TCIF2                      /*!< Transfer Complete flag for Channel 2 */
-#define DMA_FLAG_HT2                 DMA_ISR_HTIF2                      /*!< Half Tranfer flag for Channel 2      */
-#define DMA_FLAG_TE2                 DMA_ISR_TEIF2                      /*!< Tranfer Error flag for Channel 2     */
+#define DMA_FLAG_HT2                 DMA_ISR_HTIF2                      /*!< Half Transfer flag for Channel 2     */
+#define DMA_FLAG_TE2                 DMA_ISR_TEIF2                      /*!< Transfer Error flag for Channel 2    */
 #define DMA_FLAG_GI3                 DMA_ISR_GIF3                       /*!< Global Interrupt flag for Channel 3  */
 #define DMA_FLAG_TC3                 DMA_ISR_TCIF3                      /*!< Transfer Complete flag for Channel 3 */
-#define DMA_FLAG_HT3                 DMA_ISR_HTIF3                      /*!< Half Tranfer flag for Channel 3      */
-#define DMA_FLAG_TE3                 DMA_ISR_TEIF3                      /*!< Tranfer Error flag for Channel 3     */
+#define DMA_FLAG_HT3                 DMA_ISR_HTIF3                      /*!< Half Transfer flag for Channel 3     */
+#define DMA_FLAG_TE3                 DMA_ISR_TEIF3                      /*!< Transfer Error flag for Channel 3    */
 #define DMA_FLAG_GI4                 DMA_ISR_GIF4                       /*!< Global Interrupt flag for Channel 4  */
 #define DMA_FLAG_TC4                 DMA_ISR_TCIF4                      /*!< Transfer Complete flag for Channel 4 */
-#define DMA_FLAG_HT4                 DMA_ISR_HTIF4                      /*!< Half Tranfer flag for Channel 4      */
-#define DMA_FLAG_TE4                 DMA_ISR_TEIF4                      /*!< Tranfer Error flag for Channel 4     */
+#define DMA_FLAG_HT4                 DMA_ISR_HTIF4                      /*!< Half Transfer flag for Channel 4     */
+#define DMA_FLAG_TE4                 DMA_ISR_TEIF4                      /*!< Transfer Error flag for Channel 4    */
 #define DMA_FLAG_GI5                 DMA_ISR_GIF5                       /*!< Global Interrupt flag for Channel 5  */
 #define DMA_FLAG_TC5                 DMA_ISR_TCIF5                      /*!< Transfer Complete flag for Channel 5 */
-#define DMA_FLAG_HT5                 DMA_ISR_HTIF5                      /*!< Half Tranfer flag for Channel 5      */
-#define DMA_FLAG_TE5                 DMA_ISR_TEIF5                      /*!< Tranfer Error for Channel 5          */
+#define DMA_FLAG_HT5                 DMA_ISR_HTIF5                      /*!< Half Transfer flag for Channel 5     */
+#define DMA_FLAG_TE5                 DMA_ISR_TEIF5                      /*!< Transfer Error for Channel 5         */
 #define DMA_FLAG_GI6                 DMA_ISR_GIF6                       /*!< Global Interrupt flag for Channel 6  */
 #define DMA_FLAG_TC6                 DMA_ISR_TCIF6                      /*!< Transfer Complete flag for Channel 6 */
-#define DMA_FLAG_HT6                 DMA_ISR_HTIF6                      /*!< Half Tranfer flag for Channel 6      */
-#define DMA_FLAG_TE6                 DMA_ISR_TEIF6                      /*!< Tranfer Error flag for Channel 6     */
+#define DMA_FLAG_HT6                 DMA_ISR_HTIF6                      /*!< Half Transfer flag for Channel 6     */
+#define DMA_FLAG_TE6                 DMA_ISR_TEIF6                      /*!< Transfer Error flag for Channel 6    */
 #define DMA_FLAG_GI7                 DMA_ISR_GIF7                       /*!< Global Interrupt flag for Channel 7  */
 #define DMA_FLAG_TC7                 DMA_ISR_TCIF7                      /*!< Transfer Complete flag for Channel 7 */
-#define DMA_FLAG_HT7                 DMA_ISR_HTIF7                      /*!< Half Tranfer flag for Channel 7      */
-#define DMA_FLAG_TE7                 DMA_ISR_TEIF7                      /*!< Tranfer Error flag for Channel 7     */
+#define DMA_FLAG_HT7                 DMA_ISR_HTIF7                      /*!< Half Transfer flag for Channel 7     */
+#define DMA_FLAG_TE7                 DMA_ISR_TEIF7                      /*!< Transfer Error flag for Channel 7    */
 /**
   * @}
   */
 
+#if defined(DMA_CCR_SECM) && defined(DMA_CCR_PRIV)
 /** @defgroup DMA_Channel_Attributes DMA Channel Attributes
   * @brief DMA channel secure or non-secure and privileged or non-privileged attributes
   * @note Secure and non-secure attributes are only available from secure when the system
@@ -351,27 +352,23 @@ typedef struct __DMA_HandleTypeDef
   */
 
 #define DMA_CHANNEL_ATTR_PRIV_MASK         (DMA_CCR_PRIV >> 16U)
-#if defined (DUAL_CORE)
 #define DMA_CHANNEL_ATTR_SEC_MASK          (DMA_CCR_SECM >> 16U)
 #define DMA_CHANNEL_ATTR_SEC_SRC_MASK      (DMA_CCR_SSEC >> 16U)
 #define DMA_CHANNEL_ATTR_SEC_DEST_MASK     (DMA_CCR_DSEC >> 16U)
-#endif /* DUAL_CORE */
 
 #define DMA_CHANNEL_PRIV          (DMA_CHANNEL_ATTR_PRIV_MASK | DMA_CCR_PRIV)     /*!< Channel is privileged             */
 #define DMA_CHANNEL_NPRIV         (DMA_CHANNEL_ATTR_PRIV_MASK)                    /*!< Channel is unprivileged           */
-#if defined (DUAL_CORE)
 #define DMA_CHANNEL_SEC           (DMA_CHANNEL_ATTR_SEC_MASK | DMA_CCR_SECM)      /*!< Channel is secure                 */
 #define DMA_CHANNEL_NSEC          (DMA_CHANNEL_ATTR_SEC_MASK)                     /*!< Channel is non-secure             */
 #define DMA_CHANNEL_SRC_SEC       (DMA_CHANNEL_ATTR_SEC_SRC_MASK | DMA_CCR_SSEC)  /*!< Channel source is secure          */
 #define DMA_CHANNEL_SRC_NSEC      (DMA_CHANNEL_ATTR_SEC_SRC_MASK)                 /*!< Channel source is non-secure      */
 #define DMA_CHANNEL_DEST_SEC      (DMA_CHANNEL_ATTR_SEC_DEST_MASK | DMA_CCR_DSEC) /*!< Channel destination is secure     */
 #define DMA_CHANNEL_DEST_NSEC     (DMA_CHANNEL_ATTR_SEC_DEST_MASK)                /*!< Channel destination is non-secure */
-#endif /* DUAL_CORE */
-
 /**
   * @}
   */
 
+#endif /* DMA_SECURE_SWITCH */
 /**
   * @}
   */
@@ -604,6 +601,7 @@ uint32_t             HAL_DMA_GetError(DMA_HandleTypeDef *hdma);
   * @}
   */
 
+#if defined(DMA_CCR_SECM) && defined(DMA_CCR_PRIV)
 /** @addtogroup DMA_Exported_Functions_Group4
   * @{
   */
@@ -614,6 +612,7 @@ HAL_StatusTypeDef HAL_DMA_GetConfigChannelAttributes(DMA_HandleTypeDef *hdma, ui
   * @}
   */
 
+#endif /* DMA_SECURE_SWITCH */
 /**
   * @}
   */
@@ -653,12 +652,9 @@ HAL_StatusTypeDef HAL_DMA_GetConfigChannelAttributes(DMA_HandleTypeDef *hdma, ui
                                                  ((PRIORITY) == DMA_PRIORITY_HIGH)   || \
                                                  ((PRIORITY) == DMA_PRIORITY_VERY_HIGH))
 
-#if defined (DUAL_CORE)
+#if defined(DMA_CCR_SECM) && defined(DMA_CCR_PRIV)
 #define IS_DMA_ATTRIBUTES(ATTRIBUTE)            ((((ATTRIBUTE) & (~(0x001E001EU))) == 0U) && (((ATTRIBUTE) & 0x0000001EU) != 0U))
-#else
-#define IS_DMA_ATTRIBUTES(ATTRIBUTE)            (((ATTRIBUTE) == DMA_CHANNEL_PRIV)     || \
-                                                 ((ATTRIBUTE) == DMA_CHANNEL_NPRIV))
-#endif /* DUAL_CORE */
+#endif /* DMA_SECURE_SWITCH */
 /**
   * @}
   */

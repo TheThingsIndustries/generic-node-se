@@ -77,7 +77,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -274,7 +274,7 @@ HAL_StatusTypeDef HAL_FLASHEx_Erase_IT(FLASH_EraseInitTypeDef *pEraseInit)
 
     if (pEraseInit->TypeErase == FLASH_TYPEERASE_MASSERASE)
     {
-      /* Set Page to 0 for Interrupt callback managment */
+      /* Set Page to 0 for Interrupt callback management */
       pFlash.Page = 0;
 
       /* Proceed to Mass Erase */
@@ -330,7 +330,7 @@ HAL_StatusTypeDef HAL_FLASHEx_OBProgram(FLASH_OBProgramInitTypeDef *pOBInit)
   /* Option register */
   if ((pOBInit->OptionType & (OPTIONBYTE_RDP | OPTIONBYTE_USER)) == (OPTIONBYTE_RDP | OPTIONBYTE_USER))
   {
-    /* Fully modify OPTR register with RDP & user datas */
+    /* Fully modify OPTR register with RDP & user data */
     FLASH_OB_OptrConfig(pOBInit->UserType, pOBInit->UserConfig, pOBInit->RDPLevel);
   }
   else if ((pOBInit->OptionType & OPTIONBYTE_RDP) != 0U)
@@ -547,7 +547,7 @@ uint32_t HAL_FLASHEx_IsOperationSuspended(void)
 #if defined(DUAL_CORE)
 /**
   * @brief  Disable CPU2 debug access.
-  * @note   This feature can only be accessed by a secure priviledged CPU2
+  * @note   This feature can only be accessed by a secure privileged CPU2
   *         When FLASH_SFR_HDPAD = 0 (Secure Hide Protection area enabled) the CPU2 software debug is disabled after a system reset.
   *         When FLASH_SFR_HDPAD = 1 (Secure Hide Protection area disabled) the CPU2 software debug is enabled, after a system reset.
   * @retval None
@@ -559,7 +559,7 @@ void HAL_FLASHEx_DisableC2Debug(void)
 
 /**
   * @brief  Enable CPU2 debug access (When also enabled in FLASH_SFR_DDS).
-  * @note   This feature can only be accessed by a secure priviledged CPU2
+  * @note   This feature can only be accessed by a secure privileged CPU2
   *         When FLASH_SFR_HDPAD = 0 (Secure Hide Protection area enabled) the CPU2 software debug is disabled after a system reset.
   *         When FLASH_SFR_HDPAD = 1 (Secure Hide Protection area disabled) the CPU2 software debug is enabled, after a system reset.
   * @retval None
@@ -571,7 +571,7 @@ void HAL_FLASHEx_EnableC2Debug(void)
 
 /**
   * @brief  Enable Secure Hide Protection Area access.
-  * @note   This feature can only be accessed by a secure priviledged CPU2
+  * @note   This feature can only be accessed by a secure privileged CPU2
   *         This bit is set by software and will only be reset by hardware on a system reset.
   * @retval None
   */
@@ -582,7 +582,7 @@ void HAL_FLASHEx_EnableSecHideProtection(void)
 
 /**
   * @brief  Configuration of the privilege attribute.
-  * @note   This feature can only be accessed by a secure priviledged CPU2
+  * @note   This feature can only be accessed by a secure privileged CPU2
   * @param  PrivMode indicate privilege mode configuration
   *          This parameter can be one of the following values:
   *            @arg @ref FLASH_PRIV_GRANTED Access to Flash registers is granted
@@ -599,7 +599,7 @@ void HAL_FLASHEx_ConfigPrivMode(uint32_t PrivMode)
 
 /**
   * @brief  Return the value of the privilege attribute.
-  * @note   This feature can only be accessed by a secure priviledged CPU2
+  * @note   This feature can only be accessed by a secure privileged CPU2
   * @retval It indicates privilege mode configuration.
   *          This return value can be one of the following values:
   *            @arg @ref FLASH_PRIV_GRANTED Access to Flash registers is granted

@@ -41,7 +41,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -474,7 +474,7 @@ HAL_StatusTypeDef HAL_IPCC_NotifyCPU(IPCC_HandleTypeDef const *const hipcc, uint
   /* Check the parameters */
   assert_param(IS_IPCC_ALL_INSTANCE(hipcc->Instance));
 
-  /* Check if IPCC is initiliased */
+  /* Check if IPCC is initialized */
   if (hipcc->State == HAL_IPCC_STATE_READY)
   {
     /* For IPCC_CHANNEL_DIR_TX, set the status. For IPCC_CHANNEL_DIR_RX, clear the status */
@@ -773,10 +773,9 @@ void IPCC_Reset_Register(IPCC_CommonTypeDef *Instance)
 /**
   * @}
   */
-
+#endif /* IPCC */
 /**
   * @}
   */
-#endif /* IPCC */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

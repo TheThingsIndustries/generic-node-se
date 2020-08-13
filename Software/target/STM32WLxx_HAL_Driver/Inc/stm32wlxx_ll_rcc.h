@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -80,7 +80,7 @@ typedef struct
   uint32_t HCLK1_Frequency;          /*!< HCLK1 clock frequency  */
 #if defined(DUAL_CORE)
   uint32_t HCLK2_Frequency;          /*!< HCLK2 clock frequency  */
-#endif
+#endif /* DUAL_CORE */
   uint32_t HCLK3_Frequency;          /*!< HCLK3 clock frequency  */
   uint32_t PCLK1_Frequency;          /*!< PCLK1 clock frequency  */
   uint32_t PCLK2_Frequency;          /*!< PCLK2 clock frequency  */
@@ -165,7 +165,7 @@ typedef struct
 #define LL_RCC_CSR_IWDGRSTF                RCC_CSR_IWDGRSTF     /*!< Independent Watchdog reset flag */
 #define LL_RCC_CSR_WWDGRSTF                RCC_CSR_WWDGRSTF     /*!< Window watchdog reset flag */
 #define LL_RCC_CSR_BORRSTF                 RCC_CSR_BORRSTF      /*!< BOR reset flag */
-#define LL_RCC_CSR_RFILASTF                RCC_CSR_RFILARSTF    /*!< Radio illegal access flagg */
+#define LL_RCC_CSR_RFILASTF                RCC_CSR_RFILARSTF    /*!< Radio illegal access flag */
 
 /**
   * @}
@@ -692,8 +692,9 @@ typedef struct
   *         @arg @ref LL_RCC_PLLR_DIV_8
   * @retval PLL clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_PLLCLK_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLR__) ((__INPUTFREQ__) * (__PLLN__)  / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
-                   (((__PLLR__) >> RCC_PLLCFGR_PLLR_Pos) + 1U))
+#define __LL_RCC_CALC_PLLCLK_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLR__)  \
+  ((__INPUTFREQ__) * (__PLLN__)  / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
+   (((__PLLR__) >> RCC_PLLCFGR_PLLR_Pos) + 1U))
 
 /**
   * @brief  Helper macro to calculate the PLLPCLK frequency used on ADC domain
@@ -744,8 +745,9 @@ typedef struct
   *         @arg @ref LL_RCC_PLLP_DIV_32
   * @retval PLL clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_PLLCLK_ADC_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLP__) ((__INPUTFREQ__) * (__PLLN__) / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
-                   (((__PLLP__) >> RCC_PLLCFGR_PLLP_Pos) + 1U))
+#define __LL_RCC_CALC_PLLCLK_ADC_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLP__)  \
+  ((__INPUTFREQ__) * (__PLLN__) / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
+   (((__PLLP__) >> RCC_PLLCFGR_PLLP_Pos) + 1U))
 
 /**
   * @brief  Helper macro to calculate the PLLQCLK frequency used on RNG domain
@@ -772,8 +774,9 @@ typedef struct
   *         @arg @ref LL_RCC_PLLQ_DIV_8
   * @retval PLL clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_PLLCLK_RNG_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLQ__) ((__INPUTFREQ__) * (__PLLN__) / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
-                   (((__PLLQ__) >> RCC_PLLCFGR_PLLQ_Pos) + 1U))
+#define __LL_RCC_CALC_PLLCLK_RNG_FREQ(__INPUTFREQ__, __PLLM__, __PLLN__, __PLLQ__)  \
+  ((__INPUTFREQ__) * (__PLLN__) / ((((__PLLM__)>> RCC_PLLCFGR_PLLM_Pos) + 1U)) / \
+   (((__PLLQ__) >> RCC_PLLCFGR_PLLQ_Pos) + 1U))
 
 /**
   * @brief  Helper macro to calculate the PLLQCLK frequency used on I2S domain
@@ -822,7 +825,8 @@ typedef struct
   *         @arg @ref LL_RCC_SYSCLK_DIV_512
   * @retval HCLK1 clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_HCLK1_FREQ(__SYSCLKFREQ__,__CPU1PRESCALER__) ((__SYSCLKFREQ__) / AHBPrescTable[((__CPU1PRESCALER__) & RCC_CFGR_HPRE) >>  RCC_CFGR_HPRE_Pos])
+#define __LL_RCC_CALC_HCLK1_FREQ(__SYSCLKFREQ__,__CPU1PRESCALER__)  \
+  ((__SYSCLKFREQ__) / AHBPrescTable[((__CPU1PRESCALER__) & RCC_CFGR_HPRE) >>  RCC_CFGR_HPRE_Pos])
 
 #if defined(DUAL_CORE)
 /**
@@ -845,8 +849,9 @@ typedef struct
   *         @arg @ref LL_RCC_SYSCLK_DIV_512
   * @retval HCLK2 clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_HCLK2_FREQ(__SYSCLKFREQ__, __CPU2PRESCALER__) ((__SYSCLKFREQ__) / AHBPrescTable[((__CPU2PRESCALER__) & RCC_EXTCFGR_C2HPRE) >>  RCC_EXTCFGR_C2HPRE_Pos])
-#endif
+#define __LL_RCC_CALC_HCLK2_FREQ(__SYSCLKFREQ__, __CPU2PRESCALER__)  \
+  ((__SYSCLKFREQ__) / AHBPrescTable[((__CPU2PRESCALER__) &  RCC_EXTCFGR_C2HPRE) >>  RCC_EXTCFGR_C2HPRE_Pos])
+#endif  /* DUAL_CORE */
 
 /**
   * @brief  Helper macro to calculate the HCLK3 frequency
@@ -868,7 +873,8 @@ typedef struct
   *         @arg @ref LL_RCC_SYSCLK_DIV_512
   * @retval HCLK3 clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_HCLK3_FREQ(__SYSCLKFREQ__, __AHB3PRESCALER__) ((__SYSCLKFREQ__) / AHBPrescTable[(((__AHB3PRESCALER__) >> 4U) & RCC_EXTCFGR_SHDHPRE) >>  RCC_EXTCFGR_SHDHPRE_Pos])
+#define __LL_RCC_CALC_HCLK3_FREQ(__SYSCLKFREQ__, __AHB3PRESCALER__)  \
+  ((__SYSCLKFREQ__) / AHBPrescTable[(((__AHB3PRESCALER__) >> 4U) & RCC_EXTCFGR_SHDHPRE) >>  RCC_EXTCFGR_SHDHPRE_Pos])
 
 
 /**
@@ -882,7 +888,8 @@ typedef struct
   *         @arg @ref LL_RCC_APB1_DIV_16
   * @retval PCLK1 clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_PCLK1_FREQ(__HCLKFREQ__, __APB1PRESCALER__) ((__HCLKFREQ__) >> APBPrescTable[(__APB1PRESCALER__) >>  RCC_CFGR_PPRE1_Pos])
+#define __LL_RCC_CALC_PCLK1_FREQ(__HCLKFREQ__, __APB1PRESCALER__)  \
+  ((__HCLKFREQ__) >> APBPrescTable[(__APB1PRESCALER__) >>  RCC_CFGR_PPRE1_Pos])
 
 /**
   * @brief  Helper macro to calculate the PCLK2 frequency (ABP2)
@@ -895,7 +902,8 @@ typedef struct
   *         @arg @ref LL_RCC_APB2_DIV_16
   * @retval PCLK2 clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_PCLK2_FREQ(__HCLKFREQ__, __APB2PRESCALER__) ((__HCLKFREQ__) >> APBPrescTable[(__APB2PRESCALER__) >>  RCC_CFGR_PPRE2_Pos])
+#define __LL_RCC_CALC_PCLK2_FREQ(__HCLKFREQ__, __APB2PRESCALER__)  \
+  ((__HCLKFREQ__) >> APBPrescTable[(__APB2PRESCALER__) >>  RCC_CFGR_PPRE2_Pos])
 
 /**
   * @brief  Helper macro to calculate the MSI frequency (in Hz)
@@ -929,9 +937,10 @@ typedef struct
   *         @arg @ref LL_RCC_MSISRANGE_7
   * @retval MSI clock frequency (in Hz)
   */
-#define __LL_RCC_CALC_MSI_FREQ(__MSISEL__, __MSIRANGE__)   (((__MSISEL__) == LL_RCC_MSIRANGESEL_STANDBY) ? \
-                           (MSIRangeTable[((__MSIRANGE__) & RCC_CSR_MSISRANGE_Msk) >> RCC_CSR_MSISRANGE_Pos ]) : \
-                           (MSIRangeTable[((__MSIRANGE__) & RCC_CR_MSIRANGE_Msk) >> RCC_CR_MSIRANGE_Pos]))
+#define __LL_RCC_CALC_MSI_FREQ(__MSISEL__, __MSIRANGE__)    \
+  (((__MSISEL__) == LL_RCC_MSIRANGESEL_STANDBY) ? \
+   (MSIRangeTable[((__MSIRANGE__) & RCC_CSR_MSISRANGE_Msk) >> RCC_CSR_MSISRANGE_Pos ]) : \
+   (MSIRangeTable[((__MSIRANGE__) & RCC_CR_MSIRANGE_Msk) >> RCC_CR_MSIRANGE_Pos]))
 
 /**
   * @}
@@ -1021,26 +1030,6 @@ __STATIC_INLINE uint32_t LL_RCC_HSE_IsEnabledDiv2(void)
 __STATIC_INLINE void LL_RCC_HSE_EnableCSS(void)
 {
   SET_BIT(RCC->CR, RCC_CR_CSSON);
-}
-
-/**
-  * @brief  Enable HSE external oscillator (HSE Bypass)
-  * @rmtoll CR           HSEBYP        LL_RCC_HSE_EnableBypass
-  * @retval None
-  */
-__STATIC_INLINE void LL_RCC_HSE_EnableBypass(void)
-{
-  SET_BIT(RCC->CR, RCC_CR_HSEBYP);
-}
-
-/**
-  * @brief  Disable HSE external oscillator (HSE Bypass)
-  * @rmtoll CR           HSEBYP        LL_RCC_HSE_DisableBypass
-  * @retval None
-  */
-__STATIC_INLINE void LL_RCC_HSE_DisableBypass(void)
-{
-  CLEAR_BIT(RCC->CR, RCC_CR_HSEBYP);
 }
 
 /**
@@ -1809,7 +1798,7 @@ __STATIC_INLINE void LL_C2_RCC_SetAHBPrescaler(uint32_t Prescaler)
 {
   MODIFY_REG(RCC->EXTCFGR, RCC_EXTCFGR_C2HPRE, Prescaler);
 }
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @brief  Set AHB3 prescaler
@@ -1916,7 +1905,7 @@ __STATIC_INLINE uint32_t LL_C2_RCC_GetAHBPrescaler(void)
 {
   return (uint32_t)(READ_BIT(RCC->EXTCFGR, RCC_EXTCFGR_C2HPRE));
 }
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @brief  Get AHB3 prescaler
@@ -3020,7 +3009,7 @@ __STATIC_INLINE uint32_t LL_RCC_IsActiveFlag_C2HPRE(void)
 {
   return ((READ_BIT(RCC->EXTCFGR, RCC_EXTCFGR_C2HPREF) == (RCC_EXTCFGR_C2HPREF)) ? 1UL : 0UL);
 }
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @brief  Check if HCLK3 prescaler flag value has been applied or not

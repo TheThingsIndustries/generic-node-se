@@ -18,7 +18,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -60,18 +60,18 @@ extern "C" {
 #define LL_MAX_DELAY                  0xFFFFFFFFU
 
 /**
- * @brief Unique device ID register base address
- */
+  * @brief Unique device ID register base address
+  */
 #define UID_BASE_ADDRESS              UID_BASE
 
 /**
- * @brief Flash size data register base address
- */
+  * @brief Flash size data register base address
+  */
 #define FLASHSIZE_BASE_ADDRESS        FLASHSIZE_BASE
 
 /**
- * @brief Package data register base address
- */
+  * @brief Package data register base address
+  */
 #define PACKAGE_BASE_ADDRESS          PACKAGE_BASE
 
 /**
@@ -118,21 +118,24 @@ typedef struct
   */
 typedef struct
 {
-  uint32_t CPU1CLKDivider;         /*!< The CPU1 clock (HCLK1) divider. This clock is derived from the system clock (SYSCLK).
+  uint32_t CPU1CLKDivider;         /*!< The CPU1 clock (HCLK1) divider. This clock is derived from the system clock
+                                       (SYSCLK).
                                         This parameter can be a value of @ref RCC_LL_EC_SYSCLK_DIV
 
                                         This feature can be modified afterwards using unitary function
                                         @ref LL_RCC_SetAHBPrescaler(). */
 
 #if defined(DUAL_CORE)
-  uint32_t CPU2CLKDivider;         /*!< The CPU2 clock (HCLK2) divider. This clock is derived from the system clock (SYSCLK).
+  uint32_t CPU2CLKDivider;         /*!< The CPU2 clock (HCLK2) divider. This clock is derived from the system clock
+                                        (SYSCLK).
                                         This parameter can be a value of @ref RCC_LL_EC_SYSCLK_DIV
 
                                         This feature can be modified afterwards using unitary function
                                         @ref LL_C2_RCC_SetAHBPrescaler(). */
-#endif
+#endif /* DUAL_CORE */
 
-  uint32_t AHB3CLKDivider;         /*!< The AHBS clock (HCLK3) divider. This clock is derived from the system clock (SYSCLK).
+  uint32_t AHB3CLKDivider;         /*!< The AHBS clock (HCLK3) divider. This clock is derived from the system clock
+                                        (SYSCLK).
                                         This parameter can be a value of @ref RCC_LL_EC_SYSCLK_DIV
 
                                         This feature can be modified afterwards using unitary function
@@ -255,7 +258,8 @@ __STATIC_INLINE uint32_t LL_GetPackageType(void)
 #if defined(CORE_CM0PLUS)
 /**
   * @brief  This function configures the Cortex-M SysTick source of the time base.
-  * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro or function @ref LL_RCC_GetSystemClocksFreq (HCLK2_Frequency field))
+  * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro or function
+  *         @ref LL_RCC_GetSystemClocksFreq (HCLK2_Frequency field))
   * @note   When a RTOS is used, it is recommended to avoid changing the SysTick
   *         configuration by calling this function, for a delay use rather osDelay RTOS service.
   * @param  Ticks Number of ticks
@@ -264,13 +268,14 @@ __STATIC_INLINE uint32_t LL_GetPackageType(void)
 #else
 /**
   * @brief  This function configures the Cortex-M SysTick source of the time base.
-  * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro or function @ref LL_RCC_GetSystemClocksFreq (HCLK1_Frequency field))
+  * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro or function
+  *         @ref LL_RCC_GetSystemClocksFreq (HCLK1_Frequency field))
   * @note   When a RTOS is used, it is recommended to avoid changing the SysTick
   *         configuration by calling this function, for a delay use rather osDelay RTOS service.
   * @param  Ticks Number of ticks
   * @retval None
   */
-#endif
+#endif /* CORE_CM0PLUS */
 __STATIC_INLINE void LL_InitTick(uint32_t HCLKFrequency, uint32_t Ticks)
 {
   if (Ticks > 0U)
@@ -296,12 +301,14 @@ void        LL_mDelay(uint32_t Delay);
   */
 
 void        LL_SetSystemCoreClock(uint32_t HCLKFrequency);
+ErrorStatus LL_SetFlashLatency(uint32_t HCLK3_Frequency);
 ErrorStatus LL_PLL_ConfigSystemClock_MSI(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
                                          LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
 ErrorStatus LL_PLL_ConfigSystemClock_HSI(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
                                          LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
-ErrorStatus LL_PLL_ConfigSystemClock_HSE(uint32_t HSEBypass,
-                                         LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct, LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
+ErrorStatus LL_PLL_ConfigSystemClock_HSE(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitStruct,
+                                         LL_UTILS_ClkInitTypeDef *UTILS_ClkInitStruct);
+
 
 /**
   * @}

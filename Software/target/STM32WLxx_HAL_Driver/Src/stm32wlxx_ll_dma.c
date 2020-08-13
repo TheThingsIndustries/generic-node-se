@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -81,8 +81,7 @@
                                                              ((CHANNEL) == LL_DMA_CHANNEL_4) || \
                                                              ((CHANNEL) == LL_DMA_CHANNEL_5) || \
                                                              ((CHANNEL) == LL_DMA_CHANNEL_6) || \
-                                                             ((CHANNEL) == LL_DMA_CHANNEL_7) || \
-                                                             ((CHANNEL) == LL_DMA_CHANNEL_ALL))) || \
+                                                             ((CHANNEL) == LL_DMA_CHANNEL_7))) || \
                                                             (((INSTANCE) == DMA2) && \
                                                             (((CHANNEL) == LL_DMA_CHANNEL_1) || \
                                                              ((CHANNEL) == LL_DMA_CHANNEL_2) || \
@@ -90,8 +89,7 @@
                                                              ((CHANNEL) == LL_DMA_CHANNEL_4) || \
                                                              ((CHANNEL) == LL_DMA_CHANNEL_5) || \
                                                              ((CHANNEL) == LL_DMA_CHANNEL_6) || \
-                                                             ((CHANNEL) == LL_DMA_CHANNEL_7) || \
-                                                             ((CHANNEL) == LL_DMA_CHANNEL_ALL))))
+                                                             ((CHANNEL) == LL_DMA_CHANNEL_7))))
 /**
   * @}
   */

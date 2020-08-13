@@ -124,7 +124,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -780,7 +780,7 @@ HAL_StatusTypeDef HAL_USART_Transmit(USART_HandleTypeDef *husart, uint8_t *pTxDa
     husart->ErrorCode = HAL_USART_ERROR_NONE;
     husart->State = HAL_USART_STATE_BUSY_TX;
 
-    /* Init tickstart for timeout managment*/
+    /* Init tickstart for timeout management*/
     tickstart = HAL_GetTick();
 
     husart->TxXferSize = Size;
@@ -896,7 +896,7 @@ HAL_StatusTypeDef HAL_USART_Receive(USART_HandleTypeDef *husart, uint8_t *pRxDat
     husart->ErrorCode = HAL_USART_ERROR_NONE;
     husart->State = HAL_USART_STATE_BUSY_RX;
 
-    /* Init tickstart for timeout managment*/
+    /* Init tickstart for timeout management*/
     tickstart = HAL_GetTick();
 
     husart->RxXferSize = Size;
@@ -1030,7 +1030,7 @@ HAL_StatusTypeDef HAL_USART_TransmitReceive(USART_HandleTypeDef *husart, uint8_t
     husart->ErrorCode = HAL_USART_ERROR_NONE;
     husart->State = HAL_USART_STATE_BUSY_RX;
 
-    /* Init tickstart for timeout managment*/
+    /* Init tickstart for timeout management*/
     tickstart = HAL_GetTick();
 
     husart->RxXferSize = Size;
@@ -1930,7 +1930,7 @@ HAL_StatusTypeDef HAL_USART_DMAResume(USART_HandleTypeDef *husart)
     /* Clear the Overrun flag before resuming the Rx transfer*/
     __HAL_USART_CLEAR_FLAG(husart, USART_CLEAR_OREF);
 
-    /* Reenable PE and ERR (Frame error, noise error, overrun error) interrupts */
+    /* Re-enable PE and ERR (Frame error, noise error, overrun error) interrupts */
     SET_BIT(husart->Instance->CR1, USART_CR1_PEIE);
     SET_BIT(husart->Instance->CR3, USART_CR3_EIE);
 
@@ -3105,7 +3105,7 @@ static HAL_StatusTypeDef USART_CheckIdleState(USART_HandleTypeDef *husart)
   /* Initialize the USART ErrorCode */
   husart->ErrorCode = HAL_USART_ERROR_NONE;
 
-  /* Init tickstart for timeout managment*/
+  /* Init tickstart for timeout management*/
   tickstart = HAL_GetTick();
 
   /* Check if the Transmitter is enabled */

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics. 
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -1339,7 +1339,7 @@ __STATIC_INLINE void LL_EXTI_GenerateSWI_0_31(uint32_t ExtiLine)
 
 /**
   * @brief  Generate a software Interrupt Event for Lines in range 32 to 63
-  * @note If the interrupt is enabled on this line inthe EXTI_IMR2, writing a 1 to
+  * @note If the interrupt is enabled on this line in the EXTI_IMR2, writing a 1 to
   *       this bit when it is at '0' sets the corresponding pending bit in EXTI_PR2
   *       resulting in an interrupt request generation.
   *       This bit is cleared by clearing the corresponding bit in the EXTI_PR2

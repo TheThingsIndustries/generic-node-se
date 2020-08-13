@@ -6,11 +6,11 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
   *                        opensource.org/licenses/BSD-3-Clause
   *
@@ -22,7 +22,7 @@
 #define __STM32WLxx_HAL_CORTEX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -44,34 +44,34 @@
 
 #if (__MPU_PRESENT == 1)
 /** @defgroup CORTEX_MPU_Region_Initialization_Structure_definition MPU Region Initialization Structure Definition
-  * @brief  MPU Region initialization structure 
+  * @brief  MPU Region initialization structure
   * @{
   */
 typedef struct
 {
-  uint8_t                Enable;                /*!< Specifies the status of the region. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Enable                 */
-  uint8_t                Number;                /*!< Specifies the number of the region to protect. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Number                 */
-  uint32_t               BaseAddress;          /*!< Specifies the base address of the region to protect.
+  uint8_t    Enable;             /*!< Specifies the status of the region.
+                                      This parameter can be a value of @ref CORTEX_MPU_Region_Enable                */
+  uint8_t    Number;             /*!< Specifies the number of the region to protect.
+                                      This parameter can be a value of @ref CORTEX_MPU_Region_Number                */
+  uint32_t   BaseAddress;        /*!< Specifies the base address of the region to protect.
                                                                                                                     */
-  uint8_t                Size;                  /*!< Specifies the size of the region to protect. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Size                   */
-  uint8_t                SubRegionDisable;      /*!< Specifies the number of the subregion protection to disable. 
-                                                     This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF    */
-  uint8_t                TypeExtField;          /*!< Specifies the TEX field level.
-                                                     This parameter can be a value of @ref CORTEX_MPU_TEX_Levels                    */
-  uint8_t                AccessPermission;      /*!< Specifies the region access permission type. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Region_Permission_Attributes  */
-  uint8_t                DisableExec;           /*!< Specifies the instruction access status. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Instruction_Access            */
-  uint8_t                IsShareable;           /*!< Specifies the shareability status of the protected region. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Access_Shareable              */
-  uint8_t                IsCacheable;           /*!< Specifies the cacheable status of the region protected. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Access_Cacheable              */
-  uint8_t                IsBufferable;          /*!< Specifies the bufferable status of the protected region. 
-                                                     This parameter can be a value of @ref CORTEX_MPU_Access_Bufferable             */
-}MPU_Region_InitTypeDef;
+  uint8_t    Size;               /*!< Specifies the size of the region to protect.
+                                      This parameter can be a value of @ref CORTEX_MPU_Region_Size                  */
+  uint8_t    SubRegionDisable;   /*!< Specifies the number of the subregion protection to disable.
+                                      This parameter must be a number between Min_Data = 0x00 and Max_Data = 0xFF   */
+  uint8_t    TypeExtField;       /*!< Specifies the TEX field level.
+                                      This parameter can be a value of @ref CORTEX_MPU_TEX_Levels                   */
+  uint8_t    AccessPermission;   /*!< Specifies the region access permission type.
+                                      This parameter can be a value of @ref CORTEX_MPU_Region_Permission_Attributes */
+  uint8_t    DisableExec;        /*!< Specifies the instruction access status.
+                                      This parameter can be a value of @ref CORTEX_MPU_Instruction_Access           */
+  uint8_t    IsShareable;        /*!< Specifies the shareability status of the protected region.
+                                      This parameter can be a value of @ref CORTEX_MPU_Access_Shareable             */
+  uint8_t    IsCacheable;        /*!< Specifies the cacheable status of the region protected.
+                                      This parameter can be a value of @ref CORTEX_MPU_Access_Cacheable             */
+  uint8_t    IsBufferable;       /*!< Specifies the bufferable status of the protected region.
+                                      This parameter can be a value of @ref CORTEX_MPU_Access_Bufferable            */
+} MPU_Region_InitTypeDef;
 /**
   * @}
   */
@@ -104,7 +104,7 @@ typedef struct
 /**
   * @}
   */
-#endif
+#endif /* CORE_CM0PLUS */
 
 /** @defgroup CORTEX_SysTick_clock_source CORTEX SysTick clock source
   * @{
@@ -219,7 +219,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup CORTEX_MPU_Region_Permission_Attributes CORTEX MPU Region Permission Attributes 
+/** @defgroup CORTEX_MPU_Region_Permission_Attributes CORTEX MPU Region Permission Attributes
   * @{
   */
 #define  MPU_REGION_NO_ACCESS        ((uint8_t)0x00)
@@ -266,7 +266,7 @@ typedef struct
   * @{
   */
 
-/** @defgroup CORTEX_Exported_Functions_Group1 Initialization and Configuration functions 
+/** @defgroup CORTEX_Exported_Functions_Group1 Initialization and Configuration functions
   * @brief    Initialization and Configuration functions
   * @{
   */
@@ -274,8 +274,8 @@ typedef struct
 #ifdef CORE_CM0PLUS
 #else
 void HAL_NVIC_SetPriorityGrouping(uint32_t PriorityGroup);
-#endif
-void HAL_NVIC_SetPriority(IRQn_Type IRQn,uint32_t PreemptPriority, uint32_t SubPriority);
+#endif /* CORE_CM0PLUS */
+void HAL_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority);
 void HAL_NVIC_EnableIRQ(IRQn_Type IRQn);
 void HAL_NVIC_DisableIRQ(IRQn_Type IRQn);
 void HAL_NVIC_SystemReset(void);
@@ -284,7 +284,7 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb);
   * @}
   */
 
-/** @defgroup CORTEX_Exported_Functions_Group2 Peripheral Control functions 
+/** @defgroup CORTEX_Exported_Functions_Group2 Peripheral Control functions
   * @brief   Cortex control functions
   * @{
   */
@@ -292,10 +292,10 @@ uint32_t HAL_SYSTICK_Config(uint32_t TicksNumb);
 #ifdef CORE_CM0PLUS
 uint32_t HAL_NVIC_GetPriority(IRQn_Type IRQn);
 #else
-void HAL_NVIC_GetPriority(IRQn_Type IRQn, uint32_t PriorityGroup, uint32_t* pPreemptPriority, uint32_t* pSubPriority);
+void HAL_NVIC_GetPriority(IRQn_Type IRQn, uint32_t PriorityGroup, uint32_t *pPreemptPriority, uint32_t *pSubPriority);
 uint32_t HAL_NVIC_GetPriorityGrouping(void);
 uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn);
-#endif
+#endif /* CORE_CM0PLUS */
 uint32_t HAL_NVIC_GetPendingIRQ(IRQn_Type IRQn);
 void HAL_NVIC_SetPendingIRQ(IRQn_Type IRQn);
 void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn);
@@ -316,7 +316,7 @@ void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
   * @}
   */
 
-/* Private types -------------------------------------------------------------*/ 
+/* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
@@ -335,7 +335,7 @@ void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
 #define IS_NVIC_PREEMPTION_PRIORITY(PRIORITY)  ((PRIORITY) < 0x10U)
 
 #define IS_NVIC_SUB_PRIORITY(PRIORITY)         ((PRIORITY) < 0x10U)
-#endif
+#endif /* CORE_CM0PLUS */
 
 #define IS_NVIC_DEVICE_IRQ(IRQ)                   ((IRQ) > SysTick_IRQn)
 
@@ -356,7 +356,7 @@ void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
                                           ((STATE) == MPU_ACCESS_NOT_CACHEABLE))
 
 #define IS_MPU_ACCESS_BUFFERABLE(STATE)   (((STATE) == MPU_ACCESS_BUFFERABLE) || \
-                                          ((STATE) == MPU_ACCESS_NOT_BUFFERABLE))
+                                           ((STATE) == MPU_ACCESS_NOT_BUFFERABLE))
 
 #define IS_MPU_TEX_LEVEL(TYPE) (((TYPE) == MPU_TEX_LEVEL0)  || \
                                 ((TYPE) == MPU_TEX_LEVEL1)  || \
