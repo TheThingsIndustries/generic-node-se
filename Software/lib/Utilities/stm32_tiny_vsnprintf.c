@@ -25,7 +25,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
-#define TINY_PRINTF
+// #define TINY_PRINTF //Uncomment to get smaller printf code size
+#define HAS_FLOAT //Comment this to get smaller code size and sacrifice float printing like %f, %4.2f
 
 #define ZEROPAD    (1<<0)  /* Pad with zero */
 #define SIGN      (1<<1)  /* Unsigned/signed long */
@@ -49,17 +50,6 @@ static char *lower_digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char *upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /* Functions Definition ------------------------------------------------------*/
-#ifdef TINY_PRINTF
-#else
-static size_t strnlen(const char *s, size_t count);
-
-static size_t strnlen(const char *s, size_t count)
-{
-  const char *sc;
-  for (sc = s; *sc != '\0' && count--; ++sc);
-  return sc - s;
-}
-#endif
 
 static int ee_skip_atoi(const char **s)
 {
