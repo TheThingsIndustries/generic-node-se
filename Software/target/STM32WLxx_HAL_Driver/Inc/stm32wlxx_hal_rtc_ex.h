@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -209,8 +209,9 @@ typedef struct
   */
 #define RTC_INT_TAMPER_3                    TAMP_CR1_ITAMP3E
 #define RTC_INT_TAMPER_5                    TAMP_CR1_ITAMP5E
+#define RTC_INT_TAMPER_6                    TAMP_CR1_ITAMP6E
 #define RTC_INT_TAMPER_8                    TAMP_CR1_ITAMP8E
-#define RTC_INT_TAMPER_ALL                  (TAMP_CR1_ITAMP3E | TAMP_CR1_ITAMP5E | TAMP_CR1_ITAMP8E)
+#define RTC_INT_TAMPER_ALL                  (TAMP_CR1_ITAMP3E | TAMP_CR1_ITAMP5E | TAMP_CR1_ITAMP6E | TAMP_CR1_ITAMP8E)
 /**
   * @}
   */
@@ -323,16 +324,11 @@ typedef struct
 #define RTC_IT_TAMP_3                      TAMP_IER_TAMP3IE     /*!< Tamper 3 Interrupt */
 #define RTC_IT_TAMP_ALL                   (TAMP_IER_TAMP1IE | TAMP_IER_TAMP2IE | TAMP_IER_TAMP3IE)
 
-#define RTC_IT_INT_TAMP_1                  TAMP_IER_ITAMP1IE
-#define RTC_IT_INT_TAMP_2                  TAMP_IER_ITAMP2IE
 #define RTC_IT_INT_TAMP_3                  TAMP_IER_ITAMP3IE
-#define RTC_IT_INT_TAMP_4                  TAMP_IER_ITAMP4IE
 #define RTC_IT_INT_TAMP_5                  TAMP_IER_ITAMP5IE
 #define RTC_IT_INT_TAMP_6                  TAMP_IER_ITAMP6IE
-#define RTC_IT_INT_TAMP_7                  TAMP_IER_ITAMP7IE
 #define RTC_IT_INT_TAMP_8                  TAMP_IER_ITAMP8IE
-#define RTC_IT_INT_TAMP_ALL                (TAMP_IT_INT_TAMP1 | TAMP_IT_INT_TAMP2 | TAMP_IT_INT_TAMP3 | TAMP_IT_INT_TAMP4 \
-                                            TAMP_IT_INT_TAMP5 | TAMP_IT_INT_TAMP6 | TAMP_IT_INT_TAMP7 | TAMP_IT_INT_TAMP8)
+#define RTC_IT_INT_TAMP_ALL                (TAMP_IT_INT_TAMP3 | TAMP_IT_INT_TAMP5 | TAMP_IT_INT_TAMP6 | TAMP_IT_INT_TAMP8)
 /**
   * @}
   */
@@ -346,16 +342,11 @@ typedef struct
 #define RTC_FLAG_TAMP_ALL                 (RTC_FLAG_TAMP1 | RTC_FLAG_TAMP2 | RTC_FLAG_TAMP3 )
 
 
-#define RTC_FLAG_INT_TAMP_1                 TAMP_SR_ITAMP1F
-#define RTC_FLAG_INT_TAMP_2                 TAMP_SR_ITAMP2F
 #define RTC_FLAG_INT_TAMP_3                 TAMP_SR_ITAMP3F
-#define RTC_FLAG_INT_TAMP_4                 TAMP_SR_ITAMP4F
 #define RTC_FLAG_INT_TAMP_5                 TAMP_SR_ITAMP5F
 #define RTC_FLAG_INT_TAMP_6                 TAMP_SR_ITAMP6F
-#define RTC_FLAG_INT_TAMP_7                 TAMP_SR_ITAMP7F
 #define RTC_FLAG_INT_TAMP_8                 TAMP_SR_ITAMP8F
-#define RTC_FLAG_INT_TAMP_ALL               (RTC_FLAG_INT_TAMP1 | RTC_FLAG_INT_TAMP2 | RTC_FLAG_INT_TAMP3 | RTC_FLAG_INT_TAMP4 \
-                                             RTC_FLAG_INT_TAMP5 | RTC_FLAG_INT_TAMP6 | RTC_FLAG_INT_TAMP7 | RTC_FLAG_INT_TAMP8)
+#define RTC_FLAG_INT_TAMP_ALL               (RTC_FLAG_INT_TAMP3 | RTC_FLAG_INT_TAMP5 | RTC_FLAG_INT_TAMP6 | RTC_FLAG_INT_TAMP8)
 /**
   * @}
   */
@@ -404,7 +395,7 @@ typedef struct
   */
 #define RTC_BINARY_NONE                     0x00000000u      /*!< Free running BCD calendar mode (Binary mode disabled). */
 #define RTC_BINARY_ONLY                     RTC_ICSR_BIN_0   /*!< Free running Binary mode (BCD mode disabled) */
-#define RTC_BINARY_MIX                      RTC_ICSR_BIN_1   /*!< Free running BCD calendar and Binary modes */
+#define RTC_BINARY_MIX                      RTC_ICSR_BIN_1   /*!< Free running BCD calendar and Binary mode */
 /**
   * @}
   */
@@ -932,13 +923,9 @@ typedef struct
   *            @arg  RTC_IT_TAMP_2: Tamper2 interrupt
   *            @arg  RTC_IT_TAMP_3: Tamper3 interrupt
   *            @arg  RTC_IT_INT_TAMP_ALL: All Internal Tamper interrupts
-  *            @arg  RTC_IT_INT_TAMP_1: Internal Tamper1 interrupt
-  *            @arg  RTC_IT_INT_TAMP_2: Internal Tamper2 interrupt
   *            @arg  RTC_IT_INT_TAMP_3: Internal Tamper3 interrupt
-  *            @arg  RTC_IT_INT_TAMP_4: Internal Tamper4 interrupt
   *            @arg  RTC_IT_INT_TAMP_5: Internal Tamper5 interrupt
   *            @arg  RTC_IT_INT_TAMP_6: Internal Tamper6 interrupt
-  *            @arg  RTC_IT_INT_TAMP_7: Internal Tamper7 interrupt
   *            @arg  RTC_IT_INT_TAMP_8: Internal Tamper8 interrupt
   * @retval None
   */
@@ -955,13 +942,9 @@ typedef struct
   *            @arg  RTC_IT_TAMP_2: Tamper2 interrupt
   *            @arg  RTC_IT_TAMP_3: Tamper3 interrupt
   *            @arg  RTC_IT_INT_TAMP_ALL: All internal tampers interrupts
-  *            @arg  RTC_IT_INT_TAMP_1: Internal Tamper1 interrupt
-  *            @arg  RTC_IT_INT_TAMP_2: Internal Tamper2 interrupt
   *            @arg  RTC_IT_INT_TAMP_3: Internal Tamper3 interrupt
-  *            @arg  RTC_IT_INT_TAMP_4: Internal Tamper4 interrupt
   *            @arg  RTC_IT_INT_TAMP_5: Internal Tamper5 interrupt
   *            @arg  RTC_IT_INT_TAMP_6: Internal Tamper6 interrupt
-  *            @arg  RTC_IT_INT_TAMP_7: Internal Tamper7 interrupt
   *            @arg  RTC_IT_INT_TAMP_8: Internal Tamper8 interrupt
   * @retval None
   */
@@ -976,13 +959,9 @@ typedef struct
   *             @arg RTC_FLAG_TAMP_1: Tamper1 flag
   *             @arg RTC_FLAG_TAMP_2: Tamper2 flag
   *             @arg RTC_FLAG_TAMP_3: Tamper3 flag
-  *             @arg RTC_FLAG_INT_TAMP_1: Internal Tamper1 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_2: Internal Tamper2 interrupt
   *             @arg RTC_FLAG_INT_TAMP_3: Internal Tamper3 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_4: Internal Tamper4 interrupt
   *             @arg RTC_FLAG_INT_TAMP_5: Internal Tamper5 interrupt
   *             @arg RTC_FLAG_INT_TAMP_6: Internal Tamper6 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_7: Internal Tamper7 interrupt
   *             @arg RTC_FLAG_INT_TAMP_8: Internal Tamper8 interrupt
   * @retval None
   */
@@ -998,13 +977,9 @@ typedef struct
   *             @arg RTC_FLAG_TAMP_2: Tamper2 flag
   *             @arg RTC_FLAG_TAMP_3: Tamper3 flag
   *             @arg RTC_FLAG_INT_TAMP_ALL: All Internal Tamper flags
-  *             @arg RTC_FLAG_INT_TAMP_1: Internal Tamper1 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_2: Internal Tamper2 interrupt
   *             @arg RTC_FLAG_INT_TAMP_3: Internal Tamper3 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_4: Internal Tamper4 interrupt
   *             @arg RTC_FLAG_INT_TAMP_5: Internal Tamper5 interrupt
   *             @arg RTC_FLAG_INT_TAMP_6: Internal Tamper6 interrupt
-  *             @arg RTC_FLAG_INT_TAMP_7: Internal Tamper7 interrupt
   *             @arg RTC_FLAG_INT_TAMP_8: Internal Tamper8 interrupt
   * @retval None
   */
@@ -1145,7 +1120,7 @@ void              HAL_RTCEx_TimeStampEventCallback(RTC_HandleTypeDef *hrtc);
  */
 
 HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock);
-HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock);
+HAL_StatusTypeDef HAL_RTCEx_SetWakeUpTimer_IT(RTC_HandleTypeDef *hrtc, uint32_t WakeUpCounter, uint32_t WakeUpClock, uint32_t WakeUpAutoClr);
 HAL_StatusTypeDef HAL_RTCEx_DeactivateWakeUpTimer(RTC_HandleTypeDef *hrtc);
 uint32_t          HAL_RTCEx_GetWakeUpTimer(RTC_HandleTypeDef *hrtc);
 void              HAL_RTCEx_WakeUpTimerIRQHandler(RTC_HandleTypeDef *hrtc);
@@ -1207,6 +1182,7 @@ void              HAL_RTCEx_Tamper2EventCallback(RTC_HandleTypeDef *hrtc);
 void              HAL_RTCEx_Tamper3EventCallback(RTC_HandleTypeDef *hrtc);
 void              HAL_RTCEx_InternalTamper3EventCallback(RTC_HandleTypeDef *hrtc);
 void              HAL_RTCEx_InternalTamper5EventCallback(RTC_HandleTypeDef *hrtc);
+void              HAL_RTCEx_InternalTamper6EventCallback(RTC_HandleTypeDef *hrtc);
 void              HAL_RTCEx_InternalTamper8EventCallback(RTC_HandleTypeDef *hrtc);
 /**
   * @}

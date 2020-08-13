@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -24,7 +24,7 @@
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
-#endif
+#endif /* USE_FULL_ASSERT */
 /** @addtogroup STM32WLxx_LL_Driver
   * @{
   */
@@ -42,18 +42,18 @@
 /** @addtogroup RCC_LL_Private_Macros
   * @{
   */
-#define IS_LL_RCC_USART_CLKSOURCE(__VALUE__)  (((__VALUE__) == LL_RCC_USART1_CLKSOURCE) \
-                                            || ((__VALUE__) == LL_RCC_USART2_CLKSOURCE))
+#define IS_LL_RCC_USART_CLKSOURCE(__VALUE__)  (((__VALUE__) == LL_RCC_USART1_CLKSOURCE) || \
+                                               ((__VALUE__) == LL_RCC_USART2_CLKSOURCE))
 
 #define IS_LL_RCC_LPUART_CLKSOURCE(__VALUE__) (((__VALUE__) == LL_RCC_LPUART1_CLKSOURCE))
 
-#define IS_LL_RCC_I2C_CLKSOURCE(__VALUE__)    (((__VALUE__) == LL_RCC_I2C1_CLKSOURCE) \
-                                            || ((__VALUE__) == LL_RCC_I2C2_CLKSOURCE) \
-                                            || ((__VALUE__) == LL_RCC_I2C3_CLKSOURCE))
+#define IS_LL_RCC_I2C_CLKSOURCE(__VALUE__)    (((__VALUE__) == LL_RCC_I2C1_CLKSOURCE) || \
+                                               ((__VALUE__) == LL_RCC_I2C2_CLKSOURCE) || \
+                                               ((__VALUE__) == LL_RCC_I2C3_CLKSOURCE))
 
-#define IS_LL_RCC_LPTIM_CLKSOURCE(__VALUE__)  (((__VALUE__) == LL_RCC_LPTIM1_CLKSOURCE) \
-                                            || ((__VALUE__) == LL_RCC_LPTIM2_CLKSOURCE) \
-                                            || ((__VALUE__) == LL_RCC_LPTIM3_CLKSOURCE))
+#define IS_LL_RCC_LPTIM_CLKSOURCE(__VALUE__)  (((__VALUE__) == LL_RCC_LPTIM1_CLKSOURCE) || \
+                                               ((__VALUE__) == LL_RCC_LPTIM2_CLKSOURCE) || \
+                                               ((__VALUE__) == LL_RCC_LPTIM3_CLKSOURCE))
 
 #define IS_LL_RCC_RNG_CLKSOURCE(__VALUE__)    (((__VALUE__) == LL_RCC_RNG_CLKSOURCE))
 
@@ -79,7 +79,7 @@ uint32_t RCC_GetSystemClockFreq(void);
 uint32_t RCC_GetHCLK1ClockFreq(uint32_t SYSCLK_Frequency);
 #if defined(DUAL_CORE)
 uint32_t RCC_GetHCLK2ClockFreq(uint32_t SYSCLK_Frequency);
-#endif
+#endif /* DUAL_CORE */
 uint32_t RCC_GetHCLK3ClockFreq(uint32_t SYSCLK_Frequency);
 
 
@@ -141,8 +141,8 @@ ErrorStatus LL_RCC_DeInit(void)
   vl_mask = LL_RCC_ReadReg(CR);
 
   /* Reset HSION, HSIKERON, HSIASFS, HSEON, HSEBYP, HSEPRE, HSEBYPPWR and PLLSYSON bits */
-  CLEAR_BIT(vl_mask,
-            (RCC_CR_HSION | RCC_CR_HSIKERON | RCC_CR_HSIASFS | RCC_CR_HSEON | RCC_CR_HSEBYP | RCC_CR_HSEPRE | RCC_CR_HSEBYPPWR | RCC_CR_PLLON));
+  CLEAR_BIT(vl_mask, (RCC_CR_HSION | RCC_CR_HSIKERON | RCC_CR_HSIASFS | RCC_CR_HSEON | \
+                      RCC_CR_HSEPRE | RCC_CR_HSEBYPPWR | RCC_CR_PLLON));
 
   /* Write new value in CR register */
   LL_RCC_WriteReg(CR, vl_mask);
@@ -158,8 +158,8 @@ ErrorStatus LL_RCC_DeInit(void)
   LL_RCC_WriteReg(CIER, 0x00000000U);
 
   /* Clear all interrupt flags */
-  vl_mask = RCC_CICR_LSIRDYC | RCC_CICR_LSERDYC | RCC_CICR_MSIRDYC | RCC_CICR_HSIRDYC | RCC_CICR_HSERDYC | RCC_CICR_PLLRDYC | \
-            RCC_CICR_CSSC | RCC_CICR_LSECSSC;
+  vl_mask = RCC_CICR_LSIRDYC | RCC_CICR_LSERDYC | RCC_CICR_MSIRDYC | RCC_CICR_HSIRDYC | \
+            RCC_CICR_HSERDYC | RCC_CICR_PLLRDYC | RCC_CICR_CSSC | RCC_CICR_LSECSSC;
 
   LL_RCC_WriteReg(CICR, vl_mask);
 
@@ -218,7 +218,7 @@ void LL_RCC_GetSystemClocksFreq(LL_RCC_ClocksTypeDef *RCC_Clocks)
 #if defined(DUAL_CORE)
   /* HCLK2 clock frequency */
   RCC_Clocks->HCLK2_Frequency   = RCC_GetHCLK2ClockFreq(RCC_Clocks->SYSCLK_Frequency);
-#endif
+#endif /* DUAL_CORE */
 
   /* HCLK3 clock frequency */
   RCC_Clocks->HCLK3_Frequency   = RCC_GetHCLK3ClockFreq(RCC_Clocks->SYSCLK_Frequency);
@@ -582,8 +582,7 @@ uint32_t LL_RCC_GetLPTIMClockFreq(uint32_t LPTIMxSource)
   * @retval RNG clock frequency (in Hz)
   *         - @ref  LL_RCC_PERIPH_FREQUENCY_NO indicates that oscillator (MSI) or PLLs (PLL) is not ready
   */
-uint32_t
-LL_RCC_GetRNGClockFreq(uint32_t RNGxSource)
+uint32_t LL_RCC_GetRNGClockFreq(uint32_t RNGxSource)
 {
   uint32_t rng_frequency = LL_RCC_PERIPH_FREQUENCY_NO;
 
@@ -846,7 +845,7 @@ uint32_t RCC_GetHCLK2ClockFreq(uint32_t SYSCLK_Frequency)
   /* HCLK clock frequency */
   return __LL_RCC_CALC_HCLK2_FREQ(SYSCLK_Frequency, LL_C2_RCC_GetAHBPrescaler());
 }
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @brief  Return HCLK clock frequency
@@ -887,7 +886,8 @@ uint32_t RCC_GetPCLK2ClockFreq(uint32_t HCLK_Frequency)
   */
 uint32_t RCC_PLL_GetFreqDomain_SYS(void)
 {
-  uint32_t pllinputfreq, pllsource;
+  uint32_t pllinputfreq;
+  uint32_t pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value/ PLLM) * PLLN
      SYSCLK = PLL_VCO / PLLR
@@ -936,7 +936,8 @@ uint32_t RCC_PLL_GetFreqDomain_SYS(void)
   */
 uint32_t RCC_PLL_GetFreqDomain_ADC(void)
 {
-  uint32_t pllinputfreq, pllsource;
+  uint32_t pllinputfreq;
+  uint32_t pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value / PLLM) * PLLN
   */
@@ -983,7 +984,8 @@ uint32_t RCC_PLL_GetFreqDomain_ADC(void)
   */
 uint32_t RCC_PLL_GetFreqDomain_RNG(void)
 {
-  uint32_t pllinputfreq, pllsource;
+  uint32_t pllinputfreq;
+  uint32_t pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value / PLLM) * PLLN
   */
@@ -1030,7 +1032,8 @@ uint32_t RCC_PLL_GetFreqDomain_RNG(void)
   */
 uint32_t RCC_PLL_GetFreqDomain_I2S(void)
 {
-  uint32_t pllinputfreq, pllsource;
+  uint32_t pllinputfreq;
+  uint32_t pllsource;
 
   /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI Value / PLLM) * PLLN
   */

@@ -147,7 +147,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -189,12 +189,12 @@
   * @{
   */
 #define __HAL_LPTIM_WAKEUPTIMER_EXTI_ENABLE_IT(__INSTANCE__) \
-     (((__INSTANCE__) == LPTIM1) ? __HAL_LPTIM_LPTIM1_EXTI_ENABLE_IT() :\
-      ((__INSTANCE__) == LPTIM2) ? __HAL_LPTIM_LPTIM2_EXTI_ENABLE_IT() : __HAL_LPTIM_LPTIM3_EXTI_ENABLE_IT())
+  (((__INSTANCE__) == LPTIM1) ? __HAL_LPTIM_LPTIM1_EXTI_ENABLE_IT() :\
+   ((__INSTANCE__) == LPTIM2) ? __HAL_LPTIM_LPTIM2_EXTI_ENABLE_IT() : __HAL_LPTIM_LPTIM3_EXTI_ENABLE_IT())
 
 #define __HAL_LPTIM_WAKEUPTIMER_EXTI_DISABLE_IT(__INSTANCE__) \
-     (((__INSTANCE__) == LPTIM1) ? __HAL_LPTIM_LPTIM1_EXTI_DISABLE_IT() :\
-      ((__INSTANCE__) == LPTIM2) ? __HAL_LPTIM_LPTIM2_EXTI_DISABLE_IT() : __HAL_LPTIM_LPTIM3_EXTI_DISABLE_IT())
+  (((__INSTANCE__) == LPTIM1) ? __HAL_LPTIM_LPTIM1_EXTI_DISABLE_IT() :\
+   ((__INSTANCE__) == LPTIM2) ? __HAL_LPTIM_LPTIM2_EXTI_DISABLE_IT() : __HAL_LPTIM_LPTIM3_EXTI_DISABLE_IT())
 /**
   * @}
   */
@@ -213,8 +213,8 @@ static HAL_StatusTypeDef LPTIM_WaitForFlag(LPTIM_HandleTypeDef *hlptim, uint32_t
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group1 Initialization/de-initialization functions
- *  @brief    Initialization and Configuration functions.
- *
+  *  @brief    Initialization and Configuration functions.
+  *
 @verbatim
   ==============================================================================
               ##### Initialization and de-initialization functions #####
@@ -481,8 +481,8 @@ __weak void HAL_LPTIM_MspDeInit(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group2 LPTIM Start-Stop operation functions
- *  @brief   Start-Stop operation functions.
- *
+  *  @brief   Start-Stop operation functions.
+  *
 @verbatim
   ==============================================================================
                 ##### LPTIM Start Stop operation functions #####
@@ -1631,7 +1631,8 @@ HAL_StatusTypeDef HAL_LPTIM_Counter_Start(LPTIM_HandleTypeDef *hlptim, uint32_t 
   hlptim->State = HAL_LPTIM_STATE_BUSY;
 
   /* If clock source is not ULPTIM clock and counter source is external, then it must not be prescaled */
-  if ((hlptim->Init.Clock.Source != LPTIM_CLOCKSOURCE_ULPTIM) && (hlptim->Init.CounterSource == LPTIM_COUNTERSOURCE_EXTERNAL))
+  if ((hlptim->Init.Clock.Source != LPTIM_CLOCKSOURCE_ULPTIM) &&
+      (hlptim->Init.CounterSource == LPTIM_COUNTERSOURCE_EXTERNAL))
   {
     /* Check if clock is prescaled */
     assert_param(IS_LPTIM_CLOCK_PRESCALERDIV1(hlptim->Init.Clock.Prescaler));
@@ -1712,7 +1713,8 @@ HAL_StatusTypeDef HAL_LPTIM_Counter_Start_IT(LPTIM_HandleTypeDef *hlptim, uint32
   __HAL_LPTIM_WAKEUPTIMER_EXTI_ENABLE_IT(hlptim->Instance);
 
   /* If clock source is not ULPTIM clock and counter source is external, then it must not be prescaled */
-  if ((hlptim->Init.Clock.Source != LPTIM_CLOCKSOURCE_ULPTIM) && (hlptim->Init.CounterSource == LPTIM_COUNTERSOURCE_EXTERNAL))
+  if ((hlptim->Init.Clock.Source != LPTIM_CLOCKSOURCE_ULPTIM) &&
+      (hlptim->Init.CounterSource == LPTIM_COUNTERSOURCE_EXTERNAL))
   {
     /* Check if clock is prescaled */
     assert_param(IS_LPTIM_CLOCK_PRESCALERDIV1(hlptim->Init.Clock.Prescaler));
@@ -1815,8 +1817,8 @@ HAL_StatusTypeDef HAL_LPTIM_Counter_Stop_IT(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group3 LPTIM Read operation functions
- *  @brief  Read operation functions.
- *
+  *  @brief  Read operation functions.
+  *
 @verbatim
   ==============================================================================
                   ##### LPTIM Read operation functions #####
@@ -1873,8 +1875,8 @@ uint32_t HAL_LPTIM_ReadCompare(LPTIM_HandleTypeDef *hlptim)
   */
 
 /** @defgroup LPTIM_Exported_Functions_Group4 LPTIM IRQ handler and callbacks
- *  @brief  LPTIM  IRQ handler.
- *
+  *  @brief  LPTIM  IRQ handler.
+  *
 @verbatim
   ==============================================================================
                       ##### LPTIM IRQ handler and callbacks  #####
@@ -2426,8 +2428,8 @@ HAL_StatusTypeDef HAL_LPTIM_UnRegisterCallback(LPTIM_HandleTypeDef        *hlpti
   */
 
 /** @defgroup LPTIM_Group5 Peripheral State functions
- *  @brief   Peripheral State functions.
- *
+  *  @brief   Peripheral State functions.
+  *
 @verbatim
   ==============================================================================
                       ##### Peripheral State functions #####
@@ -2504,8 +2506,7 @@ static HAL_StatusTypeDef LPTIM_WaitForFlag(LPTIM_HandleTypeDef *hlptim, uint32_t
     {
       result = HAL_TIMEOUT;
     }
-  }
-  while ((!(__HAL_LPTIM_GET_FLAG((hlptim), (flag)))) && (count != 0UL));
+  } while ((!(__HAL_LPTIM_GET_FLAG((hlptim), (flag)))) && (count != 0UL));
 
   return result;
 }

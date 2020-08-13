@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -46,89 +46,76 @@ extern "C" {
 #define IS_RCC_LSCOSOURCE(__SOURCE__) (((__SOURCE__) == RCC_LSCOSOURCE_LSI) || \
                                        ((__SOURCE__) == RCC_LSCOSOURCE_LSE))
 
-#define IS_RCC_PERIPHCLOCK(__SELECTION__)                                                \
-               ((((__SELECTION__) & RCC_PERIPHCLK_USART1)   == RCC_PERIPHCLK_USART1)  || \
-                (((__SELECTION__) & RCC_PERIPHCLK_USART2)   == RCC_PERIPHCLK_USART2)  || \
-                (((__SELECTION__) & RCC_PERIPHCLK_LPUART1)  == RCC_PERIPHCLK_LPUART1) || \
-                (((__SELECTION__) & RCC_PERIPHCLK_I2S2)     == RCC_PERIPHCLK_I2S2)    || \
-                (((__SELECTION__) & RCC_PERIPHCLK_I2C1)     == RCC_PERIPHCLK_I2C1)    || \
-                (((__SELECTION__) & RCC_PERIPHCLK_I2C2)     == RCC_PERIPHCLK_I2C2)    || \
-                (((__SELECTION__) & RCC_PERIPHCLK_I2C3)     == RCC_PERIPHCLK_I2C3)    || \
-                (((__SELECTION__) & RCC_PERIPHCLK_LPTIM1)   == RCC_PERIPHCLK_LPTIM1)  || \
-                (((__SELECTION__) & RCC_PERIPHCLK_LPTIM2)   == RCC_PERIPHCLK_LPTIM2)  || \
-                (((__SELECTION__) & RCC_PERIPHCLK_LPTIM3)   == RCC_PERIPHCLK_LPTIM3)  || \
-                (((__SELECTION__) & RCC_PERIPHCLK_RNG)      == RCC_PERIPHCLK_RNG)     || \
-                (((__SELECTION__) & RCC_PERIPHCLK_ADC)      == RCC_PERIPHCLK_ADC)     || \
-                (((__SELECTION__) & RCC_PERIPHCLK_RTC)      == RCC_PERIPHCLK_RTC))
+#define IS_RCC_PERIPHCLOCK(__SELECTION__) ((((__SELECTION__) & RCC_PERIPHCLK_USART1)   == RCC_PERIPHCLK_USART1)  || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_USART2)   == RCC_PERIPHCLK_USART2)  || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_LPUART1)  == RCC_PERIPHCLK_LPUART1) || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_I2S2)     == RCC_PERIPHCLK_I2S2)    || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_I2C1)     == RCC_PERIPHCLK_I2C1)    || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_I2C2)     == RCC_PERIPHCLK_I2C2)    || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_I2C3)     == RCC_PERIPHCLK_I2C3)    || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_LPTIM1)   == RCC_PERIPHCLK_LPTIM1)  || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_LPTIM2)   == RCC_PERIPHCLK_LPTIM2)  || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_LPTIM3)   == RCC_PERIPHCLK_LPTIM3)  || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_RNG)      == RCC_PERIPHCLK_RNG)     || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_ADC)      == RCC_PERIPHCLK_ADC)     || \
+                                           (((__SELECTION__) & RCC_PERIPHCLK_RTC)      == RCC_PERIPHCLK_RTC))
 
-#define IS_RCC_USART1CLKSOURCE(__SOURCE__)                      \
-               (((__SOURCE__) == RCC_USART1CLKSOURCE_PCLK2)  || \
-                ((__SOURCE__) == RCC_USART1CLKSOURCE_SYSCLK) || \
-                ((__SOURCE__) == RCC_USART1CLKSOURCE_LSE)    || \
-                ((__SOURCE__) == RCC_USART1CLKSOURCE_HSI))
+#define IS_RCC_USART1CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_USART1CLKSOURCE_PCLK2)  || \
+                                             ((__SOURCE__) == RCC_USART1CLKSOURCE_SYSCLK) || \
+                                             ((__SOURCE__) == RCC_USART1CLKSOURCE_LSE)    || \
+                                             ((__SOURCE__) == RCC_USART1CLKSOURCE_HSI))
 
-#define IS_RCC_USART2CLKSOURCE(__SOURCE__)                      \
-               (((__SOURCE__) == RCC_USART2CLKSOURCE_PCLK1)  || \
-                ((__SOURCE__) == RCC_USART2CLKSOURCE_SYSCLK) || \
-                ((__SOURCE__) == RCC_USART2CLKSOURCE_LSE)    || \
-                ((__SOURCE__) == RCC_USART2CLKSOURCE_HSI))
+#define IS_RCC_USART2CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_USART2CLKSOURCE_PCLK1)  || \
+                                             ((__SOURCE__) == RCC_USART2CLKSOURCE_SYSCLK) || \
+                                             ((__SOURCE__) == RCC_USART2CLKSOURCE_LSE)    || \
+                                             ((__SOURCE__) == RCC_USART2CLKSOURCE_HSI))
 
-#define IS_RCC_I2S2CLKSOURCE(__SOURCE__)                    \
-               (((__SOURCE__) == RCC_I2S2CLKSOURCE_PLL)  || \
-                ((__SOURCE__) == RCC_I2S2CLKSOURCE_HSI)  || \
-                ((__SOURCE__) == RCC_I2S2CLKSOURCE_PIN))
+#define IS_RCC_I2S2CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_I2S2CLKSOURCE_PLL)  || \
+                                           ((__SOURCE__) == RCC_I2S2CLKSOURCE_HSI)  || \
+                                           ((__SOURCE__) == RCC_I2S2CLKSOURCE_PIN))
 
-#define IS_RCC_LPUART1CLKSOURCE(__SOURCE__)                      \
-               (((__SOURCE__) == RCC_LPUART1CLKSOURCE_PCLK1)  || \
-                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_SYSCLK) || \
-                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_LSE)    || \
-                ((__SOURCE__) == RCC_LPUART1CLKSOURCE_HSI))
+#define IS_RCC_LPUART1CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_LPUART1CLKSOURCE_PCLK1)  || \
+                                              ((__SOURCE__) == RCC_LPUART1CLKSOURCE_SYSCLK) || \
+                                              ((__SOURCE__) == RCC_LPUART1CLKSOURCE_LSE)    || \
+                                              ((__SOURCE__) == RCC_LPUART1CLKSOURCE_HSI))
 
-#define IS_RCC_I2C1CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_I2C1CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_I2C1CLKSOURCE_SYSCLK)|| \
-                ((__SOURCE__) == RCC_I2C1CLKSOURCE_HSI))
+#define IS_RCC_I2C1CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_I2C1CLKSOURCE_PCLK1) || \
+                                           ((__SOURCE__) == RCC_I2C1CLKSOURCE_SYSCLK)|| \
+                                           ((__SOURCE__) == RCC_I2C1CLKSOURCE_HSI))
 
-#define IS_RCC_I2C2CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_I2C2CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_I2C2CLKSOURCE_SYSCLK)|| \
-                ((__SOURCE__) == RCC_I2C2CLKSOURCE_HSI))
+#define IS_RCC_I2C2CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_I2C2CLKSOURCE_PCLK1) || \
+                                           ((__SOURCE__) == RCC_I2C2CLKSOURCE_SYSCLK)|| \
+                                           ((__SOURCE__) == RCC_I2C2CLKSOURCE_HSI))
 
 
-#define IS_RCC_I2C3CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_I2C3CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_I2C3CLKSOURCE_SYSCLK)|| \
-                ((__SOURCE__) == RCC_I2C3CLKSOURCE_HSI))
+#define IS_RCC_I2C3CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_I2C3CLKSOURCE_PCLK1) || \
+                                           ((__SOURCE__) == RCC_I2C3CLKSOURCE_SYSCLK)|| \
+                                           ((__SOURCE__) == RCC_I2C3CLKSOURCE_HSI))
 
-#define IS_RCC_LPTIM1CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_LPTIM1CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSI)   || \
-                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_HSI)   || \
-                ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSE))
+#define IS_RCC_LPTIM1CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_LPTIM1CLKSOURCE_PCLK1) || \
+                                             ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_HSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM1CLKSOURCE_LSE))
 
-#define IS_RCC_LPTIM2CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_LPTIM2CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSI)   || \
-                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_HSI)   || \
-                ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSE))
+#define IS_RCC_LPTIM2CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_LPTIM2CLKSOURCE_PCLK1) || \
+                                             ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_HSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM2CLKSOURCE_LSE))
 
-#define IS_RCC_LPTIM3CLKSOURCE(__SOURCE__)                     \
-               (((__SOURCE__) == RCC_LPTIM3CLKSOURCE_PCLK1) || \
-                ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_LSI)   || \
-                ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_HSI)   || \
-                ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_LSE))
+#define IS_RCC_LPTIM3CLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_LPTIM3CLKSOURCE_PCLK1) || \
+                                             ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_LSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_HSI)   || \
+                                             ((__SOURCE__) == RCC_LPTIM3CLKSOURCE_LSE))
 
-#define IS_RCC_RNGCLKSOURCE(__SOURCE__)                       \
-               (((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
-                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
-                ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE)     || \
-                ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI))
+#define IS_RCC_RNGCLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_RNGCLKSOURCE_PLL)     || \
+                                          ((__SOURCE__) == RCC_RNGCLKSOURCE_LSI)     || \
+                                          ((__SOURCE__) == RCC_RNGCLKSOURCE_LSE)     || \
+                                          ((__SOURCE__) == RCC_RNGCLKSOURCE_MSI))
 
-#define IS_RCC_ADCCLKSOURCE(__SOURCE__)                    \
-               (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
-                ((__SOURCE__) == RCC_ADCCLKSOURCE_HSI)  || \
-                ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
-                ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
+#define IS_RCC_ADCCLKSOURCE(__SOURCE__)  (((__SOURCE__) == RCC_ADCCLKSOURCE_NONE) || \
+                                          ((__SOURCE__) == RCC_ADCCLKSOURCE_HSI)  || \
+                                          ((__SOURCE__) == RCC_ADCCLKSOURCE_PLL)  || \
+                                          ((__SOURCE__) == RCC_ADCCLKSOURCE_SYSCLK))
 
 /**
   * @}
@@ -378,8 +365,8 @@ typedef struct
 
 /* Exported macros -----------------------------------------------------------*/
 /** @defgroup RCCEx_Exported_Macros RCCEx Exported Macros
- * @{
- */
+  * @{
+  */
 
 /*============================================================================*/
 
@@ -623,7 +610,7 @@ typedef struct
 #define __HAL_RCC_LSECSS_EXTI_DISABLE_IT()           LL_C2_EXTI_DisableIT_0_31(RCC_EXTI_LINE_LSECSS)
 #define __HAL_RCC_LSECSS_EXTI_ENABLE_EVENT()         LL_C2_EXTI_EnableEvent_0_31(RCC_EXTI_LINE_LSECSS)
 #define __HAL_RCC_LSECSS_EXTI_DISABLE_EVENT()        LL_C2_EXTI_DisableEvent_0_31(RCC_EXTI_LINE_LSECSS)
-                                                     
+
 #define __HAL_RCC_HSECSS_EXTI_ENABLE_IT()            LL_C2_EXTI_EnableIT_32_63(RCC_EXTI_LINE_HSECSS)
 #define __HAL_RCC_HSECSS_EXTI_DISABLE_IT()           LL_C2_EXTI_DisableIT_32_63(RCC_EXTI_LINE_HSECSS)
 #else
@@ -631,10 +618,10 @@ typedef struct
 #define __HAL_RCC_LSECSS_EXTI_DISABLE_IT()           LL_EXTI_DisableIT_0_31(RCC_EXTI_LINE_LSECSS)
 #define __HAL_RCC_LSECSS_EXTI_ENABLE_EVENT()         LL_EXTI_EnableEvent_0_31(RCC_EXTI_LINE_LSECSS)
 #define __HAL_RCC_LSECSS_EXTI_DISABLE_EVENT()        LL_EXTI_DisableEvent_0_31(RCC_EXTI_LINE_LSECSS)
-                                                     
+
 #define __HAL_RCC_HSECSS_EXTI_ENABLE_IT()            LL_EXTI_EnableIT_32_63(RCC_EXTI_LINE_HSECSS)
 #define __HAL_RCC_HSECSS_EXTI_DISABLE_IT()           LL_EXTI_DisableIT_32_63(RCC_EXTI_LINE_HSECSS)
-#endif
+#endif /* CORE_CM0PLUS */
 
 #else
 
@@ -646,7 +633,7 @@ typedef struct
 #define __HAL_RCC_HSECSS_EXTI_ENABLE_IT()            LL_EXTI_EnableIT_32_63(RCC_EXTI_LINE_HSECSS)
 #define __HAL_RCC_HSECSS_EXTI_DISABLE_IT()           LL_EXTI_DisableIT_32_63(RCC_EXTI_LINE_HSECSS)
 
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @}

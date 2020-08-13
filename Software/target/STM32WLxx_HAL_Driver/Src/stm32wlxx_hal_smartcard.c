@@ -168,7 +168,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -779,7 +779,7 @@ HAL_StatusTypeDef HAL_SMARTCARD_UnRegisterCallback(SMARTCARD_HandleTypeDef *hsma
             and HAL_SMARTCARD_ErrorCallback() user callback is executed. Transfer is kept ongoing on SMARTCARD side.
             If user wants to abort it, Abort services should be called by user.
        (++) Error is considered as Blocking : Transfer could not be completed properly and is aborted.
-            This concerns Frame Error in Interrupt mode tranmission, Overrun Error in Interrupt mode reception and all errors in DMA mode.
+            This concerns Frame Error in Interrupt mode transmission, Overrun Error in Interrupt mode reception and all errors in DMA mode.
             Error code is set to allow user to identify error type, and HAL_SMARTCARD_ErrorCallback() user callback is executed.
 
 @endverbatim
@@ -824,13 +824,22 @@ HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, ui
     /* Disable the Peripheral first to update mode for TX master */
     CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
 
-    /* Disable Rx, enable Tx */
-    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
-    SET_BIT(hsmartcard->Instance->RQR, (uint16_t)SMARTCARD_RXDATA_FLUSH_REQUEST);
+    /* In case of TX only mode, if NACK is enabled, the USART must be able to monitor
+       the bidirectional line to detect a NACK signal in case of parity error.
+       Therefore, the receiver block must be enabled as well (RE bit must be set). */
+    if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX)
+     && (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
+    {
+      SET_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
+    }
+    /* Enable Tx */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_TE);
 
     /* Enable the Peripheral */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+
+    /* Perform a TX/RX FIFO Flush */
+    __HAL_SMARTCARD_FLUSH_DRREGISTER(hsmartcard);
 
     hsmartcard->ErrorCode = HAL_SMARTCARD_ERROR_NONE;
     hsmartcard->TxXferSize = Size;
@@ -851,15 +860,23 @@ HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, ui
     {
       return HAL_TIMEOUT;
     }
-    /* Re-enable Rx at end of transmission if initial mode is Rx/Tx */
-    if (hsmartcard->Init.Mode == SMARTCARD_MODE_TX_RX)
+
+    /* Disable the Peripheral first to update mode */
+    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+    if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX)
+     && (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
     {
-      /* Disable the Peripheral first to update modes */
-      CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
-      SET_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
-      /* Enable the Peripheral */
-      SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+      /* In case of TX only mode, if NACK is enabled, receiver block has been enabled
+         for Transmit phase. Disable this receiver block. */
+      CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
     }
+    if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX_RX)
+     || (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
+    {
+      /* Perform a TX FIFO Flush at end of Tx phase, as all sent bytes are appearing in Rx Data register */
+      __HAL_SMARTCARD_FLUSH_DRREGISTER(hsmartcard);
+    }
+    SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
 
     /* At end of Tx process, restore hsmartcard->gState to Ready */
     hsmartcard->gState = HAL_SMARTCARD_STATE_READY;
@@ -980,13 +997,22 @@ HAL_StatusTypeDef HAL_SMARTCARD_Transmit_IT(SMARTCARD_HandleTypeDef *hsmartcard,
     /* Disable the Peripheral first to update mode for TX master */
     CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
 
-    /* Disable Rx, enable Tx */
-    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
-    SET_BIT(hsmartcard->Instance->RQR, (uint16_t)SMARTCARD_RXDATA_FLUSH_REQUEST);
+    /* In case of TX only mode, if NACK is enabled, the USART must be able to monitor
+       the bidirectional line to detect a NACK signal in case of parity error.
+       Therefore, the receiver block must be enabled as well (RE bit must be set). */
+    if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX)
+     && (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
+    {
+      SET_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
+    }
+    /* Enable Tx */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_TE);
 
     /* Enable the Peripheral */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+
+    /* Perform a TX/RX FIFO Flush */
+    __HAL_SMARTCARD_FLUSH_DRREGISTER(hsmartcard);
 
     /* Configure Tx interrupt processing */
     if (hsmartcard->FifoMode == SMARTCARD_FIFOMODE_ENABLE)
@@ -1128,13 +1154,22 @@ HAL_StatusTypeDef HAL_SMARTCARD_Transmit_DMA(SMARTCARD_HandleTypeDef *hsmartcard
     /* Disable the Peripheral first to update mode for TX master */
     CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
 
-    /* Disable Rx, enable Tx */
-    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
-    SET_BIT(hsmartcard->Instance->RQR, (uint16_t)SMARTCARD_RXDATA_FLUSH_REQUEST);
+    /* In case of TX only mode, if NACK is enabled, the USART must be able to monitor
+       the bidirectional line to detect a NACK signal in case of parity error.
+       Therefore, the receiver block must be enabled as well (RE bit must be set). */
+    if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX)
+     && (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
+    {
+      SET_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
+    }
+    /* Enable Tx */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_TE);
 
     /* Enable the Peripheral */
     SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+
+    /* Perform a TX/RX FIFO Flush */
+    __HAL_SMARTCARD_FLUSH_DRREGISTER(hsmartcard);
 
     /* Set the SMARTCARD DMA transfer complete callback */
     hsmartcard->hdmatx->XferCpltCallback = SMARTCARD_DMATransmitCplt;
@@ -2950,15 +2985,22 @@ static void SMARTCARD_EndTransmit_IT(SMARTCARD_HandleTypeDef *hsmartcard)
     CLEAR_BIT(hsmartcard->Instance->CR3, USART_CR3_EIE);
   }
 
-  /* Re-enable Rx at end of transmission if initial mode is Rx/Tx */
-  if (hsmartcard->Init.Mode == SMARTCARD_MODE_TX_RX)
+  /* Disable the Peripheral first to update mode */
+  CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+  if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX)
+   && (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
   {
-    /* Disable the Peripheral first to update modes */
-    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
-    SET_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
-    /* Enable the Peripheral */
-    SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
+    /* In case of TX only mode, if NACK is enabled, receiver block has been enabled
+       for Transmit phase. Disable this receiver block. */
+    CLEAR_BIT(hsmartcard->Instance->CR1, USART_CR1_RE);
   }
+  if ((hsmartcard->Init.Mode == SMARTCARD_MODE_TX_RX)
+   || (hsmartcard->Init.NACKEnable == SMARTCARD_NACK_ENABLE))
+  {
+    /* Perform a TX FIFO Flush at end of Tx phase, as all sent bytes are appearing in Rx Data register */
+    __HAL_SMARTCARD_FLUSH_DRREGISTER(hsmartcard);
+  }
+  SET_BIT(hsmartcard->Instance->CR1, USART_CR1_UE);
 
   /* Tx process is ended, restore hsmartcard->gState to Ready */
   hsmartcard->gState = HAL_SMARTCARD_STATE_READY;

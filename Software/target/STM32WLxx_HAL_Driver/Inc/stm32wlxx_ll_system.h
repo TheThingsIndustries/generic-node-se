@@ -19,7 +19,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -60,6 +60,13 @@ extern "C" {
   */
 #define LL_SYSCFG_EXTI_REGISTER_PINPOS_SHFT     16U   /*!< Define used to shift pin position in EXTICR register */
 
+/**
+ * @brief VREFBUF VREF_SC0 & VREF_SC1 calibration values 
+ */
+#define VREFBUF_SC0_CAL_ADDR   ((uint8_t*) (0x1FFF75F0UL)) /*!<  Address of VREFBUF trimming value for VRS=0,
+                                                                 VREF_SC0 in STM32WL datasheet */
+#define VREFBUF_SC1_CAL_ADDR   ((uint8_t*) (0x1FFF7530UL)) /*!<  Address of VREFBUF trimming value for VRS=1,
+                                                                 VREF_SC1 in STM32WL datasheet */
 /**
   * @}
   */
@@ -1500,6 +1507,24 @@ __STATIC_INLINE uint32_t LL_VREFBUF_GetVoltageScaling(void)
 }
 
 /**
+  * @brief  Get the VREFBUF trimming value for VRS=0 (VREF_SC0)
+  * @retval Between 0 and 0x3F
+  */
+__STATIC_INLINE uint32_t LL_VREFBUF_SC0_GetCalibration(void)
+{
+  return (uint32_t)(*VREFBUF_SC0_CAL_ADDR);
+}
+
+/**
+  * @brief  Get the VREFBUF trimming value for VRS=1 (VREF_SC1)
+  * @retval Between 0 and 0x3F
+  */
+__STATIC_INLINE uint32_t LL_VREFBUF_SC1_GetCalibration(void)
+{
+  return (uint32_t)(*VREFBUF_SC1_CAL_ADDR);
+}
+
+/**
   * @brief  Check if Voltage reference buffer is ready
   * @rmtoll VREFBUF_CSR  VRR           LL_VREFBUF_IsVREFReady
   * @retval State of bit (1 or 0).
@@ -1521,6 +1546,11 @@ __STATIC_INLINE uint32_t LL_VREFBUF_GetTrimming(void)
 
 /**
   * @brief  Set the trimming code for VREFBUF calibration (Tune the internal reference buffer voltage)
+  * @note   Each VrefBuf voltage scale is calibrated in production for each device,
+  *         data stored in flash memory.
+  *         Functions @ref LL_VREFBUF_SC0_GetCalibration and 
+  *         @ref LL_VREFBUF_SC0_GetCalibration can be used to retrieve
+  *         these calibration data.
   * @rmtoll VREFBUF_CCR  TRIM          LL_VREFBUF_SetTrimming
   * @param  Value Between 0 and 0x3F
   * @retval None
@@ -1844,9 +1874,7 @@ __STATIC_INLINE uint32_t LL_FLASH_GetC2BootResetVect(void)
 
 /**
   * @brief  Return the Unique Device Number
-  * @note   The 64-bit UID64 may be used by Firmware to derive BLE 48-bit Device Address EUI-48 or
-  *         802.15.4 64-bit Device Address EUI-64.
-  * @retval Values between Min_Data=0x00 and Max_Data=0xFFFF
+  * @retval Values between Min_Data=0x00000000 and Max_Data=0xFFFFFFFF
   */
 __STATIC_INLINE uint32_t LL_FLASH_GetUDN(void)
 {
@@ -1855,8 +1883,6 @@ __STATIC_INLINE uint32_t LL_FLASH_GetUDN(void)
 
 /**
   * @brief  Return the Device ID
-  * @note   The 64-bit UID64 may be used by Firmware to derive BLE 48-bit Device Address EUI-48 or
-  *         802.15.4 64-bit Device Address EUI-64.
   *         For STM32WLxxxx devices, the device ID is 0x15
   * @retval Values between Min_Data=0x00 and Max_Data=0xFF (ex: Device ID is 0x15)
   */
@@ -1867,10 +1893,8 @@ __STATIC_INLINE uint32_t LL_FLASH_GetDeviceID(void)
 
 /**
   * @brief  Return the ST Company ID
-  * @note   The 64-bit UID64 may be used by Firmware to derive BLE 48-bit Device Address EUI-48 or
-  *         802.15.4 64-bit Device Address EUI-64.
-  *         For STM32WLxxxx devices, the ST Compagny ID is 0x0080E1
-  * @retval Values between Min_Data=0x00 and Max_Data=0xFFFFFF (ex: ST Compagny ID is 0x0080E1)
+  * @note   For STM32WLxxxx devices, the ST Company ID is 0x0080E1
+  * @retval Values between Min_Data=0x00 and Max_Data=0xFFFFFF (ex: ST Company ID is 0x0080E1)
   */
 __STATIC_INLINE uint32_t LL_FLASH_GetSTCompanyID(void)
 {

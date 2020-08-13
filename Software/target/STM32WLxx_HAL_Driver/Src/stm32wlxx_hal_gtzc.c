@@ -67,7 +67,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -225,7 +225,7 @@ HAL_StatusTypeDef HAL_GTZC_TZSC_GetConfigPeriphAttributes(uint32_t PeriphId, uin
     for (index = 0U; index < GTZC_TZSC_PERIPH_NUMBER; index++)
     {
       /* Check what are TZSC peripheral position. Here use privilege mask as
-        reference beacause SPISUBGHZ is securable by option byte */
+        reference because SPISUBGHZ is securable by option byte */
       while((TZSC_PRIVCFGR1_ALL_Msk & (1UL << periphpos)) == 0x00U)
       {
         /* increment peripheral position */
@@ -613,7 +613,7 @@ HAL_StatusTypeDef HAL_GTZC_TZIC_EnableIT(uint32_t PeriphId)
   * @param  pFlag Pointer to the flags.
   *         If PeriphId target a single peripheral, pointer on a single element.
   *         If all peripherals selected, pointer to an array of GTZC_PERIPH_TZIC_MAX elements
-  *         Element content is either GTZC_TZIC_NO_ILA_EVENT or GTZC_TZSC_ILA_EVENT_PENDING
+  *         Element content is either GTZC_TZIC_NO_ILA_EVENT or GTZC_TZIC_ILA_EVENT_PENDING
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_GTZC_TZIC_GetFlag(uint32_t PeriphId, uint32_t *pFlag)

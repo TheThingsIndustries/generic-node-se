@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -101,22 +101,30 @@ ErrorStatus LL_PWR_DeInit(void)
 #endif
 
   /* Clear all flags */
+#if defined(DUAL_CORE)
   LL_PWR_WriteReg(SCR,
                   LL_PWR_SCR_CWUF
                   | LL_PWR_SCR_CWRFBUSYF
                   | LL_PWR_SCR_CWPVDF
-#if defined(DUAL_CORE)
                   | LL_PWR_SCR_CC2HF
-#endif
                  );
-
-  LL_PWR_WriteReg(EXTSCR,
-#ifdef CORE_CM0PLUS
-                  LL_PWR_EXTSCR_C2CSSF
 #else
-                  LL_PWR_EXTSCR_C1CSSF
-#endif
+  LL_PWR_WriteReg(SCR,
+                  LL_PWR_SCR_CWUF
+                  | LL_PWR_SCR_CWRFBUSYF
+                  | LL_PWR_SCR_CWPVDF
                  );
+#endif
+
+#ifdef CORE_CM0PLUS
+  LL_PWR_WriteReg(EXTSCR,
+                  LL_PWR_EXTSCR_C2CSSF
+                 );
+#else
+  LL_PWR_WriteReg(EXTSCR,
+                  LL_PWR_EXTSCR_C1CSSF
+                 );
+#endif
 
   return SUCCESS;
 }

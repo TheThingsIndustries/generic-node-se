@@ -38,7 +38,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -66,8 +66,8 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /** @defgroup RCC_Private_Constants RCC Private Constants
- * @{
- */
+  * @{
+  */
 #define HSE_TIMEOUT_VALUE          HSE_STARTUP_TIMEOUT
 #define HSI_TIMEOUT_VALUE          (2U)       /* 2 ms (minimum Tick + 1)         */
 #define MSI_TIMEOUT_VALUE          (2U)       /* 2 ms (minimum Tick + 1)         */
@@ -131,7 +131,7 @@ static HAL_StatusTypeDef RCC_SetFlashLatency(uint32_t Flash_ClkSrcFreq, uint32_t
          (+) HSI (high-speed internal): 16 MHz factory-trimmed RC used directly or through
              the PLL as System clock source.
 
-         (+) MSI (Mutiple Speed Internal): Its frequency is software trimmable from 100KHZ to 48MHZ.
+         (+) MSI (Multiple Speed Internal): Its frequency is software trimmable from 100KHZ to 48MHZ.
              The number of flash wait states is automatically adjusted when MSI range is updated with
              @ref HAL_RCC_OscConfig() and the MSI is used as System clock source.
 
@@ -279,9 +279,6 @@ HAL_StatusTypeDef HAL_RCC_DeInit(void)
     }
   }
 
-  /* Reset HSEBYP bit once HSE is OFF */
-  LL_RCC_HSE_DisableBypass();
-
   /* Reset HSEBYPPWR bit once HSE is OFF */
   LL_RCC_HSE_DisableTcxo();
 
@@ -401,7 +398,7 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)
         }
 
         /* Update the SystemCoreClock global variable */
-        SystemCoreClockUpdate();
+        SystemCoreClock = HAL_RCC_GetHCLKFreq();
 
         /* Configure the source of time base considering new system clocks settings*/
         status = HAL_InitTick(uwTickPrio);
@@ -902,7 +899,6 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)
   *            @arg FLASH_LATENCY_2   FLASH 2 Latency cycle
   *
   * @note   The SystemCoreClock CMSIS variable is used to store System Clock Frequency
-  *         and updated by SystemCoreClockUpdate() function called within this function
   *
   * @note   The MSI is used by default as system clock source after
   *         wake-up from Reset, wake-up from STANDBY mode. After restart from Reset,
@@ -997,7 +993,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
       }
     }
   }
-#endif
+#endif /* DUAL_CORE */
 
   /*-------------------------- HCLK3 Configuration ---------------------------*/
   if (((RCC_ClkInitStruct->ClockType) & RCC_CLOCKTYPE_HCLK3) == RCC_CLOCKTYPE_HCLK3)
@@ -1132,7 +1128,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
   /*--------------------------------------------------------------------------*/
 
   /* Update the SystemCoreClock global variable */
-  SystemCoreClockUpdate();
+  SystemCoreClock = HAL_RCC_GetHCLKFreq();
 
   /* Configure the source of time base considering new system clocks settings*/
   return HAL_InitTick(uwTickPrio);
@@ -1143,8 +1139,8 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
   */
 
 /** @defgroup RCC_Exported_Functions_Group2 Peripheral Control functions
- *  @brief   RCC clocks control functions
- *
+  *  @brief   RCC clocks control functions
+  *
 @verbatim
  ===============================================================================
                       ##### Peripheral Control functions #####
@@ -1152,7 +1148,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
     [..]
     This subsection provides a set of functions allowing to:
 
-    (+) Ouput clock to MCO pin.
+    (+) Output clock to MCO pin.
     (+) Retrieve current clock frequencies.
     (+) Enable the Clock Security System.
     (+) HSE CSS Interrupt handler.
@@ -1290,6 +1286,7 @@ uint32_t HAL_RCC_GetSysClockFreq(void)
   }
   else
   {
+    /* Nothing to do */
   }
 
   if (__HAL_RCC_GET_SYSCLK_SOURCE() == RCC_SYSCLKSOURCE_STATUS_PLLCLK)
@@ -1317,7 +1314,8 @@ uint32_t HAL_RCC_GetSysClockFreq(void)
         pllinputfreq = msifreq;
         break;
     }
-    sysclockfreq = __LL_RCC_CALC_PLLCLK_FREQ(pllinputfreq, LL_RCC_PLL_GetDivider(), LL_RCC_PLL_GetN(), LL_RCC_PLL_GetR());
+    sysclockfreq = __LL_RCC_CALC_PLLCLK_FREQ(pllinputfreq, LL_RCC_PLL_GetDivider(),
+                                             LL_RCC_PLL_GetN(), LL_RCC_PLL_GetR());
   }
 
   return sysclockfreq;
@@ -1343,7 +1341,7 @@ uint32_t HAL_RCC_GetHCLK2Freq(void)
   /* Get SysClock and Compute HCLK2 frequency --------------------------------*/
   return ((uint32_t)(__LL_RCC_CALC_HCLK2_FREQ(HAL_RCC_GetSysClockFreq(), LL_C2_RCC_GetAHBPrescaler())));
 }
-#endif
+#endif /* DUAL_CORE */
 
 /**
   * @brief  Return the HCLK3 frequency.
@@ -1397,10 +1395,6 @@ void HAL_RCC_GetOscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)
     {
       RCC_OscInitStruct->HSEState = RCC_HSE_BYPASS_PWR;
     }
-    else if ((RCC->CR & RCC_CR_HSEBYP) == RCC_CR_HSEBYP)
-    {
-      RCC_OscInitStruct->HSEState = RCC_HSE_BYPASS;
-    }
     else if ((RCC->CR & RCC_CR_HSEON) == RCC_CR_HSEON)
     {
       RCC_OscInitStruct->HSEState = RCC_HSE_ON;
@@ -1444,20 +1438,20 @@ void HAL_RCC_GetOscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)
     RCC_OscInitStruct->HSICalibrationValue = LL_RCC_HSI_GetCalibTrimming();
 
     /* Get the LSE configuration -----------------------------------------------*/
-    if ((RCC->BDCR & RCC_BDCR_LSEBYP) == RCC_BDCR_LSEBYP)
+    if ((RCC->BDCR & RCC_BDCR_LSEON) == RCC_BDCR_LSEON)
     {
-      if ((RCC->BDCR & RCC_BDCR_LSESYSEN) == RCC_BDCR_LSESYSEN)
+      if ((RCC->BDCR & RCC_BDCR_LSEBYP) == RCC_BDCR_LSEBYP)
       {
-        RCC_OscInitStruct->LSEState = RCC_LSE_BYPASS;
+        if ((RCC->BDCR & RCC_BDCR_LSESYSEN) == RCC_BDCR_LSESYSEN)
+        {
+          RCC_OscInitStruct->LSEState = RCC_LSE_BYPASS;
+        }
+        else
+        {
+          RCC_OscInitStruct->LSEState = RCC_LSE_BYPASS_RTC_ONLY;
+        }
       }
-      else
-      {
-        RCC_OscInitStruct->LSEState = RCC_LSE_BYPASS_RTC_ONLY;
-      }
-    }
-    else if ((RCC->BDCR & RCC_BDCR_LSEON) == RCC_BDCR_LSEON)
-    {
-      if ((RCC->BDCR & RCC_BDCR_LSESYSEN) == RCC_BDCR_LSESYSEN)
+      else if ((RCC->BDCR & RCC_BDCR_LSESYSEN) == RCC_BDCR_LSESYSEN)
       {
         RCC_OscInitStruct->LSEState = RCC_LSE_ON;
       }
@@ -1526,7 +1520,7 @@ void HAL_RCC_GetClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, uint32_t *pF
                                     | RCC_CLOCKTYPE_PCLK2  | RCC_CLOCKTYPE_HCLK3);
 #if defined(DUAL_CORE)
     RCC_ClkInitStruct->ClockType |= RCC_CLOCKTYPE_HCLK2;
-#endif
+#endif  /* DUAL_CORE */
 
     /* Get the SYSCLK configuration --------------------------------------------*/
     RCC_ClkInitStruct->SYSCLKSource = LL_RCC_GetSysClkSource();
@@ -1543,7 +1537,7 @@ void HAL_RCC_GetClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, uint32_t *pF
 #if defined(DUAL_CORE)
     /* Get the AHBCLK2Divider configuration ------------------------------------*/
     RCC_ClkInitStruct->AHBCLK2Divider = LL_C2_RCC_GetAHBPrescaler();
-#endif
+#endif  /* DUAL_CORE */
 
     /* Get the AHBCLK3Divider configuration ------------------------------------*/
     RCC_ClkInitStruct->AHBCLK3Divider = LL_RCC_GetAHB3Prescaler();
