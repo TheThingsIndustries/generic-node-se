@@ -14,13 +14,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics. 
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * This software component is licensed by ST under Apache License, Version 2.0,
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  *                        opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -83,7 +83,7 @@ typedef enum
   DMA1_Channel5_IRQn                  = 15,     /*!< DMA1 Channel 5 Interrupt                                          */
   DMA1_Channel6_IRQn                  = 16,     /*!< DMA1 Channel 6 Interrupt                                          */
   DMA1_Channel7_IRQn                  = 17,     /*!< DMA1 Channel 7 Interrupt                                          */
-  ADC1_IRQn                           = 18,     /*!< ADC1 Interrupt                                                    */
+  ADC_IRQn                            = 18,     /*!< ADC Interrupt                                                     */
   DAC_IRQn                            = 19,     /*!< DAC Interrupt                                                     */
   COMP_IRQn                           = 21,     /*!< COMP1 and COMP2 Interrupts                                        */
   EXTI9_5_IRQn                        = 22,     /*!< EXTI Lines [9:5] Interrupt                                        */
@@ -112,7 +112,7 @@ typedef enum
   HSEM_IRQn                           = 47,     /*!< HSEM Interrupt                                                    */
   I2C3_EV_IRQn                        = 48,     /*!< I2C3 Event Interrupt                                              */
   I2C3_ER_IRQn                        = 49,     /*!< I2C3 Error Interrupt                                              */
-  Radio_IRQn                          = 50,     /*!< Radio Interrupt                                                   */
+  SUBGHZ_Radio_IRQn                   = 50,     /*!< SUBGHZ Radio Interrupt                                            */
   AES_IRQn                            = 51,     /*!< AES Interrupt                                                     */
   RNG_IRQn                            = 52,     /*!< RNG Interrupt                                                     */
   PKA_IRQn                            = 53,     /*!< PKA Interrupt                                                     */
@@ -188,7 +188,7 @@ typedef struct
 
 typedef struct
 {
-  __IO uint32_t CCR;          /*!< ADC common configuration register,             Address offset: ADC1 base address + 0x308 */
+  __IO uint32_t CCR;          /*!< ADC common configuration register,             Address offset: ADC base address + 0x308 */
 } ADC_Common_TypeDef;
 
 /**
@@ -363,13 +363,13 @@ typedef struct
 typedef struct
 {
   __IO uint32_t ACR;           /*!< FLASH Access control register,                      Address offset: 0x00      */
-  uint32_t RESERVED1;          /*!< Reserved,                                           Address offset: 0x04      */
+  uint32_t RESERVED0;          /*!< Reserved,                                           Address offset: 0x04      */
   __IO uint32_t KEYR;          /*!< FLASH Key register,                                 Address offset: 0x08      */
   __IO uint32_t OPTKEYR;       /*!< FLASH Option Key register,                          Address offset: 0x0C      */
   __IO uint32_t SR;            /*!< FLASH Status register,                              Address offset: 0x10      */
   __IO uint32_t CR;            /*!< FLASH Control register,                             Address offset: 0x14      */
   __IO uint32_t ECCR;          /*!< FLASH ECC register,                                 Address offset: 0x18      */
-  uint32_t RESERVED2;          /*!< Reserved,                                           Address offset: 0x1C      */
+  uint32_t RESERVED1;          /*!< Reserved,                                           Address offset: 0x1C      */
   __IO uint32_t OPTR;          /*!< FLASH Option register,                              Address offset: 0x20      */
   __IO uint32_t PCROP1ASR;     /*!< FLASH Bank 1 PCROP area A Start address register,   Address offset: 0x24      */
   __IO uint32_t PCROP1AER;     /*!< FLASH Bank 1 PCROP area A End address register,     Address offset: 0x28      */
@@ -815,8 +815,8 @@ typedef struct
 #define VREFBUF_BASE            (APB2PERIPH_BASE + 0x00000030UL)
 #define COMP1_BASE              (APB2PERIPH_BASE + 0x00000200UL)
 #define COMP2_BASE              (APB2PERIPH_BASE + 0x00000204UL)
-#define ADC1_BASE               (APB2PERIPH_BASE + 0x00002400UL)
-#define ADC1_COMMON_BASE        (APB2PERIPH_BASE + 0x00002708UL)
+#define ADC_BASE                (APB2PERIPH_BASE + 0x00002400UL)
+#define ADC_COMMON_BASE         (APB2PERIPH_BASE + 0x00002708UL)
 #define TIM1_BASE               (APB2PERIPH_BASE + 0x00002C00UL)
 #define SPI1_BASE               (APB2PERIPH_BASE + 0x00003000UL)
 #define USART1_BASE             (APB2PERIPH_BASE + 0x00003800UL)
@@ -923,8 +923,8 @@ typedef struct
 #define COMP12_COMMON           ((COMP_Common_TypeDef *) COMP2_BASE)
 #define TIM1                    ((TIM_TypeDef *) TIM1_BASE)
 #define SPI1                    ((SPI_TypeDef *) SPI1_BASE)
-#define ADC1                    ((ADC_TypeDef *) ADC1_BASE)
-#define ADC1_COMMON             ((ADC_Common_TypeDef *) ADC1_COMMON_BASE)
+#define ADC                     ((ADC_TypeDef *) ADC_BASE)
+#define ADC_COMMON              ((ADC_Common_TypeDef *) ADC_COMMON_BASE)
 #define TIM16                   ((TIM_TypeDef *) TIM16_BASE)
 #define TIM17                   ((TIM_TypeDef *) TIM17_BASE)
 #define USART1                  ((USART_TypeDef *) USART1_BASE)
@@ -2879,9 +2879,6 @@ typedef struct
 #define DMA_CCR_MEM2MEM_Msk    (0x1UL << DMA_CCR_MEM2MEM_Pos)                  /*!< 0x00004000 */
 #define DMA_CCR_MEM2MEM        DMA_CCR_MEM2MEM_Msk                             /*!< Memory to memory mode               */
 
-#define DMA_CCR_PRIV_Pos       (20U)
-#define DMA_CCR_PRIV_Msk       (0x1UL << DMA_CCR_PRIV_Pos)                    /*!< 0x00100000 */
-#define DMA_CCR_PRIV           DMA_CCR_PRIV_Msk                               /*!< Privileged mode                      */
 
 /******************  Bit definition for DMA_CNDTR register  *******************/
 #define DMA_CNDTR_NDT_Pos      (0U)
@@ -3336,12 +3333,6 @@ typedef struct
 #define EXTI_RTSR2_RT34_Pos      (2U)
 #define EXTI_RTSR2_RT34_Msk      (0x1UL << EXTI_RTSR2_RT34_Pos)                /*!< 0x00000004 */
 #define EXTI_RTSR2_RT34          EXTI_RTSR2_RT34_Msk                           /*!< Rising trigger event configuration bit of line 34 */
-#define EXTI_RTSR2_RT40_Pos      (8U)
-#define EXTI_RTSR2_RT40_Msk      (0x1UL << EXTI_RTSR2_RT40_Pos)                /*!< 0x00000100 */
-#define EXTI_RTSR2_RT40          EXTI_RTSR2_RT40_Msk                           /*!< Rising trigger event configuration bit of line 40 */
-#define EXTI_RTSR2_RT41_Pos      (9U)
-#define EXTI_RTSR2_RT41_Msk      (0x1UL << EXTI_RTSR2_RT41_Pos)                /*!< 0x00000200 */
-#define EXTI_RTSR2_RT41          EXTI_RTSR2_RT41_Msk                           /*!< Rising trigger event configuration bit of line 41 */
 #define EXTI_RTSR2_RT45_Pos      (13U)
 #define EXTI_RTSR2_RT45_Msk      (0x1UL << EXTI_RTSR2_RT45_Pos)                /*!< 0x00002000 */
 #define EXTI_RTSR2_RT45          EXTI_RTSR2_RT45_Msk                           /*!< Rising trigger event configuration bit of line 45 */
@@ -3350,12 +3341,6 @@ typedef struct
 #define EXTI_FTSR2_FT34_Pos      (2U)
 #define EXTI_FTSR2_FT34_Msk      (0x1UL << EXTI_FTSR2_FT34_Pos)                /*!< 0x00000004 */
 #define EXTI_FTSR2_FT34          EXTI_FTSR2_FT34_Msk                           /*!< Falling trigger event configuration bit of line 34 */
-#define EXTI_FTSR2_FT40_Pos      (8U)
-#define EXTI_FTSR2_FT40_Msk      (0x1UL << EXTI_FTSR2_FT40_Pos)                /*!< 0x00000100 */
-#define EXTI_FTSR2_FT40          EXTI_FTSR2_FT40_Msk                           /*!< Falling trigger event configuration bit of line 40 */
-#define EXTI_FTSR2_FT41_Pos      (9U)
-#define EXTI_FTSR2_FT41_Msk      (0x1UL << EXTI_FTSR2_FT41_Pos)                /*!< 0x00000200 */
-#define EXTI_FTSR2_FT41          EXTI_FTSR2_FT41_Msk                           /*!< Falling trigger event configuration bit of line 41 */
 #define EXTI_FTSR2_FT45_Pos      (13U)
 #define EXTI_FTSR2_FT45_Msk      (0x1UL << EXTI_FTSR2_FT45_Pos)                /*!< 0x00002000 */
 #define EXTI_FTSR2_FT45          EXTI_FTSR2_FT45_Msk                           /*!< Falling trigger event configuration bit of line 45 */
@@ -3364,12 +3349,6 @@ typedef struct
 #define EXTI_SWIER2_SWI34_Pos    (2U)
 #define EXTI_SWIER2_SWI34_Msk    (0x1UL << EXTI_SWIER2_SWI34_Pos)              /*!< 0x00000004 */
 #define EXTI_SWIER2_SWI34        EXTI_SWIER2_SWI34_Msk                         /*!< Software Interrupt on line 34 */
-#define EXTI_SWIER2_SWI40_Pos    (8U)
-#define EXTI_SWIER2_SWI40_Msk    (0x1UL << EXTI_SWIER2_SWI40_Pos)              /*!< 0x00000100 */
-#define EXTI_SWIER2_SWI40        EXTI_SWIER2_SWI40_Msk                         /*!< Software Interrupt on line 40 */
-#define EXTI_SWIER2_SWI41_Pos    (9U)
-#define EXTI_SWIER2_SWI41_Msk    (0x1UL << EXTI_SWIER2_SWI41_Pos)              /*!< 0x00000200 */
-#define EXTI_SWIER2_SWI41        EXTI_SWIER2_SWI41_Msk                         /*!< Software Interrupt on line 41 */
 #define EXTI_SWIER2_SWI45_Pos    (13U)
 #define EXTI_SWIER2_SWI45_Msk    (0x1UL << EXTI_SWIER2_SWI45_Pos)              /*!< 0x00002000 */
 #define EXTI_SWIER2_SWI45        EXTI_SWIER2_SWI45_Msk                         /*!< Software Interrupt on line 45 */
@@ -3378,12 +3357,6 @@ typedef struct
 #define EXTI_PR2_PIF34_Pos       (2U)
 #define EXTI_PR2_PIF34_Msk       (0x1UL << EXTI_PR2_PIF34_Pos)                 /*!< 0x00000004 */
 #define EXTI_PR2_PIF34           EXTI_PR2_PIF34_Msk                            /*!< Pending bit for line 34 */
-#define EXTI_PR2_PIF40_Pos       (8U)
-#define EXTI_PR2_PIF40_Msk       (0x1UL << EXTI_PR2_PIF40_Pos)                 /*!< 0x00000100 */
-#define EXTI_PR2_PIF40           EXTI_PR2_PIF40_Msk                            /*!< Pending bit for line 40 */
-#define EXTI_PR2_PIF41_Pos       (9U)
-#define EXTI_PR2_PIF41_Msk       (0x1UL << EXTI_PR2_PIF41_Pos)                 /*!< 0x00000200 */
-#define EXTI_PR2_PIF41           EXTI_PR2_PIF41_Msk                            /*!< Pending bit for line 41 */
 #define EXTI_PR2_PIF45_Pos       (13U)
 #define EXTI_PR2_PIF45_Msk       (0x1UL << EXTI_PR2_PIF45_Pos)                 /*!< 0x00002000 */
 #define EXTI_PR2_PIF45           EXTI_PR2_PIF45_Msk                            /*!< Pending bit for line 45 */
@@ -5797,9 +5770,6 @@ typedef struct
 #define RCC_CR_HSERDY_Pos                    (17U)
 #define RCC_CR_HSERDY_Msk                    (0x1UL << RCC_CR_HSERDY_Pos)      /*!< 0x00020000 */
 #define RCC_CR_HSERDY                        RCC_CR_HSERDY_Msk                 /*!< External High Speed oscillator (HSE) clock ready */
-#define RCC_CR_HSEBYP_Pos                    (18U)
-#define RCC_CR_HSEBYP_Msk                    (0x1UL << RCC_CR_HSEBYP_Pos)      /*!< 0x00040000 */
-#define RCC_CR_HSEBYP                        RCC_CR_HSEBYP_Msk                 /*!< External High Speed oscillator (HSE) clock bypass */
 #define RCC_CR_CSSON_Pos                     (19U)
 #define RCC_CR_CSSON_Msk                     (0x1UL << RCC_CR_CSSON_Pos)       /*!< 0x00080000 */
 #define RCC_CR_CSSON                         RCC_CR_CSSON_Msk                  /*!< HSE Clock Security System enable */
@@ -9255,11 +9225,11 @@ typedef struct
 #define TIM_DMAR_DMAB             TIM_DMAR_DMAB_Msk                            /*!<DMA register for burst accesses */
 
 /*******************  Bit definition for TIM1_OR1 register  ******************/
-#define TIM1_OR1_ETR_ADC1_RMP_Pos  (0U)
-#define TIM1_OR1_ETR_ADC1_RMP_Msk  (0x3UL << TIM1_OR1_ETR_ADC1_RMP_Pos)        /*!< 0x00000003 */
-#define TIM1_OR1_ETR_ADC1_RMP      TIM1_OR1_ETR_ADC1_RMP_Msk                   /*!< TIM1_ETR_ADC1 remapping capability*/
-#define TIM1_OR1_ETR_ADC1_RMP_0    (0x1UL << TIM1_OR1_ETR_ADC1_RMP_Pos)        /*!< 0x00000001 */
-#define TIM1_OR1_ETR_ADC1_RMP_1    (0x2UL << TIM1_OR1_ETR_ADC1_RMP_Pos)        /*!< 0x00000002 */
+#define TIM1_OR1_ETR_ADC_RMP_Pos   (0U)
+#define TIM1_OR1_ETR_ADC_RMP_Msk   (0x3UL << TIM1_OR1_ETR_ADC_RMP_Pos)         /*!< 0x00000003 */
+#define TIM1_OR1_ETR_ADC_RMP       TIM1_OR1_ETR_ADC_RMP_Msk                    /*!< TIM1_ETR_ADC remapping capability */
+#define TIM1_OR1_ETR_ADC_RMP_0     (0x1UL << TIM1_OR1_ETR_ADC_RMP_Pos)         /*!< 0x00000001 */
+#define TIM1_OR1_ETR_ADC_RMP_1     (0x2UL << TIM1_OR1_ETR_ADC_RMP_Pos)         /*!< 0x00000002 */
 #define TIM1_OR1_TI1_RMP_Pos       (4U)
 #define TIM1_OR1_TI1_RMP_Msk       (0x1UL << TIM1_OR1_TI1_RMP_Pos)             /*!< 0x00000010 */
 #define TIM1_OR1_TI1_RMP           TIM1_OR1_TI1_RMP_Msk                        /*!< Input Capture 1 remap*/
@@ -9385,9 +9355,9 @@ typedef struct
 #define TIM1_AF2_BK2CMP2P         TIM1_AF2_BK2CMP2P_Msk                        /*!<BRK2 COMP2 input polarity */
 
 /******************************* ADC Instances ********************************/
-#define IS_ADC_ALL_INSTANCE(INSTANCE) ((INSTANCE) == ADC1)
+#define IS_ADC_ALL_INSTANCE(INSTANCE) ((INSTANCE) == ADC)
 
-#define IS_ADC_COMMON_INSTANCE(INSTANCE) ((INSTANCE) == ADC1_COMMON)
+#define IS_ADC_COMMON_INSTANCE(INSTANCE) ((INSTANCE) == ADC_COMMON)
 
 /******************************* AES Instances ********************************/
 #define IS_AES_ALL_INSTANCE(INSTANCE) ((INSTANCE) == AES)
