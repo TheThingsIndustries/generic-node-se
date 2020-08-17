@@ -34,6 +34,7 @@
 extern UART_HandleTypeDef STNODE_BSP_debug_usart;
 extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
+extern TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
 
 /**
  * HW aliases for the board components
@@ -222,6 +223,37 @@ typedef enum
 #define FLASH_SPI_AF GPIO_AF5_SPI1
 // TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
+#define BUZZER_TIMER TIM2
+#define BUZZER_TIMER_CHANNEL TIM_CHANNEL_1
+/**
+ * In this example TIM2 input clock (TIM2CLK) is set to APB1 clock (PCLK1),
+ * since APB1 prescaler is equal to 1.
+ * TIM1CLK = PCLK1
+ * PCLK1 = HCLK
+ * => TIM1CLK = HCLK = SystemCoreClock
+ * To get TIM1 counter clock at 1 MHz, the prescaler is computed as follows:
+ * Prescaler = (TIM2CLK / TIM2 counter clock) - 1
+ * Prescaler = ((SystemCoreClock) /1 MHz) - 1
+ */
+#define BUZZER_PRESCALER     (uint32_t)(((SystemCoreClock) / 100000) - 1)
+/**
+ * To get TIM2 output clock at 2.73 KHz, the period (BUZZER_PERIOD)) is computed as follows:
+ * BUZZER_PERIOD = (TIM2 counter clock / TIM2 output clock) - 1 ~= 365
+ *
+ */
+#define BUZZER_PERIOD (365U)
+#define BUZZER_TIMER_PWM_PIN                    GPIO_PIN_15
+#define BUZZER_TIMER_PWM_GPIO_PORT              GPIOA
+#define BUZZER_TIMER_CLK_ENABLE() __HAL_RCC_TIM2_CLK_ENABLE()
+#define BUZZER_TIMER_CLK_DISABLE() __HAL_RCC_TIM2_CLK_DISABLE()
+#define BUZZER_TIMER_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
+#define BUZZER_TIMER_AF GPIO_AF1_TIM2
+
+#define BUZZER_TIMER_IRQn TIM2_IRQn
+#define BUZZER_TIMER_IT TIM_IT_UPDATE
+
+#define BUZZER_TIMER_PRIORITY 0
+
 /**
  * BSP APIs
  */
@@ -257,7 +289,9 @@ int32_t STNODE_BSP_UART_DMA_Init(void);
 
 int32_t STNODE_BSP_Sensor_I2C1_Init(void);
 
-  int32_t STNODE_BSP_Flash_SPI_Init(void);
+int32_t STNODE_BSP_Flash_SPI_Init(void);
+
+int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
 
 #ifdef __cplusplus
 }
