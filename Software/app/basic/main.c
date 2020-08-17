@@ -86,6 +86,28 @@ int main(void)
     APP_PPRINTF("\r\n Simple external SPI flash test (MX25R1635F) failed, check UART logs for more details\r\n");
   }
 
+  if (BUZZER_Init() == BUZZER_OP_SUCCESS)
+  {
+    APP_PPRINTF("\r\n Testing Buzzer!\r\n");
+    BUZZER_SetState(BUZZER_STATE_TICK);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_DODO);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_DODODO);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_WARNING);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_DANGER);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_RING);
+    HAL_Delay(1000);
+    BUZZER_SetState(BUZZER_STATE_OFF);
+  }
+  else
+  {
+    APP_PPRINTF("\r\n Failed to test the Buzzer!\r\n");
+  }
+
   while (1)
   {
     STNODE_BSP_LED_Toggle(LED_BLUE);
