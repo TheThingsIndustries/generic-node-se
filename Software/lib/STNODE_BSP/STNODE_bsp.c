@@ -36,6 +36,7 @@ static void BUTTON_SW1_EXTI_Callback(void);
 UART_HandleTypeDef STNODE_BSP_debug_usart;
 I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 SPI_HandleTypeDef STNODE_BSP_flash_spi;
+TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
 
 /**
  * LED APIs
@@ -563,3 +564,64 @@ int32_t STNODE_BSP_Flash_SPI_Init(void)
 }
 
 // TODO: Add communication init like UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
+
+int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
+{
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  STNODE_BSP_buzzer_timer.Instance = BUZZER_TIMER;
+  STNODE_BSP_buzzer_timer.Init.Prescaler = BUZZER_PRESCALER;
+  STNODE_BSP_buzzer_timer.Init.CounterMode = TIM_COUNTERMODE_UP;
+  STNODE_BSP_buzzer_timer.Init.Period = BUZZER_PERIOD;
+  STNODE_BSP_buzzer_timer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  STNODE_BSP_buzzer_timer.Init.RepetitionCounter = 0;
+  STNODE_BSP_buzzer_timer.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_PWM_Init(&STNODE_BSP_buzzer_timer) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&STNODE_BSP_buzzer_timer, &sMasterConfig) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&STNODE_BSP_buzzer_timer, &sConfigOC, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.BreakFilter = 0;
+  sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
+  sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
+  sBreakDeadTimeConfig.Break2Filter = 0;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&STNODE_BSP_buzzer_timer, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  HAL_TIM_RegisterCallback(&STNODE_BSP_buzzer_timer, HAL_TIM_PERIOD_ELAPSED_CB_ID, cb);
+  if (HAL_TIM_PWM_Start_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  return STNODE_BSP_ERROR_NONE;
+}

@@ -79,11 +79,11 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         __HAL_LINKDMA(uartHandle, hdmatx, hdma_tx);
 
         /* NVIC configuration for DMA transfer complete interrupt */
-        HAL_NVIC_SetPriority(DEBUG_USART_DMA_TX_IRQn, DEBUG_USART_PRIORITY, 1);
+        HAL_NVIC_SetPriority(DEBUG_USART_DMA_TX_IRQn, DEBUG_USART_DMA_PRIORITY, 1);
         HAL_NVIC_EnableIRQ(DEBUG_USART_DMA_TX_IRQn);
 
         /* NVIC for DEBUG_USART, to catch the TX complete */
-        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_DMA_PRIORITY, 1);
+        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_PRIORITY, 1);
         HAL_NVIC_EnableIRQ(DEBUG_USART_IRQn);
 
         /* Enable DEBUG_USART wakeup interrupt */
@@ -209,6 +209,46 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *spiHandle)
         FLASH_SPI_CLK_DISABLE();
 
         HAL_GPIO_DeInit(FLASH_SPI_GPIO_PORT, FLASH_SPI_MISO_PIN | FLASH_SPI_MOSI_PIN | FLASH_SPI_SCK_PIN | FLASH_SPI_CS_PIN);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *timerHandle)
+{
+    GPIO_InitTypeDef gpio_init_structure = {0};
+    if (timerHandle->Instance == BUZZER_TIMER)
+    {
+        BUZZER_TIMER_CLK_ENABLE();
+        BUZZER_TIMER_GPIO_CLK_ENABLE();
+
+        gpio_init_structure.Pin = BUZZER_TIMER_PWM_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_PP;
+        gpio_init_structure.Pull = GPIO_PULLUP;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        gpio_init_structure.Alternate = BUZZER_TIMER_AF;
+        HAL_GPIO_Init(BUZZER_TIMER_PWM_GPIO_PORT, &gpio_init_structure);
+
+        HAL_NVIC_SetPriority(BUZZER_TIMER_IRQn, BUZZER_TIMER_PRIORITY, 0);
+        HAL_NVIC_EnableIRQ(BUZZER_TIMER_IRQn);
+    }
+    else
+    {
+        msp_error_handler();
+    }
+}
+
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *timerHandle)
+{
+    if (timerHandle->Instance == BUZZER_TIMER)
+    {
+         BUZZER_TIMER_CLK_DISABLE();
+
+        HAL_GPIO_DeInit(BUZZER_TIMER_PWM_GPIO_PORT, BUZZER_TIMER_PWM_PIN);
+
+        HAL_NVIC_DisableIRQ(BUZZER_TIMER_IRQn);
     }
     else
     {
