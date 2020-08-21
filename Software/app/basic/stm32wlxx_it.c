@@ -182,5 +182,10 @@ void DMA1_Channel5_IRQHandler(void)
   HAL_DMA_IRQHandler(STNODE_BSP_debug_usart.hdmatx);
 }
 
+void TIM2_IRQHandler(void)
+{
+  HAL_TIM_IRQHandler(&STNODE_BSP_buzzer_timer);
+}
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
