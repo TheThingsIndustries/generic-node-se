@@ -235,15 +235,15 @@ typedef enum
  * Prescaler = (TIM2CLK / TIM2 counter clock) - 1
  * Prescaler = ((SystemCoreClock) /1 MHz) - 1
  */
-#define BUZZER_PRESCALER     (uint32_t)(((SystemCoreClock) / 100000) - 1)
+#define BUZZER_PRESCALER (uint32_t)(((SystemCoreClock) / 100000) - 1)
 /**
  * To get TIM2 output clock at 2.73 KHz, the period (BUZZER_PERIOD)) is computed as follows:
  * BUZZER_PERIOD = (TIM2 counter clock / TIM2 output clock) - 1 ~= 365
  *
  */
 #define BUZZER_PERIOD (365U)
-#define BUZZER_TIMER_PWM_PIN                    GPIO_PIN_15
-#define BUZZER_TIMER_PWM_GPIO_PORT              GPIOA
+#define BUZZER_TIMER_PWM_PIN GPIO_PIN_15
+#define BUZZER_TIMER_PWM_PORT GPIOA
 #define BUZZER_TIMER_CLK_ENABLE() __HAL_RCC_TIM2_CLK_ENABLE()
 #define BUZZER_TIMER_CLK_DISABLE() __HAL_RCC_TIM2_CLK_DISABLE()
 #define BUZZER_TIMER_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()

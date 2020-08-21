@@ -229,7 +229,9 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *timerHandle)
         gpio_init_structure.Pull = GPIO_PULLUP;
         gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
         gpio_init_structure.Alternate = BUZZER_TIMER_AF;
-        HAL_GPIO_Init(BUZZER_TIMER_PWM_GPIO_PORT, &gpio_init_structure);
+        HAL_GPIO_Init(BUZZER_TIMER_PWM_PORT, &gpio_init_structure);
+        HAL_GPIO_WritePin(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN, GPIO_PIN_RESET);
+
 
         HAL_NVIC_SetPriority(BUZZER_TIMER_IRQn, BUZZER_TIMER_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(BUZZER_TIMER_IRQn);
@@ -246,7 +248,7 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *timerHandle)
     {
          BUZZER_TIMER_CLK_DISABLE();
 
-        HAL_GPIO_DeInit(BUZZER_TIMER_PWM_GPIO_PORT, BUZZER_TIMER_PWM_PIN);
+        HAL_GPIO_DeInit(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN);
 
         HAL_NVIC_DisableIRQ(BUZZER_TIMER_IRQn);
     }

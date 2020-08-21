@@ -43,6 +43,7 @@ BUZZER_op_result_t BUZZER_Init(void)
     if (STNODE_BSP_BUZZER_TIM_Init(BUZZER_TIM_IRQHandler) == STNODE_BSP_ERROR_NONE)
     {
       init_flag = true;
+      buzzer_state = BUZZER_STATE_OFF;
       return BUZZER_OP_SUCCESS;
     }
     else
@@ -58,6 +59,7 @@ static void BUZZER_Off(void)
   BUZZER_Init();
 
   __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, 0);
+  HAL_GPIO_WritePin(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN, GPIO_PIN_RESET);
 
   buzzer_state = BUZZER_STATE_OFF;
 }
