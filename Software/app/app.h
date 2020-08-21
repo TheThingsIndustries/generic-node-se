@@ -32,6 +32,7 @@
 #include "SHTC3.h"
 #include "MX25R16.h"
 #include "LIS2DH12.h"
+#include "BUZZER.h"
 
 #define APP_PPRINTF(...)  do{ } while( UTIL_ADV_TRACE_OK != UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_OFF, __VA_ARGS__) ) //Polling Mode
 #define APP_TPRINTF(...)   do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_ON, __VA_ARGS__);} }while(0); //with timestamp
