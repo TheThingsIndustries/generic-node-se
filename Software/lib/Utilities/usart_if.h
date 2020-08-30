@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * @file   usart_if.h
-  * @author MCD Application Team
-  * @brief  Header file for the UART driver handling for hyperterminal communication
+  * @file    usart_if.h
+  * @author  MCD Application Team
+  * @brief   Header for USART interface configuration
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -84,6 +84,13 @@ void vcom_IRQHandler(void);
 * @return none
 */
 void vcom_DMA_TX_IRQHandler(void);
+
+/**
+  * @brief  Resume the UART and associated DMA (used by LPM)
+  * @param  none
+  * @return none
+  */
+void vcom_Resume(void);
 
 #ifdef __cplusplus
 }
