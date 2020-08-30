@@ -19,9 +19,9 @@
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
+
 #include "STNODE_bsp.h"
 
-static DMA_HandleTypeDef hdma_tx;
 static void msp_error_handler();
 
 void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
@@ -256,6 +256,26 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *timerHandle)
     {
         msp_error_handler();
     }
+}
+
+void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef* subghzHandle)
+{
+
+    /* SUBGHZ clock enable */
+    __HAL_RCC_SUBGHZSPI_CLK_ENABLE();
+
+    /* SUBGHZ interrupt Init */
+    HAL_NVIC_SetPriority(SUBGHZ_Radio_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(SUBGHZ_Radio_IRQn);
+}
+
+void HAL_SUBGHZ_MspDeInit(SUBGHZ_HandleTypeDef* subghzHandle)
+{
+    /* Peripheral clock disable */
+    __HAL_RCC_SUBGHZSPI_CLK_DISABLE();
+
+    /* SUBGHZ interrupt Deinit */
+    HAL_NVIC_DisableIRQ(SUBGHZ_Radio_IRQn);
 }
 
 static void msp_error_handler()
