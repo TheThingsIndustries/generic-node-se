@@ -60,23 +60,23 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &gpio_init_structure);
 
         /* Configure the DMA handler for Transmission process */
-        hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
-        hdma_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
-        hdma_tx.Init.PeriphInc = DMA_PINC_DISABLE;
-        hdma_tx.Init.MemInc = DMA_MINC_ENABLE;
-        hdma_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-        hdma_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-        hdma_tx.Init.Mode = DMA_NORMAL;
-        hdma_tx.Init.Priority = DMA_PRIORITY_LOW;
-        hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
+        STNODE_BSP_hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
+        STNODE_BSP_hdma_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+        STNODE_BSP_hdma_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+        STNODE_BSP_hdma_tx.Init.MemInc = DMA_MINC_ENABLE;
+        STNODE_BSP_hdma_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+        STNODE_BSP_hdma_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+        STNODE_BSP_hdma_tx.Init.Mode = DMA_NORMAL;
+        STNODE_BSP_hdma_tx.Init.Priority = DMA_PRIORITY_LOW;
+        STNODE_BSP_hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
 
-        if (HAL_DMA_Init(&hdma_tx) != HAL_OK)
+        if (HAL_DMA_Init(&STNODE_BSP_hdma_tx) != HAL_OK)
         {
             msp_error_handler();
         }
 
         /* Associate the initialized DMA handle to the UART handle */
-        __HAL_LINKDMA(uartHandle, hdmatx, hdma_tx);
+        __HAL_LINKDMA(uartHandle, hdmatx, STNODE_BSP_hdma_tx);
 
         /* NVIC configuration for DMA transfer complete interrupt */
         HAL_NVIC_SetPriority(DEBUG_USART_DMA_TX_IRQn, DEBUG_USART_DMA_PRIORITY, 1);
