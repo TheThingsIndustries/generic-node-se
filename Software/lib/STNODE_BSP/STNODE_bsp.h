@@ -26,6 +26,7 @@
 #include "STNODE_bsp_error.h"
 #include "STNODE_bsp_conf.h"
 #include "stm32wlxx_hal.h"
+#include "STNODE_radio.h"
 
 #ifdef __cplusplus
  extern "C" {
@@ -35,6 +36,8 @@ extern UART_HandleTypeDef STNODE_BSP_debug_usart;
 extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
 extern TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
+extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
+extern SUBGHZ_HandleTypeDef hsubghz; // `hsubghz` is used by radio_driver.c (can't rename!)
 
 /**
  * HW aliases for the board components

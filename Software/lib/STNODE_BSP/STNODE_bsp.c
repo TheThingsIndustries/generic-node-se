@@ -37,6 +37,7 @@ UART_HandleTypeDef STNODE_BSP_debug_usart;
 I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 SPI_HandleTypeDef STNODE_BSP_flash_spi;
 TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
+DMA_HandleTypeDef STNODE_BSP_hdma_tx;
 
 /**
  * LED APIs
