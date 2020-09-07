@@ -18,7 +18,6 @@
   */
 
 #include "app.h"
-#include "basic_lorawan.h"
 #include "Region.h" /* Needed for LORAWAN_DEFAULT_DATA_RATE */
 #include "stm32_timer.h"
 #include "sys_app.h"
@@ -33,11 +32,11 @@
 typedef enum TxEventType_e
 {
   /*!
-   * @brief AppdataTransmition issue based on timer every TxDutyCycleTime
+   * @brief Applicaiton data transmission issue based on timer with APP_TX_DUTYCYCLE
    */
   TX_ON_TIMER,
   /*!
-   * @brief AppdataTransmition external event plugged on OnSendEvent( )
+   * @brief Application data transmission on external event (button press)
    */
   TX_ON_EVENT
 } TxEventType_t;
@@ -45,35 +44,35 @@ typedef enum TxEventType_e
 /**
   * @brief  LoRa endNode send request
   * @param  none
-  * @retval none
+  * @return none
   */
 static void SendTxData(void);
 
 /**
   * @brief  TX timer callback function
   * @param  timer context
-  * @retval none
+  * @return none
   */
 static void OnTxTimerEvent(void *context);
 
 /**
   * @brief  LED timer callback function
   * @param  LED context
-  * @retval none
+  * @return none
   */
 static void OnTimerLedEvent(void *context);
 
 /**
   * @brief  join event callback function
   * @param  params
-  * @retval none
+  * @return none
   */
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams);
 
 /**
   * @brief  tx event callback function
   * @param  params
-  * @retval none
+  * @return none
   */
 static void OnTxData(LmHandlerTxParams_t *params);
 
@@ -81,7 +80,7 @@ static void OnTxData(LmHandlerTxParams_t *params);
   * @brief callback when LoRa endNode has received a frame
   * @param appData
   * @param params
-  * @retval None
+  * @return None
   */
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
 
@@ -185,8 +184,8 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   {
     static const char *slotStrings[] = {"1", "2", "C", "C Multicast", "B Ping-Slot", "B Multicast Ping-Slot"};
 
-    APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Indication ==========\r\n");
-    APP_LOG(TS_OFF, VLEVEL_H, "###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
+    APP_LOG(TS_OFF, VLEVEL_M, "\r\n ###### ========== MCPS-Indication ==========\r\n");
+    APP_LOG(TS_OFF, VLEVEL_M, "\r\n ###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
             params->DownlinkCounter, slotStrings[params->RxSlot], appData->Port, params->Datarate, params->Rssi, params->Snr);
     switch (appData->Port)
     {
@@ -221,10 +220,10 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
       }
       break;
     case LORAWAN_APP_PORT:
-      APP_LOG(TS_OFF, VLEVEL_H, "Recieved %d bytes on LORAWAN_APP_PORT: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
+      APP_LOG(TS_OFF, VLEVEL_M, "\r\n Recieved %d bytes on LORAWAN_APP_PORT: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
       break;
     default:
-      APP_LOG(TS_OFF, VLEVEL_H, "Recieved %d bytes on undefined port: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
+      APP_LOG(TS_OFF, VLEVEL_M, "\r\n Recieved %d bytes on undefined port: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
       break;
     }
   }

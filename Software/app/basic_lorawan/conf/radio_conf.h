@@ -26,7 +26,7 @@ extern "C" {
 #include "stm32_mem.h"
 #include "mw_log_conf.h"     /* mw trace conf */
 #include "STNODE_bsp.h"
-#include "basic_lorawan.h"
+#include "app_conf.h"
 
 
 #define DBG_GPIO_RADIO_TX(set_rst) //DBG_GPIO_##set_rst##_LINE(DGB_LINE2_PORT, DGB_LINE2_PIN);

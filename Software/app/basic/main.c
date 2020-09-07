@@ -22,12 +22,6 @@
 
 #include "app.h"
 
-#define NUMBER_TEMPRETURE_SENSOR_READ 5
-#define TEMPRETURE_SENSOR_READ_INTERVAL 1000
-
-#define NUMBER_ACCLEROMETER_READ 5
-#define ACCELEROMETER_READ_INTERVAL 1000
-
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
