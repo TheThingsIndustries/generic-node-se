@@ -24,6 +24,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/basic
+    ${PROJECT_SOURCE_DIR}/app/basic/conf
     ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3

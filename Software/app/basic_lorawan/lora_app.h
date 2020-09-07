@@ -88,7 +88,7 @@ extern "C" {
 /**
   * @brief  Init Lora Application
   * @param None
-  * @retval None
+  * @return None
   */
 void LoRaWAN_Init(void);
 

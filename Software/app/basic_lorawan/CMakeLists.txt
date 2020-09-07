@@ -34,15 +34,9 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
-    ${PROJECT_SOURCE_DIR}/app
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
-    ${PROJECT_SOURCE_DIR}/lib/SHTC3
-    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
-    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
-    ${PROJECT_SOURCE_DIR}/lib/BUZZER
     )
 target_compile_definitions(lorawan
     PUBLIC
@@ -78,7 +72,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
-    ${PROJECT_SOURCE_DIR}/lib/STNODE_Hal
+    ${PROJECT_SOURCE_DIR}/lib/STNODE_HAl
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635

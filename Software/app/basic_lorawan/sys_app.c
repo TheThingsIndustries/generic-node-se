@@ -20,32 +20,31 @@
 #include <stdio.h>
 #include "app.h"
 #include "sys_app.h"
-#include "basic_lorawan.h"
 #include "stm32_seq.h"
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
-#include "rtc_if.h"
+#include "STNODE_rtc.h"
 
 #define MAX_TS_SIZE (int)16
 
 /**
   * @brief  Set all pins such to minimized consumption (necessary for some STM32 families)
   * @param none
-  * @retval None
+  * @return None
   */
 static void Gpio_PreInit(void);
 
 /**
   * @brief  Initiliszes the system for debugging or low power mode debending on DEBUGGER_ON
   * @param none
-  * @retval None
+  * @return None
   */
 static void DBG_Init(void);
 /**
 
   * @brief Returns sec and msec based on the systime in use
   * @param none
-  * @retval  none
+  * @return  none
   */
 static void TimestampNow(uint8_t *buff, uint16_t *size);
 
@@ -57,7 +56,8 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 /**
   * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
   * @param none
-  * @retval  none
+  * @return  none
+  * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/st-node/issues/57
   */
 void SystemApp_Init(void)
 {
@@ -96,7 +96,7 @@ void SystemApp_Init(void)
 /**
   * @brief redefines __weak function in stm32_seq.c such to enter low power
   * @param none
-  * @retval  none
+  * @return  none
   */
 void UTIL_SEQ_Idle(void)
 {
@@ -257,7 +257,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
   * @brief This function configures the source of the time base.
   * @brief  don't enable systick
   * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
+  * @return HAL status
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -268,21 +268,21 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 /**
   * @brief Provide a tick value in millisecond measured using RTC
   * @note This function overwrites the __weak one from HAL
-  * @retval tick value
+  * @return tick value
   */
 uint32_t HAL_GetTick(void)
 {
-  return RTC_IF_GetTimerValue();
+  return STNODE_RTC_GetTimerValue();
 }
 
 /**
   * @brief This function provides delay (in ms)
   * @param Delay: specifies the delay time length, in milliseconds.
-  * @retval None
+  * @return None
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  RTC_IF_DelayMs(Delay); /* based on RTC */
+  STNODE_RTC_DelayMs(Delay); /* based on RTC */
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

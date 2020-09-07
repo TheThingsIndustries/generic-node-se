@@ -35,4 +35,11 @@
 /* LOW_POWER_DISABLE = 1 : LowPowerMode disabled : MCU enters sleep mode only */
 #define LOW_POWER_DISABLE 0
 
+#define NUMBER_TEMPRETURE_SENSOR_READ 5
+#define TEMPRETURE_SENSOR_READ_INTERVAL 1000
+
+#define NUMBER_ACCLEROMETER_READ 5
+#define ACCELEROMETER_READ_INTERVAL 1000
+
+
 #endif /* APP_CONF_H */

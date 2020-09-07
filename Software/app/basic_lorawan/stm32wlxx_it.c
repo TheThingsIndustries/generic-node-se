@@ -106,7 +106,7 @@ void SysTick_Handler(void)
   */
 void TAMP_STAMP_LSECSS_SSRU_IRQHandler(void)
 {
-  HAL_RTCEx_SSRUIRQHandler(&hrtc);
+  HAL_RTCEx_SSRUIRQHandler(&STNODE_BSP_rtc);
 }
 
 /**
@@ -140,7 +140,7 @@ void DMA1_Channel5_IRQHandler(void)
   */
 void RTC_Alarm_IRQHandler(void)
 {
-  HAL_RTC_AlarmIRQHandler(&hrtc);
+  HAL_RTC_AlarmIRQHandler(&STNODE_BSP_rtc);
 }
 
 /**
