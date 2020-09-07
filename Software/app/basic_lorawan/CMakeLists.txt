@@ -55,6 +55,7 @@ file(GLOB MAIN_SRC
         "${PROJECT_SOURCE_DIR}/app/basic_lorawan/*.c"
         "${PROJECT_SOURCE_DIR}/target/*.c"
         "${PROJECT_SOURCE_DIR}/lib/STNODE_BSP/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/STNODE_HAL/*.c"
         "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
         "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
         "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
@@ -77,6 +78,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/STNODE_Hal
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635

@@ -232,7 +232,6 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *timerHandle)
         HAL_GPIO_Init(BUZZER_TIMER_PWM_PORT, &gpio_init_structure);
         HAL_GPIO_WritePin(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN, GPIO_PIN_RESET);
 
-
         HAL_NVIC_SetPriority(BUZZER_TIMER_IRQn, BUZZER_TIMER_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(BUZZER_TIMER_IRQn);
     }
@@ -246,7 +245,7 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *timerHandle)
 {
     if (timerHandle->Instance == BUZZER_TIMER)
     {
-         BUZZER_TIMER_CLK_DISABLE();
+        BUZZER_TIMER_CLK_DISABLE();
 
         HAL_GPIO_DeInit(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN);
 
@@ -258,9 +257,8 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *timerHandle)
     }
 }
 
-void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef* subghzHandle)
+void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef *subghzHandle)
 {
-
     /* SUBGHZ clock enable */
     __HAL_RCC_SUBGHZSPI_CLK_ENABLE();
 
@@ -269,13 +267,53 @@ void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef* subghzHandle)
     HAL_NVIC_EnableIRQ(SUBGHZ_Radio_IRQn);
 }
 
-void HAL_SUBGHZ_MspDeInit(SUBGHZ_HandleTypeDef* subghzHandle)
+void HAL_SUBGHZ_MspDeInit(SUBGHZ_HandleTypeDef *subghzHandle)
 {
     /* Peripheral clock disable */
     __HAL_RCC_SUBGHZSPI_CLK_DISABLE();
 
     /* SUBGHZ interrupt Deinit */
     HAL_NVIC_DisableIRQ(SUBGHZ_Radio_IRQn);
+}
+
+void HAL_RTC_MspInit(RTC_HandleTypeDef *rtcHandle)
+{
+
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+    if (rtcHandle->Instance == RTC)
+    {
+        PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+        PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+        {
+            msp_error_handler();
+        }
+
+        /* RTC clock enable */
+        __HAL_RCC_RTC_ENABLE();
+        __HAL_RCC_RTCAPB_CLK_ENABLE();
+
+        /* RTC interrupt Init */
+        HAL_NVIC_SetPriority(TAMP_STAMP_LSECSS_SSRU_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(TAMP_STAMP_LSECSS_SSRU_IRQn);
+        HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
+    }
+}
+
+void HAL_RTC_MspDeInit(RTC_HandleTypeDef *rtcHandle)
+{
+    if (rtcHandle->Instance == RTC)
+    {
+        /* Peripheral clock disable */
+        __HAL_RCC_RTC_DISABLE();
+        __HAL_RCC_RTCAPB_CLK_DISABLE();
+
+        /* RTC interrupt Deinit */
+        HAL_NVIC_DisableIRQ(TAMP_STAMP_LSECSS_SSRU_IRQn);
+        HAL_NVIC_DisableIRQ(RTC_Alarm_IRQn);
+    }
 }
 
 static void msp_error_handler()
