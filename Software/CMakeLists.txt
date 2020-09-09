@@ -23,9 +23,9 @@ if(NOT CMAKE_BUILD_TYPE)
     message(WARNING "[WARN] CMAKE_BUILD_TYPE not specified: Using ${CMAKE_BUILD_TYPE} by default")
 endif()
 
-if(NOT TARGET_GROUP)
-    set(TARGET_GROUP production CACHE STRING "Choose the target group." FORCE)
-    message(WARNING "[WARN] TARGET_GROUP not specified: Using ${TARGET_GROUP} by default")
+if(NOT TARGET_APP)
+    set(TARGET_APP basic CACHE STRING "Choose the target app." FORCE)
+    message(WARNING "[WARN] TARGET_APP not specified: Using ${TARGET_APP} app by default")
 endif()
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
@@ -34,6 +34,9 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 #-------------------
 enable_language(C ASM)
 project(main)
+set (APP_LIST
+"basic"
+"basic_lorawan")
 #-------------------
 # MCU Setup
 #-------------------
@@ -47,6 +50,10 @@ set(LINKER_SCRIPT ${MCU_DIR}/stm32wle5xx_flash.ld)
 # HAL Setup
 #-------------------
 set(HAL_DIR target/STM32WLxx_HAL_Driver)
+#-------------------
+# LoRaWAN Setup
+#-------------------
+set(LORAWAN_DIR lib/STM32WLxx_LoRaWAN)
 #-------------------
 # CMSIS Setup
 #-------------------
@@ -181,86 +188,17 @@ else()
     ${OBJECT_GEN_FLAGS} \
     ")
 endif()
-# Actual build which will go onto the board
-if(TARGET_GROUP STREQUAL production)
-    #-------------------
-    # HAL library
-    #-------------------
-    file(GLOB HAL_SRC
-        "${HAL_DIR}/Src/*.c"
-        )
-    add_library(hal STATIC
-        ${HAL_SRC}
-        )
-    target_include_directories(hal
-        PUBLIC
-        ${HAL_DIR}/Inc
-        ${MCU_DIR}/Include
-        ${CMSIS_DIR}/Core/Include
-        PRIVATE
-        ${PROJECT_SOURCE_DIR}/target
-        )
-    target_compile_definitions(hal
-        PUBLIC
-        ${MCU}
-        )
-    #-------------------
-    # Main elf
-    #-------------------
-    file(GLOB MAIN_SRC
-        "app/basic/*.c"
-        "target/*.c"
-        "lib/STNODE_BSP/*.c"
-        "lib/Utilities/*.c"
-        "lib/SHTC3/*.c"
-        "lib/MX25R1635/*.c"
-        "lib/LIS2DH12/*.c"
-        "lib/BUZZER/*.c"
-        )
-    set(SOURCES
-        ${MAIN_SRC}
-        ${STARTUP_FILE}
-        ${SYSTEM_FILE}
-        )
-    add_executable(${PROJECT_NAME}.elf
-        ${SOURCES}
-        )
-    target_include_directories(${PROJECT_NAME}.elf
-        PUBLIC
-        ${PROJECT_SOURCE_DIR}/target
-        ${PROJECT_SOURCE_DIR}/app
-        ${PROJECT_SOURCE_DIR}/app/basic
-        ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
-        ${PROJECT_SOURCE_DIR}/lib/Utilities
-        ${PROJECT_SOURCE_DIR}/lib/SHTC3
-        ${PROJECT_SOURCE_DIR}/lib/MX25R1635
-        ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
-        ${PROJECT_SOURCE_DIR}/lib/BUZZER
-        )
-    target_link_libraries(${PROJECT_NAME}.elf
-        PUBLIC
-        hal
-        )
-    target_compile_definitions(${PROJECT_NAME}.elf
-        PUBLIC
-        ${MCU}
-        SEMIHOSTING=${SEMIHOSTING}
-        )
-        # Create output in hex and binary format
-        create_bin_output(${PROJECT_NAME})
-        create_hex_output(${PROJECT_NAME})
-        # Add additional files to the make clean
-        set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
-        "${PROJECT_NAME}.map"
-        "${PROJECT_NAME}.bin"
-        "${PROJECT_NAME}.hex"
-    )
+
+# Buidling Specified Application
+if(TARGET_APP IN_LIST APP_LIST)
+    add_subdirectory(target)
+    add_subdirectory(app/${TARGET_APP})
 else()
-    message(FATAL_ERROR "Given TARGET_GROUP unknown")
+    message(FATAL_ERROR "Given TARGET_APP unknown")
 endif()
 
 # Unset all cache
 unset(SEMIHOSTING)
 unset(CMAKE_TOOLCHAIN_FILE)
 unset(CMAKE_BUILD_TYPE)
-unset(TARGET_GROUP)
+unset(TARGET_APP)

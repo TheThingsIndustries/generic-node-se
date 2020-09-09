@@ -22,6 +22,8 @@ $ git clone --branch develop https://github.com/TheThingsIndustries/st-node.git
 2. Set `TOOLCHAIN_PREFIX` in [cross.cmake](./cross.cmake)
 3. Install [MinGW](http://mingw.org) for Windows environment and make sure `mingw32-make.exe` can be used from cmd (as a recognized command)
 
+> Note: you can configure TARGET_APP to any [app](./app) you desire.
+
 ## Usage (MAC OSX & Linux)
 
 ### Debug build commands
@@ -32,7 +34,7 @@ $ mkdir -p build/debug
 
 $ cd build/debug
 
-$ cmake ../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_GROUP=production
+$ cmake ../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_APP=basic
 
 $ make
 ```
@@ -44,7 +46,7 @@ $ mkdir -p build/release
 
 $ cd build/release
 
-$ cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_GROUP=production
+$ cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_APP=basic
 
 $ make
 ```
@@ -59,7 +61,7 @@ $ mkdir build\debug
 
 $ cd build\debug
 
-$ cmake -G "MinGW Makefiles" ../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_GROUP=production
+$ cmake -G "MinGW Makefiles" ../.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_APP=basic
 
 $ mingw32-make.exe
 ```
@@ -72,7 +74,7 @@ $ mkdir build\release
 
 $ cd build\release
 
-$ cmake -G "MinGW Makefiles" ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_GROUP=production
+$ cmake -G "MinGW Makefiles" ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cross.cmake -DTARGET_APP=basic
 
 $ mingw32-make.exe
 ```

@@ -10,3 +10,5 @@ This folder contains the libraries developed to support the application layer.
 [LIS2DH12](./LIS2DH12) contains the Accelerometer[LIS2DH12](https://www.st.com/en/mems-and-sensors/lis2dh12.html) driver and support functions.
 
 [BUZZER](./BUZZER) contains the Piezo Buzzer driver and support functions.
+
+[STM32WLxx_LoRaWAN](./STM32WLxx_LoRaWAN) contains the Sub GHz physical layer driver (SX1262 transceiver) and the LoRaWAN stack.
