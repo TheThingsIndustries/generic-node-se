@@ -37,6 +37,8 @@ UART_HandleTypeDef STNODE_BSP_debug_usart;
 I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 SPI_HandleTypeDef STNODE_BSP_flash_spi;
 TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
+DMA_HandleTypeDef STNODE_BSP_hdma_tx;
+RTC_HandleTypeDef STNODE_BSP_rtc;
 
 /**
  * LED APIs
@@ -620,6 +622,41 @@ int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
   }
   HAL_TIM_RegisterCallback(&STNODE_BSP_buzzer_timer, HAL_TIM_PERIOD_ELAPSED_CB_ID, cb);
   if (HAL_TIM_PWM_Start_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  return STNODE_BSP_ERROR_NONE;
+}
+
+int32_t STNODE_BSP_RTC_Init(void)
+{
+  RTC_AlarmTypeDef sAlarm = {0};
+
+  STNODE_BSP_rtc.Instance = RTC;
+  STNODE_BSP_rtc.Init.AsynchPrediv = RTC_PREDIV_A;
+  STNODE_BSP_rtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  STNODE_BSP_rtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
+  STNODE_BSP_rtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  STNODE_BSP_rtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  STNODE_BSP_rtc.Init.OutPutPullUp = RTC_OUTPUT_PULLUP_NONE;
+  STNODE_BSP_rtc.Init.BinMode = RTC_BINARY_ONLY;
+  if (HAL_RTC_Init(&STNODE_BSP_rtc) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  // Initialize RTC and set the Time and Date
+  if (HAL_RTCEx_SetSSRU_IT(&STNODE_BSP_rtc) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  // Enable the Alarm A
+  sAlarm.BinaryAutoClr = RTC_ALARMSUBSECONDBIN_AUTOCLR_NO;
+  sAlarm.AlarmTime.SubSeconds = 0x0;
+  sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
+  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDBINMASK_NONE;
+  sAlarm.Alarm = RTC_ALARM_A;
+  if (HAL_RTC_SetAlarm_IT(&STNODE_BSP_rtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
   {
     return STNODE_BSP_ERROR_NO_INIT;
   }

@@ -26,6 +26,7 @@
 #include "STNODE_bsp_error.h"
 #include "STNODE_bsp_conf.h"
 #include "stm32wlxx_hal.h"
+#include "STNODE_radio.h"
 
 #ifdef __cplusplus
  extern "C" {
@@ -35,6 +36,9 @@ extern UART_HandleTypeDef STNODE_BSP_debug_usart;
 extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
 extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
 extern TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
+extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
+extern RTC_HandleTypeDef STNODE_BSP_rtc;
+extern SUBGHZ_HandleTypeDef hsubghz; // `hsubghz` is used by radio_driver.c (can't rename!)
 
 /**
  * HW aliases for the board components
@@ -254,6 +258,10 @@ typedef enum
 
 #define BUZZER_TIMER_PRIORITY 0
 
+#define RTC_N_PREDIV_S 10
+#define RTC_PREDIV_S ((1 << RTC_N_PREDIV_S) - 1)
+#define RTC_PREDIV_A ((1 << (15 - RTC_N_PREDIV_S)) - 1)
+
 /**
  * BSP APIs
  */
@@ -292,6 +300,8 @@ int32_t STNODE_BSP_Sensor_I2C1_Init(void);
 int32_t STNODE_BSP_Flash_SPI_Init(void);
 
 int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
+
+int32_t STNODE_BSP_RTC_Init(void);
 
 #ifdef __cplusplus
 }

@@ -26,4 +26,20 @@
 
 #define APP_LOG_ENABLED 1
 
+/* if ON (=1) it enables the debbugger plus 4 dgb pins */
+/* if OFF (=0) the debugger is OFF (lower consumption) */
+#define DEBUGGER_ON       0
+
+
+/* LOW_POWER_DISABLE = 0 : LowPowerMode enabled : MCU enters stop2 mode*/
+/* LOW_POWER_DISABLE = 1 : LowPowerMode disabled : MCU enters sleep mode only */
+#define LOW_POWER_DISABLE 0
+
+#define NUMBER_TEMPRETURE_SENSOR_READ 5
+#define TEMPRETURE_SENSOR_READ_INTERVAL 1000
+
+#define NUMBER_ACCLEROMETER_READ 5
+#define ACCELEROMETER_READ_INTERVAL 1000
+
+
 #endif /* APP_CONF_H */

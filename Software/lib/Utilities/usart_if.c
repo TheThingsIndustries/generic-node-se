@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * @file  : usart_if.c
+  * @file    usart_if.c
   * @author  MCD Application Team
-  * @brief   interfaces UART MX driver for hyperterminal communication
+  * @brief   Configuration of UART MX driver interface for hyperterminal communication
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -72,11 +72,9 @@ UTIL_ADV_TRACE_Status_t vcom_DeInit(void)
   /*##-3- Disable the NVIC for DMA ###########################################*/
   /* temorary while waiting CR 50840: MX implementation of  MX_DMA_DeInit() */
   /* For the time being user should change mannualy the channel according to the MX settings */
-  /* USER CODE BEGIN 1 */
   HAL_NVIC_DisableIRQ(DMA1_Channel5_IRQn);
 
   return UTIL_ADV_TRACE_OK;
-  /* USER CODE END 1 */
 }
 
 void vcom_Trace(uint8_t *p_data, uint16_t size)
@@ -124,6 +122,14 @@ UTIL_ADV_TRACE_Status_t vcom_ReceiveInit(void (*RxCb)(uint8_t *rxChar, uint16_t 
   HAL_UART_Receive_IT(&UartHandle, &charRx, 1);
 
   return UTIL_ADV_TRACE_OK;
+}
+
+void vcom_Resume(void)
+{
+  /*to re-enable lost UART & DMA settings*/
+  HAL_UART_Init(&STNODE_BSP_debug_usart);
+
+  HAL_DMA_Init(&STNODE_BSP_hdma_tx);
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
