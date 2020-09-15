@@ -17,38 +17,31 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20008000;    /* end of RAM */
+_estack = ORIGIN(RAM1) + LENGTH(RAM1); /* end of "SRAM1" Ram type memory */
 
-/* Set minimum size for stack and dynamic memory. */
-/* (The linker will generate an error if there is
- *  less than this much RAM leftover.)
- *  For the current application, Default amount is enough
- *  but as the complexity grow, you will have to
- *  increase this */
+_Min_Heap_Size  = 0x200; /* required amount of heap  */
+_Min_Stack_Size = 0x800 ; /* required amount of stack */
 
-_Min_Heap_Size = 0x200;      /* required amount of heap  */
-_Min_Stack_Size = 0x800;    /* required amount of stack */
-
-/* Specify the memory areas */
+/* Memories definition */
 MEMORY
 {
-    RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 32K
-    RAM2 (xrw)      : ORIGIN = 0x20008000, LENGTH = 32K
-    FLASH (rx)      : ORIGIN = 0x08000000, LENGTH = 256K
+  ROM    (rx)    : ORIGIN = 0x08000000, LENGTH = 256K   /* Flash memory dedicated to CM4 */
+  RAM1   (xrw)   : ORIGIN = 0x20000000, LENGTH = 32K    /* Non-backup SRAM1 dedicated to CM4 */
+  RAM2   (xrw)   : ORIGIN = 0x20008000, LENGTH = 32K    /* Backup SRAM2 dedicated to CM4 */
 }
 
-/* Define output sections */
+/* Sections */
 SECTIONS
 {
-  /* The startup code goes first into FLASH */
+  /* The startup code into "ROM" Rom type memory */
   .isr_vector :
   {
     . = ALIGN(8);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(8);
-  } >FLASH
+  } >ROM
 
-  /* The program code and other data goes into FLASH */
+  /* The program code and other data into "ROM" Rom type memory */
   .text :
   {
     . = ALIGN(8);
@@ -63,63 +56,64 @@ SECTIONS
 
     . = ALIGN(8);
     _etext = .;        /* define a global symbols at end of code */
-  } >FLASH
+  } >ROM
 
-  /* Constant data goes into FLASH */
+  /* Constant data into "ROM" Rom type memory */
   .rodata :
   {
     . = ALIGN(8);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(8);
-  } >FLASH
+  } >ROM
 
-  .ARM.extab   :
-  {
-  . = ALIGN(8);
-  *(.ARM.extab* .gnu.linkonce.armextab.*)
-  . = ALIGN(8);
-  } >FLASH
+  .ARM.extab   : {
+    . = ALIGN(8);
+    *(.ARM.extab* .gnu.linkonce.armextab.*)
+    . = ALIGN(8);
+  } >ROM
+
   .ARM : {
-	. = ALIGN(8);
+    . = ALIGN(8);
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-	. = ALIGN(8);
-  } >FLASH
+    . = ALIGN(8);
+  } >ROM
 
   .preinit_array     :
   {
-	. = ALIGN(8);
+    . = ALIGN(8);
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-	. = ALIGN(8);
-  } >FLASH
+    . = ALIGN(8);
+  } >ROM
 
   .init_array :
   {
-	. = ALIGN(8);
+    . = ALIGN(8);
     PROVIDE_HIDDEN (__init_array_start = .);
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-	. = ALIGN(8);
-  } >FLASH
+    . = ALIGN(8);
+  } >ROM
+
   .fini_array :
   {
-	. = ALIGN(8);
+    . = ALIGN(8);
     PROVIDE_HIDDEN (__fini_array_start = .);
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
-	. = ALIGN(8);
-  } >FLASH
+    . = ALIGN(8);
+  } >ROM
 
-  /* used by the startup to initialize data */
+  /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);
 
-  /* Initialized data sections goes into RAM, load LMA copy after code */
+  /* Initialized data sections into "SRAM1" Ram type memory */
   .data :
   {
     . = ALIGN(8);
@@ -129,26 +123,48 @@ SECTIONS
 
     . = ALIGN(8);
     _edata = .;        /* define a global symbol at data end */
-  } >RAM AT> FLASH
 
+  } >RAM1 AT> ROM
 
-  /* Uninitialized data section */
-  . = ALIGN(4);
+  /* Uninitialized data section into "SRAM1" Ram type memory */
+  . = ALIGN(8);
   .bss :
   {
-    /* This is used by the startup in order to initialize the .bss secion */
+    /* This is used by the startup in order to initialize the .bss section */
     _sbss = .;         /* define a global symbol at bss start */
     __bss_start__ = _sbss;
     *(.bss)
     *(.bss*)
     *(COMMON)
 
-    . = ALIGN(4);
+    . = ALIGN(8);
     _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
-  } >RAM
+  } >RAM1
 
-  /* User_heap_stack section, used to check that there is enough RAM left */
+  /* Data section into "SRAM1" Ram type memory: Non-backup SRAM1 dedicated to CM4 */
+  . = ALIGN(8);
+  RAM1_region :
+  {
+    _sRAM_region = .;         /* define a global symbol at section start */
+    *(.RAM1_region)
+
+    . = ALIGN(8);
+    _eRAM1_region = .;         /* define a global symbol at section end */
+  } >RAM1
+
+  /* Data section into "SRAM2" Ram type memory: Backup SRAM2 dedicated to CM4 */
+  . = ALIGN(8);
+  RAM2_region :
+  {
+    _sRAM2_region = .;         /* define a global symbol at section start */
+    *(.RAM2_region)
+
+    . = ALIGN(8);
+    _eRAM2_region = .;         /* define a global symbol at section end */
+  } >RAM2
+
+  /* User_heap_stack section, used to check that there is enough "SRAM1" Ram  type memory left */
   ._user_heap_stack :
   {
     . = ALIGN(8);
@@ -157,11 +173,9 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >RAM
+  } >RAM1
 
-
-
-  /* Remove information from the standard libraries */
+  /* Remove information from the compiler libraries */
   /DISCARD/ :
   {
     libc.a ( * )
