@@ -12,3 +12,7 @@ This folder contains the libraries developed to support the application layer.
 [BUZZER](./BUZZER) contains the Piezo Buzzer driver and support functions.
 
 [STM32WLxx_LoRaWAN](./STM32WLxx_LoRaWAN) contains the Sub GHz physical layer driver (SX1262 transceiver) and the LoRaWAN stack.
+
+[ATECC608A-TNGLORA](./ATECC608A-TNGLORA) contains the [ATECC608A-TNGLORA](https://www.microchip.com/wwwproducts/en/ATECC608A-TNGLORA) secure element hal and support funciotns.
+
+[cryptoauthlib](./cryptoauthlib) contains Microchip support library for ATECC608A-TNGLORA.
