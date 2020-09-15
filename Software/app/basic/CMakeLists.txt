@@ -10,6 +10,13 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
     "${PROJECT_SOURCE_DIR}/lib/LIS2DH12/*.c"
     "${PROJECT_SOURCE_DIR}/lib/BUZZER/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/hashes/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal/atca_hal.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/host/*.c"
     )
 set(SOURCES
     ${MAIN_SRC}
@@ -31,6 +38,13 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635
     ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
     ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/hashes
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/host
     )
 target_link_libraries(${PROJECT_NAME}.elf
     PUBLIC
