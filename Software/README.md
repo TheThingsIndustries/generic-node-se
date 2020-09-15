@@ -17,7 +17,7 @@ The software uses `CMAKE` and `arm-none-eabi-gcc` toolchain with the ST SOC `STM
 ## Set-up
 1. Clone project & checkout `develop` branch
 ```
-$ git clone --branch develop https://github.com/TheThingsIndustries/st-node.git
+$ git clone --branch develop --recurse-submodules https://github.com/TheThingsIndustries/st-node.git
 ```
 2. Set `TOOLCHAIN_PREFIX` in [cross.cmake](./cross.cmake)
 3. Install [MinGW](http://mingw.org) for Windows environment and make sure `mingw32-make.exe` can be used from cmd (as a recognized command)
