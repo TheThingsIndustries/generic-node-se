@@ -25,8 +25,12 @@
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
+void led_toggle(uint8_t n_toggles, uint32_t toggle_delay);
+void buzzer_play(uint8_t n_plays, uint32_t play_delay);
+void secure_element_read_info(void);
 void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay);
+void flash_read_write(void);
 
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
@@ -35,80 +39,61 @@ void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 
 int main(void)
 {
-  int16_t status;
-  MxChip mxic;
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   SystemClock_Config();
-
-  STNODE_BSP_LED_Init(LED_BLUE);
-  STNODE_BSP_LED_Init(LED_RED);
 
   UTIL_ADV_TRACE_Init();
   UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
 
-  APP_PPRINTF("\r\n Starting STNODE basic app \r\n");
+  APP_PPRINTF("\r\n -------------- Starting STNODE basic app -------------- \r\n");
 
+  APP_PPRINTF("\r\n Testing LED functionality \r\n");
+  led_toggle(NUMBER_LED_TOGGLE, LED_TOGGLE_INTERVAL);
+
+  APP_PPRINTF("\r\n Testing secure element functionality \r\n");
+  APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_SECURE_ELEMENT \r\n");
+  STNODE_BSP_LS_Init(LOAD_SWITCH_SECURE_ELEMENT);
+  STNODE_BSP_LS_On(LOAD_SWITCH_SECURE_ELEMENT);
+  HAL_Delay(100);
+
+  STNODE_BSP_SEC_ELM_I2C2_Init();
+  HAL_Delay(100);
+
+  APP_PPRINTF("\r\n 2) Attempting to read secure element serial number \r\n");
+  secure_element_read_info();
+
+  APP_PPRINTF("\r\n Testing on board sensors functionality \r\n");
+  APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_SENSORS \r\n");
   STNODE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   STNODE_BSP_LS_On(LOAD_SWITCH_SENSORS);
   HAL_Delay(100);
 
   STNODE_BSP_Sensor_I2C1_Init();
-  HAL_Delay(100);
 
+  APP_PPRINTF("\r\n 2) Attempting to read sensors data \r\n");
   tempreture_sensor_read_data_polling(NUMBER_TEMPRETURE_SENSOR_READ, TEMPRETURE_SENSOR_READ_INTERVAL);
   accelerometer_read_data_polling(NUMBER_ACCLEROMETER_READ, ACCELEROMETER_READ_INTERVAL);
 
+  APP_PPRINTF("\r\n Testing on board external flash functionality \r\n");
+  APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_FLASH \r\n");
   STNODE_BSP_LS_Init(LOAD_SWITCH_FLASH);
   STNODE_BSP_LS_On(LOAD_SWITCH_FLASH);
   HAL_Delay(100);
 
-  status = MX25R16_Init(&mxic);
-  if (status != MXST_SUCCESS)
-  {
-    APP_PPRINTF("\r\n Failed to init external SPI flash (MX25R1635F)\r\n");
-  }
+  APP_PPRINTF("\r\n 2) Attempting to read & write to external flash \r\n");
+  flash_read_write();
 
-  status = MxSimpleTest(&mxic);
-  if (status == MXST_SUCCESS)
-  {
-    APP_PPRINTF("\r\n Simple external SPI flash (MX25R1635F) test passed!\r\n");
-  }
-  else
-  {
-    APP_PPRINTF("\r\n Simple external SPI flash test (MX25R1635F) failed, check UART logs for more details\r\n");
-  }
+  APP_PPRINTF("\r\n Testing Buzzer functionality \r\n");
+  // buzzer_play(NUMBER_BUZZER_PLAY, BUZZER_PLAY_INTERVAL);
 
-  if (BUZZER_Init() == BUZZER_OP_SUCCESS)
-  {
-    APP_PPRINTF("\r\n Testing Buzzer!\r\n");
-    BUZZER_SetState(BUZZER_STATE_TICK);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_DODO);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_DODODO);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_WARNING);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_DANGER);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_RING);
-    HAL_Delay(1000);
-    BUZZER_SetState(BUZZER_STATE_OFF);
-  }
-  else
-  {
-    APP_PPRINTF("\r\n Failed to test the Buzzer!\r\n");
-  }
-
+  APP_PPRINTF("\r\n -------------- Finished STNODE basic app -------------- \r\n");
   while (1)
   {
     STNODE_BSP_LED_Toggle(LED_BLUE);
-    /* Insert delay 100 ms */
     HAL_Delay(100);
     STNODE_BSP_LED_Toggle(LED_RED);
-    /* Insert delay 100 ms */
     HAL_Delay(100);
   }
   return 0;

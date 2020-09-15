@@ -115,7 +115,7 @@ void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay)
             acceleration_mg[2] =
                 lis2dh12_from_fs2_hr_to_mg(data_raw_acceleration.i16bit[2]);
 
-            APP_PPRINTF("Accelerometer acceleration [mg]: X: %4.2f\t Y: %4.2f\t Z: %4.2f\r\n",
+            APP_PPRINTF("\r\n Accelerometer acceleration [mg]: X: %4.2f\t Y: %4.2f\t Z: %4.2f\r\n",
                         acceleration_mg[0], acceleration_mg[1], acceleration_mg[2]);
         }
 
@@ -128,7 +128,7 @@ void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay)
             temperature_degC =
                 lis2dh12_from_lsb_hr_to_celsius(data_raw_temperature.i16bit);
 
-            APP_PPRINTF("Accelerometer Temperature sensor [degC]:%6.2f\r\n",
+            APP_PPRINTF("\r\n Accelerometer Temperature sensor [degC]: %6.2f\r\n",
                         temperature_degC);
         }
         HAL_Delay(read_delay);
