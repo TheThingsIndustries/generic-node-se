@@ -109,7 +109,7 @@ if(CMAKE_CROSSCOMPILING STREQUAL "1")
     message(STATUS "[INFO] Startup file used is ${STARTUP_FILE}")
     # Control ARM Semihosting support
     if(NOT SEMIHOSTING)
-        set(SEMIHOSTING 1)
+        set(SEMIHOSTING 0)
         message(WARNING "[WARN] Semihosting support not specified: Enabling by default")
     endif()
     #-------------------
