@@ -34,6 +34,7 @@
 
 extern UART_HandleTypeDef STNODE_BSP_debug_usart;
 extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
+extern I2C_HandleTypeDef STNODE_BSP_sec_elm_i2c2;
 extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
 extern TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
 extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
@@ -206,6 +207,27 @@ typedef enum
 #define SENSOR_I2C1_SDA_GPIO_PORT              GPIOA
 #define SENSOR_I2C1_SCL_SDA_AF                 GPIO_AF4_I2C1
 
+#define SEC_ELM_I2C2                  I2C2
+#define SEC_ELM_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
+#define SEC_ELM_I2C2_TIMOUT           100U //Read and write operattions timeout in ms
+#define SEC_ELM_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
+#define SEC_ELM_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
+
+#define SEC_ELM_I2C2_CLK_ENABLE()    __HAL_RCC_I2C2_CLK_ENABLE()
+#define SEC_ELM_I2C2_CLK_DISABLE()   __HAL_RCC_I2C2_CLK_DISABLE()
+
+#define SEC_ELM_I2C2_SDA_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+#define SEC_ELM_I2C2_SCL_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define SEC_ELM_I2C2_FORCE_RESET()              __HAL_RCC_I2C2_FORCE_RESET()
+#define SEC_ELM_I2C2_RELEASE_RESET()            __HAL_RCC_I2C2_RELEASE_RESET()
+
+#define SEC_ELM_I2C2_SCL_PIN                    GPIO_PIN_12
+#define SEC_ELM_I2C2_SCL_GPIO_PORT              GPIOA
+#define SEC_ELM_I2C2_SDA_PIN                    GPIO_PIN_11
+#define SEC_ELM_I2C2_SDA_GPIO_PORT              GPIOA
+#define SEC_ELM_I2C2_SCL_SDA_AF                 GPIO_AF4_I2C2
+
 #define FLASH_SPI SPI1
 #define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_256
 #define Flash_SPI_TIMOUT 100U        //Read and write operattions timeout in ms
@@ -225,7 +247,6 @@ typedef enum
 #define FLASH_SPI_MOSI_PIN GPIO_PIN_7
 
 #define FLASH_SPI_AF GPIO_AF5_SPI1
-// TODO: Add Pin mapping for UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 #define BUZZER_TIMER TIM2
 #define BUZZER_TIMER_CHANNEL TIM_CHANNEL_1
@@ -296,6 +317,7 @@ int32_t STNODE_BSP_USART_Init(void);
 int32_t STNODE_BSP_UART_DMA_Init(void);
 
 int32_t STNODE_BSP_Sensor_I2C1_Init(void);
+int32_t STNODE_BSP_SEC_ELM_I2C2_Init(void);
 
 int32_t STNODE_BSP_Flash_SPI_Init(void);
 

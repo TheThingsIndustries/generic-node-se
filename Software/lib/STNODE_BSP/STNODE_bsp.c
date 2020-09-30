@@ -35,6 +35,7 @@ static const uint16_t LOAD_SWITCH_PIN[LOAD_SWITCHn] = {LOAD_SWITCH1_PIN, LOAD_SW
 static void BUTTON_SW1_EXTI_Callback(void);
 UART_HandleTypeDef STNODE_BSP_debug_usart;
 I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
+I2C_HandleTypeDef STNODE_BSP_sec_elm_i2c2;
 SPI_HandleTypeDef STNODE_BSP_flash_spi;
 TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
 DMA_HandleTypeDef STNODE_BSP_hdma_tx;
@@ -541,6 +542,36 @@ int32_t STNODE_BSP_Sensor_I2C1_Init(void)
   return STNODE_BSP_ERROR_NONE;
 }
 
+/**
+ * @brief Init the Sensors I2C2 bus.
+ *
+ * @return STNODE_BSP status
+ */
+int32_t STNODE_BSP_SEC_ELM_I2C2_Init(void)
+{
+  STNODE_BSP_sec_elm_i2c2.Instance = SEC_ELM_I2C2;
+  STNODE_BSP_sec_elm_i2c2.Init.Timing = SEC_ELM_I2C2_TIMING; // I2C2 bus frequency config
+  STNODE_BSP_sec_elm_i2c2.Init.OwnAddress1 = 0x00;
+  STNODE_BSP_sec_elm_i2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  STNODE_BSP_sec_elm_i2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  STNODE_BSP_sec_elm_i2c2.Init.OwnAddress2 = 0x00;
+  STNODE_BSP_sec_elm_i2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  STNODE_BSP_sec_elm_i2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+
+  if (HAL_I2C_Init(&STNODE_BSP_sec_elm_i2c2) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  /* Enable the Analog I2C Filter */
+  if (HAL_I2CEx_ConfigAnalogFilter(&STNODE_BSP_sec_elm_i2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  return STNODE_BSP_ERROR_NONE;
+}
+
 int32_t STNODE_BSP_Flash_SPI_Init(void)
 {
   /* FLASH_SPI parameter configuration*/
@@ -564,8 +595,6 @@ int32_t STNODE_BSP_Flash_SPI_Init(void)
   }
   return STNODE_BSP_ERROR_NONE;
 }
-
-// TODO: Add communication init like UART, SPI and I2C, see https://github.com/TheThingsIndustries/st-node/issues/30
 
 int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
 {

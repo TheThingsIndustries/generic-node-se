@@ -40,6 +40,9 @@
 #include "MX25R16.h"
 #include "LIS2DH12.h"
 #include "BUZZER.h"
+#include "atca_basic.h"
+#include "cryptoauthlib.h"
+#include "atca_devtypes.h"
 
 /**
  * Application helpers
