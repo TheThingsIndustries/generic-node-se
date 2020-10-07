@@ -132,7 +132,7 @@ void USART2_IRQHandler(void)
 
 void DMA1_Channel5_IRQHandler(void)
 {
-  HAL_DMA_IRQHandler(STNODE_BSP_debug_usart.hdmatx);
+  HAL_DMA_IRQHandler(&STNODE_BSP_hdma_tx);
 }
 
 /**

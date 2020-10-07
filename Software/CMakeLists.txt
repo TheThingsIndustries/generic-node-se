@@ -40,12 +40,12 @@ set (APP_LIST
 #-------------------
 # MCU Setup
 #-------------------
-set(MCU STM32WLE5xx)
+set(MCU STM32WL55xx)
 set(MCU_DIR target)
 set(MCU_SPEC  cortex-m4)
-set(STARTUP_FILE ${MCU_DIR}/startup_stm32wle5xx.s)
+set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
 set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
-set(LINKER_SCRIPT ${MCU_DIR}/stm32wle5xx_flash.ld)
+set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
 #-------------------
 # HAL Setup
 #-------------------

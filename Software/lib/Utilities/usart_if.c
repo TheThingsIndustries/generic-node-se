@@ -88,12 +88,6 @@ UTIL_ADV_TRACE_Status_t vcom_Trace_DMA(uint8_t *p_data, uint16_t size)
   return UTIL_ADV_TRACE_OK;
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
-{
-  /* buffer transmission complete*/
-  TxCpltCallback(NULL);
-}
-
 UTIL_ADV_TRACE_Status_t vcom_ReceiveInit(void (*RxCb)(uint8_t *rxChar, uint16_t size, uint8_t error))
 {
   UART_WakeUpTypeDef WakeUpSelection;
@@ -130,6 +124,12 @@ void vcom_Resume(void)
   HAL_UART_Init(&STNODE_BSP_debug_usart);
 
   HAL_DMA_Init(&STNODE_BSP_hdma_tx);
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+  /* buffer transmission complete*/
+  TxCpltCallback(NULL);
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file      startup_stm32wle5xx.s
+  * @file      startup_stm32wl55xx.s
   * @author    MCD Application Team
   * @brief     STM32WL55xx devices Cortex-M4 vector table for GCC toolchain.
   *            This module performs:

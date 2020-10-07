@@ -86,7 +86,7 @@ int main(void)
   flash_read_write();
 
   APP_PPRINTF("\r\n Testing Buzzer functionality \r\n");
-  // buzzer_play(NUMBER_BUZZER_PLAY, BUZZER_PLAY_INTERVAL);
+  buzzer_play(NUMBER_BUZZER_PLAY, BUZZER_PLAY_INTERVAL);
 
   APP_PPRINTF("\r\n -------------- Finished STNODE basic app -------------- \r\n");
   while (1)
