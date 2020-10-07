@@ -16,13 +16,13 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics. 
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the 
+  * This software component is licensed by ST under Apache License, Version 2.0,
+  * the "License"; You may not use this file except in compliance with the
   * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  *                        opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -57,10 +57,12 @@
    application
   */
 
-#if !defined (STM32WLE5xx)
+#if !defined (STM32WL55xx) && !defined (STM32WL54xx) && !defined (STM32WLE5xx) && !defined (STM32WLE4xx)
+  /* #define STM32WL55xx */   /*!< STM32WL55xx Devices */
+  /* #define STM32WL54xx */   /*!< STM32WL54xx Devices */
   /* #define STM32WLE5xx */   /*!< STM32WLE5xx Devices */
+  /* #define STM32WLE4xx */   /*!< STM32WLE4xx Devices */
 #endif
-
 
 /*  Tip: To avoid modifying this file each time you need to switch between these
         devices, you can define the device in your toolchain compiler preprocessor.
@@ -78,7 +80,7 @@
   * @brief CMSIS Device version number
   */
 #define __STM32WLxx_CMSIS_VERSION_MAIN   (0x00U) /*!< [31:24] main version */
-#define __STM32WLxx_CMSIS_VERSION_SUB1   (0x04U) /*!< [23:16] sub1 version */
+#define __STM32WLxx_CMSIS_VERSION_SUB1   (0x07U) /*!< [23:16] sub1 version */
 #define __STM32WLxx_CMSIS_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define __STM32WLxx_CMSIS_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 #define __STM32WLxx_CMSIS_DEVICE_VERSION        ((__STM32WLxx_CMSIS_VERSION_MAIN << 24)\
@@ -94,8 +96,14 @@
   * @{
   */
 
-#if defined(STM32WLE5xx)
+#if defined(STM32WL55xx)
+  #include "stm32wl55xx.h"
+#elif defined(STM32WLE5xx)
   #include "stm32wle5xx.h"
+#elif defined(STM32WL54xx)
+  #include "stm32wl54xx.h"
+#elif defined(STM32WLE4xx)
+  #include "stm32wle4xx.h"
 #else
  #error "Please select first the target STM32WLxx device used in your application, for instance xxx (in stm32wlxx.h file)"
 #endif
