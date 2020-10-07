@@ -89,6 +89,7 @@ void flash_read_write(void)
     if (MX25R16_Init(&mxic) != MXST_SUCCESS)
     {
         APP_PPRINTF("\r\n Failed to init external SPI flash (MX25R1635F)\r\n");
+        return;
     }
 
     if (MxSimpleTest(&mxic) == MXST_SUCCESS)
