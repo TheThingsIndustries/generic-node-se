@@ -31,19 +31,16 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 
     if (uartHandle->Instance == DEBUG_USART)
     {
-        DEBUG_USART_TX_GPIO_CLK_ENABLE();
-        DEBUG_USART_RX_GPIO_CLK_ENABLE();
-
-        DEBUG_USART_DMA_CLK_ENABLE();
-        DEBUG_USART_DMAMUX_CLK_ENABLE();
-        DEBUG_USART_CLK_ENABLE();
-
         PeriphClkInit.PeriphClockSelection = DEBUG_USART_PERIPH_CLK;
         PeriphClkInit.Usart2ClockSelection = DEBUG_USART_SOURCE_CLK; // Configures USART2
         if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
         {
             msp_error_handler();
         }
+
+        DEBUG_USART_CLK_ENABLE();
+        DEBUG_USART_TX_GPIO_CLK_ENABLE();
+        DEBUG_USART_RX_GPIO_CLK_ENABLE();
 
         gpio_init_structure.Pin = DEBUG_USART_TX_PIN;
         gpio_init_structure.Mode = GPIO_MODE_AF_PP;
@@ -61,6 +58,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 
         /* Configure the DMA handler for Transmission process */
         STNODE_BSP_hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
+        STNODE_BSP_hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
         STNODE_BSP_hdma_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
         STNODE_BSP_hdma_tx.Init.PeriphInc = DMA_PINC_DISABLE;
         STNODE_BSP_hdma_tx.Init.MemInc = DMA_MINC_ENABLE;
@@ -68,9 +66,13 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         STNODE_BSP_hdma_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
         STNODE_BSP_hdma_tx.Init.Mode = DMA_NORMAL;
         STNODE_BSP_hdma_tx.Init.Priority = DMA_PRIORITY_LOW;
-        STNODE_BSP_hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
 
         if (HAL_DMA_Init(&STNODE_BSP_hdma_tx) != HAL_OK)
+        {
+            msp_error_handler();
+        }
+
+        if (HAL_DMA_ConfigChannelAttributes(&STNODE_BSP_hdma_tx, DMA_CHANNEL_NPRIV) != HAL_OK)
         {
             msp_error_handler();
         }
@@ -78,12 +80,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         /* Associate the initialized DMA handle to the UART handle */
         __HAL_LINKDMA(uartHandle, hdmatx, STNODE_BSP_hdma_tx);
 
-        /* NVIC configuration for DMA transfer complete interrupt */
-        HAL_NVIC_SetPriority(DEBUG_USART_DMA_TX_IRQn, DEBUG_USART_DMA_PRIORITY, 1);
-        HAL_NVIC_EnableIRQ(DEBUG_USART_DMA_TX_IRQn);
-
         /* NVIC for DEBUG_USART, to catch the TX complete */
-        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_PRIORITY, 1);
+        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(DEBUG_USART_IRQn);
 
         /* Enable DEBUG_USART wakeup interrupt */
@@ -139,7 +137,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
     else if (i2cHandle-> Instance == SEC_ELM_I2C2)
     {
         RCC_PeriphCLKInitStruct.PeriphClockSelection = SEC_ELM_I2C2_PERIPH_CLK;
-        RCC_PeriphCLKInitStruct.I2c1ClockSelection = SEC_ELM_I2C2_SOURCE_CLK;
+        RCC_PeriphCLKInitStruct.I2c2ClockSelection = SEC_ELM_I2C2_SOURCE_CLK;
         HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphCLKInitStruct);
 
         SEC_ELM_I2C2_SDA_GPIO_CLK_ENABLE();

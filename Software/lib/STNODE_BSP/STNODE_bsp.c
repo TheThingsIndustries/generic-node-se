@@ -479,14 +479,28 @@ int32_t STNODE_BSP_USART_Init(void)
   STNODE_BSP_debug_usart.Init.Mode = UART_MODE_TX_RX;
   STNODE_BSP_debug_usart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   STNODE_BSP_debug_usart.Init.OverSampling = UART_OVERSAMPLING_16;
+  STNODE_BSP_debug_usart.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  STNODE_BSP_debug_usart.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  STNODE_BSP_debug_usart.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
 
   if (HAL_UART_Init(&STNODE_BSP_debug_usart) != HAL_OK)
   {
     return STNODE_BSP_ERROR_NO_INIT;
   }
 
-  /* In StopMode: Need UART in FIFO mode so characters are displayed on Hyperterminal */
-  HAL_UARTEx_EnableFifoMode(&STNODE_BSP_debug_usart);
+  if (HAL_UARTEx_SetTxFifoThreshold(&STNODE_BSP_debug_usart, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&STNODE_BSP_debug_usart, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+  if (HAL_UARTEx_EnableFifoMode(&STNODE_BSP_debug_usart) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
   return STNODE_BSP_ERROR_NONE;
 }
 
@@ -498,16 +512,13 @@ int32_t STNODE_BSP_USART_Init(void)
 int32_t STNODE_BSP_UART_DMA_Init(void)
 {
   /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-#ifdef HAL_ADC_MODULE_ENABLED
+  DEBUG_USART_DMAMUX_CLK_ENABLE();
+  DEBUG_USART_DMA_CLK_ENABLE();
+
   /* DMA interrupt init */
-  /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-#endif
-  /* DMA1_Channel7_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, DEBUG_USART_DMA_PRIORITY, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
   return STNODE_BSP_ERROR_NONE;
 }
@@ -539,6 +550,15 @@ int32_t STNODE_BSP_Sensor_I2C1_Init(void)
     return STNODE_BSP_ERROR_NO_INIT;
   }
 
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&STNODE_BSP_sensor_i2c1, 0) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  HAL_I2CEx_EnableFastModePlus(SENSOR_I2C1_FASTMODEPLUS);
+
   return STNODE_BSP_ERROR_NONE;
 }
 
@@ -568,6 +588,15 @@ int32_t STNODE_BSP_SEC_ELM_I2C2_Init(void)
   {
     return STNODE_BSP_ERROR_NO_INIT;
   }
+
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&STNODE_BSP_sec_elm_i2c2, 0) != HAL_OK)
+  {
+    return STNODE_BSP_ERROR_NO_INIT;
+  }
+
+  HAL_I2CEx_EnableFastModePlus(SEC_ELM_I2C2_FASTMODEPLUS);
 
   return STNODE_BSP_ERROR_NONE;
 }
