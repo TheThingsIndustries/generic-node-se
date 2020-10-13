@@ -36,7 +36,8 @@ enable_language(C ASM)
 project(main)
 set (APP_LIST
 "basic"
-"basic_lorawan")
+"basic_lorawan"
+"basic_bootloader")
 #-------------------
 # MCU Setup
 #-------------------
