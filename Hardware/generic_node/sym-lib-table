@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name node-lib-v1)(type Legacy)(uri C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/node-lib-v1.lib)(options "")(descr ""))
+  (lib (name generic_node-rescue)(type Legacy)(uri ${KIPRJMOD}/generic_node-rescue.lib)(options "")(descr ""))
+)
