@@ -5,6 +5,7 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/app/basic_bootloader/*.c"
     "${PROJECT_SOURCE_DIR}/target/*.c"
     "${PROJECT_SOURCE_DIR}/lib/STNODE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MCU_FLASH/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
     "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
@@ -22,11 +23,15 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/basic_bootloader
-    ${PROJECT_SOURCE_DIR}/app/basic/conf
+    ${PROJECT_SOURCE_DIR}/app/basic_bootloader/conf
     ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
     )
 target_link_libraries(${PROJECT_NAME}.elf
     PUBLIC

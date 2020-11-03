@@ -21,13 +21,14 @@
  */
 
 #include "app.h"
+#include "bootloader.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
-  APP_PPRINTF("\r\n DEBUG_USART data received \r\n");
+  APP_PPRINTF("\r\n Data received via UART \r\n");
 }
 
 int main(void)
@@ -36,14 +37,33 @@ int main(void)
   HAL_Init();
   SystemClock_Config();
 
+#if (APP_LOG_ENABLED)
   UTIL_ADV_TRACE_Init();
   UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
+#endif
 
   APP_PPRINTF("\r\n -------------- Starting STNODE basic bootloader -------------- \r\n");
-  while (1)
+  HAL_Delay(APP_PRINT_DELAY);
+  APP_PPRINTF("\r\n Check system reset flags \r\n");
+  if (__HAL_RCC_GET_FLAG(RCC_FLAG_OBLRST))
   {
+    APP_PPRINTF("\r\n OBL flag is active.\n");
+#if (CLEAR_RESET_FLAGS)
+    /* Clear system reset flags */
+    __HAL_RCC_CLEAR_RESET_FLAGS();
+    APP_PPRINTF("\r\n Reset flags cleared.\n");
+#endif
   }
+  APP_PPRINTF("Jumping to application at APP_ADDRESS: 0x%08x\n", APP_ADDRESS);
+  HAL_Delay(APP_PRINT_DELAY);
+
+#if (APP_LOG_ENABLED)
+  UTIL_ADV_TRACE_DeInit();
+#endif
+
+  Bootloader_JumpToApplication();
+  Error_Handler();
 }
 
 /**
