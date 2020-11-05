@@ -1,4 +1,4 @@
-update=9/30/2020 10:54:05 AM
+update=10/28/2020 11:43:47 AM
 version=1
 last_client=kicad
 [general]
@@ -15,9 +15,9 @@ LibDir=
 [pcbnew]
 version=1
 PageLayoutDescrFile=
-LastNetListRead=ST-Node-BatteryHolder.net
+LastNetListRead=Generic_Node-BatteryHolder.net
 CopperLayerCount=2
-BoardThickness=1
+BoardThickness=0.6
 AllowMicroVias=0
 AllowBlindVias=0
 RequireCourtyardDefinitions=0
@@ -75,7 +75,7 @@ OthersTextSizeH=1
 OthersTextSizeThickness=0.15
 OthersTextItalic=0
 OthersTextUpright=1
-SolderMaskClearance=0.05
+SolderMaskClearance=0
 SolderMaskMinWidth=0
 SolderPasteClearance=0
 SolderPasteRatio=-0
