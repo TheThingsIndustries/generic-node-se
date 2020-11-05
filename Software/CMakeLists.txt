@@ -36,7 +36,8 @@ enable_language(C ASM)
 project(main)
 set (APP_LIST
 "basic"
-"basic_lorawan")
+"basic_lorawan"
+"basic_bootloader")
 #-------------------
 # MCU Setup
 #-------------------
@@ -45,6 +46,8 @@ set(MCU_DIR target)
 set(MCU_SPEC  cortex-m4)
 set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
 set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
+set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
+# Adjust stm32wl55xx_flash.ld to app.ld or bootloader.ld when using a bootloader
 set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
 #-------------------
 # HAL Setup
@@ -150,6 +153,16 @@ if(CMAKE_CROSSCOMPILING STREQUAL "1")
         string(APPEND CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT_PATH} ")
     else()
         message(FATAL_ERROR "[ERRR] Could not find linker script ${LINKER_SCRIPT}")
+    endif()
+
+    find_file(LINKER_SCRIPT_MEM_PATH
+        NAMES "${LINKER_SCRIPT_MEM}"
+        PATHS
+        ${CMAKE_CURRENT_LIST_DIR}
+        )
+    if(DEFINED LINKER_SCRIPT_MEM_PATH)
+        message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
+        string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
     endif()
 
     if("${SEMIHOSTING}" STREQUAL "1")
