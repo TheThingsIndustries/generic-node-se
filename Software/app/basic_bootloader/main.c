@@ -44,25 +44,33 @@ int main(void)
 #endif
 
   APP_PPRINTF("\r\n -------------- Starting STNODE basic bootloader -------------- \r\n");
-  HAL_Delay(APP_PRINT_DELAY);
-  APP_PPRINTF("\r\n Check system reset flags \r\n");
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_OBLRST))
+  Bootloader_Init();
+  Bootloader_HandleInput();
+
+#if (APP_LOG_ENABLED)
+  Bootloader_state_t state = Bootloader_GetState();
+  switch (state)
   {
-    APP_PPRINTF("\r\n OBL flag is active.\n");
-#if (CLEAR_RESET_FLAGS)
-    /* Clear system reset flags */
-    __HAL_RCC_CLEAR_RESET_FLAGS();
-    APP_PPRINTF("\r\n Reset flags cleared.\n");
-#endif
+  case BOOTLOADER_STATE_APP_JMP:
+    APP_PPRINTF("\r\n Jumping to application at APP_ADDRESS: 0x%08x \r\n", APP_ADDRESS);
+    break;
+  case BOOTLOADER_STATE_SYS_JMP:
+    APP_PPRINTF("\r\n Jumping to ST bootloader at SYSMEM_ADDRESS : 0x%08x \r\n", ST_BOOTLOADER_SYSMEM_ADDRESS);
+    break;
+  default:
+    APP_PPRINTF("\r\n Un-handled bootloader state \r\n");
+    break;
   }
-  APP_PPRINTF("Jumping to application at APP_ADDRESS: 0x%08x\n", APP_ADDRESS);
   HAL_Delay(APP_PRINT_DELAY);
+#endif
 
 #if (APP_LOG_ENABLED)
   UTIL_ADV_TRACE_DeInit();
 #endif
 
-  Bootloader_JumpToApplication();
+  Bootloader_DeInit();
+  Bootloader_Jump();
+
   Error_Handler();
 }
 
