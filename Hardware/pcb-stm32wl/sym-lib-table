@@ -1,4 +1,4 @@
 (sym_lib_table
-  (lib (name node-lib-v1)(type Legacy)(uri C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/node-lib-v1.lib)(options "")(descr ""))
+  (lib (name node-lib-v1)(type Legacy)(uri ${KIPRJMOD}/../lib/node-lib.lib)(options "")(descr ""))
   (lib (name M620720)(type Legacy)(uri C:/Users/Admin/Downloads/LIB_M620720/M620720/KiCad/M620720.lib)(options "")(descr ""))
 )
