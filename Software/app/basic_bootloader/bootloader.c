@@ -23,41 +23,151 @@
 #include "bootloader.h"
 
 typedef void (*functionPointer)(void);
+static volatile Bootloader_state_t bootloader_state = BOOTLOADER_STATE_APP_JMP;
 
 /**
- * @brief  This function initializes bootloader and flash.
+ * @brief  Initializes bootloader and flash
  * @return Bootloader_op_result_t (BL_OP_SUCCESS or BL_OP_UNKNOWN_ERROR)
  */
 uint8_t Bootloader_Init(void)
 {
     Bootloader_op_result_t ret = BL_OP_UNKNOWN_ERROR;
-    if(MCU_FLASH_Init() == HAL_OK)
+
+    /* Check system reset flags */
+    if (__HAL_RCC_GET_FLAG(RCC_FLAG_OBLRST))
+    {
+        /* OBL flag is active */
+#if (CLEAR_RESET_FLAGS)
+        /* Clear system reset flags */
+        __HAL_RCC_CLEAR_RESET_FLAGS();
+#endif
+    }
+
+    if (MCU_FLASH_Init() == HAL_OK)
     {
         ret = BL_OP_SUCCESS;
     }
+
+    STNODE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_GPIO);
+
+#if (BOOTLOADER_LED_FEEDBACK)
+    STNODE_BSP_LED_Init(LED_RED);
+    STNODE_BSP_LED_Init(LED_BLUE);
+#endif
+
     return ret;
 }
 
 /**
- * @brief  Performs a jump to the user application in flash
+ * @brief  De-Initializes bootloader
+ * @return Bootloader_op_result_t
+ */
+uint8_t Bootloader_DeInit(void)
+{
+
+#if (BOOTLOADER_LED_FEEDBACK)
+    STNODE_BSP_LED_DeInit(LED_RED);
+    STNODE_BSP_LED_DeInit(LED_BLUE);
+#endif
+
+    return BL_OP_SUCCESS;
+}
+
+/**
+ * @brief Set Bootloader state
  * @return None
  */
-void Bootloader_JumpToApplication(void)
+void Bootloader_SetState(Bootloader_state_t state)
 {
-    uint32_t JumpAddress = *(__IO uint32_t *)(APP_ADDRESS + 4);
-    functionPointer Jump = (functionPointer)JumpAddress;
+    bootloader_state = state;
+}
+
+/**
+ * @brief Get Bootloader state
+ * @return None
+ */
+Bootloader_state_t Bootloader_GetState(void)
+{
+    return bootloader_state;
+}
+
+void Bootloader_HandleInput(void)
+{
+    uint8_t button_counter = 0;
+
+#if (BOOTLOADER_LED_FEEDBACK)
+    STNODE_BSP_LED_On(LED_RED);
+    HAL_Delay(BOOTLOADER_LED_DELAY);
+#endif
+
+    while ((BOOTLOADER_BTN_PRESSED()) && (button_counter < BOOTLOADER_BTN_MAX_WAIT))
+    {
+        if (button_counter == BOOTLOADER_BTN_SYS_JMP_WAIT)
+        {
+            bootloader_state = BOOTLOADER_STATE_SYS_JMP;
+        }
+
+#if (BOOTLOADER_LED_FEEDBACK)
+        if (button_counter < BOOTLOADER_BTN_SYS_JMP_WAIT)
+        {
+            STNODE_BSP_LED_Toggle(LED_RED);
+        }
+        else if (button_counter == BOOTLOADER_BTN_SYS_JMP_WAIT)
+        {
+            STNODE_BSP_LED_Off(LED_RED);
+            STNODE_BSP_LED_On(LED_BLUE);
+        }
+        else
+        {
+            STNODE_BSP_LED_Toggle(LED_BLUE);
+        }
+#endif
+
+        button_counter++;
+        HAL_Delay(BOOTLOADER_BTN_SAMPLE_DELAY);
+    }
+#if (BOOTLOADER_LED_FEEDBACK)
+    STNODE_BSP_LED_Off(LED_RED);
+    STNODE_BSP_LED_Off(LED_BLUE);
+#endif
+}
+
+/**
+ * @brief Performs the jump to user application address or internal ST bootloader
+ * @return None
+ */
+void Bootloader_Jump()
+{
+    uint32_t mem_address = 0;
+    uint32_t jump_address = 0;
+    switch (bootloader_state)
+    {
+    case BOOTLOADER_STATE_APP_JMP:
+        mem_address = APP_ADDRESS;
+#if (SET_VECTOR_TABLE)
+        SCB->VTOR = APP_ADDRESS;
+#endif
+        break;
+    case BOOTLOADER_STATE_SYS_JMP:
+        mem_address = ST_BOOTLOADER_SYSMEM_ADDRESS;
+        __HAL_SYSCFG_REMAPMEMORY_SYSTEMFLASH();
+        break;
+    default:
+        return;
+        break;
+    }
+    jump_address = *(__IO uint32_t *)(mem_address + 4);
+    functionPointer Jump = (functionPointer)jump_address;
+
 
     HAL_RCC_DeInit();
     HAL_DeInit();
+    __disable_irq();
 
     SysTick->CTRL = 0;
     SysTick->LOAD = 0;
     SysTick->VAL = 0;
 
-#if (SET_VECTOR_TABLE)
-    SCB->VTOR = APP_ADDRESS;
-#endif
-
-    __set_MSP(*(__IO uint32_t *)APP_ADDRESS);
+    __set_MSP(*(__IO uint32_t *)mem_address);
     Jump();
 }
