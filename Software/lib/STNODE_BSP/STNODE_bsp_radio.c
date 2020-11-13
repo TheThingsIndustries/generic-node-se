@@ -20,7 +20,7 @@
  *
  */
 
-#include "STNODE_radio.h"
+#include "STNODE_bsp_radio.h"
 
 SUBGHZ_HandleTypeDef hsubghz;
 
