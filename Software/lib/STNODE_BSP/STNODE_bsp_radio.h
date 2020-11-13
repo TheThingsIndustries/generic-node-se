@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef STNODE_RADIO_H
-#define STNODE_RADIO_H
+#ifndef STNODE_BSP_RADIO_H
+#define STNODE_BSP_RADIO_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,6 +29,7 @@ extern "C" {
 
 #include "stm32wlxx_hal.h"
 
+extern SUBGHZ_HandleTypeDef hsubghz; // `hsubghz` is used by radio_driver.c (can't rename!)
 
 typedef enum
 {
@@ -97,4 +98,4 @@ int32_t RBI_IsDCDC(void);
 }
 #endif
 
-#endif
+#endif /* STNODE_BSP_RADIO_H */

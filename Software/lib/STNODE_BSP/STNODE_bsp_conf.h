@@ -27,11 +27,10 @@
  extern "C" {
 #endif
 
-/* COM usage define */
-#define USE_BSP_COM_FEATURE                 0U
+#define STNODE_BSP_V_0_1 01
+#define STNODE_BSP_V_0_2 02
 
-/* COM log define */
-#define USE_COM_LOG                         0U
+#define STNODE_BSP_VERSION STNODE_BSP_V_0_1
 
 /* IRQ priorities */
 #define STNODE_BSP_BUTTON_SWx_IT_PRIORITY         15U
