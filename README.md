@@ -6,8 +6,7 @@ Development repository around the ST [STM32WL](https://www.st.com/en/microcontro
 ## Development
 
 ### Hardware
-
-[PDF version](./Hardware/ST-Node-V0.1/design-files/ST-Node-V0.1.pdf) of the schematics is located in `Hardware/ST-Node-V0.1/design-files`
+Hardware design and libraries can be found in [Hardware](./Hardware)
 
 CAD tools used:
 - KiCAD v.5.1.6
