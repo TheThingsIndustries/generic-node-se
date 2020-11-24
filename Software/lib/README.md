@@ -16,3 +16,7 @@ This folder contains the libraries developed to support the application layer.
 [ATECC608A-TNGLORA](./ATECC608A-TNGLORA) contains the [ATECC608A-TNGLORA](https://www.microchip.com/wwwproducts/en/ATECC608A-TNGLORA) secure element hal and support funciotns.
 
 [cryptoauthlib](./cryptoauthlib) contains Microchip support library for ATECC608A-TNGLORA.
+
+[MCU_FLASH](./MCU_FLASH) contains hal APIs for controlling the SOC internal flash memory.
+
+[FreeRTOS-Kernel](./FreeRTOS-Kernel) contains the FreeRTOS kernel.
