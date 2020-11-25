@@ -37,7 +37,8 @@ project(main)
 set (APP_LIST
 "basic"
 "basic_lorawan"
-"basic_bootloader")
+"basic_bootloader"
+"basic_freertos")
 #-------------------
 # MCU Setup
 #-------------------

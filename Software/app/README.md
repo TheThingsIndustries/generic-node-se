@@ -5,3 +5,7 @@ This folder contains various sample applications.
 
 [basic_lorawan](./basic_lorawan) contains a simple application of LoRaWAN where a class A device joins via OTAA and sends dummy payloads triggered by a time interval or a push button.
 The device enters stop mode in between tranmisions to reduce power consumption.
+
+[basic_bootloader](./basic_bootloader) contains a bootloader that allows for application/internal bootloader jumps.
+
+[basic_freertos](./basic_freertos) contains a basic FreeRTOS low power application that creates two threads and passes messages via a queue triggering a blinking LED with each passed message.
