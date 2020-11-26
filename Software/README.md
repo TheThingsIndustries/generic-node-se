@@ -1,4 +1,4 @@
-# STNODE Software
+# GNSE Software
 The software uses `CMAKE` and `arm-none-eabi-gcc` toolchain with the ST SOC `STM32WLxx`
 
 ## Structure

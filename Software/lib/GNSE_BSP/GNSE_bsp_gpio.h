@@ -14,18 +14,18 @@
  */
 
 /**
- * @file STNODE_bsp_gpio.h
+ * @file GNSE_bsp_gpio.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_GPIO_H
-#define STNODE_BSP_GPIO_H
+#ifndef GNSE_BSP_GPIO_H
+#define GNSE_BSP_GPIO_H
 
 #include "stm32wlxx_hal.h"
-#include "STNODE_bsp_error.h"
-#include "STNODE_bsp_conf.h"
+#include "GNSE_bsp_error.h"
+#include "GNSE_bsp_conf.h"
 
 /**
  * HW aliases for the board components
@@ -142,30 +142,30 @@ typedef enum
  * BSP GPIO APIs
  */
 
-int32_t STNODE_BSP_LED_Init(Led_TypeDef Led);
-int32_t STNODE_BSP_LED_DeInit(Led_TypeDef Led);
-int32_t STNODE_BSP_LED_On(Led_TypeDef Led);
-int32_t STNODE_BSP_LED_Off(Led_TypeDef Led);
-int32_t STNODE_BSP_LED_Toggle(Led_TypeDef Led);
-int32_t STNODE_BSP_LED_GetState(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_Init(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_DeInit(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_On(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_Off(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_Toggle(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_GetState(Led_TypeDef Led);
 
-int32_t STNODE_BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
-int32_t STNODE_BSP_PB_DeInit(Button_TypeDef Button);
-int32_t STNODE_BSP_PB_GetState(Button_TypeDef Button);
-void STNODE_BSP_PB_Callback(Button_TypeDef Button);
-void STNODE_BSP_PB_IRQHandler(Button_TypeDef Button);
+int32_t GNSE_BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
+int32_t GNSE_BSP_PB_DeInit(Button_TypeDef Button);
+int32_t GNSE_BSP_PB_GetState(Button_TypeDef Button);
+void GNSE_BSP_PB_Callback(Button_TypeDef Button);
+void GNSE_BSP_PB_IRQHandler(Button_TypeDef Button);
 
-int32_t STNODE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
-int32_t STNODE_BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
-int32_t STNODE_BSP_LS_On(Load_Switch_TypeDef loadSwitch);
-int32_t STNODE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
-int32_t STNODE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
-int32_t STNODE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_On(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch);
 
-int32_t STNODE_BSP_BM_Init();
-int32_t STNODE_BSP_BM_DeInit();
-int32_t STNODE_BSP_BM_Enable();
-int32_t STNODE_BSP_BM_Disable();
-int32_t STNODE_BSP_BM_GetState();
+int32_t GNSE_BSP_BM_Init();
+int32_t GNSE_BSP_BM_DeInit();
+int32_t GNSE_BSP_BM_Enable();
+int32_t GNSE_BSP_BM_Disable();
+int32_t GNSE_BSP_BM_GetState();
 
-#endif /* STNODE_BSP_GPIO_H */
+#endif /* GNSE_BSP_GPIO_H */

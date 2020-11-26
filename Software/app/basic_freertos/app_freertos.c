@@ -22,7 +22,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

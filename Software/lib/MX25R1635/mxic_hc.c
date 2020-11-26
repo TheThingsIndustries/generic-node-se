@@ -30,9 +30,9 @@
  */
 int MxHardwareInit(MxSpi *Spi)
 {
-    int32_t bsp_status = STNODE_BSP_ERROR_NONE;
-    bsp_status = STNODE_BSP_Flash_SPI_Init();
-    if (bsp_status != STNODE_BSP_ERROR_NONE)
+    int32_t bsp_status = GNSE_BSP_ERROR_NONE;
+    bsp_status = GNSE_BSP_Flash_SPI_Init();
+    if (bsp_status != GNSE_BSP_ERROR_NONE)
     {
         return MXST_FAILURE;
     }
@@ -54,13 +54,13 @@ int MxPolledTransfer(MxSpi *Spi, u8 *WrBuf, u8 *RdBuf, u32 ByteCount)
     if (RdBuf == NULL)
     {
         HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_RESET);
-        status = HAL_SPI_Transmit(&STNODE_BSP_flash_spi, (uint8_t *)WrBuf, ByteCount, Flash_SPI_TIMOUT);
+        status = HAL_SPI_Transmit(&GNSE_BSP_flash_spi, (uint8_t *)WrBuf, ByteCount, Flash_SPI_TIMOUT);
         HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_SET);
     }
     else
     {
         HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_RESET);
-        status = HAL_SPI_TransmitReceive(&STNODE_BSP_flash_spi, (uint8_t *)WrBuf, (uint8_t *)RdBuf, ByteCount, Flash_SPI_TIMOUT);
+        status = HAL_SPI_TransmitReceive(&GNSE_BSP_flash_spi, (uint8_t *)WrBuf, (uint8_t *)RdBuf, ByteCount, Flash_SPI_TIMOUT);
         HAL_GPIO_WritePin(FLASH_SPI_GPIO_PORT, FLASH_SPI_CS_PIN, GPIO_PIN_SET);
     }
 

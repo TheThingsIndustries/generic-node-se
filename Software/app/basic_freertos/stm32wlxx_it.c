@@ -19,7 +19,7 @@
   ******************************************************************************
   */
 
-#include "STNODE_BSP.h"
+#include "GNSE_BSP.h"
 #include "stm32wlxx_it.h"
 
 extern TIM_HandleTypeDef htim17;

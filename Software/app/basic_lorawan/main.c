@@ -20,8 +20,8 @@
  *
  */
 
-#include "STNODE_bsp.h"
-#include "STNODE_lpm.h"
+#include "GNSE_bsp.h"
+#include "GNSE_lpm.h"
 #include "stm32_seq.h"
 #include "sys_app.h"
 #include "lora_app.h"
@@ -105,9 +105,9 @@ void Error_Handler(void)
   * A basic Implementation below
   * TODO: Improve with system wide error handler, see https://github.com/TheThingsIndustries/st-node/issues/57
   */
-  STNODE_BSP_LED_Init(LED_RED);
-  STNODE_BSP_LED_On(LED_RED);
-  STNODE_LPM_EnterStopMode();
+  GNSE_BSP_LED_Init(LED_RED);
+  GNSE_BSP_LED_On(LED_RED);
+  GNSE_LPM_EnterStopMode();
   while (1)
   {
   }

@@ -14,29 +14,29 @@
  */
 
  /**
- * @file STNODE_bsp_conf.h
+ * @file GNSE_bsp_conf.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_CONF_H
-#define STNODE_BSP_CONF_H
+#ifndef GNSE_BSP_CONF_H
+#define GNSE_BSP_CONF_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-#define STNODE_BSP_V_0_1 01
-#define STNODE_BSP_V_0_2 02
+#define GNSE_BSP_V_0_1 01
+#define GNSE_BSP_V_0_2 02
 
-#define STNODE_BSP_VERSION STNODE_BSP_V_0_1
+#define GNSE_BSP_VERSION GNSE_BSP_V_0_1
 
 /* IRQ priorities */
-#define STNODE_BSP_BUTTON_SWx_IT_PRIORITY         15U
+#define GNSE_BSP_BUTTON_SWx_IT_PRIORITY         15U
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* STNODE_BSP_CONF_H */
+#endif /* GNSE_BSP_CONF_H */

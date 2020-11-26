@@ -91,9 +91,9 @@ void QueueReceiveThread(void *argument)
     {
       if (osQueueMsg == Queue_value)
       {
-        STNODE_BSP_LED_On(LED_BLUE);
+        GNSE_BSP_LED_On(LED_BLUE);
         osDelay(LED_TOGGLE_DELAY);
-        STNODE_BSP_LED_Off(LED_BLUE);
+        GNSE_BSP_LED_Off(LED_BLUE);
       }
     }
   }
@@ -128,8 +128,8 @@ int main(void)
   MX_GPIO_Init();
 
   /* Initialize LED */
-  STNODE_BSP_LED_Init(LED_BLUE);
-  STNODE_BSP_LED_Init(LED_RED);
+  GNSE_BSP_LED_Init(LED_BLUE);
+  GNSE_BSP_LED_Init(LED_RED);
 
   /* Init scheduler */
   osKernelInitialize();

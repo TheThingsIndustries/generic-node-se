@@ -14,25 +14,25 @@
  */
 
 /**
- * @file STNODE_bsp_serial.h
+ * @file GNSE_bsp_serial.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
 
-#ifndef STNODE_BSP_SERIAL_H
-#define STNODE_BSP_SERIAL_H
+#ifndef GNSE_BSP_SERIAL_H
+#define GNSE_BSP_SERIAL_H
 
 #include "stm32wlxx_hal.h"
-#include "STNODE_bsp_error.h"
-#include "STNODE_bsp_conf.h"
+#include "GNSE_bsp_error.h"
+#include "GNSE_bsp_conf.h"
 
-extern UART_HandleTypeDef STNODE_BSP_debug_usart;
-extern I2C_HandleTypeDef STNODE_BSP_sensor_i2c1;
-extern I2C_HandleTypeDef STNODE_BSP_sec_elm_i2c2;
-extern SPI_HandleTypeDef STNODE_BSP_flash_spi;
-extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
+extern UART_HandleTypeDef GNSE_BSP_debug_usart;
+extern I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
+extern I2C_HandleTypeDef GNSE_BSP_sec_elm_i2c2;
+extern SPI_HandleTypeDef GNSE_BSP_flash_spi;
+extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 /**
  * HAL defines
@@ -42,7 +42,7 @@ extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
 #define DEBUG_USART USART2
 #define DEBUG_USART_BAUDRATE 115200
 #define DEBUG_USART_PERIPH_CLK RCC_PERIPHCLK_USART2
-#define DEBUG_USART_SOURCE_CLK RCC_USART2CLKSOURCE_SYSCLK //If adjusted, Update Usart2ClockSelection in STNODE_msp.c
+#define DEBUG_USART_SOURCE_CLK RCC_USART2CLKSOURCE_SYSCLK //If adjusted, Update Usart2ClockSelection in GNSE_msp.c
 
 #define DEBUG_USART_CLK_ENABLE()        __HAL_RCC_USART2_CLK_ENABLE()
 #define DEBUG_USART_CLK_DISABLE()       __HAL_RCC_USART2_CLK_DISABLE()
@@ -142,12 +142,12 @@ extern DMA_HandleTypeDef STNODE_BSP_hdma_tx;
  * BSP Serial APIs
  */
 
-int32_t STNODE_BSP_USART_Init(void);
-int32_t STNODE_BSP_UART_DMA_Init(void);
+int32_t GNSE_BSP_USART_Init(void);
+int32_t GNSE_BSP_UART_DMA_Init(void);
 
-int32_t STNODE_BSP_Sensor_I2C1_Init(void);
-int32_t STNODE_BSP_SEC_ELM_I2C2_Init(void);
+int32_t GNSE_BSP_Sensor_I2C1_Init(void);
+int32_t GNSE_BSP_SEC_ELM_I2C2_Init(void);
 
-int32_t STNODE_BSP_Flash_SPI_Init(void);
+int32_t GNSE_BSP_Flash_SPI_Init(void);
 
-#endif /* STNODE_BSP_SERIAL_H */
+#endif /* GNSE_BSP_SERIAL_H */

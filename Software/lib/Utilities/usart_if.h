@@ -17,7 +17,7 @@
   ******************************************************************************
   */
 #include "stm32_adv_trace.h"
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USART_IF_H__

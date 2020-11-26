@@ -14,37 +14,37 @@
  */
 
 /**
- * @file STNODE_bsp_clk_timer.c
+ * @file GNSE_bsp_clk_timer.c
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
-#include "STNODE_bsp_clk_timer.h"
+#include "GNSE_bsp_clk_timer.h"
 
-TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
-RTC_HandleTypeDef STNODE_BSP_rtc;
+TIM_HandleTypeDef GNSE_BSP_buzzer_timer;
+RTC_HandleTypeDef GNSE_BSP_rtc;
 
-int32_t STNODE_BSP_RTC_Init(void)
+int32_t GNSE_BSP_RTC_Init(void)
 {
   RTC_AlarmTypeDef sAlarm = {0};
 
-  STNODE_BSP_rtc.Instance = RTC;
-  STNODE_BSP_rtc.Init.AsynchPrediv = RTC_PREDIV_A;
-  STNODE_BSP_rtc.Init.OutPut = RTC_OUTPUT_DISABLE;
-  STNODE_BSP_rtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
-  STNODE_BSP_rtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-  STNODE_BSP_rtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  STNODE_BSP_rtc.Init.OutPutPullUp = RTC_OUTPUT_PULLUP_NONE;
-  STNODE_BSP_rtc.Init.BinMode = RTC_BINARY_ONLY;
-  if (HAL_RTC_Init(&STNODE_BSP_rtc) != HAL_OK)
+  GNSE_BSP_rtc.Instance = RTC;
+  GNSE_BSP_rtc.Init.AsynchPrediv = RTC_PREDIV_A;
+  GNSE_BSP_rtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  GNSE_BSP_rtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
+  GNSE_BSP_rtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  GNSE_BSP_rtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  GNSE_BSP_rtc.Init.OutPutPullUp = RTC_OUTPUT_PULLUP_NONE;
+  GNSE_BSP_rtc.Init.BinMode = RTC_BINARY_ONLY;
+  if (HAL_RTC_Init(&GNSE_BSP_rtc) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
 
   // Initialize RTC and set the Time and Date
-  if (HAL_RTCEx_SetSSRU_IT(&STNODE_BSP_rtc) != HAL_OK)
+  if (HAL_RTCEx_SetSSRU_IT(&GNSE_BSP_rtc) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
   // Enable the Alarm A
   sAlarm.BinaryAutoClr = RTC_ALARMSUBSECONDBIN_AUTOCLR_NO;
@@ -52,37 +52,37 @@ int32_t STNODE_BSP_RTC_Init(void)
   sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
   sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDBINMASK_NONE;
   sAlarm.Alarm = RTC_ALARM_A;
-  if (HAL_RTC_SetAlarm_IT(&STNODE_BSP_rtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
+  if (HAL_RTC_SetAlarm_IT(&GNSE_BSP_rtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
-  return STNODE_BSP_ERROR_NONE;
+  return GNSE_BSP_ERROR_NONE;
 }
 
-int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
+int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
 {
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
-  STNODE_BSP_buzzer_timer.Instance = BUZZER_TIMER;
-  STNODE_BSP_buzzer_timer.Init.Prescaler = BUZZER_PRESCALER;
-  STNODE_BSP_buzzer_timer.Init.CounterMode = TIM_COUNTERMODE_UP;
-  STNODE_BSP_buzzer_timer.Init.Period = BUZZER_PERIOD;
-  STNODE_BSP_buzzer_timer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  STNODE_BSP_buzzer_timer.Init.RepetitionCounter = 0;
-  STNODE_BSP_buzzer_timer.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-  if (HAL_TIM_PWM_Init(&STNODE_BSP_buzzer_timer) != HAL_OK)
+  GNSE_BSP_buzzer_timer.Instance = BUZZER_TIMER;
+  GNSE_BSP_buzzer_timer.Init.Prescaler = BUZZER_PRESCALER;
+  GNSE_BSP_buzzer_timer.Init.CounterMode = TIM_COUNTERMODE_UP;
+  GNSE_BSP_buzzer_timer.Init.Period = BUZZER_PERIOD;
+  GNSE_BSP_buzzer_timer.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  GNSE_BSP_buzzer_timer.Init.RepetitionCounter = 0;
+  GNSE_BSP_buzzer_timer.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_PWM_Init(&GNSE_BSP_buzzer_timer) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
 
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&STNODE_BSP_buzzer_timer, &sMasterConfig) != HAL_OK)
+  if (HAL_TIMEx_MasterConfigSynchronization(&GNSE_BSP_buzzer_timer, &sMasterConfig) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
@@ -92,9 +92,9 @@ int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&STNODE_BSP_buzzer_timer, &sConfigOC, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&GNSE_BSP_buzzer_timer, &sConfigOC, BUZZER_TIMER_CHANNEL) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
 
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
@@ -108,14 +108,14 @@ int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
   sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
   sBreakDeadTimeConfig.Break2Filter = 0;
   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&STNODE_BSP_buzzer_timer, &sBreakDeadTimeConfig) != HAL_OK)
+  if (HAL_TIMEx_ConfigBreakDeadTime(&GNSE_BSP_buzzer_timer, &sBreakDeadTimeConfig) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
-  HAL_TIM_RegisterCallback(&STNODE_BSP_buzzer_timer, HAL_TIM_PERIOD_ELAPSED_CB_ID, cb);
-  if (HAL_TIM_PWM_Start_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  HAL_TIM_RegisterCallback(&GNSE_BSP_buzzer_timer, HAL_TIM_PERIOD_ELAPSED_CB_ID, cb);
+  if (HAL_TIM_PWM_Start_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
   {
-    return STNODE_BSP_ERROR_NO_INIT;
+    return GNSE_BSP_ERROR_NO_INIT;
   }
-  return STNODE_BSP_ERROR_NONE;
+  return GNSE_BSP_ERROR_NONE;
 }

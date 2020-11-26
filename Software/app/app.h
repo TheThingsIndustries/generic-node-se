@@ -15,7 +15,7 @@
 
 /**
  * @file app.h
- * @brief Common file for STNODE applications
+ * @brief Common file for GNSE applications
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
@@ -33,9 +33,9 @@
 #include "stm32_systime.h"
 
 /**
- * STNODE Libraries
+ * GNSE Libraries
  */
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 #include "SHTC3.h"
 #include "MX25R16.h"
 #include "LIS2DH12.h"

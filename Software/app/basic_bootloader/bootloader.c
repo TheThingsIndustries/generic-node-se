@@ -48,11 +48,11 @@ uint8_t Bootloader_Init(void)
         ret = BL_OP_SUCCESS;
     }
 
-    STNODE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_GPIO);
+    GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_GPIO);
 
 #if (BOOTLOADER_LED_FEEDBACK)
-    STNODE_BSP_LED_Init(LED_RED);
-    STNODE_BSP_LED_Init(LED_BLUE);
+    GNSE_BSP_LED_Init(LED_RED);
+    GNSE_BSP_LED_Init(LED_BLUE);
 #endif
 
     return ret;
@@ -66,8 +66,8 @@ uint8_t Bootloader_DeInit(void)
 {
 
 #if (BOOTLOADER_LED_FEEDBACK)
-    STNODE_BSP_LED_DeInit(LED_RED);
-    STNODE_BSP_LED_DeInit(LED_BLUE);
+    GNSE_BSP_LED_DeInit(LED_RED);
+    GNSE_BSP_LED_DeInit(LED_BLUE);
 #endif
 
     return BL_OP_SUCCESS;
@@ -96,7 +96,7 @@ void Bootloader_HandleInput(void)
     uint8_t button_counter = 0;
 
 #if (BOOTLOADER_LED_FEEDBACK)
-    STNODE_BSP_LED_On(LED_RED);
+    GNSE_BSP_LED_On(LED_RED);
     HAL_Delay(BOOTLOADER_LED_DELAY);
 #endif
 
@@ -110,16 +110,16 @@ void Bootloader_HandleInput(void)
 #if (BOOTLOADER_LED_FEEDBACK)
         if (button_counter < BOOTLOADER_BTN_SYS_JMP_WAIT)
         {
-            STNODE_BSP_LED_Toggle(LED_RED);
+            GNSE_BSP_LED_Toggle(LED_RED);
         }
         else if (button_counter == BOOTLOADER_BTN_SYS_JMP_WAIT)
         {
-            STNODE_BSP_LED_Off(LED_RED);
-            STNODE_BSP_LED_On(LED_BLUE);
+            GNSE_BSP_LED_Off(LED_RED);
+            GNSE_BSP_LED_On(LED_BLUE);
         }
         else
         {
-            STNODE_BSP_LED_Toggle(LED_BLUE);
+            GNSE_BSP_LED_Toggle(LED_BLUE);
         }
 #endif
 
@@ -127,8 +127,8 @@ void Bootloader_HandleInput(void)
         HAL_Delay(BOOTLOADER_BTN_SAMPLE_DELAY);
     }
 #if (BOOTLOADER_LED_FEEDBACK)
-    STNODE_BSP_LED_Off(LED_RED);
-    STNODE_BSP_LED_Off(LED_BLUE);
+    GNSE_BSP_LED_Off(LED_RED);
+    GNSE_BSP_LED_Off(LED_BLUE);
 #endif
 }
 

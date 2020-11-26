@@ -165,7 +165,7 @@ void LoRaWAN_Init(void)
   }
   else
   {
-    STNODE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
+    GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
   }
 }
 
