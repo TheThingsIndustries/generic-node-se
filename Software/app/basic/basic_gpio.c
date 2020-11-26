@@ -24,18 +24,18 @@
 
 void led_toggle(uint8_t n_toggles, uint32_t toggle_delay)
 {
-    STNODE_BSP_LED_Init(LED_BLUE);
-    STNODE_BSP_LED_Init(LED_RED);
+    GNSE_BSP_LED_Init(LED_BLUE);
+    GNSE_BSP_LED_Init(LED_RED);
     APP_PPRINTF("\r\n Toggling LED lights \r\n");
     for (size_t counter = 0; counter < n_toggles; counter++)
     {
-        STNODE_BSP_LED_Toggle(LED_BLUE);
+        GNSE_BSP_LED_Toggle(LED_BLUE);
         HAL_Delay(toggle_delay);
-        STNODE_BSP_LED_Toggle(LED_RED);
+        GNSE_BSP_LED_Toggle(LED_RED);
         HAL_Delay(toggle_delay);
     }
-    STNODE_BSP_LED_Off(LED_BLUE);
-    STNODE_BSP_LED_Off(LED_RED);
+    GNSE_BSP_LED_Off(LED_BLUE);
+    GNSE_BSP_LED_Off(LED_RED);
 }
 
 void buzzer_play(uint8_t n_plays, uint32_t play_delay)

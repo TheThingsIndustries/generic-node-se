@@ -40,7 +40,7 @@ BUZZER_op_result_t BUZZER_Init(void)
 
   if (init_flag == false)
   {
-    if (STNODE_BSP_BUZZER_TIM_Init(BUZZER_TIM_IRQHandler) == STNODE_BSP_ERROR_NONE)
+    if (GNSE_BSP_BUZZER_TIM_Init(BUZZER_TIM_IRQHandler) == GNSE_BSP_ERROR_NONE)
     {
       init_flag = true;
       buzzer_state = BUZZER_STATE_OFF;
@@ -58,7 +58,7 @@ static void BUZZER_Off(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, 0);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, 0);
   HAL_GPIO_WritePin(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN, GPIO_PIN_RESET);
 
   buzzer_state = BUZZER_STATE_OFF;
@@ -68,8 +68,8 @@ static void BUZZER_Ring(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, BUZZER_PERIOD);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 2);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, BUZZER_PERIOD);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 2);
   buzzer_state = BUZZER_STATE_RING;
 }
 
@@ -77,11 +77,11 @@ static void BUZZER_Tick(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 2 - 1);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 4);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 2 - 1);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 4);
 
-  __HAL_TIM_CLEAR_FLAG(&STNODE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
-  __HAL_TIM_ENABLE_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_IT);
+  __HAL_TIM_CLEAR_FLAG(&GNSE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
+  __HAL_TIM_ENABLE_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_IT);
 
   buzzerCount = 0;
   buzzer_state = BUZZER_STATE_TICK;
@@ -91,11 +91,11 @@ static void BUZZER_DODO(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 4 - 1);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 8);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 4 - 1);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 8);
 
-  __HAL_TIM_CLEAR_FLAG(&STNODE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
-  __HAL_TIM_ENABLE_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_IT);
+  __HAL_TIM_CLEAR_FLAG(&GNSE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
+  __HAL_TIM_ENABLE_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_IT);
 
   buzzerCount = 1;
   buzzer_state = BUZZER_STATE_DODO;
@@ -105,11 +105,11 @@ static void BUZZER_DODODO(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 8 - 1);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 16);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 8 - 1);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 16);
 
-  __HAL_TIM_CLEAR_FLAG(&STNODE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
-  __HAL_TIM_ENABLE_IT(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_IT);
+  __HAL_TIM_CLEAR_FLAG(&GNSE_BSP_buzzer_timer, TIM_FLAG_UPDATE);
+  __HAL_TIM_ENABLE_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_IT);
 
   buzzerCount = 3;
   buzzer_state = BUZZER_STATE_DODODO;
@@ -119,8 +119,8 @@ static void BUZZER_Warning(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 2 - 1);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 4);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 2 - 1);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 4);
 
   buzzer_state = BUZZER_STATE_WARNING;
 }
@@ -129,8 +129,8 @@ static void BUZZER_Danger(void)
 {
   BUZZER_Init();
 
-  __HAL_TIM_SET_AUTORELOAD(&STNODE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 4 - 1);
-  __HAL_TIM_SET_COMPARE(&STNODE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 8);
+  __HAL_TIM_SET_AUTORELOAD(&GNSE_BSP_buzzer_timer, (BUZZER_PERIOD + 1) / 4 - 1);
+  __HAL_TIM_SET_COMPARE(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL, (BUZZER_PERIOD + 1) / 8);
 
   buzzer_state = BUZZER_STATE_DANGER;
 }

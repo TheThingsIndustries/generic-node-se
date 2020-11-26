@@ -25,7 +25,7 @@
 
 #include "stm32wlxx.h"
 #include "stm32_adv_trace.h"
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 #ifdef __cplusplus
 extern "C" {

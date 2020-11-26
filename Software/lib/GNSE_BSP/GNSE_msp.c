@@ -14,13 +14,13 @@
  */
 
 /**
- * @file STNODE_msp.c
+ * @file GNSE_msp.c
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 static void msp_error_handler();
 
@@ -57,28 +57,28 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &gpio_init_structure);
 
         /* Configure the DMA handler for Transmission process */
-        STNODE_BSP_hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
-        STNODE_BSP_hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
-        STNODE_BSP_hdma_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
-        STNODE_BSP_hdma_tx.Init.PeriphInc = DMA_PINC_DISABLE;
-        STNODE_BSP_hdma_tx.Init.MemInc = DMA_MINC_ENABLE;
-        STNODE_BSP_hdma_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-        STNODE_BSP_hdma_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-        STNODE_BSP_hdma_tx.Init.Mode = DMA_NORMAL;
-        STNODE_BSP_hdma_tx.Init.Priority = DMA_PRIORITY_LOW;
+        GNSE_BSP_hdma_tx.Instance = DEBUG_USART_TX_DMA_CHANNEL;
+        GNSE_BSP_hdma_tx.Init.Request = DEBUG_USART_TX_DMA_REQUEST;
+        GNSE_BSP_hdma_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+        GNSE_BSP_hdma_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+        GNSE_BSP_hdma_tx.Init.MemInc = DMA_MINC_ENABLE;
+        GNSE_BSP_hdma_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+        GNSE_BSP_hdma_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+        GNSE_BSP_hdma_tx.Init.Mode = DMA_NORMAL;
+        GNSE_BSP_hdma_tx.Init.Priority = DMA_PRIORITY_LOW;
 
-        if (HAL_DMA_Init(&STNODE_BSP_hdma_tx) != HAL_OK)
+        if (HAL_DMA_Init(&GNSE_BSP_hdma_tx) != HAL_OK)
         {
             msp_error_handler();
         }
 
-        if (HAL_DMA_ConfigChannelAttributes(&STNODE_BSP_hdma_tx, DMA_CHANNEL_NPRIV) != HAL_OK)
+        if (HAL_DMA_ConfigChannelAttributes(&GNSE_BSP_hdma_tx, DMA_CHANNEL_NPRIV) != HAL_OK)
         {
             msp_error_handler();
         }
 
         /* Associate the initialized DMA handle to the UART handle */
-        __HAL_LINKDMA(uartHandle, hdmatx, STNODE_BSP_hdma_tx);
+        __HAL_LINKDMA(uartHandle, hdmatx, GNSE_BSP_hdma_tx);
 
         /* NVIC for DEBUG_USART, to catch the TX complete */
         HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_PRIORITY, 0);

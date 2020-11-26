@@ -14,21 +14,21 @@
  */
 
 /**
- * @file STNODE_bsp_clk_timer.h
+ * @file GNSE_bsp_clk_timer.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_CLK_TIMER_H
-#define STNODE_BSP_CLK_TIMER_H
+#ifndef GNSE_BSP_CLK_TIMER_H
+#define GNSE_BSP_CLK_TIMER_H
 
 #include "stm32wlxx_hal.h"
-#include "STNODE_bsp_error.h"
-#include "STNODE_bsp_conf.h"
+#include "GNSE_bsp_error.h"
+#include "GNSE_bsp_conf.h"
 
-extern TIM_HandleTypeDef STNODE_BSP_buzzer_timer;
-extern RTC_HandleTypeDef STNODE_BSP_rtc;
+extern TIM_HandleTypeDef GNSE_BSP_buzzer_timer;
+extern RTC_HandleTypeDef GNSE_BSP_rtc;
 
 #define RTC_N_PREDIV_S 10
 #define RTC_PREDIV_S ((1 << RTC_N_PREDIV_S) - 1)
@@ -66,8 +66,8 @@ extern RTC_HandleTypeDef STNODE_BSP_rtc;
 
 #define BUZZER_TIMER_PRIORITY 0
 
-int32_t STNODE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
+int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
 
-int32_t STNODE_BSP_RTC_Init(void);
+int32_t GNSE_BSP_RTC_Init(void);
 
-#endif /* STNODE_BSP_CLK_TIMER_H */
+#endif /* GNSE_BSP_CLK_TIMER_H */

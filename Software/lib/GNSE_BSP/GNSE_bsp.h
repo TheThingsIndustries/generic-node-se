@@ -14,20 +14,20 @@
  */
 
 /**
- * @file STNODE_bsp.h
+ * @file GNSE_bsp.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_H
-#define STNODE_BSP_H
+#ifndef GNSE_BSP_H
+#define GNSE_BSP_H
 
-#include "STNODE_bsp_conf.h"
+#include "GNSE_bsp_conf.h"
 #include "stm32wlxx_hal.h"
-#include "STNODE_bsp_radio.h"
-#include "STNODE_bsp_gpio.h"
-#include "STNODE_bsp_serial.h"
-#include "STNODE_bsp_clk_timer.h"
+#include "GNSE_bsp_radio.h"
+#include "GNSE_bsp_gpio.h"
+#include "GNSE_bsp_serial.h"
+#include "GNSE_bsp_clk_timer.h"
 
-#endif /* STNODE_BSP_H */
+#endif /* GNSE_BSP_H */

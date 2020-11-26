@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#include "STNODE_bsp.h" // subghz.h should be deleted if radio_driver.c doesnt depend on it
+#include "GNSE_bsp.h" // subghz.h should be deleted if radio_driver.c doesnt depend on it
 
 #ifdef __cplusplus
 }

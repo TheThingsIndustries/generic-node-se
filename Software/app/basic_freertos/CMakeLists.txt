@@ -5,7 +5,7 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/app/basic_freertos/*.c"
     "${PROJECT_SOURCE_DIR}/target/*.c"
     "${PROJECT_SOURCE_DIR}/target/FreeRTOS_CMSIS/*.c"
-    "${PROJECT_SOURCE_DIR}/lib/STNODE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
     "${PROJECT_SOURCE_DIR}/lib/MCU_FLASH/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
@@ -30,7 +30,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/basic_freertos
     ${PROJECT_SOURCE_DIR}/app/basic_freertos/conf
-    ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3

@@ -14,13 +14,13 @@
  */
 
 /**
- * @file STNODE_radio.c
+ * @file GNSE_radio.c
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#include "STNODE_bsp_radio.h"
+#include "GNSE_bsp_radio.h"
 
 SUBGHZ_HandleTypeDef hsubghz;
 

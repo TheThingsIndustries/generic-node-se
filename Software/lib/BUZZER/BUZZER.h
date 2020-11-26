@@ -23,7 +23,7 @@
 #ifndef BUZZER_H
 #define BUZZER_H
 
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 #ifdef __cplusplus
 extern "C"

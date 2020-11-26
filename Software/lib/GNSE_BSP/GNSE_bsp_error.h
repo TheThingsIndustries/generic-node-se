@@ -14,35 +14,35 @@
  */
 
 /**
- * @file STNODE_bsp_error.h
+ * @file GNSE_bsp_error.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_ERROR_H
-#define STNODE_BSP_ERROR_H
+#ifndef GNSE_BSP_ERROR_H
+#define GNSE_BSP_ERROR_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 /* Common Error codes */
-#define STNODE_BSP_ERROR_NONE                         0
-#define STNODE_BSP_ERROR_NO_INIT                     -1
-#define STNODE_BSP_ERROR_WRONG_PARAM                 -2
-#define STNODE_BSP_ERROR_BUSY                        -3
-#define STNODE_BSP_ERROR_PERIPH_FAILURE              -4
-#define STNODE_BSP_ERROR_COMPONENT_FAILURE           -5
-#define STNODE_BSP_ERROR_UNKNOWN_FAILURE             -6
-#define STNODE_BSP_ERROR_UNKNOWN_COMPONENT           -7
-#define STNODE_BSP_ERROR_BUS_FAILURE                 -8
-#define STNODE_BSP_ERROR_CLOCK_FAILURE               -9
-#define STNODE_BSP_ERROR_MSP_FAILURE                 -10
-#define STNODE_BSP_ERROR_FEATURE_NOT_SUPPORTED       -11
+#define GNSE_BSP_ERROR_NONE                         0
+#define GNSE_BSP_ERROR_NO_INIT                     -1
+#define GNSE_BSP_ERROR_WRONG_PARAM                 -2
+#define GNSE_BSP_ERROR_BUSY                        -3
+#define GNSE_BSP_ERROR_PERIPH_FAILURE              -4
+#define GNSE_BSP_ERROR_COMPONENT_FAILURE           -5
+#define GNSE_BSP_ERROR_UNKNOWN_FAILURE             -6
+#define GNSE_BSP_ERROR_UNKNOWN_COMPONENT           -7
+#define GNSE_BSP_ERROR_BUS_FAILURE                 -8
+#define GNSE_BSP_ERROR_CLOCK_FAILURE               -9
+#define GNSE_BSP_ERROR_MSP_FAILURE                 -10
+#define GNSE_BSP_ERROR_FEATURE_NOT_SUPPORTED       -11
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* STNODE_BSP_ERROR_H */
+#endif /* GNSE_BSP_ERROR_H */

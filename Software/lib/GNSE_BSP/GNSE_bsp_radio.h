@@ -14,14 +14,14 @@
  */
 
 /**
- * @file STNODE_radio.h
+ * @file GNSE_radio.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#ifndef STNODE_BSP_RADIO_H
-#define STNODE_BSP_RADIO_H
+#ifndef GNSE_BSP_RADIO_H
+#define GNSE_BSP_RADIO_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -98,4 +98,4 @@ int32_t RBI_IsDCDC(void);
 }
 #endif
 
-#endif /* STNODE_BSP_RADIO_H */
+#endif /* GNSE_BSP_RADIO_H */
