@@ -22,7 +22,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "STNODE_BSP.h"
+#include "GNSE_BSP.h"
 #include "stm32wlxx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -174,12 +174,12 @@ void SysTick_Handler(void)
 
 void USART2_IRQHandler(void)
 {
-  HAL_UART_IRQHandler(&STNODE_BSP_debug_usart);
+  HAL_UART_IRQHandler(&GNSE_BSP_debug_usart);
 }
 
 void DMA1_Channel5_IRQHandler(void)
 {
-  HAL_DMA_IRQHandler(&STNODE_BSP_hdma_tx);
+  HAL_DMA_IRQHandler(&GNSE_BSP_hdma_tx);
 }
 
 /* USER CODE END 1 */

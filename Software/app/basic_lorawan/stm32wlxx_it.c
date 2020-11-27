@@ -16,7 +16,7 @@
   ******************************************************************************
   */
 
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 #include "stm32wlxx_it.h"
 
 extern RTC_HandleTypeDef hrtc;
@@ -106,7 +106,7 @@ void SysTick_Handler(void)
   */
 void TAMP_STAMP_LSECSS_SSRU_IRQHandler(void)
 {
-  HAL_RTCEx_SSRUIRQHandler(&STNODE_BSP_rtc);
+  HAL_RTCEx_SSRUIRQHandler(&GNSE_BSP_rtc);
 }
 
 /**
@@ -127,12 +127,12 @@ void EXTI1_IRQHandler(void)
 
 void USART2_IRQHandler(void)
 {
-  HAL_UART_IRQHandler(&STNODE_BSP_debug_usart);
+  HAL_UART_IRQHandler(&GNSE_BSP_debug_usart);
 }
 
 void DMA1_Channel5_IRQHandler(void)
 {
-  HAL_DMA_IRQHandler(&STNODE_BSP_hdma_tx);
+  HAL_DMA_IRQHandler(&GNSE_BSP_hdma_tx);
 }
 
 /**
@@ -140,7 +140,7 @@ void DMA1_Channel5_IRQHandler(void)
   */
 void RTC_Alarm_IRQHandler(void)
 {
-  HAL_RTC_AlarmIRQHandler(&STNODE_BSP_rtc);
+  HAL_RTC_AlarmIRQHandler(&GNSE_BSP_rtc);
 }
 
 /**

@@ -9,7 +9,7 @@ file(GLOB LORAWAN_SRC
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
-    "${PROJECT_SOURCE_DIR}/lib/STNODE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/*.c"
 
@@ -36,7 +36,7 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
-    ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     )
 target_compile_definitions(lorawan
     PUBLIC
@@ -48,8 +48,8 @@ target_compile_definitions(lorawan
 file(GLOB MAIN_SRC
         "${PROJECT_SOURCE_DIR}/app/basic_lorawan/*.c"
         "${PROJECT_SOURCE_DIR}/target/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/STNODE_BSP/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/STNODE_HAL/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
         "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
         "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
         "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
@@ -71,8 +71,8 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
-    ${PROJECT_SOURCE_DIR}/lib/STNODE_BSP
-    ${PROJECT_SOURCE_DIR}/lib/STNODE_HAl
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAl
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635

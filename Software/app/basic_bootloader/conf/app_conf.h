@@ -15,7 +15,7 @@
 
 /**
  * @file app_conf.h
- * @brief Common configuration file for STNODE applications
+ * @brief Common configuration file for GNSE applications
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *

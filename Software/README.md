@@ -1,4 +1,4 @@
-# STNODE Software
+# GNSE Software
 The software uses `CMAKE` and `arm-none-eabi-gcc` toolchain with the ST SOC `STM32WLxx`
 
 ## Structure
@@ -17,7 +17,7 @@ The software uses `CMAKE` and `arm-none-eabi-gcc` toolchain with the ST SOC `STM
 ## Set-up
 1. Clone project & checkout `develop` branch
 ```
-$ git clone --branch develop --recurse-submodules https://github.com/TheThingsIndustries/st-node.git
+$ git clone --branch develop --recurse-submodules https://github.com/TheThingsIndustries/generic-node-se.git
 ```
 2. Set `TOOLCHAIN_PREFIX` in [cross.cmake](./cross.cmake)
 3. Install [MinGW](http://mingw.org) for Windows environment and make sure `mingw32-make.exe` can be used from cmd (as a recognized command)
@@ -28,7 +28,7 @@ $ git clone --branch develop --recurse-submodules https://github.com/TheThingsIn
 
 ### Debug build commands
 ```
-$ cd st-node/Software/
+$ cd generic-node-se/Software/
 
 $ mkdir -p build/debug
 
@@ -40,7 +40,7 @@ $ make
 ```
 ### Release build commands
 ```
-$ cd st-node/Software/
+$ cd generic-node-se/Software/
 
 $ mkdir -p build/release
 
@@ -55,7 +55,7 @@ $ make
 
 ### Debug build commands
 ```
-$ cd st-node\Software\
+$ cd generic-node-se\Software\
 
 $ mkdir build\debug
 
@@ -68,7 +68,7 @@ $ mingw32-make.exe
 
 ### Release build commands
 ```
-$ cd st-node\Software\
+$ cd generic-node-se\Software\
 
 $ mkdir build\release
 
