@@ -57,7 +57,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
   * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
   * @param none
   * @return  none
-  * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/st-node/issues/57
+  * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/generic-node-se/issues/57
   */
 void SystemApp_Init(void)
 {

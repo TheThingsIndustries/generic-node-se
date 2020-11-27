@@ -401,7 +401,7 @@ int32_t GNSE_BSP_BM_Init(void)
     HAL_GPIO_Init(VBAT_PORT, &gpio_init_structure);
     HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
 
-    //TODO: Add ADC init here, see https://github.com/TheThingsIndustries/st-node/issues/29
+    //TODO: Add ADC init here, see https://github.com/TheThingsIndustries/generic-node-se/issues/29
 
     return GNSE_BSP_ERROR_NONE;
 }
@@ -419,7 +419,7 @@ int32_t GNSE_BSP_BM_DeInit(void)
     /* DeInit the VBAT pin */
     HAL_GPIO_DeInit(VBAT_PORT, VBAT_PIN);
 
-    //TODO: Add ADC Deinit here, see https://github.com/TheThingsIndustries/st-node/issues/29
+    //TODO: Add ADC Deinit here, see https://github.com/TheThingsIndustries/generic-node-se/issues/29
 
     return GNSE_BSP_ERROR_NONE;
 }
