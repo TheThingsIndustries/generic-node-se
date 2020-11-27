@@ -47,18 +47,18 @@ int main(void)
   UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
 
-  APP_PPRINTF("\r\n -------------- Starting STNODE basic app -------------- \r\n");
+  APP_PPRINTF("\r\n -------------- Starting GNSE basic app -------------- \r\n");
 
   APP_PPRINTF("\r\n Testing LED functionality \r\n");
   led_toggle(NUMBER_LED_TOGGLE, LED_TOGGLE_INTERVAL);
 
   APP_PPRINTF("\r\n Testing secure element functionality \r\n");
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_SECURE_ELEMENT \r\n");
-  STNODE_BSP_LS_Init(LOAD_SWITCH_SECURE_ELEMENT);
-  STNODE_BSP_LS_On(LOAD_SWITCH_SECURE_ELEMENT);
+  GNSE_BSP_LS_Init(LOAD_SWITCH_SECURE_ELEMENT);
+  GNSE_BSP_LS_On(LOAD_SWITCH_SECURE_ELEMENT);
   HAL_Delay(100);
 
-  STNODE_BSP_SEC_ELM_I2C2_Init();
+  GNSE_BSP_SEC_ELM_I2C2_Init();
   HAL_Delay(100);
 
   APP_PPRINTF("\r\n 2) Attempting to read secure element serial number \r\n");
@@ -66,11 +66,11 @@ int main(void)
 
   APP_PPRINTF("\r\n Testing on board sensors functionality \r\n");
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_SENSORS \r\n");
-  STNODE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
-  STNODE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+  GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+  GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
   HAL_Delay(100);
 
-  STNODE_BSP_Sensor_I2C1_Init();
+  GNSE_BSP_Sensor_I2C1_Init();
 
   APP_PPRINTF("\r\n 2) Attempting to read sensors data \r\n");
   tempreture_sensor_read_data_polling(NUMBER_TEMPRETURE_SENSOR_READ, TEMPRETURE_SENSOR_READ_INTERVAL);
@@ -78,8 +78,8 @@ int main(void)
 
   APP_PPRINTF("\r\n Testing on board external flash functionality \r\n");
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_FLASH \r\n");
-  STNODE_BSP_LS_Init(LOAD_SWITCH_FLASH);
-  STNODE_BSP_LS_On(LOAD_SWITCH_FLASH);
+  GNSE_BSP_LS_Init(LOAD_SWITCH_FLASH);
+  GNSE_BSP_LS_On(LOAD_SWITCH_FLASH);
   HAL_Delay(100);
 
   APP_PPRINTF("\r\n 2) Attempting to read & write to external flash \r\n");
@@ -88,12 +88,12 @@ int main(void)
   APP_PPRINTF("\r\n Testing Buzzer functionality \r\n");
   buzzer_play(NUMBER_BUZZER_PLAY, BUZZER_PLAY_INTERVAL);
 
-  APP_PPRINTF("\r\n -------------- Finished STNODE basic app -------------- \r\n");
+  APP_PPRINTF("\r\n -------------- Finished GNSE basic app -------------- \r\n");
   while (1)
   {
-    STNODE_BSP_LED_Toggle(LED_BLUE);
+    GNSE_BSP_LED_Toggle(LED_BLUE);
     HAL_Delay(100);
-    STNODE_BSP_LED_Toggle(LED_RED);
+    GNSE_BSP_LED_Toggle(LED_RED);
     HAL_Delay(100);
   }
   return 0;

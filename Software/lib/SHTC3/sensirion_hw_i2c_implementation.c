@@ -31,7 +31,7 @@
 
 #include "stm32wlxx_hal.h"
 #include "sensirion_i2c.h"
-#include "STNODE_BSP.h"
+#include "GNSE_BSP.h"
 
 /**
  * Initialize all hard- and software components that are needed for the I2C
@@ -39,7 +39,7 @@
  */
 void sensirion_i2c_init(void)
 {
-// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
 
 /**
@@ -47,7 +47,7 @@ void sensirion_i2c_init(void)
  */
 void sensirion_i2c_release(void)
 {
-// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
 
 /**
@@ -62,7 +62,7 @@ void sensirion_i2c_release(void)
  */
 int8_t sensirion_i2c_read(uint8_t address, uint8_t *data, uint16_t count)
 {
-    return (int8_t)HAL_I2C_Master_Receive(&STNODE_BSP_sensor_i2c1, (uint16_t)(address << 1),
+    return (int8_t)HAL_I2C_Master_Receive(&GNSE_BSP_sensor_i2c1, (uint16_t)(address << 1),
                                           data, count, SENSOR_I2C1_TIMOUT);
 }
 
@@ -80,7 +80,7 @@ int8_t sensirion_i2c_read(uint8_t address, uint8_t *data, uint16_t count)
 int8_t sensirion_i2c_write(uint8_t address, const uint8_t *data,
                            uint16_t count)
 {
-    return (int8_t)HAL_I2C_Master_Transmit(&STNODE_BSP_sensor_i2c1, (uint16_t)(address << 1),
+    return (int8_t)HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, (uint16_t)(address << 1),
                                            (uint8_t *)data, count, SENSOR_I2C1_TIMOUT);
 }
 

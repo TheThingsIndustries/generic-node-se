@@ -23,7 +23,7 @@
 #include "stm32_seq.h"
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
-#include "STNODE_rtc.h"
+#include "GNSE_rtc.h"
 
 #define MAX_TS_SIZE (int)16
 
@@ -57,7 +57,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
   * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
   * @param none
   * @return  none
-  * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/st-node/issues/57
+  * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/generic-node-se/issues/57
   */
 void SystemApp_Init(void)
 {
@@ -272,7 +272,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 uint32_t HAL_GetTick(void)
 {
-  return STNODE_RTC_GetTimerValue();
+  return GNSE_RTC_GetTimerValue();
 }
 
 /**
@@ -282,7 +282,7 @@ uint32_t HAL_GetTick(void)
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  STNODE_RTC_DelayMs(Delay); /* based on RTC */
+  GNSE_RTC_DelayMs(Delay); /* based on RTC */
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

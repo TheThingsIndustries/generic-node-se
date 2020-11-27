@@ -14,46 +14,33 @@
  */
 
 /**
- * @file STNODE_lpm.c
+ * @file GNSE_lpm.h
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
-#include "STNODE_lpm.h"
-#include "usart_if.h"
+#ifndef GNSE_LPM_H
+#define GNSE_LPM_H
 
-const struct UTIL_LPM_Driver_s UTIL_PowerDriver =
-{
-  STNODE_LPM_EnterSleepMode,
-  STNODE_LPM_ExitSleepMode,
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-  STNODE_LPM_EnterStopMode,
-  STNODE_LPM_ExitStopMode,
-
-  STNODE_LPM_EnterOffMode,
-  STNODE_LPM_ExitOffMode,
-};
+#include "stm32_lpm.h"
 
 /**
   * @brief Enters Low Power Off Mode
   * @param none
   * @return none
   */
-void STNODE_LPM_EnterOffMode(void)
-{
-  // Not implemented.
-}
-
+void GNSE_LPM_EnterOffMode(void);
 /**
   * @brief Exits Low Power Off Mode
   * @param none
   * @return none
   */
-void STNODE_LPM_ExitOffMode(void)
-{
-  // Not implemented.
-}
+void GNSE_LPM_ExitOffMode(void);
 
 /**
   * @brief Enters Low Power Stop Mode
@@ -61,33 +48,14 @@ void STNODE_LPM_ExitOffMode(void)
   * @param none
   * @return none
   */
-void STNODE_LPM_EnterStopMode(void)
-{
-  /* Suspend sysTick : work around for degugger problem in dual core (tickets 71085,  72038, 71087 ) */
-  HAL_SuspendTick();
-  /* Clear Status Flag before entering STOP/STANDBY Mode */
-  LL_PWR_ClearFlag_C1STOP_C1STB();
-  HAL_PWREx_EnterSTOP2Mode(PWR_STOPENTRY_WFI);
-}
-
+void GNSE_LPM_EnterStopMode(void);
 /**
   * @brief Exits Low Power Stop Mode
   * @note Enable the pll at 32MHz
   * @param none
   * @return none
   */
-void STNODE_LPM_ExitStopMode(void)
-{
-  /* Resume sysTick : work around for degugger problem in dual core */
-  HAL_ResumeTick();
-  /*Not retained periph:
-    ADC interface
-    DAC interface USARTx, TIMx, i2Cx, SPIx
-    SRAM ctrls, DMAx, DMAMux, AES, RNG, HSEM  */
-
-  /* Resume not retained USARTx and DMA */
-  vcom_Resume();
-}
+void GNSE_LPM_ExitStopMode(void);
 
 /**
   * @brief Enters Low Power Sleep Mode
@@ -95,12 +63,7 @@ void STNODE_LPM_ExitStopMode(void)
   * @param none
   * @return none
   */
-void STNODE_LPM_EnterSleepMode(void)
-{
-  /* Suspend sysTick */
-  HAL_SuspendTick();
-  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-}
+void GNSE_LPM_EnterSleepMode(void);
 
 /**
   * @brief Enters Low Power Sleep Mode
@@ -108,8 +71,10 @@ void STNODE_LPM_EnterSleepMode(void)
   * @param none
   * @return none
   */
-void STNODE_LPM_ExitSleepMode(void)
-{
-  /* Suspend sysTick */
-  HAL_ResumeTick();
+void GNSE_LPM_ExitSleepMode(void);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /*GNSE_LPM_H*/

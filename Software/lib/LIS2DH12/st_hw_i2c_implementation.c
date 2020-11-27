@@ -21,7 +21,7 @@
  */
 
 #include "LIS2DH12.h"
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 /*
  * @brief  Write generic device register (platform dependent)
@@ -79,8 +79,8 @@ LIS2DE12_op_result_t LIS2DH12_init(stmdev_ctx_t *app_ctx)
     {
         app_ctx->write_reg = st_platform_write;
         app_ctx->read_reg = st_platform_read;
-        app_ctx->handle = &STNODE_BSP_sensor_i2c1;
+        app_ctx->handle = &GNSE_BSP_sensor_i2c1;
         return LIS2DE12_OP_SUCCESS;
     }
-    // TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+    // TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }

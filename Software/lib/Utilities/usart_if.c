@@ -32,8 +32,8 @@ const UTIL_ADV_TRACE_Driver_s UTIL_TraceDriver =
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Uart Handle */
-extern UART_HandleTypeDef STNODE_BSP_debug_usart;
-#define UartHandle STNODE_BSP_debug_usart
+extern UART_HandleTypeDef GNSE_BSP_debug_usart;
+#define UartHandle GNSE_BSP_debug_usart
 uint8_t charRx;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,8 +55,8 @@ static void (*RxCpltCallback)(uint8_t *rxChar, uint16_t size, uint8_t error);
 UTIL_ADV_TRACE_Status_t vcom_Init(void (*cb)(void *))
 {
   TxCpltCallback = cb;
-  STNODE_BSP_UART_DMA_Init();
-  STNODE_BSP_USART_Init();
+  GNSE_BSP_UART_DMA_Init();
+  GNSE_BSP_USART_Init();
   return UTIL_ADV_TRACE_OK;
 }
 
@@ -121,9 +121,9 @@ UTIL_ADV_TRACE_Status_t vcom_ReceiveInit(void (*RxCb)(uint8_t *rxChar, uint16_t 
 void vcom_Resume(void)
 {
   /*to re-enable lost UART & DMA settings*/
-  HAL_UART_Init(&STNODE_BSP_debug_usart);
+  HAL_UART_Init(&GNSE_BSP_debug_usart);
 
-  HAL_DMA_Init(&STNODE_BSP_hdma_tx);
+  HAL_DMA_Init(&GNSE_BSP_hdma_tx);
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)

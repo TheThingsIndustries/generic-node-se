@@ -25,7 +25,7 @@ extern "C" {
 
 #include "stm32_mem.h"
 #include "mw_log_conf.h"     /* mw trace conf */
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 #include "app_conf.h"
 
 

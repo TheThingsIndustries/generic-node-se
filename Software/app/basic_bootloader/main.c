@@ -43,7 +43,7 @@ int main(void)
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
 #endif
 
-  APP_PPRINTF("\r\n -------------- Starting STNODE basic bootloader -------------- \r\n");
+  APP_PPRINTF("\r\n -------------- Starting GNSE basic bootloader -------------- \r\n");
   Bootloader_Init();
   Bootloader_HandleInput();
 

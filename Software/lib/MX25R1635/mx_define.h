@@ -23,11 +23,11 @@
 #ifndef MX_DEFINE_H
 #define MX_DEFINE_H
 
-#define PLATFORM_STNODE 1
+#define PLATFORM_GNSE 1
 
-#if PLATFORM_STNODE
+#if PLATFORM_GNSE
 #include "stm32_adv_trace.h"
-#include "STNODE_bsp.h"
+#include "GNSE_bsp.h"
 
 #define GetChar()
 #define Mx_printf FLASH_PPRINTF

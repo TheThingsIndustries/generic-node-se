@@ -14,18 +14,18 @@
  */
 
 /**
- * @file STNODE_rtc.c
+ * @file GNSE_rtc.c
  *
  * @copyright Copyright (c) 2020 The Things Industries B.V.
  *
  */
 
 #include <math.h>
-#include "STNODE_bsp.h"
-#include "STNODE_rtc.h"
+#include "GNSE_bsp.h"
+#include "GNSE_rtc.h"
 #include "stm32wlxx_ll_rtc.h"
 
-#define RtcHandle STNODE_BSP_rtc
+#define RtcHandle GNSE_BSP_rtc
 
 #define MIN_ALARM_DELAY               3 /* in ticks */
 /* RTC Ticks/ms conversion */
@@ -37,9 +37,9 @@
 
 #ifdef RTIF_DEBUG
 #include "sys_app.h" /*for app_log*/
-#define STNODE_RTC_DBG_PRINTF(...) do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ALWAYS, T_REG_OFF, TS_OFF, __VA_ARGS__);} }while(0);
+#define GNSE_RTC_DBG_PRINTF(...) do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ALWAYS, T_REG_OFF, TS_OFF, __VA_ARGS__);} }while(0);
 #else
-#define STNODE_RTC_DBG_PRINTF(...)
+#define GNSE_RTC_DBG_PRINTF(...)
 #endif /* RTIF_DEBUG */
 
 /*!
@@ -67,7 +67,7 @@ static inline uint32_t GetTimerTicks(void);
  * @param [IN] MSBticks
  * @return None
  */
-static void STNODE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks);
+static void GNSE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks);
 
 /*!
  * @brief Reads MSBticks from backup register
@@ -76,115 +76,115 @@ static void STNODE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks);
  * @param [IN] None
  * @return MSBticks
  */
-static uint32_t STNODE_RTC_BkUp_Read_MSBticks(void);
+static uint32_t GNSE_RTC_BkUp_Read_MSBticks(void);
 
 /*Timer driver*/
 const UTIL_TIMER_Driver_s UTIL_TimerDriver =
 {
-  STNODE_RTC_Init,
+  GNSE_RTC_Init,
   NULL,
 
-  STNODE_RTC_StartTimer,
-  STNODE_RTC_StopTimer,
+  GNSE_RTC_StartTimer,
+  GNSE_RTC_StopTimer,
 
-  STNODE_RTC_SetTimerContext,
-  STNODE_RTC_GetTimerContext,
+  GNSE_RTC_SetTimerContext,
+  GNSE_RTC_GetTimerContext,
 
-  STNODE_RTC_GetTimerElapsedTime,
-  STNODE_RTC_GetTimerValue,
-  STNODE_RTC_GetMinimumTimeout,
+  GNSE_RTC_GetTimerElapsedTime,
+  GNSE_RTC_GetTimerValue,
+  GNSE_RTC_GetMinimumTimeout,
 
-  STNODE_RTC_Convert_ms2Tick,
-  STNODE_RTC_Convert_Tick2ms,
+  GNSE_RTC_Convert_ms2Tick,
+  GNSE_RTC_Convert_Tick2ms,
 };
 
 /*System Time driver*/
 const UTIL_SYSTIM_Driver_s UTIL_SYSTIMDriver =
 {
-  STNODE_RTC_BkUp_Write_Seconds,
-  STNODE_RTC_BkUp_Read_Seconds,
-  STNODE_RTC_BkUp_Write_SubSeconds,
-  STNODE_RTC_BkUp_Read_SubSeconds,
-  STNODE_RTC_GetTime,
+  GNSE_RTC_BkUp_Write_Seconds,
+  GNSE_RTC_BkUp_Read_Seconds,
+  GNSE_RTC_BkUp_Write_SubSeconds,
+  GNSE_RTC_BkUp_Read_SubSeconds,
+  GNSE_RTC_GetTime,
 };
 
-UTIL_TIMER_Status_t STNODE_RTC_Init(void)
+UTIL_TIMER_Status_t GNSE_RTC_Init(void)
 {
   if (RTC_Initialized == false)
   {
-    STNODE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
+    GNSE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
 
-    STNODE_BSP_RTC_Init();
+    GNSE_BSP_RTC_Init();
     /** Stop Timer */
-    STNODE_RTC_StopTimer();
+    GNSE_RTC_StopTimer();
     /** Configure the Alarm A */
-    HAL_RTC_DeactivateAlarm(&STNODE_BSP_rtc, RTC_ALARM_A);
+    HAL_RTC_DeactivateAlarm(&GNSE_BSP_rtc, RTC_ALARM_A);
     /*Enable Direct Read of the calendar registers (not through Shadow) */
-    HAL_RTCEx_EnableBypassShadow(&STNODE_BSP_rtc);
+    HAL_RTCEx_EnableBypassShadow(&GNSE_BSP_rtc);
     /*initialise MSB ticks*/
-    STNODE_RTC_BkUp_Write_MSBticks(0);
+    GNSE_RTC_BkUp_Write_MSBticks(0);
 
-    STNODE_RTC_SetTimerContext();
+    GNSE_RTC_SetTimerContext();
 
     RTC_Initialized = true;
   }
   return UTIL_TIMER_OK;
 }
 
-UTIL_TIMER_Status_t STNODE_RTC_StartTimer(uint32_t timeout)
+UTIL_TIMER_Status_t GNSE_RTC_StartTimer(uint32_t timeout)
 {
   RTC_AlarmTypeDef sAlarm = {0};
   /*Stop timer if one is already started*/
-  STNODE_RTC_StopTimer();
+  GNSE_RTC_StopTimer();
   timeout += RtcTimerContext;
 
-  STNODE_RTC_DBG_PRINTF("Start timer: time=%d, alarm=%d\n\r",  GetTimerTicks(), timeout);
+  GNSE_RTC_DBG_PRINTF("Start timer: time=%d, alarm=%d\n\r",  GetTimerTicks(), timeout);
   /* starts timer*/
   sAlarm.BinaryAutoClr = RTC_ALARMSUBSECONDBIN_AUTOCLR_NO;
   sAlarm.AlarmTime.SubSeconds = UINT32_MAX - timeout;
   sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
   sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDBINMASK_NONE;
   sAlarm.Alarm = RTC_ALARM_A;
-  if (HAL_RTC_SetAlarm_IT(&STNODE_BSP_rtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
+  if (HAL_RTC_SetAlarm_IT(&GNSE_BSP_rtc, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
   {
     return UTIL_TIMER_HW_ERROR;
   }
   return UTIL_TIMER_OK;
 }
 
-UTIL_TIMER_Status_t STNODE_RTC_StopTimer(void)
+UTIL_TIMER_Status_t GNSE_RTC_StopTimer(void)
 {
   /* Clear RTC Alarm Flag */
-  __HAL_RTC_ALARM_CLEAR_FLAG(&STNODE_BSP_rtc, RTC_FLAG_ALRAF);
+  __HAL_RTC_ALARM_CLEAR_FLAG(&GNSE_BSP_rtc, RTC_FLAG_ALRAF);
   /* Disable the Alarm A interrupt */
-  HAL_RTC_DeactivateAlarm(&STNODE_BSP_rtc, RTC_ALARM_A);
+  HAL_RTC_DeactivateAlarm(&GNSE_BSP_rtc, RTC_ALARM_A);
   /*overload RTC feature enable*/
-  STNODE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
+  GNSE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
   return UTIL_TIMER_OK;
 }
 
-uint32_t STNODE_RTC_SetTimerContext(void)
+uint32_t GNSE_RTC_SetTimerContext(void)
 {
   /*store time context*/
   RtcTimerContext = GetTimerTicks();
-  STNODE_RTC_DBG_PRINTF("STNODE_RTC_SetTimerContext=%d\n\r", RtcTimerContext);
+  GNSE_RTC_DBG_PRINTF("GNSE_RTC_SetTimerContext=%d\n\r", RtcTimerContext);
   /*return time context*/
   return RtcTimerContext;
 }
 
-uint32_t STNODE_RTC_GetTimerContext(void)
+uint32_t GNSE_RTC_GetTimerContext(void)
 {
-  STNODE_RTC_DBG_PRINTF("STNODE_RTC_GetTimerContext=%d\n\r", RtcTimerContext);
+  GNSE_RTC_DBG_PRINTF("GNSE_RTC_GetTimerContext=%d\n\r", RtcTimerContext);
   /*return time context*/
   return RtcTimerContext;
 }
 
-uint32_t STNODE_RTC_GetTimerElapsedTime(void)
+uint32_t GNSE_RTC_GetTimerElapsedTime(void)
 {
   return ((uint32_t)(GetTimerTicks() - RtcTimerContext));
 }
 
-uint32_t STNODE_RTC_GetTimerValue(void)
+uint32_t GNSE_RTC_GetTimerValue(void)
 {
   if (RTC_Initialized == true)
   {
@@ -196,24 +196,24 @@ uint32_t STNODE_RTC_GetTimerValue(void)
   }
 }
 
-uint32_t STNODE_RTC_GetMinimumTimeout(void)
+uint32_t GNSE_RTC_GetMinimumTimeout(void)
 {
   return (MIN_ALARM_DELAY);
 }
 
-uint32_t STNODE_RTC_Convert_ms2Tick(uint32_t timeMilliSec)
+uint32_t GNSE_RTC_Convert_ms2Tick(uint32_t timeMilliSec)
 {
   return ((uint32_t)((((uint64_t) timeMilliSec) << RTC_N_PREDIV_S) / 1000));
 }
 
-uint32_t STNODE_RTC_Convert_Tick2ms(uint32_t tick)
+uint32_t GNSE_RTC_Convert_Tick2ms(uint32_t tick)
 {
   return ((uint32_t)((((uint64_t)(tick)) * 1000) >> RTC_N_PREDIV_S));
 }
 
-void STNODE_RTC_DelayMs(uint32_t delay)
+void GNSE_RTC_DelayMs(uint32_t delay)
 {
-  uint32_t delayTicks = STNODE_RTC_Convert_ms2Tick(delay);
+  uint32_t delayTicks = GNSE_RTC_Convert_ms2Tick(delay);
   uint32_t timeout = GetTimerTicks();
 
   /* Wait delay ms */
@@ -242,17 +242,17 @@ void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *RtcHandle)
 void HAL_RTCEx_SSRUEventCallback(RTC_HandleTypeDef *hrtc)
 {
   /*called every 48 days with 1024 ticks per seconds*/
-  STNODE_RTC_DBG_PRINTF(">>Handler SSRUnderflow at %d\n\r", GetTimerTicks());
+  GNSE_RTC_DBG_PRINTF(">>Handler SSRUnderflow at %d\n\r", GetTimerTicks());
   /*Increment MSBticks*/
-  uint32_t MSB_ticks = STNODE_RTC_BkUp_Read_MSBticks();
-  STNODE_RTC_BkUp_Write_MSBticks(MSB_ticks + 1);
+  uint32_t MSB_ticks = GNSE_RTC_BkUp_Read_MSBticks();
+  GNSE_RTC_BkUp_Write_MSBticks(MSB_ticks + 1);
 }
 
-uint32_t STNODE_RTC_GetTime(uint16_t *mSeconds)
+uint32_t GNSE_RTC_GetTime(uint16_t *mSeconds)
 {
   uint64_t ticks;
   uint32_t timerValueLsb = GetTimerTicks();
-  uint32_t timerValueMSB = STNODE_RTC_BkUp_Read_MSBticks();
+  uint32_t timerValueMSB = GNSE_RTC_BkUp_Read_MSBticks();
 
   ticks = (((uint64_t) timerValueMSB) << 32) + timerValueLsb;
 
@@ -260,40 +260,40 @@ uint32_t STNODE_RTC_GetTime(uint16_t *mSeconds)
 
   ticks = (uint32_t) ticks & RTC_PREDIV_S;
 
-  *mSeconds = STNODE_RTC_Convert_Tick2ms(ticks);
+  *mSeconds = GNSE_RTC_Convert_Tick2ms(ticks);
 
   return seconds;
 }
 
-void STNODE_RTC_BkUp_Write_Seconds(uint32_t Seconds)
+void GNSE_RTC_BkUp_Write_Seconds(uint32_t Seconds)
 {
-  HAL_RTCEx_BKUPWrite(&STNODE_BSP_rtc, RTC_BKP_SECONDS, Seconds);
+  HAL_RTCEx_BKUPWrite(&GNSE_BSP_rtc, RTC_BKP_SECONDS, Seconds);
 }
 
-void STNODE_RTC_BkUp_Write_SubSeconds(uint32_t SubSeconds)
+void GNSE_RTC_BkUp_Write_SubSeconds(uint32_t SubSeconds)
 {
-  HAL_RTCEx_BKUPWrite(&STNODE_BSP_rtc, RTC_BKP_SUBSECONDS, SubSeconds);
+  HAL_RTCEx_BKUPWrite(&GNSE_BSP_rtc, RTC_BKP_SUBSECONDS, SubSeconds);
 }
 
-uint32_t STNODE_RTC_BkUp_Read_Seconds(void)
+uint32_t GNSE_RTC_BkUp_Read_Seconds(void)
 {
-  return HAL_RTCEx_BKUPRead(&STNODE_BSP_rtc, RTC_BKP_SECONDS);
+  return HAL_RTCEx_BKUPRead(&GNSE_BSP_rtc, RTC_BKP_SECONDS);
 }
 
-uint32_t STNODE_RTC_BkUp_Read_SubSeconds(void)
+uint32_t GNSE_RTC_BkUp_Read_SubSeconds(void)
 {
-  return HAL_RTCEx_BKUPRead(&STNODE_BSP_rtc, RTC_BKP_SUBSECONDS);
+  return HAL_RTCEx_BKUPRead(&GNSE_BSP_rtc, RTC_BKP_SUBSECONDS);
 }
 
-static void STNODE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks)
+static void GNSE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks)
 {
-  HAL_RTCEx_BKUPWrite(&STNODE_BSP_rtc, RTC_BKP_MSBTICKS, MSBticks);
+  HAL_RTCEx_BKUPWrite(&GNSE_BSP_rtc, RTC_BKP_MSBTICKS, MSBticks);
 }
 
-static uint32_t STNODE_RTC_BkUp_Read_MSBticks(void)
+static uint32_t GNSE_RTC_BkUp_Read_MSBticks(void)
 {
   uint32_t MSBticks;
-  MSBticks = HAL_RTCEx_BKUPRead(&STNODE_BSP_rtc, RTC_BKP_MSBTICKS);
+  MSBticks = HAL_RTCEx_BKUPRead(&GNSE_BSP_rtc, RTC_BKP_MSBTICKS);
   return MSBticks;
 }
 
