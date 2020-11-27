@@ -39,7 +39,7 @@
  */
 void sensirion_i2c_init(void)
 {
-// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
 
 /**
@@ -47,7 +47,7 @@ void sensirion_i2c_init(void)
  */
 void sensirion_i2c_release(void)
 {
-// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+// This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
 
 /**

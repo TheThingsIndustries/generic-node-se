@@ -95,7 +95,7 @@ ATCA_STATUS hal_i2c_discover_devices(int bus_num, ATCAIfaceCfg cfg[], int *found
  */
 ATCA_STATUS hal_i2c_init(void *hal, ATCAIfaceCfg *cfg)
 {
-    // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+    // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
     return ATCA_SUCCESS;
 }
 
@@ -105,7 +105,7 @@ ATCA_STATUS hal_i2c_init(void *hal, ATCAIfaceCfg *cfg)
  */
 ATCA_STATUS hal_i2c_post_init(ATCAIface iface)
 {
-    // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/st-node/issues/33
+    // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
     return ATCA_SUCCESS;
 }
 

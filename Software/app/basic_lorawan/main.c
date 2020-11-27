@@ -103,7 +103,7 @@ void Error_Handler(void)
 {
   /* User can add his own implementation to report the HAL error return state
   * A basic Implementation below
-  * TODO: Improve with system wide error handler, see https://github.com/TheThingsIndustries/st-node/issues/57
+  * TODO: Improve with system wide error handler, see https://github.com/TheThingsIndustries/generic-node-se/issues/57
   */
   GNSE_BSP_LED_Init(LED_RED);
   GNSE_BSP_LED_On(LED_RED);

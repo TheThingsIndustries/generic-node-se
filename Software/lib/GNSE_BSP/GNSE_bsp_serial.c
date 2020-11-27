@@ -175,7 +175,7 @@ int32_t GNSE_BSP_Flash_SPI_Init(void)
   GNSE_BSP_flash_spi.Init.DataSize = SPI_DATASIZE_8BIT;
   GNSE_BSP_flash_spi.Init.CLKPolarity = SPI_POLARITY_LOW;
   GNSE_BSP_flash_spi.Init.CLKPhase = SPI_PHASE_1EDGE;
-  GNSE_BSP_flash_spi.Init.NSS = SPI_NSS_SOFT; //TODO: USE HW NSS, see https://github.com/TheThingsIndustries/st-node/issues/40
+  GNSE_BSP_flash_spi.Init.NSS = SPI_NSS_SOFT; //TODO: USE HW NSS, see https://github.com/TheThingsIndustries/generic-node-se/issues/40
   GNSE_BSP_flash_spi.Init.BaudRatePrescaler = FLASH_SPI_BAUDRATE;
   GNSE_BSP_flash_spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
   GNSE_BSP_flash_spi.Init.TIMode = SPI_TIMODE_DISABLE;
