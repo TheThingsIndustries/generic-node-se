@@ -1,0 +1,36 @@
+### Module positions - created on 11/24/20 08:19:57 ###
+### Printed by Pcbnew version kicad (5.1.8)-1
+## Unit = mm, Angle = deg.
+## Side : bottom
+# Ref     Val                Package                                          PosX       PosY       Rot  Side
+C58       10uF               C_0603_1608Metric                             -0.5300   -16.3800   90.0000  bottom
+C59       100nF              C_0402_1005Metric                              1.1140   -15.3710  180.0000  bottom
+C60       100nF              C_0402_1005Metric                             12.5100   -14.3300  180.0000  bottom
+C61       100nF              C_0402_1005Metric                             -2.0950   -13.5590  270.0000  bottom
+C62       100nF              C_0402_1005Metric                             -7.5200   -14.9500   90.0000  bottom
+C63       100nF              C_0402_1005Metric                              1.9530   -26.0090  270.0000  bottom
+C64       100nF              C_0402_1005Metric                             10.3500    -5.4500   90.0000  bottom
+D3        FM-B2020RGBA       LED_Cree-PLCC4_2x2mm_CW                       -7.0000     0.0000  270.0000  bottom
+D4        ESD9D5V            D_SOD-923                                     10.3500    -3.6000   90.0000  bottom
+FID2      Fiducial           Fiducial_0.5mm_Mask1.5mm                      -7.5000   -28.0000    0.0000  bottom
+FID4      Fiducial           Fiducial_0.5mm_Mask1.5mm                     -14.8000    18.0000    0.0000  bottom
+FID6      Fiducial           Fiducial_0.5mm_Mask1.5mm                      12.6500    18.2500    0.0000  bottom
+G-ACCELL  LOGO               LAbel_ACCELL_2000px                           -1.9000   -17.9500  180.0000  bottom
+G-FLASH   LOGO               Label_FLASH_3000px                             7.3000   -10.1000  180.0000  bottom
+G-SE      LOGO               Label_SE_3000px                               -8.0500   -10.0500  180.0000  bottom
+G-TH      LOGO               Label_T_H_2000px                               5.0000   -23.8500  180.0000  bottom
+R11       DNM                R_0402_1005Metric                             12.5140   -13.3690  180.0000  bottom
+R12       DNM                R_0402_1005Metric                             12.5000   -12.4000  180.0000  bottom
+R13       10K                R_0402_1005Metric                              8.2500   -15.9000   90.0000  bottom
+R15       4K7                R_0402_1005Metric                             12.9540    -2.5880  270.0000  bottom
+R18       4K7                R_0402_1005Metric                             11.9380    -2.5880   90.0000  bottom
+R21       1K                 R_0402_1005Metric                             -7.8650    -2.4650   90.0000  bottom
+R22       330R               R_0402_1005Metric                             -7.2850     2.2590    0.0000  bottom
+R23       330R               R_0402_1005Metric                             -6.8490    -2.4650   90.0000  bottom
+R24       100R               R_0402_1005Metric                             10.0000     7.6000  180.0000  bottom
+SW1       USR_BTN            PushButton_KSC721GLFS                          6.5000     0.0000   90.0000  bottom
+U8        MX25R1635          FLASH_UFDFN-8-MX25R1635F                       9.5120   -13.5270    0.0000  bottom
+U9        LIS2DH12           LGA-12_2x2mm_P0.5mm                            0.0080   -13.5388  270.0000  bottom
+U10       SHTC3              Sensirion_DFN-4-1EP_2x2mm_P1mm_EP0.7x1.6mm     0.0254   -27.0129  180.0000  bottom
+U11       ATECC608A-TNGLORA  DFN-8-1EP_3x2mm_P0.5mm_EP1.3x1.5mm           -10.3000   -13.4888    0.0000  bottom
+## End

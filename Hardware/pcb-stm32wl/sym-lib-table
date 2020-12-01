@@ -1,4 +1,4 @@
 (sym_lib_table
-  (lib (name node-lib-v1)(type Legacy)(uri ${KIPRJMOD}/../lib/node-lib.lib)(options "")(descr ""))
-  (lib (name M620720)(type Legacy)(uri C:/Users/Admin/Downloads/LIB_M620720/M620720/KiCad/M620720.lib)(options "")(descr ""))
+  (lib (name node-lib-v1)(type Legacy)(uri C:/Users/orkha/OneDrive/TTI_Files/Generic_Node_SE/Hardware/libs/node-lib-v1.lib)(options "")(descr ""))
+  (lib (name pcb-stm32wl-rescue)(type Legacy)(uri C:/Users/orkha/OneDrive/TTI_Files/Generic_Node_SE/Hardware/pcb_stm32wl/pcb-stm32wl-rescue.lib)(options "")(descr ""))
 )

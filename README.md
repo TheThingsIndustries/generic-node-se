@@ -1,16 +1,39 @@
-# TTI ST NODE
+# The Things Device Framework - Generic Node Sensor Edition (GNSE)
 
 ## About
-Development repository around the ST [STM32WL](https://www.st.com/en/microcontrollers-microprocessors/stm32wl-series.html) series LoRaWAN system on chips.
+
+LoRaWAN promised you roaming, secure and low-cost sensors that last on a battery for years. The Things Device Framework delivers this promise with additional strong end to end encryption and firmware over the air update in a device with multiple sensors that can be configured and programmed to support many use cases.
+
+Thi repository contains all the necessary hardware and software files for our GNSE platform. The core of the system is based on the brand new STM32WL55xx dual-core LoRaWAN SOC.
+
+![Generic Node](Docs/generic_node_se_case.gif)
+
+## Specification
+- [STM32WL55CCU6 ](https://www.st.com/en/microcontrollers-microprocessors/stm32wl-series.html) dual-core Arm Cortex®-M4/M0+ @48 MHz
+- 256 Kbytes of Flash & 64 Kbytes of SRAM
+- SX126x sub-GHz radio 
+- Power output up to +22.00 dBm 
+- LoRa, (G)FSK, (G)MSK, BPSK modulations
+- 868 MHz & 915 MHz dual-band operation
+- 2xAA battery powered node with wide input voltage range: 2.2V - 5.5V
+- [ATECC608A-TNGLORA](https://www.microchip.com/wwwproducts/en/ATECC608A-TNGLORA) pre-provisioned secure element for LoRaWAN
+- [LIS2DH12](https://www.st.com/en/mems-and-sensors/lis2dh12.html) - ULP 3-axis accelerometer 
+- [SHTC3](https://www.sensirion.com/en/environmental-sensors/humidity-sensors/digital-humidity-sensor-shtc3-our-new-standard-for-consumer-electronics/) humidity and temperature sensor
+- [MX25R1635](https://www.macronix.com/en-us/products/NOR-Flash/Serial-NOR-Flash/Pages/default.aspx) 16Mb SPI NOR Flash for FUOTA and data-logging
+- A user button, an RGB LED, a buzzer and a user-friendly expansion and programming options. 
+
+
+![Generic Node Main PCB (front)](Docs/generic_node_se.png)
+
 
 ## Development
 
 ### Hardware
-Hardware design and libraries can be found in [Hardware](./Hardware)
+All the necessary schematics and the PCB files can be found in [Hardware](./Hardware) directory.
 
 CAD tools used:
-- KiCAD v.5.1.6
-- Fusion 360
+- [KiCAD v.5.1.8](https://kicad.org/)
+- [FreeCAD 0.18](https://www.freecadweb.org/)
 
 ### Software
 Software libraries and sample applications can be found in [Software](./Software)
