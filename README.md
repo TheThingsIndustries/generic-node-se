@@ -9,7 +9,7 @@ This repository contains all the necessary hardware and software files for the G
 ![Generic Node](Docs/Images/generic_node_se_case.gif)
 
 ## Specification
-- [STM32WL55CCU6 ](https://www.st.com/en/microcontrollers-microprocessors/stm32wl-series.html) dual-core Arm Cortex®-M4/M0+ @48 MHz
+- [STM32WL55CCU6](https://www.st.com/en/microcontrollers-microprocessors/stm32wl-series.html) dual-core Arm Cortex®-M4/M0+ @48 MHz
 - 256 Kbytes of Flash & 64 Kbytes of SRAM
 - SX126x sub-GHz radio 
 - Power output up to +22.00 dBm 
