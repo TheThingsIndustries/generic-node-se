@@ -23,9 +23,21 @@ K battery cell
 F ~
 $ENDCMP
 #
+$CMP FM-B2020RGBA
+D RGB LED, red/green/blue/anode
+K LED RGB diode
+F ~
+$ENDCMP
+#
 $CMP LD39130SPUR
 D LDO Voltage Regulators Linear Voltage Regulators & Vref
 F https://componentsearchengine.com/Datasheets/1/LD39130SPUR.pdf
+$ENDCMP
+#
+$CMP LED_RGB
+D RGB LED, 6 pin package
+K LED RGB diode
+F ~
 $ENDCMP
 #
 $CMP LIS2DH12
@@ -42,6 +54,12 @@ $ENDCMP
 $CMP MX25R8035
 D SOP8 150/200mil
 K Flash,Serial
+$ENDCMP
+#
+$CMP RF_Shield_One_Piece_No_Pad
+D One-piece EMI RF shielding cabinet
+K RF EMI shielding can
+F ~
 $ENDCMP
 #
 $CMP RP605Zx
@@ -96,6 +114,12 @@ $CMP TPS62849DLC
 D 3.4-V fixed output voltage - 750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
 K step-down dc-dc buck regulator
 F https://www.ti.com/lit/gpn/TPS62840
+$ENDCMP
+#
+$CMP TS3A5223RSWR
+D Dual SPDT 0.45Ω Bidirectional Analog Switch, 10-UQFN
+K switch analog SPDT
+F https://www.ti.com/lit/ds/symlink/ts3a5223.pdf
 $ENDCMP
 #
 #End Doc Library

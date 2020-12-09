@@ -30,7 +30,7 @@
   (pad 6 smd rect (at 2.712 0.635 90) (size 0.65 1.525) (layers F.Cu F.Paste))
   (pad 7 smd rect (at 2.712 -0.635 90) (size 0.65 1.525) (layers F.Cu F.Paste))
   (pad 8 smd rect (at 2.712 -1.905 90) (size 0.65 1.525) (layers F.Cu F.Paste))
-  (model "C:\\Users\\Admin\\OneDrive\\TTI_Files\\ST_Node\\Hardware\\SamacSys_Parts.3dshapes\\NE555DR.stp"
+  (model "${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/NE555DR.stp"
     (at(xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate(xyz 0 0 0))
