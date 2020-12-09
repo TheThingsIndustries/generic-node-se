@@ -3,8 +3,8 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 4
-Title "Power Supply & Load Switches"
+Sheet 3 4
+Title "STM32WL LoRa SoC"
 Date "2020-09-25"
 Rev "2.0.2"
 Comp "The Things Industries"
@@ -14,1045 +14,943 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L power:+BATT #PWR019
-U 1 1 5E91BC54
-P 5000 875
-F 0 "#PWR019" H 5000 725 50  0001 C CNN
-F 1 "+BATT" H 5015 1048 50  0000 C CNN
-F 2 "" H 5000 875 50  0001 C CNN
-F 3 "" H 5000 875 50  0001 C CNN
-	1    5000 875 
+L power:GND #PWR046
+U 1 1 5EA84D3B
+P 4425 4750
+F 0 "#PWR046" H 4425 4500 50  0001 C CNN
+F 1 "GND" H 4430 4577 50  0000 C CNN
+F 2 "" H 4425 4750 50  0001 C CNN
+F 3 "" H 4425 4750 50  0001 C CNN
+	1    4425 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4425 4750 4425 4725
+Wire Wire Line
+	4425 4725 4525 4725
+Wire Wire Line
+	4525 4725 4525 4700
+Wire Wire Line
+	4425 4725 4325 4725
+Wire Wire Line
+	4325 4725 4325 4700
+Connection ~ 4425 4725
+Wire Wire Line
+	3550 5375 4100 5375
+Wire Wire Line
+	4100 4450 4325 4450
+Wire Wire Line
+	4325 4500 4325 4450
+Wire Wire Line
+	4525 4500 4525 4450
+$Comp
+L power:GND #PWR050
+U 1 1 5EA9037E
+P 5400 6825
+F 0 "#PWR050" H 5400 6575 50  0001 C CNN
+F 1 "GND" H 5405 6652 50  0000 C CNN
+F 2 "" H 5400 6825 50  0001 C CNN
+F 3 "" H 5400 6825 50  0001 C CNN
+	1    5400 6825
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 6800 5400 6825
+Wire Wire Line
+	5400 6325 5400 6275
+Connection ~ 5400 6275
+Wire Wire Line
+	5400 6275 5675 6275
+Wire Wire Line
+	5400 6600 5400 6575
+$Comp
+L power:GND #PWR065
+U 1 1 5EABC09B
+P 9050 5175
+F 0 "#PWR065" H 9050 4925 50  0001 C CNN
+F 1 "GND" H 9055 5002 50  0000 C CNN
+F 2 "" H 9050 5175 50  0001 C CNN
+F 3 "" H 9050 5175 50  0001 C CNN
+	1    9050 5175
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 5100 8950 5150
+Wire Wire Line
+	8950 5150 9050 5150
+Wire Wire Line
+	9050 5150 9050 5175
+Wire Wire Line
+	9050 5150 9050 5100
+Connection ~ 9050 5150
+Wire Wire Line
+	5850 4675 5850 4550
+$Comp
+L power:GND #PWR052
+U 1 1 5EAC7F31
+P 5850 4900
+F 0 "#PWR052" H 5850 4650 50  0001 C CNN
+F 1 "GND" H 5855 4727 50  0000 C CNN
+F 2 "" H 5850 4900 50  0001 C CNN
+F 3 "" H 5850 4900 50  0001 C CNN
+	1    5850 4900
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR02
-U 1 1 5E9146B2
+L power:GND #PWR051
+U 1 1 5EAC841D
+P 5850 4050
+F 0 "#PWR051" H 5850 3800 50  0001 C CNN
+F 1 "GND" H 5725 3975 50  0000 C CNN
+F 2 "" H 5850 4050 50  0001 C CNN
+F 3 "" H 5850 4050 50  0001 C CNN
+	1    5850 4050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5850 4050 5850 4075
+Wire Wire Line
+	5850 4275 5850 4350
+Wire Wire Line
+	5850 4350 6000 4350
+Wire Wire Line
+	5850 4875 5850 4900
+$Comp
+L power:GND #PWR054
+U 1 1 5EAD9A9D
+P 6675 5675
+F 0 "#PWR054" H 6675 5425 50  0001 C CNN
+F 1 "GND" H 6680 5502 50  0000 C CNN
+F 2 "" H 6675 5675 50  0001 C CNN
+F 3 "" H 6675 5675 50  0001 C CNN
+	1    6675 5675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6675 5650 6675 5675
+$Comp
+L power:GND #PWR057
+U 1 1 5EADE7A2
+P 7175 5675
+F 0 "#PWR057" H 7175 5425 50  0001 C CNN
+F 1 "GND" H 7180 5502 50  0000 C CNN
+F 2 "" H 7175 5675 50  0001 C CNN
+F 3 "" H 7175 5675 50  0001 C CNN
+	1    7175 5675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7175 5650 7175 5675
+Wire Wire Line
+	6675 5450 6675 5400
+Wire Wire Line
+	6675 5400 6825 5400
+Wire Wire Line
+	7025 5400 7175 5400
+Wire Wire Line
+	7175 5400 7175 5450
+Wire Wire Line
+	7025 5150 7175 5150
+Wire Wire Line
+	7175 5150 7175 5400
+Connection ~ 7175 5400
+Wire Wire Line
+	6825 5150 6675 5150
+Connection ~ 6675 5400
+Wire Wire Line
+	7375 5400 7175 5400
+$Comp
+L power:GND #PWR060
+U 1 1 5EAEBEE0
+P 7950 5675
+F 0 "#PWR060" H 7950 5425 50  0001 C CNN
+F 1 "GND" H 7955 5502 50  0000 C CNN
+F 2 "" H 7950 5675 50  0001 C CNN
+F 3 "" H 7950 5675 50  0001 C CNN
+	1    7950 5675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7950 5650 7950 5675
+Wire Wire Line
+	7575 5400 7650 5400
+Wire Wire Line
+	7850 5400 7950 5400
+Wire Wire Line
+	7950 5400 7950 5450
+$Comp
+L power:GND #PWR055
+U 1 1 5EAFB6D6
+P 6700 4625
+F 0 "#PWR055" H 6700 4375 50  0001 C CNN
+F 1 "GND" H 6705 4452 50  0000 C CNN
+F 2 "" H 6700 4625 50  0001 C CNN
+F 3 "" H 6700 4625 50  0001 C CNN
+	1    6700 4625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6700 4600 6700 4625
+$Comp
+L power:GND #PWR058
+U 1 1 5EAFB6E1
+P 7200 4625
+F 0 "#PWR058" H 7200 4375 50  0001 C CNN
+F 1 "GND" H 7205 4452 50  0000 C CNN
+F 2 "" H 7200 4625 50  0001 C CNN
+F 3 "" H 7200 4625 50  0001 C CNN
+	1    7200 4625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7200 4600 7200 4625
+Wire Wire Line
+	6700 4400 6700 4350
+Wire Wire Line
+	7200 4350 7200 4400
+Wire Wire Line
+	7050 4100 7200 4100
+Wire Wire Line
+	7200 4100 7200 4350
+Wire Wire Line
+	6850 4100 6700 4100
+Wire Wire Line
+	6700 4100 6700 4350
+Wire Wire Line
+	7300 4350 7200 4350
+$Comp
+L power:GND #PWR059
+U 1 1 5EAFB702
+P 7925 4625
+F 0 "#PWR059" H 7925 4375 50  0001 C CNN
+F 1 "GND" H 7930 4452 50  0000 C CNN
+F 2 "" H 7925 4625 50  0001 C CNN
+F 3 "" H 7925 4625 50  0001 C CNN
+	1    7925 4625
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7925 4600 7925 4625
+Wire Wire Line
+	7500 4350 7550 4350
+Wire Wire Line
+	7925 4350 7925 4400
+$Comp
+L power:VDDA #PWR037
+U 1 1 5ED0C478
+P 1725 2025
+F 0 "#PWR037" H 1725 1875 50  0001 C CNN
+F 1 "VDDA" H 1740 2198 50  0000 C CNN
+F 2 "" H 1725 2025 50  0001 C CNN
+F 3 "" H 1725 2025 50  0001 C CNN
+	1    1725 2025
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR032
+U 1 1 5ED16449
+P 725 1525
+F 0 "#PWR032" H 725 1275 50  0001 C CNN
+F 1 "GND" H 730 1352 50  0000 C CNN
+F 2 "" H 725 1525 50  0001 C CNN
+F 3 "" H 725 1525 50  0001 C CNN
+	1    725  1525
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	725  1025 725  1075
+Wire Wire Line
+	725  1425 725  1500
+Wire Wire Line
+	1100 1125 1100 1075
+Wire Wire Line
+	1100 1075 725  1075
+Connection ~ 725  1075
+Wire Wire Line
+	725  1075 725  1125
+Wire Wire Line
+	1475 1125 1475 1075
+Wire Wire Line
+	1475 1425 1475 1500
+Connection ~ 725  1500
+Wire Wire Line
+	725  1500 725  1525
+Wire Wire Line
+	1100 1425 1100 1500
+Wire Wire Line
+	1100 1500 725  1500
+Text Notes 850  1050 0    50   ~ 0
+44
+Text Notes 2275 1050 0    50   ~ 0
+11
+Connection ~ 7950 5400
+Wire Wire Line
+	1225 4200 1225 4275
+Wire Wire Line
+	1225 4375 1350 4375
+Wire Wire Line
+	1350 4275 1225 4275
+Connection ~ 1225 4275
+Wire Wire Line
+	1225 4275 1225 4375
+$Comp
+L power:GND #PWR035
+U 1 1 5EE0CE8C
+P 1275 2450
+F 0 "#PWR035" H 1275 2200 50  0001 C CNN
+F 1 "GND" H 1280 2277 50  0000 C CNN
+F 2 "" H 1275 2450 50  0001 C CNN
+F 3 "" H 1275 2450 50  0001 C CNN
+	1    1275 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR038
+U 1 1 5EE0EE49
+P 1725 2450
+F 0 "#PWR038" H 1725 2200 50  0001 C CNN
+F 1 "GND" H 1730 2277 50  0000 C CNN
+F 2 "" H 1725 2450 50  0001 C CNN
+F 3 "" H 1725 2450 50  0001 C CNN
+	1    1725 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	725  2000 725  2050
+Wire Wire Line
+	725  2050 850  2050
+Wire Wire Line
+	1050 2050 1275 2050
+Wire Wire Line
+	1725 2050 1725 2025
+Wire Wire Line
+	1725 2075 1725 2050
+Connection ~ 1725 2050
+Wire Wire Line
+	1275 2075 1275 2050
+Connection ~ 1275 2050
+Wire Wire Line
+	1275 2050 1725 2050
+Wire Wire Line
+	1275 2375 1275 2450
+Wire Wire Line
+	1725 2375 1725 2450
+$Comp
+L power:VDDA #PWR043
+U 1 1 5EE3850B
+P 3600 4175
+F 0 "#PWR043" H 3600 4025 50  0001 C CNN
+F 1 "VDDA" H 3615 4348 50  0000 C CNN
+F 2 "" H 3600 4175 50  0001 C CNN
+F 3 "" H 3600 4175 50  0001 C CNN
+	1    3600 4175
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3600 4175 3600 4275
+Wire Wire Line
+	3600 4275 3550 4275
+$Comp
+L power:GND #PWR036
+U 1 1 5EE4112D
+P 1275 7550
+F 0 "#PWR036" H 1275 7300 50  0001 C CNN
+F 1 "GND" H 1280 7377 50  0000 C CNN
+F 2 "" H 1275 7550 50  0001 C CNN
+F 3 "" H 1275 7550 50  0001 C CNN
+	1    1275 7550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1350 7525 1275 7525
+Wire Wire Line
+	1275 7525 1275 7550
+Wire Wire Line
+	8875 1700 8950 1700
+Wire Wire Line
+	8950 1700 8950 1925
+$Comp
+L power:GND #PWR064
+U 1 1 5ED3E66C
+P 8950 2175
+F 0 "#PWR064" H 8950 1925 50  0001 C CNN
+F 1 "GND" H 8955 2002 50  0000 C CNN
+F 2 "" H 8950 2175 50  0001 C CNN
+F 3 "" H 8950 2175 50  0001 C CNN
+	1    8950 2175
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 2125 8950 2175
+Connection ~ 8950 1700
+Text GLabel 1300 6575 0    50   Output ~ 10
+PB0_VDD_TCXO
+Wire Wire Line
+	1350 6575 1300 6575
+Wire Notes Line
+	500  500  500  2700
+$Comp
+L power:GND #PWR053
+U 1 1 5EDBFA91
+P 6575 1875
+F 0 "#PWR053" H 6575 1625 50  0001 C CNN
+F 1 "GND" H 6580 1702 50  0000 C CNN
+F 2 "" H 6575 1875 50  0001 C CNN
+F 3 "" H 6575 1875 50  0001 C CNN
+	1    6575 1875
+	1    0    0    -1  
+$EndComp
+Text GLabel 6925 1100 0    50   Input ~ 10
+PB0_VDD_TCXO
+Wire Wire Line
+	6575 1875 6575 1825
+Wire Wire Line
+	6575 1825 6675 1825
+$Comp
+L power:GND #PWR056
+U 1 1 5EDE255F
+P 6975 2225
+F 0 "#PWR056" H 6975 1975 50  0001 C CNN
+F 1 "GND" H 6980 2052 50  0000 C CNN
+F 2 "" H 6975 2225 50  0001 C CNN
+F 3 "" H 6975 2225 50  0001 C CNN
+	1    6975 2225
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6975 2125 6975 2225
+Wire Wire Line
+	6575 1475 6975 1475
+Wire Wire Line
+	6975 1475 6975 1525
+Wire Wire Line
+	6925 1100 6975 1100
+Wire Wire Line
+	6975 1100 6975 1200
+Wire Wire Line
+	6975 1400 6975 1475
+Connection ~ 6975 1475
+Wire Wire Line
+	6575 1675 6575 1825
+Connection ~ 6575 1825
+Text GLabel 7675 1100 2    50   Output ~ 10
+OSC_IN
+Wire Wire Line
+	7675 1100 7575 1100
+Wire Wire Line
+	7575 1450 7575 1500
+Wire Wire Line
+	7575 1800 7575 1825
+Wire Wire Line
+	7575 1825 7275 1825
+Wire Wire Line
+	7575 1100 7575 1250
+Text GLabel 3600 7625 2    50   Input ~ 10
+OSC_IN
+Wire Wire Line
+	3600 7625 3550 7625
+NoConn ~ 3550 7525
+Wire Notes Line
+	6225 500  6225 2700
+Wire Notes Line
+	6225 2700 8075 2700
+Wire Notes Line
+	8075 2700 8075 500 
+Wire Notes Line
+	8075 500  6225 500 
+Text GLabel 8950 1450 1    50   BiDi ~ 10
+OSC32_OUT
+Wire Wire Line
+	8950 1450 8950 1700
+Text GLabel 3600 7225 2    50   BiDi ~ 10
+OSC32_IN
+Text GLabel 3600 7325 2    50   BiDi ~ 10
+OSC32_OUT
+Wire Wire Line
+	3550 7225 3600 7225
+Wire Wire Line
+	3600 7325 3550 7325
+Text Notes 6675 700  0    79   ~ 16
+32MHz HSE TCXO
+Text Notes 8250 700  0    79   ~ 16
+32KHz LSE CLK
+Wire Notes Line
+	8125 500  8125 2700
+Wire Notes Line
+	8125 2700 9275 2700
+Wire Notes Line
+	9275 2700 9275 500 
+Wire Notes Line
+	9275 500  8125 500 
+Wire Wire Line
+	1300 4625 1350 4625
+Wire Wire Line
+	1350 4725 1300 4725
+Wire Wire Line
+	8475 1450 8475 1700
+Text GLabel 8475 1450 1    50   BiDi ~ 10
+OSC32_IN
+Connection ~ 8475 1700
+Wire Wire Line
+	8475 2125 8475 2175
+$Comp
+L power:GND #PWR061
+U 1 1 5ED3E21D
+P 8475 2175
+F 0 "#PWR061" H 8475 1925 50  0001 C CNN
+F 1 "GND" H 8480 2002 50  0000 C CNN
+F 2 "" H 8475 2175 50  0001 C CNN
+F 3 "" H 8475 2175 50  0001 C CNN
+	1    8475 2175
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8475 1700 8475 1925
+Wire Wire Line
+	8575 1700 8475 1700
+Text GLabel 4650 2000 0    59   Input ~ 12
+VLXSMPS
+Wire Wire Line
+	4650 2000 4700 2000
+Text GLabel 5675 2000 2    59   Output ~ 12
+VFBSMPS
+Wire Wire Line
+	5675 2000 5300 2000
+Connection ~ 5300 2000
+Text GLabel 3600 4775 2    49   Output ~ 10
+VLXSMPS
+Wire Wire Line
+	3550 4775 3600 4775
+Text GLabel 3600 4875 2    49   Input ~ 10
+VFBSMPS
+Wire Wire Line
+	3600 4875 3550 4875
+$Comp
+L power:GND #PWR048
+U 1 1 5F114B1E
+P 5125 2450
+F 0 "#PWR048" H 5125 2200 50  0001 C CNN
+F 1 "GND" H 5130 2277 50  0000 C CNN
+F 2 "" H 5125 2450 50  0001 C CNN
+F 3 "" H 5125 2450 50  0001 C CNN
+	1    5125 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5125 2375 5125 2450
+Text GLabel 3600 4675 2    49   Output ~ 10
+VDDSMPS
+Wire Wire Line
+	3600 4675 3550 4675
+Text GLabel 9700 1750 1    59   Input ~ 12
+VDDSMPS
+Wire Wire Line
+	4575 1075 4900 1075
+Wire Wire Line
+	5325 1075 5325 1125
+Wire Wire Line
+	4900 1125 4900 1075
+Connection ~ 4900 1075
+Wire Wire Line
+	4900 1075 5325 1075
+$Comp
+L power:GND #PWR047
+U 1 1 5F166546
+P 4900 1475
+F 0 "#PWR047" H 4900 1225 50  0001 C CNN
+F 1 "GND" H 4905 1302 50  0000 C CNN
+F 2 "" H 4900 1475 50  0001 C CNN
+F 3 "" H 4900 1475 50  0001 C CNN
+	1    4900 1475
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR049
+U 1 1 5F166914
+P 5325 1475
+F 0 "#PWR049" H 5325 1225 50  0001 C CNN
+F 1 "GND" H 5330 1302 50  0000 C CNN
+F 2 "" H 5325 1475 50  0001 C CNN
+F 3 "" H 5325 1475 50  0001 C CNN
+	1    5325 1475
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5325 1425 5325 1475
+Wire Wire Line
+	4900 1425 4900 1475
+$Comp
+L power:GND #PWR045
+U 1 1 5F18300E
+P 3625 5125
+F 0 "#PWR045" H 3625 4875 50  0001 C CNN
+F 1 "GND" H 3630 4952 50  0000 C CNN
+F 2 "" H 3625 5125 50  0001 C CNN
+F 3 "" H 3625 5125 50  0001 C CNN
+	1    3625 5125
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3550 5075 3625 5075
+Wire Wire Line
+	3625 5075 3625 5125
+Text GLabel 3600 4975 2    49   Input ~ 10
+VDDRF1V55
+Wire Wire Line
+	3550 4975 3600 4975
+Text GLabel 5575 1775 2    59   Output ~ 12
+VDDRF1V55
+Wire Wire Line
+	5575 1775 5300 1775
+Wire Wire Line
+	5300 1775 5300 2000
+Text GLabel 3600 4475 2    49   Input ~ 10
+VDDRF
+Text GLabel 3600 4375 2    49   Input ~ 10
+VDDPA
+Wire Wire Line
+	3600 4375 3550 4375
+Wire Wire Line
+	3550 4475 3600 4475
+Text GLabel 2650 1975 1    59   Output ~ 12
+VDDPA
+Connection ~ 5325 1075
+$Comp
+L power:GND #PWR039
+U 1 1 5F1EA3F9
+P 2300 2450
+F 0 "#PWR039" H 2300 2200 50  0001 C CNN
+F 1 "GND" H 2305 2277 50  0000 C CNN
+F 2 "" H 2300 2450 50  0001 C CNN
+F 3 "" H 2300 2450 50  0001 C CNN
+	1    2300 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 1975 2300 2050
+Wire Wire Line
+	2300 2350 2300 2450
+$Comp
+L power:GND #PWR040
+U 1 1 5F209409
+P 2650 2450
+F 0 "#PWR040" H 2650 2200 50  0001 C CNN
+F 1 "GND" H 2655 2277 50  0000 C CNN
+F 2 "" H 2650 2450 50  0001 C CNN
+F 3 "" H 2650 2450 50  0001 C CNN
+	1    2650 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 1975 2650 2050
+Wire Wire Line
+	2650 2350 2650 2450
+$Comp
+L power:GND #PWR042
+U 1 1 5F219A32
+P 3050 2450
+F 0 "#PWR042" H 3050 2200 50  0001 C CNN
+F 1 "GND" H 3055 2277 50  0000 C CNN
+F 2 "" H 3050 2450 50  0001 C CNN
+F 3 "" H 3050 2450 50  0001 C CNN
+	1    3050 2450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3050 1975 3050 2050
+Wire Wire Line
+	3050 2350 3050 2450
+Text GLabel 2300 1975 1    59   Output ~ 12
+VDDRF
+Text GLabel 3050 1975 1    59   Output ~ 12
+VDDRF1V55
+Wire Notes Line
+	4175 500  4175 2700
+Wire Notes Line
+	6175 500  4175 500 
+Text Notes 4850 675  0    79   ~ 16
+VDDSMPS
+Text Notes 9825 700  0    79   ~ 16
+VDDPA SELECT
+Wire Notes Line
+	9325 500  11150 500 
+Text GLabel 3625 1900 1    59   Output ~ 12
+PB0_VDD_TCXO
+$Comp
+L power:GND #PWR044
+U 1 1 5F5BB6DD
+P 3625 2475
+F 0 "#PWR044" H 3625 2225 50  0001 C CNN
+F 1 "GND" H 3630 2302 50  0000 C CNN
+F 2 "" H 3625 2475 50  0001 C CNN
+F 3 "" H 3625 2475 50  0001 C CNN
+	1    3625 2475
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3775 2050 3775 1975
+Text Notes 900  675  0    79   ~ 16
+Decoupling Capacitors (*close to STM32WL)
+Wire Wire Line
+	6675 5150 6675 5400
+Wire Wire Line
+	5250 4925 5200 4925
+Text GLabel 5200 4925 0    59   Input ~ 12
+FE_CTRL1
+Text GLabel 1300 7275 0    49   Output ~ 10
+FE_CTRL3
+Text GLabel 1300 4875 0    49   Output ~ 10
+FE_CTRL1
+Text GLabel 1300 4975 0    49   Output ~ 10
+FE_CTRL2
+Wire Wire Line
+	1350 6875 1300 6875
+Wire Wire Line
+	1350 6975 1300 6975
+$Comp
+L power:GND #PWR063
+U 1 1 5F89828B
+P 8775 3825
+F 0 "#PWR063" H 8775 3575 50  0001 C CNN
+F 1 "GND" H 8675 3725 50  0000 C CNN
+F 2 "" H 8775 3825 50  0001 C CNN
+F 3 "" H 8775 3825 50  0001 C CNN
+	1    8775 3825
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR066
+U 1 1 5F8987B0
+P 9150 3825
+F 0 "#PWR066" H 9150 3575 50  0001 C CNN
+F 1 "GND" H 9250 3725 50  0000 C CNN
+F 2 "" H 9150 3825 50  0001 C CNN
+F 3 "" H 9150 3825 50  0001 C CNN
+	1    9150 3825
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 3825 9150 3800
+$Comp
+L power:GND #PWR062
+U 1 1 5F92336D
+P 8775 3300
+F 0 "#PWR062" H 8775 3050 50  0001 C CNN
+F 1 "GND" H 8780 3127 50  0000 C CNN
+F 2 "" H 8775 3300 50  0001 C CNN
+F 3 "" H 8775 3300 50  0001 C CNN
+	1    8775 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8725 2975 8775 2975
+Wire Wire Line
+	8775 3275 8775 3300
+Text GLabel 8450 3550 0    59   Input ~ 12
+FE_CTRL1
+Text GLabel 8450 2975 0    59   Input ~ 12
+FE_CTRL2
+Wire Wire Line
+	8450 2975 8525 2975
+Wire Wire Line
+	8450 3550 8525 3550
+Wire Wire Line
+	9875 2975 9950 2975
+Wire Wire Line
+	9475 2975 9425 2975
+Text GLabel 9950 2975 2    59   Input ~ 12
+FE_CTRL3
+Text GLabel 9425 2975 0    59   Input ~ 12
+VDDRF
+Connection ~ 5400 6575
+Wire Wire Line
+	5400 6575 5400 6525
+Wire Notes Line
+	4975 6675 4825 6675
+Wire Notes Line
+	4825 6675 4825 6175
+Wire Notes Line
+	4975 6175 4975 6675
+Text Notes 4900 6175 0    59   ~ 12
+100 Ohms diff.
+Wire Notes Line
+	4825 6175 5600 6175
+Text Notes 6200 6150 0    59   ~ 12
+50 Ohms
+Wire Notes Line style solid
+	6050 6150 6625 6150
+Wire Wire Line
+	1300 6175 1350 6175
+Wire Wire Line
+	1350 6275 1300 6275
+Text HLabel 1300 6175 0    59   BiDi Italic 0
+SWDIO
+Text HLabel 1300 6275 0    59   Input Italic 0
+SWCLK
+Wire Notes Line
+	5600 6175 5600 6125
+Wire Notes Line style solid
+	6625 6100 6625 6150
+Text HLabel 1300 5075 0    59   Output Italic 0
+PA2_TxD2
+Text HLabel 1300 5175 0    59   Input Italic 0
+PA3_RxD2
+Wire Wire Line
+	1350 5075 1300 5075
+Wire Wire Line
+	1300 5175 1350 5175
+Wire Wire Line
+	1350 6675 1300 6675
+Wire Wire Line
+	1300 7075 1350 7075
+Wire Wire Line
+	1300 7175 1350 7175
+Text HLabel 1300 5275 0    59   BiDi ~ 0
+PA4_CS1
+Text HLabel 3625 6925 2    59   BiDi ~ 0
+PC13
+Wire Wire Line
+	3625 6925 3550 6925
+Wire Wire Line
+	1300 7275 1350 7275
+Text HLabel 1300 5975 0    59   BiDi Italic 0
+PA11_SDA2
+Text HLabel 1300 6075 0    59   Output Italic 0
+PA12_SCL2
+Wire Wire Line
+	1300 5975 1350 5975
+Wire Wire Line
+	1350 6075 1300 6075
+Text HLabel 1300 5875 0    59   BiDi Italic 0
+PA10_SDA1
+Text HLabel 1300 5775 0    59   Output Italic 0
+PA09_SCL1
+Wire Wire Line
+	1300 5775 1350 5775
+Wire Wire Line
+	1350 5875 1300 5875
+Text HLabel 1300 5375 0    59   Output Italic 0
+PA5_SCK1
+Text HLabel 1300 5475 0    59   Input Italic 0
+PA6_MISO1
+Text HLabel 1300 5575 0    59   Output Italic 0
+PA7_MOSI1
+Wire Wire Line
+	1300 5375 1350 5375
+Wire Wire Line
+	1300 5475 1350 5475
+Wire Wire Line
+	1300 5575 1350 5575
+Wire Wire Line
+	1350 4875 1300 4875
+Wire Wire Line
+	1300 4975 1350 4975
+Wire Wire Line
+	1350 5275 1300 5275
+Text HLabel 1300 7175 0    59   BiDi Italic 0
+PB7
+Text HLabel 1300 7075 0    59   BiDi Italic 0
+PB6
+Text HLabel 1300 6975 0    59   BiDi Italic 0
+PB5
+Text HLabel 1300 6875 0    59   BiDi Italic 0
+PB4
+Text HLabel 1300 6675 0    59   BiDi Italic 0
+PB2
+Text HLabel 1300 6775 0    59   BiDi Italic 0
+PB3
+Text HLabel 1300 6375 0    59   BiDi Italic 0
+PA15
+Wire Wire Line
+	1300 7375 1350 7375
+Text HLabel 1300 7375 0    59   BiDi ~ 0
+PB12
+Text GLabel 10300 2550 0    59   Input ~ 12
+FE_CTRL1
+Text GLabel 10725 1925 2    59   Output ~ 12
+VDDPA
+$Comp
+L power:PWR_FLAG #FLG03
+U 1 1 5EFE17AC
 P 1275 2025
-F 0 "#PWR02" H 1275 1775 50  0001 C CNN
-F 1 "GND" H 1280 1852 50  0000 C CNN
+F 0 "#FLG03" H 1275 2100 50  0001 C CNN
+F 1 "PWR_FLAG" H 1275 2198 50  0000 C CNN
 F 2 "" H 1275 2025 50  0001 C CNN
-F 3 "" H 1275 2025 50  0001 C CNN
+F 3 "~" H 1275 2025 50  0001 C CNN
 	1    1275 2025
 	1    0    0    -1  
 $EndComp
-$Comp
-L Power_Management:TPS22917DBV U1
-U 1 1 5E94B9D4
-P 4250 3925
-F 0 "U1" H 4000 4200 50  0000 C CNN
-F 1 "TPS22917DBV" H 4350 4200 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23-6" H 4250 4425 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tps22917.pdf" H 4300 3225 50  0001 C CNN
-F 4 "TPS22917DBVR" H 4250 3925 50  0001 C CNN "MPN"
-F 5 "https://www.ti.com/store/ti/en/p/product/?p=TPS22917DBVR" H 4250 3925 50  0001 C CNN "URL"
-	1    4250 3925
-	1    0    0    -1  
-$EndComp
-Text Notes 3100 4975 0    98   Italic 20
-       Load Switch 1 \nSensors & Secure Element
-Text Notes 6175 4975 0    98   Italic 20
-Load Switch 2 - Flash
-Text Notes 8050 6150 0    98   Italic 20
-Mounting Holes & Fiducials
-Text Notes 650  2900 0    91   Italic 18
-Input ESD, Reverse Polarity  \n& Short-Circuit Protection
-$Comp
-L Device:C C9
-U 1 1 5E9710F2
-P 9200 2325
-F 0 "C9" H 9300 2375 50  0000 L CNN
-F 1 "100nF" H 9300 2225 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 9238 2175 50  0001 C CNN
-F 3 "~" H 9200 2325 50  0001 C CNN
-F 4 "CC0402KRX7R7BB104" H 9200 2325 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 9200 2325 50  0001 C CNN "URL"
-	1    9200 2325
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR028
-U 1 1 5E971839
-P 9200 2525
-F 0 "#PWR028" H 9200 2275 50  0001 C CNN
-F 1 "GND" H 9205 2352 50  0000 C CNN
-F 2 "" H 9200 2525 50  0001 C CNN
-F 3 "" H 9200 2525 50  0001 C CNN
-	1    9200 2525
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	9200 2475 9200 2525
+	1275 2025 1275 2050
+Wire Wire Line
+	5325 1075 5600 1075
+Text Notes 1850 1050 0    50   ~ 0
+28
+Wire Wire Line
+	1475 1075 1100 1075
+Connection ~ 1100 1075
+Wire Wire Line
+	1475 1500 1100 1500
+Connection ~ 1100 1500
+Connection ~ 1475 1075
+Wire Wire Line
+	1900 1425 1900 1500
+Wire Wire Line
+	1900 1500 1475 1500
+Connection ~ 1475 1500
+Wire Wire Line
+	1900 1075 1900 1125
+Text GLabel 5600 1075 2    59   Output ~ 12
+VDDSMPS
+Text Label 5025 6275 0    59   ~ 0
+RFI_P
+Text GLabel 4575 1075 0    59   Input ~ 12
+VDDRF
+Text HLabel 1300 4625 0    59   Input ~ 0
+BOOT0
+Text HLabel 1300 4725 0    59   Input ~ 0
+NRST
 $Comp
-L Device:C C6
-U 1 1 5E9FD0EE
-P 5000 1175
-F 0 "C6" H 5115 1221 50  0000 L CNN
-F 1 "1uF" H 5115 1130 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 5038 1025 50  0001 C CNN
-F 3 "~" H 5000 1175 50  0001 C CNN
-F 4 "CL05A105KQ5NNNC" H 5000 1175 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Samsung-Electro-Mechanics-CL05A105KQ5NNNC_C107372.html" H 5000 1175 50  0001 C CNN "URL"
-	1    5000 1175
+L power:+2V8 #PWR031
+U 1 1 5F590B0C
+P 725 1025
+F 0 "#PWR031" H 725 875 50  0001 C CNN
+F 1 "+2V8" H 740 1198 50  0000 C CNN
+F 2 "" H 725 1025 50  0001 C CNN
+F 3 "" H 725 1025 50  0001 C CNN
+	1    725  1025
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR020
-U 1 1 5EA0ADFB
-P 5000 1425
-F 0 "#PWR020" H 5000 1175 50  0001 C CNN
-F 1 "GND" H 5005 1252 50  0000 C CNN
-F 2 "" H 5000 1425 50  0001 C CNN
-F 3 "" H 5000 1425 50  0001 C CNN
-	1    5000 1425
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5000 1325 5000 1425
-Wire Wire Line
-	5000 875  5000 975 
-$Comp
-L Device:C C7
-U 1 1 5EAEC19F
-P 5425 1175
-F 0 "C7" H 5540 1221 50  0000 L CNN
-F 1 "100nF" H 5540 1130 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 5463 1025 50  0001 C CNN
-F 3 "~" H 5425 1175 50  0001 C CNN
-F 4 "CC0402KRX7R7BB104" H 5425 1175 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 5425 1175 50  0001 C CNN "URL"
-	1    5425 1175
+L power:+2V8 #PWR033
+U 1 1 5F5918E1
+P 725 2000
+F 0 "#PWR033" H 725 1850 50  0001 C CNN
+F 1 "+2V8" H 740 2173 50  0000 C CNN
+F 2 "" H 725 2000 50  0001 C CNN
+F 3 "" H 725 2000 50  0001 C CNN
+	1    725  2000
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR021
-U 1 1 5EAEC1A9
-P 5425 1425
-F 0 "#PWR021" H 5425 1175 50  0001 C CNN
-F 1 "GND" H 5430 1252 50  0000 C CNN
-F 2 "" H 5425 1425 50  0001 C CNN
-F 3 "" H 5425 1425 50  0001 C CNN
-	1    5425 1425
+L power:+2V8 #PWR034
+U 1 1 5F591DB8
+P 1225 4200
+F 0 "#PWR034" H 1225 4050 50  0001 C CNN
+F 1 "+2V8" H 1240 4373 50  0000 C CNN
+F 2 "" H 1225 4200 50  0001 C CNN
+F 3 "" H 1225 4200 50  0001 C CNN
+	1    1225 4200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5425 1325 5425 1425
+	1475 1075 1900 1075
 Wire Wire Line
-	5425 1025 5425 975 
+	1300 6375 1350 6375
 Wire Wire Line
-	5000 1025 5000 975 
-Connection ~ 5000 975 
-Wire Wire Line
-	5000 975  5425 975 
-$Comp
-L Connector:TestPoint_Probe TP2
-U 1 1 5EB036D1
-P 3425 1125
-F 0 "TP2" V 3600 1200 50  0000 C CNN
-F 1 "VBAT" V 3425 1325 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 3625 1125 50  0001 C CNN
-F 3 "~" H 3625 1125 50  0001 C CNN
-F 4 "DNM" H 3425 1125 50  0001 C CNN "MPN"
-F 5 "~" H 3425 1125 50  0001 C CNN "URL"
-	1    3425 1125
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:C C12
-U 1 1 5EB19FA1
-P 10800 1825
-F 0 "C12" H 10700 1775 50  0000 R CNN
-F 1 "22uF" H 10700 1875 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 10838 1675 50  0001 C CNN
-F 3 "~" H 10800 1825 50  0001 C CNN
-F 4 "CC0603MRX5R5BB226" H 10800 1825 50  0001 C CNN "MPN"
-F 5 "" H 10800 1825 50  0001 C CNN "DNM_MPN"
-F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_22uF-226-20-6-3V_C109448.html" H 10800 1825 50  0001 C CNN "URL"
-F 7 "JMK107BBJ226MA" H 10800 1825 50  0001 C CNN "ALT_MPN"
-	1    10800 1825
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	10375 1675 10375 1625
-$Comp
-L power:GND #PWR029
-U 1 1 5EB2218C
-P 10375 2125
-F 0 "#PWR029" H 10375 1875 50  0001 C CNN
-F 1 "GND" H 10380 1952 50  0000 C CNN
-F 2 "" H 10375 2125 50  0001 C CNN
-F 3 "" H 10375 2125 50  0001 C CNN
-	1    10375 2125
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10375 1975 10375 2050
-Text HLabel 6500 2125 0    50   Input ~ 0
-VBAT_READ_EN
-Text HLabel 9375 2125 2    50   Output ~ 0
-VBAT_ADC
-Wire Notes Line
-	525  3075 525  5000
-Wire Notes Line
-	525  5000 2625 5000
-Wire Notes Line
-	2625 5000 2625 3075
-Wire Notes Line
-	2625 3075 525  3075
-Wire Notes Line width 20 style solid
-	475  3050 11200 3050
-Wire Notes Line
-	2675 5000 5675 5000
-Wire Notes Line
-	5675 5000 5675 3075
-Wire Notes Line
-	5675 3075 2675 3075
-Wire Notes Line
-	2675 3075 2675 5000
-$Comp
-L Device:R R2
-U 1 1 5EB4B77F
-P 4025 4300
-F 0 "R2" V 4125 4250 50  0000 L CNN
-F 1 "100K" V 4025 4200 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 3955 4300 50  0001 C CNN
-F 3 "~" H 4025 4300 50  0001 C CNN
-F 4 "RC0402FR-07100KL	" H 4025 4300 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100KL_C60491.html" H 4025 4300 50  0001 C CNN "URL"
-	1    4025 4300
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C3
-U 1 1 5EB4BF94
-P 3350 4025
-F 0 "C3" H 3450 4100 50  0000 L CNN
-F 1 "1uF" H 3400 3925 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 3388 3875 50  0001 C CNN
-F 3 "~" H 3350 4025 50  0001 C CNN
-F 4 "CL05A105KQ5NNNC" H 3350 4025 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Samsung-Electro-Mechanics-CL05A105KQ5NNNC_C107372.html" H 3350 4025 50  0001 C CNN "URL"
-	1    3350 4025
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	3350 3500 3350 3825
-Connection ~ 3350 3825
-Wire Wire Line
-	3350 3825 3350 3875
-Wire Wire Line
-	3850 4025 3825 4025
-$Comp
-L power:GND #PWR013
-U 1 1 5EB674F9
-P 3350 4200
-F 0 "#PWR013" H 3350 3950 50  0001 C CNN
-F 1 "GND" H 3355 4027 50  0000 C CNN
-F 2 "" H 3350 4200 50  0001 C CNN
-F 3 "" H 3350 4200 50  0001 C CNN
-	1    3350 4200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3350 4175 3350 4200
-Wire Wire Line
-	4750 3925 4650 3925
-Text HLabel 4900 3825 2    59   Output ~ 12
-VCC_SENSORS
-$Comp
-L power:GND #PWR018
-U 1 1 5EB844CF
-P 4250 4375
-F 0 "#PWR018" H 4250 4125 50  0001 C CNN
-F 1 "GND" H 4255 4202 50  0000 C CNN
-F 2 "" H 4250 4375 50  0001 C CNN
-F 3 "" H 4250 4375 50  0001 C CNN
-	1    4250 4375
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4250 4225 4250 4300
-Wire Wire Line
-	4175 4300 4250 4300
-Connection ~ 4250 4300
-Wire Wire Line
-	4250 4300 4250 4375
-Wire Wire Line
-	3825 4300 3875 4300
-Wire Wire Line
-	3825 4025 3825 4300
-Wire Wire Line
-	3825 4300 3825 4475
-Wire Wire Line
-	3825 4475 3725 4475
-Connection ~ 3825 4300
-Text HLabel 3725 4475 0    50   Input ~ 0
-LS1_SENSORS_EN
-$Comp
-L Power_Management:TPS22917DBV U3
-U 1 1 5EBA57C3
-P 7125 3850
-F 0 "U3" H 6875 4125 50  0000 C CNN
-F 1 "TPS22917DBV" H 7225 4125 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23-6" H 7125 4350 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tps22917.pdf" H 7175 3150 50  0001 C CNN
-F 4 "TPS22917DBVR" H 7125 3850 50  0001 C CNN "MPN"
-F 5 "https://www.ti.com/store/ti/en/p/product/?p=TPS22917DBVR" H 7125 3850 50  0001 C CNN "URL"
-	1    7125 3850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R4
-U 1 1 5EBA57D7
-P 6875 4225
-F 0 "R4" V 6975 4175 50  0000 L CNN
-F 1 "100K" V 6875 4125 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 6805 4225 50  0001 C CNN
-F 3 "~" H 6875 4225 50  0001 C CNN
-F 4 "RC0402FR-07100KL	" H 6875 4225 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100KL_C60491.html" H 6875 4225 50  0001 C CNN "URL"
-	1    6875 4225
-	0    1    1    0   
-$EndComp
-$Comp
-L Device:C C8
-U 1 1 5EBA57E1
-P 6225 3950
-F 0 "C8" H 6325 4025 50  0000 L CNN
-F 1 "1uF" H 6275 3850 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 6263 3800 50  0001 C CNN
-F 3 "~" H 6225 3950 50  0001 C CNN
-F 4 "CL05A105KQ5NNNC" H 6225 3950 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Samsung-Electro-Mechanics-CL05A105KQ5NNNC_C107372.html" H 6225 3950 50  0001 C CNN "URL"
-	1    6225 3950
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	6225 3425 6225 3750
-Connection ~ 6225 3750
-Wire Wire Line
-	6225 3750 6225 3800
-Wire Wire Line
-	6725 3950 6700 3950
-$Comp
-L power:GND #PWR024
-U 1 1 5EBA5814
-P 6225 4125
-F 0 "#PWR024" H 6225 3875 50  0001 C CNN
-F 1 "GND" H 6230 3952 50  0000 C CNN
-F 2 "" H 6225 4125 50  0001 C CNN
-F 3 "" H 6225 4125 50  0001 C CNN
-	1    6225 4125
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6225 4100 6225 4125
-Wire Wire Line
-	7625 3850 7525 3850
-$Comp
-L power:GND #PWR027
-U 1 1 5EBA5826
-P 7125 4300
-F 0 "#PWR027" H 7125 4050 50  0001 C CNN
-F 1 "GND" H 7130 4127 50  0000 C CNN
-F 2 "" H 7125 4300 50  0001 C CNN
-F 3 "" H 7125 4300 50  0001 C CNN
-	1    7125 4300
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7125 4150 7125 4225
-Wire Wire Line
-	7025 4225 7125 4225
-Connection ~ 7125 4225
-Wire Wire Line
-	7125 4225 7125 4300
-Wire Wire Line
-	6700 4225 6725 4225
-Wire Wire Line
-	6700 3950 6700 4225
-Wire Wire Line
-	6700 4225 6700 4400
-Wire Wire Line
-	6700 4400 6600 4400
-Connection ~ 6700 4225
-Text HLabel 6600 4400 0    50   Input ~ 0
-LS2_FLASH_EN
-Wire Notes Line
-	5725 3075 5725 5000
-Wire Notes Line
-	5725 5000 8475 5000
-Wire Notes Line
-	8475 5000 8475 3075
-Wire Notes Line
-	8475 3075 5725 3075
-Wire Notes Line
-	8525 3075 8525 5000
-Wire Notes Line
-	8525 5000 11175 5000
-Wire Notes Line
-	11175 5000 11175 3075
-Wire Notes Line
-	11175 3075 8525 3075
-$Comp
-L Mechanical:MountingHole H1
-U 1 1 5EB2DBB3
-P 8450 5750
-F 0 "H1" H 8250 5750 50  0000 L CNN
-F 1 "MountingHole" H 8550 5705 50  0001 L CNN
-F 2 "MountingHole:MountingHole_2.5mm" H 8450 5750 50  0001 C CNN
-F 3 "~" H 8450 5750 50  0001 C CNN
-F 4 "~" H 8450 5750 50  0001 C CNN "MPN"
-F 5 "~" H 8450 5750 50  0001 C CNN "URL"
-	1    8450 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Mechanical:MountingHole H2
-U 1 1 5EB2E360
-P 8650 5750
-F 0 "H2" H 8750 5750 50  0000 L CNN
-F 1 "MountingHole" H 8750 5705 50  0001 L CNN
-F 2 "MountingHole:MountingHole_2.5mm" H 8650 5750 50  0001 C CNN
-F 3 "~" H 8650 5750 50  0001 C CNN
-F 4 "~" H 8650 5750 50  0001 C CNN "MPN"
-F 5 "~" H 8650 5750 50  0001 C CNN "URL"
-	1    8650 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Mechanical:Housing N1
-U 1 1 5EB2F160
-P 9825 3925
-F 0 "N1" H 9800 4125 50  0000 L CNN
-F 1 "BoLink-16174563" H 9275 3675 79  0000 L CNN
-F 2 "node-lib-v1:BoLink_704025" H 9875 3975 50  0001 C CNN
-F 3 "~" H 9875 3975 50  0001 C CNN
-F 4 "DNM" H 9825 3925 50  0001 C CNN "MPN"
-F 5 "https://www.distrelec.nl/en/bolink-iot-enclosure-bolink-43-2x71-2x26mm-white-polycarbonate-ip65-bopla-16174563-hmt1/p/30144876" H 9825 3925 50  0001 C CNN "URL"
-F 6 "S6L-303013" H 9825 3925 50  0001 C CNN "ALT_MPN"
-	1    9825 3925
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:TestPoint_Probe TP4
-U 1 1 5EC4668F
-P 9200 2025
-F 0 "TP4" V 9275 1900 50  0000 C CNN
-F 1 "VBAT_ADC" V 9225 2300 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 9400 2025 50  0001 C CNN
-F 3 "~" H 9400 2025 50  0001 C CNN
-F 4 "DNM" H 9200 2025 50  0001 C CNN "MPN"
-F 5 "~" H 9200 2025 50  0001 C CNN "URL"
-	1    9200 2025
-	0    1    -1   0   
-$EndComp
-Wire Notes Line width 20 style solid
-	5700 3050 5700 5025
-Wire Notes Line width 20 style solid
-	8500 5025 8500 3050
-Wire Notes Line width 20 style solid
-	475  5025 11225 5025
-Text Notes 6925 2975 0    102  Italic 20
-Buck-Boost Converter
-$Comp
-L Connector:TestPoint_Probe TP3
-U 1 1 5EC3E236
-P 6625 2000
-F 0 "TP3" V 6800 2075 50  0000 C CNN
-F 1 "VBAT_READ_EN" V 6575 2300 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 6825 2000 50  0001 C CNN
-F 3 "~" H 6825 2000 50  0001 C CNN
-F 4 "DNM" H 6625 2000 50  0001 C CNN "MPN"
-F 5 "~" H 6625 2000 50  0001 C CNN "URL"
-	1    6625 2000
-	0    -1   -1   0   
-$EndComp
-$Comp
-L node-lib-v1:RP605Zx U4
-U 1 1 5ECE59C1
-P 7350 975
-F 0 "U4" H 7900 1255 50  0000 C CNN
-F 1 "RP605Z283B" H 7900 1157 59  0000 C CNB
-F 2 "node-lib-v1:WLCSP-20-P3_1.994x1.609mm_Layout5x4_P0.4mm" H 7350 575 50  0001 L BNN
-F 3 "Texas Instruments" H 7350 475 50  0001 L BNN
-F 4 "RP605Z283B-E2-F" H 7350 975 50  0001 C CNN "MPN"
-F 5 "https://eu.mouser.com/ProductDetail/Ricoh-Electronic-Devices-Company/RP605Z283B-E2-F?qs=%2Fha2pyFadujfkekTwsRQpQaCcXRCnGubiPAekIe2V2q%252BPlq4yt9zFJnKPMHL8r%252Bf&utm_source=octopart&utm_medium=aggregator&utm_campaign=848-RP605Z283B-E2-F&utm_content=Ricoh+Electronics" H 7350 975 50  0001 C CNN "URL"
-	1    7350 975 
-	1    0    0    -1  
-$EndComp
-Text Notes 4350 2950 0    71   ~ 0
-- Vin: 1.8 - 5.5V\n- Vout: 1.6 - 5.2V\n- Iout:  300 mA\n- Iq: 300 nA\n- Output V: ±1.5%\n- w/ auto-discharge
-Wire Wire Line
-	8650 1625 8825 1625
-Wire Wire Line
-	8650 1725 8825 1725
-Wire Wire Line
-	8825 1725 8825 1625
-Connection ~ 8825 1625
-$Comp
-L Device:R R3
-U 1 1 5ED1B349
-P 6625 2325
-F 0 "R3" H 6700 2350 50  0000 L CNN
-F 1 "100K" H 6700 2425 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 6555 2325 50  0001 C CNN
-F 3 "~" H 6625 2325 50  0001 C CNN
-F 4 "RC0402FR-07100KL	" H 6625 2325 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100KL_C60491.html" H 6625 2325 50  0001 C CNN "URL"
-	1    6625 2325
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	7150 975  7025 975 
-Connection ~ 5425 975 
-Wire Wire Line
-	7150 1075 7025 1075
-Wire Wire Line
-	7025 1075 7025 975 
-Wire Wire Line
-	7150 1175 7025 1175
-Wire Wire Line
-	7025 1175 7025 1075
-Connection ~ 7025 1075
-Wire Wire Line
-	7150 1275 7025 1275
-Wire Wire Line
-	7025 1275 7025 1175
-Connection ~ 7025 1175
-$Comp
-L power:GND #PWR026
-U 1 1 5ED387A0
-P 7025 1900
-F 0 "#PWR026" H 7025 1650 50  0001 C CNN
-F 1 "GND" H 7030 1727 50  0000 C CNN
-F 2 "" H 7025 1900 50  0001 C CNN
-F 3 "" H 7025 1900 50  0001 C CNN
-	1    7025 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7150 1875 7025 1875
-Wire Wire Line
-	7150 1575 7025 1575
-Wire Wire Line
-	7025 1575 7025 1675
-Wire Wire Line
-	7150 1675 7025 1675
-Connection ~ 7025 1675
-Wire Wire Line
-	7025 1675 7025 1775
-Wire Wire Line
-	7150 1775 7025 1775
-Connection ~ 7025 1775
-Wire Wire Line
-	7025 1775 7025 1875
-$Comp
-L power:GND #PWR025
-U 1 1 5ED56357
-P 6625 2525
-F 0 "#PWR025" H 6625 2275 50  0001 C CNN
-F 1 "GND" H 6630 2352 50  0000 C CNN
-F 2 "" H 6625 2525 50  0001 C CNN
-F 3 "" H 6625 2525 50  0001 C CNN
-	1    6625 2525
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6625 2175 6625 2125
-Connection ~ 6625 2125
-Wire Wire Line
-	6625 2475 6625 2525
-Wire Wire Line
-	3425 1125 3425 1225
-Wire Wire Line
-	5425 975  6175 975 
-Wire Wire Line
-	9900 1625 10375 1625
-Wire Wire Line
-	8650 1875 8825 1875
-Wire Wire Line
-	8825 1875 8825 1725
-Connection ~ 8825 1725
-Wire Wire Line
-	9200 2025 9200 2125
-Connection ~ 9200 2125
-Wire Wire Line
-	9200 2125 9375 2125
-Wire Wire Line
-	9200 2175 9200 2125
-Wire Wire Line
-	6625 2000 6625 2125
-Wire Wire Line
-	8825 1625 9900 1625
-Connection ~ 9900 1625
-Wire Wire Line
-	9225 975  9225 1075
-Wire Wire Line
-	9225 1475 9225 1375
-Wire Wire Line
-	8825 1275 8825 1375
-Connection ~ 8825 1375
-Wire Wire Line
-	8825 1375 8825 1475
-Wire Wire Line
-	8825 1175 8825 1075
-Connection ~ 8825 1075
-Wire Wire Line
-	8825 1075 8825 975 
-Connection ~ 8825 1475
-Wire Wire Line
-	8825 1475 9225 1475
-Wire Wire Line
-	8650 1475 8825 1475
-Connection ~ 8825 975 
-Wire Wire Line
-	8825 975  9225 975 
-Wire Wire Line
-	8650 975  8825 975 
-Wire Wire Line
-	8650 1075 8825 1075
-Wire Wire Line
-	8650 1175 8825 1175
-Wire Wire Line
-	8650 1275 8825 1275
-Wire Wire Line
-	8650 1375 8825 1375
-Text Notes 9350 2950 0    71   ~ 0
-- Output:  Vin/3 (division ratio)\n- Supply Current: 100nA\n- Settling time: ≥ 10ms
-$Comp
-L Device:C C10
-U 1 1 5EE37070
-P 9900 1825
-F 0 "C10" H 9786 1779 50  0000 R CNN
-F 1 "100nF" H 9786 1870 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 9938 1675 50  0001 C CNN
-F 3 "~" H 9900 1825 50  0001 C CNN
-F 4 "CC0402KRX7R7BB104" H 9900 1825 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 9900 1825 50  0001 C CNN "URL"
-	1    9900 1825
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	9900 1675 9900 1625
-Wire Wire Line
-	9900 1975 9900 2050
-Wire Wire Line
-	9900 2050 10375 2050
-Connection ~ 10375 2050
-Wire Wire Line
-	10375 2050 10375 2125
-Wire Wire Line
-	7025 1900 7025 1875
-Connection ~ 7025 1875
-Wire Wire Line
-	6500 2125 6625 2125
-Wire Wire Line
-	9200 2125 8650 2125
-Wire Wire Line
-	6625 2125 7150 2125
-Wire Notes Line
-	525  525  11175 525 
-Wire Notes Line
-	525  525  525  3025
-Wire Notes Line
-	11175 525  11175 3025
-Wire Notes Line
-	525  3025 11175 3025
-Wire Notes Line width 20 style solid
-	2650 3050 2650 5025
-Connection ~ 10375 1625
-$Comp
-L Mechanical:Fiducial FID1
-U 1 1 5EE55870
-P 9025 5750
-F 0 "FID1" H 8950 5875 50  0000 L CNN
-F 1 "Fiducial" H 8900 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 9025 5750 50  0001 C CNN
-F 3 "~" H 9025 5750 50  0001 C CNN
-F 4 "~" H 9025 5750 50  0001 C CNN "MPN"
-F 5 "~" H 9025 5750 50  0001 C CNN "URL"
-	1    9025 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:PWR_FLAG #FLG01
-U 1 1 5F01C740
-P 3575 2700
-F 0 "#FLG01" H 3575 2775 50  0001 C CNN
-F 1 "PWR_FLAG" H 3575 2873 50  0000 C CNN
-F 2 "" H 3575 2700 50  0001 C CNN
-F 3 "~" H 3575 2700 50  0001 C CNN
-	1    3575 2700
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+BATT #PWR011
-U 1 1 5F01CCBE
-P 3225 2700
-F 0 "#PWR011" H 3225 2550 50  0001 C CNN
-F 1 "+BATT" H 3240 2873 50  0000 C CNN
-F 2 "" H 3225 2700 50  0001 C CNN
-F 3 "" H 3225 2700 50  0001 C CNN
-	1    3225 2700
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3225 2700 3225 2750
-Wire Wire Line
-	3225 2750 3575 2750
-Wire Wire Line
-	3575 2750 3575 2700
-$Comp
-L power:+2V8 #PWR030
-U 1 1 5F59C841
-P 10800 1450
-F 0 "#PWR030" H 10800 1300 50  0001 C CNN
-F 1 "+2V8" H 10815 1623 50  0000 C CNN
-F 2 "" H 10800 1450 50  0001 C CNN
-F 3 "" H 10800 1450 50  0001 C CNN
-	1    10800 1450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10375 1625 10800 1625
-Text Notes 4375 2250 0    79   Italic 16
-~Buck-Boost Specs:
-$Comp
-L Connector_Generic:Conn_01x02 J2
-U 1 1 5F62CA9D
-P 975 1600
-F 0 "J2" H 975 1825 50  0000 C CNN
-F 1 "JST-PH" H 950 1725 50  0000 C CNN
-F 2 "Connector_JST:JST_PH_B2B-PH-SM4-TB_1x02-1MP_P2.00mm_Vertical" H 975 1600 50  0001 C CNN
-F 3 "~" H 975 1600 50  0001 C CNN
-F 4 "B2B-PH-SM4-TB(LF)(SN)" H 975 1600 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Wire-To-Board-Wire-To-Wire-Connector_JST-Sales-America-B2B-PH-SM4-TB-LF-SN_C160352.html" H 975 1600 50  0001 C CNN "URL"
-	1    975  1600
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	1275 1600 1175 1600
-Wire Wire Line
-	1275 1225 1275 1600
-Wire Wire Line
-	1175 1700 1275 1700
-Wire Wire Line
-	1275 1700 1275 2025
-Wire Wire Line
-	6225 3750 6725 3750
-NoConn ~ 6725 3850
-Wire Wire Line
-	3350 3825 3850 3825
-NoConn ~ 3850 3925
-Wire Wire Line
-	7525 3750 7625 3750
-Wire Wire Line
-	7625 3850 7625 3750
-Connection ~ 7625 3750
-Wire Wire Line
-	7625 3750 7775 3750
-Wire Wire Line
-	4650 3825 4750 3825
-Wire Wire Line
-	4750 3925 4750 3825
-Connection ~ 4750 3825
-Wire Wire Line
-	4750 3825 4900 3825
-$Comp
-L Device:C C11
-U 1 1 5F6B0BFA
-P 10375 1825
-F 0 "C11" H 10125 1875 50  0000 L CNN
-F 1 "1uF" H 10125 1775 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 10413 1675 50  0001 C CNN
-F 3 "~" H 10375 1825 50  0001 C CNN
-F 4 "CL05A105KQ5NNNC" H 10375 1825 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Samsung-Electro-Mechanics-CL05A105KQ5NNNC_C107372.html" H 10375 1825 50  0001 C CNN "URL"
-	1    10375 1825
-	-1   0    0    -1  
-$EndComp
-Wire Wire Line
-	10800 1975 10800 2050
-Wire Wire Line
-	10800 2050 10375 2050
-Wire Wire Line
-	10800 1675 10800 1625
-$Comp
-L Device:L_Core_Ferrite L1
-U 1 1 5F6EC441
-P 9225 1225
-F 0 "L1" H 9313 1271 50  0000 L CNN
-F 1 "2.2uH" H 9313 1180 50  0000 L CNN
-F 2 "node-lib-v1:L_HPC4012TF-2R2M" H 9225 1225 50  0001 C CNN
-F 3 "~" H 9225 1225 50  0001 C CNN
-F 4 "HPC4012TF-2R2M" H 9225 1225 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Power-Inductors_TAI-TECH-HPC4012TF-2R2M_C357047.html" H 9225 1225 50  0001 C CNN "URL"
-F 6 "" H 9225 1225 50  0001 C CNN "DNM_MPN"
-F 7 "" H 9225 1225 50  0001 C CNN "ALT_MPN"
-	1    9225 1225
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3425 1775 3425 2025
-$Comp
-L power:GND #PWR014
-U 1 1 5F6F8DE4
-P 3425 2025
-F 0 "#PWR014" H 3425 1775 50  0001 C CNN
-F 1 "GND" H 3430 1852 50  0000 C CNN
-F 2 "" H 3425 2025 50  0001 C CNN
-F 3 "" H 3425 2025 50  0001 C CNN
-	1    3425 2025
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3425 1225 3650 1225
-Connection ~ 3425 1225
-Wire Wire Line
-	3425 1475 3425 1225
-$Comp
-L Device:C C4
-U 1 1 5F6F31D6
-P 3425 1625
-F 0 "C4" H 3350 1525 50  0000 R CNN
-F 1 "100uF" H 3400 1750 50  0000 R CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 3463 1475 50  0001 C CNN
-F 3 "~" H 3425 1625 50  0001 C CNN
-F 4 "JMK316ABJ107ML-T" H 3425 1625 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Taiyo-Yuden-JMK316ABJ107ML-T_C268006.html" H 3425 1625 50  0001 C CNN "URL"
-	1    3425 1625
-	1    0    0    1   
-$EndComp
-Wire Wire Line
-	3650 1775 3650 2025
-Connection ~ 3650 1225
-Wire Wire Line
-	3650 1475 3650 1225
-Wire Wire Line
-	2625 1225 2850 1225
-$Comp
-L power:GND #PWR016
-U 1 1 5F6D3C40
-P 3650 2025
-F 0 "#PWR016" H 3650 1775 50  0001 C CNN
-F 1 "GND" H 3655 1852 50  0000 C CNN
-F 2 "" H 3650 2025 50  0001 C CNN
-F 3 "" H 3650 2025 50  0001 C CNN
-	1    3650 2025
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C5
-U 1 1 5F6D2A03
-P 3650 1625
-F 0 "C5" H 3625 1525 50  0000 R CNN
-F 1 "100uF" H 3625 1750 50  0000 R CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 3688 1475 50  0001 C CNN
-F 3 "~" H 3650 1625 50  0001 C CNN
-F 4 "JMK316ABJ107ML-T" H 3650 1625 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Taiyo-Yuden-JMK316ABJ107ML-T_C268006.html" H 3650 1625 50  0001 C CNN "URL"
-	1    3650 1625
-	-1   0    0    1   
-$EndComp
-$Comp
-L power:GND #PWR09
-U 1 1 5E914B45
-P 2425 2025
-F 0 "#PWR09" H 2425 1775 50  0001 C CNN
-F 1 "GND" H 2430 1852 50  0000 C CNN
-F 2 "" H 2425 2025 50  0001 C CNN
-F 3 "" H 2425 2025 50  0001 C CNN
-	1    2425 2025
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Polyfuse F1
-U 1 1 5E92FEC6
-P 3000 1225
-F 0 "F1" V 2900 1225 50  0000 C CNN
-F 1 "PTC 13V 1A" V 3100 1225 50  0000 C CNN
-F 2 "Fuse:Fuse_1210_3225Metric_Castellated" H 3050 1025 50  0001 L CNN
-F 3 "~" H 3000 1225 50  0001 C CNN
-F 4 "SMD1210-050" V 3000 1225 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/PTC-Resettable-Fuses_TECHFUSE-SMD1210-050_C70094.html" H 3000 1225 50  0001 C CNN "URL"
-	1    3000 1225
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3650 1225 3650 1100
-$Comp
-L power:+BATT #PWR015
-U 1 1 5E916D44
-P 3650 1100
-F 0 "#PWR015" H 3650 950 50  0001 C CNN
-F 1 "+BATT" H 3665 1273 50  0000 C CNN
-F 2 "" H 3650 1100 50  0001 C CNN
-F 3 "" H 3650 1100 50  0001 C CNN
-	1    3650 1100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_PMOS_GSD Q1
-U 1 1 5E90F467
-P 2425 1325
-F 0 "Q1" V 2767 1325 50  0000 C CNN
-F 1 "CEN2321A" V 2676 1325 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 2625 1425 50  0001 C CNN
-F 3 "~" H 2425 1325 50  0001 C CNN
-F 4 "CEN2321A" V 2425 1325 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/MOSFET_CET-Chino-Excel-Tech-CEN2321A_C180870.html" H 2425 1325 50  0001 C CNN "URL"
-	1    2425 1325
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Device:D_TVS_ALT D1
-U 1 1 5F6CE63C
-P 1500 1650
-F 0 "D1" V 1400 1725 50  0000 L CNN
-F 1 "PESD5V0S1BA" H 1225 1525 50  0000 L CNN
-F 2 "Diode_SMD:D_SOD-323" H 1500 1650 50  0001 C CNN
-F 3 "~" H 1500 1650 50  0001 C CNN
-F 4 "PESD5V0S1BA,115" V 1500 1650 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/TVS_Nexperia-PESD5V0S1BA-115_C19224.html" H 1500 1650 50  0001 C CNN "URL"
-	1    1500 1650
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	1500 1500 1500 1225
-Wire Wire Line
-	1275 1225 1500 1225
-Connection ~ 1500 1225
-$Comp
-L power:GND #PWR04
-U 1 1 5F6DB075
-P 1500 2025
-F 0 "#PWR04" H 1500 1775 50  0001 C CNN
-F 1 "GND" H 1505 1852 50  0000 C CNN
-F 2 "" H 1500 2025 50  0001 C CNN
-F 3 "" H 1500 2025 50  0001 C CNN
-	1    1500 2025
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1500 1800 1500 2025
-$Comp
-L Device:C_Small C2
-U 1 1 5F6E568D
-P 2600 1800
-F 0 "C2" H 2692 1846 50  0000 L CNN
-F 1 "10nF" H 2692 1755 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0402_1005Metric" H 2600 1800 50  0001 C CNN
-F 3 "~" H 2600 1800 50  0001 C CNN
-F 4 "CC0402KRX7R7BB103" H 2600 1800 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB103_C327009.html" H 2600 1800 50  0001 C CNN "URL"
-	1    2600 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R1
-U 1 1 5F6E634B
-P 2425 1800
-F 0 "R1" H 2525 1750 50  0000 L CNN
-F 1 "10K" V 2425 1725 50  0000 L CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 2355 1800 50  0001 C CNN
-F 3 "~" H 2425 1800 50  0001 C CNN
-F 4 "AC0402JR-0710KL" H 2425 1800 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-AC0402JR-0710KL_C144731.html" H 2425 1800 50  0001 C CNN "URL"
-	1    2425 1800
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	2425 1650 2425 1600
-Wire Wire Line
-	2600 1700 2600 1600
-Wire Wire Line
-	2600 1600 2425 1600
-Connection ~ 2425 1600
-Wire Wire Line
-	2425 1600 2425 1525
-Wire Wire Line
-	2425 1950 2425 2025
-$Comp
-L power:GND #PWR010
-U 1 1 5F6FA86A
-P 2600 2025
-F 0 "#PWR010" H 2600 1775 50  0001 C CNN
-F 1 "GND" H 2605 1852 50  0000 C CNN
-F 2 "" H 2600 2025 50  0001 C CNN
-F 3 "" H 2600 2025 50  0001 C CNN
-	1    2600 2025
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2600 1900 2600 2025
-$Comp
-L power:+2V8 #PWR023
-U 1 1 5F705F72
-P 6225 3425
-F 0 "#PWR023" H 6225 3275 50  0001 C CNN
-F 1 "+2V8" H 6240 3598 50  0000 C CNN
-F 2 "" H 6225 3425 50  0001 C CNN
-F 3 "" H 6225 3425 50  0001 C CNN
-	1    6225 3425
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+2V8 #PWR012
-U 1 1 5F70648E
-P 3350 3500
-F 0 "#PWR012" H 3350 3350 50  0001 C CNN
-F 1 "+2V8" H 3365 3673 50  0000 C CNN
-F 2 "" H 3350 3500 50  0001 C CNN
-F 3 "" H 3350 3500 50  0001 C CNN
-	1    3350 3500
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10800 1450 10800 1625
-Connection ~ 10800 1625
-Wire Wire Line
-	3150 1225 3425 1225
-Wire Wire Line
-	1500 1225 2000 1225
-$Comp
-L Device:C C1
-U 1 1 5F75B100
-P 2000 1650
-F 0 "C1" H 1925 1550 50  0000 R CNN
-F 1 "100uF" H 1975 1775 50  0000 R CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 2038 1500 50  0001 C CNN
-F 3 "~" H 2000 1650 50  0001 C CNN
-F 4 "JMK316ABJ107ML-T" H 2000 1650 50  0001 C CNN "MPN"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Taiyo-Yuden-JMK316ABJ107ML-T_C268006.html" H 2000 1650 50  0001 C CNN "URL"
-	1    2000 1650
-	1    0    0    1   
-$EndComp
-Wire Wire Line
-	2000 1500 2000 1225
-Connection ~ 2000 1225
-Wire Wire Line
-	2000 1225 2225 1225
-$Comp
-L power:GND #PWR07
-U 1 1 5F762607
-P 2000 2025
-F 0 "#PWR07" H 2000 1775 50  0001 C CNN
-F 1 "GND" H 2005 1852 50  0000 C CNN
-F 2 "" H 2000 2025 50  0001 C CNN
-F 3 "" H 2000 2025 50  0001 C CNN
-	1    2000 2025
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2000 1800 2000 2025
-Wire Notes Line
-	4225 3025 4225 525 
-Wire Notes Line
-	4275 525  4275 3025
-Wire Notes Line width 20 style solid
-	4250 3050 4250 475 
+	1300 6775 1350 6775
 $Bitmap
-Pos 10825 6850
+Pos 10800 6875
 Scale 0.200000
 Data
 89 50 4E 47 0D 0A 1A 0A 00 00 00 0D 49 48 44 52 00 00 05 00 00 00 02 CF 08 02 00 00 00 B2 9F FA 
@@ -3564,313 +3462,1422 @@ B6 E5 B9 DD 5C 03 FF 08 AF 6D 00 C0 69 96 E6 3A 46 00 00 00 FF 3B 02 60 00 C0 9C
 60 82 
 EndData
 $EndBitmap
-Text Notes 9525 2600 0    79   Italic 16
-~Battery Monitor (BM):
+Text Notes 4600 3725 0    79   ~ 0
+HIGH
+Text Notes 4600 3475 0    79   ~ 0
+HIGH
+Text Notes 4600 3225 0    79   ~ 0
+HIGH
+Text Notes 4025 3475 0    79   ~ 0
+HIGH
+Text Notes 4025 3225 0    79   ~ 0
+HIGH
+Text Notes 3350 3475 0    79   ~ 0
+HIGH
+Text Notes 3350 3725 0    79   ~ 0
+HIGH
+Text Notes 4050 3725 0    79   Italic 16
+LOW
+Text Notes 3350 3225 0    79   Italic 16
+LOW
+Text Notes 2100 3750 0    79   Italic 16
+Receive
+Text Notes 1800 3475 0    79   Italic 16
+TX low output power*
+Text Notes 1775 3225 0    79   Italic 16
+TX high output power
+Text Notes 1575 2975 0    79   ~ 16
+RF front-end configuration
+Wire Notes Line
+	1550 2800 1550 3800
+Wire Notes Line
+	1550 3800 5175 3800
+Wire Notes Line
+	5175 2800 1550 2800
+Wire Notes Line
+	3250 2800 3250 3800
+Wire Notes Line
+	5175 3050 1550 3050
+Wire Notes Line
+	1550 3300 5175 3300
+Wire Notes Line
+	5175 3550 1550 3550
+Wire Notes Line
+	4525 2800 4525 3800
+Wire Notes Line
+	3875 2800 3875 3800
+Text Notes 4550 2975 0    79   ~ 16
+FE_CTRL3
+Text Notes 3900 2975 0    79   ~ 16
+FE_CTRL2
+Text Notes 3275 2975 0    79   ~ 16
+FE_CTRL1
+Wire Notes Line
+	5175 3800 5175 2800
+Wire Notes Line
+	11150 500  11150 2700
+Wire Notes Line
+	11150 2700 9325 2700
+Wire Notes Line
+	9325 500  9325 2700
+Wire Notes Line
+	6175 2700 6175 500 
+Wire Notes Line
+	4175 2700 6175 2700
+Wire Wire Line
+	1900 1075 2325 1075
+Connection ~ 1900 1075
+Text Notes 5050 1050 0    59   ~ 0
+46
+Wire Wire Line
+	5125 2075 5125 2000
+Text HLabel 1350 5675 0    59   BiDi ~ 0
+PA8
+Connection ~ 4325 4450
+Wire Wire Line
+	4325 4450 4525 4450
+Connection ~ 4525 4450
+Wire Wire Line
+	4525 4450 4800 4450
+Wire Wire Line
+	6400 4350 6400 5675
+Connection ~ 5850 4350
+Wire Wire Line
+	6200 4350 6400 4350
+Connection ~ 5850 4550
+Wire Wire Line
+	5850 4550 6000 4550
+Wire Wire Line
+	6200 4550 6500 4550
+Connection ~ 7200 4350
+Connection ~ 6700 4350
+Wire Wire Line
+	6700 4350 6850 4350
+Wire Wire Line
+	7050 4350 7200 4350
+Wire Wire Line
+	6700 4350 6400 4350
+Connection ~ 6400 4350
+Wire Wire Line
+	6675 5400 6500 5400
+Connection ~ 6500 5400
+Wire Wire Line
+	6500 5400 6500 5975
+Wire Wire Line
+	8775 3800 8775 3825
+Wire Wire Line
+	8775 3075 8775 2975
+Connection ~ 8775 2975
+Wire Wire Line
+	8775 2975 8950 2975
+Wire Wire Line
+	9675 3550 9500 3550
+Wire Wire Line
+	8050 5400 7950 5400
+Wire Wire Line
+	8725 3550 8775 3550
+Wire Wire Line
+	8775 3600 8775 3550
+Connection ~ 8775 3550
+Wire Wire Line
+	8775 3550 8850 3550
+Wire Wire Line
+	9050 3550 9150 3550
+Wire Wire Line
+	9150 3600 9150 3550
+Connection ~ 9150 3550
+Wire Wire Line
+	9150 3550 9300 3550
+Wire Wire Line
+	9675 3125 9675 3550
+Wire Wire Line
+	8050 4450 8150 4450
+Wire Wire Line
+	8050 4450 8050 5400
+Wire Wire Line
+	8150 4550 8150 6275
+Connection ~ 7925 4350
+Wire Wire Line
+	7925 4350 8150 4350
+Wire Wire Line
+	7750 4350 7925 4350
+Wire Notes Line style solid
+	6050 6150 6050 6250
+Wire Notes Line style solid
+	6050 6250 6025 6225
+Wire Notes Line style solid
+	6050 6250 6075 6225
+Text Notes 5025 5550 0    59   ~ 12
+50 Ohms
+Wire Notes Line style solid
+	4875 5550 5450 5550
+Wire Notes Line style solid
+	5450 5500 5450 5550
+Wire Notes Line style solid
+	4875 5550 4875 5650
+Wire Notes Line style solid
+	4875 5650 4850 5625
+Wire Notes Line style solid
+	4875 5650 4900 5625
+Text Notes 5025 5850 0    59   ~ 12
+50 Ohms
+Wire Notes Line style solid
+	4875 5850 5450 5850
+Wire Notes Line style solid
+	5450 5800 5450 5850
+Wire Notes Line style solid
+	4875 5850 4875 5950
+Wire Notes Line style solid
+	4875 5950 4850 5925
+Wire Notes Line style solid
+	4875 5950 4900 5925
+Wire Notes Line
+	500  2750 500  7750
+Wire Notes Line
+	500  7750 6925 7750
+Wire Notes Line
+	6925 7750 6925 6500
+Wire Notes Line
+	6925 6500 11150 6500
+Wire Notes Line
+	11150 6500 11150 2750
+Wire Notes Line
+	10925 2750 275  2750
+Wire Notes Line width 20 style solid
+	9300 475  9300 2725
+Wire Notes Line width 20 style solid
+	11200 2725 475  2725
+Wire Notes Line width 20 style solid
+	8100 475  8100 2725
+Wire Notes Line width 20 style solid
+	6200 475  6200 2725
+Wire Notes Line width 20 style solid
+	4150 475  4150 2725
+Text Notes 5200 3500 0    71   ~ 0
+Transmit high output power (+22dBm): FE_CTRL1 = 0\nPA regulator (VDDPA) supplied from VDDSMPS.\nTransmit default output power (+14dBm): FE_CTRL1 = 1\nPA regulator (VDDPA) supplied from VDDRF1V55.
+Wire Wire Line
+	5250 4850 5250 4925
+Wire Wire Line
+	4100 4450 4100 5375
+Wire Wire Line
+	6500 4550 6500 5400
+Wire Wire Line
+	3875 5675 6400 5675
+Wire Wire Line
+	5700 4350 5850 4350
+Wire Wire Line
+	5700 4550 5850 4550
+Wire Wire Line
+	10225 2350 10300 2425
+Wire Wire Line
+	10725 1925 10675 1925
+Text GLabel 9700 2100 3    59   Input ~ 12
+VDDRF1V55
+Wire Wire Line
+	9700 2100 9775 2025
+Wire Wire Line
+	9700 1750 9775 1825
 $Comp
-L Connector:TestPoint_Probe TP1
-U 1 1 5FCD1808
-P 2000 1075
-F 0 "TP1" V 2175 1150 50  0000 C CNN
-F 1 "VIN" V 2000 1200 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 2200 1075 50  0001 C CNN
-F 3 "~" H 2200 1075 50  0001 C CNN
-F 4 "DNM" H 2000 1075 50  0001 C CNN "MPN"
-F 5 "~" H 2000 1075 50  0001 C CNN "URL"
-	1    2000 1075
+L power:+2V8 #PWR073
+U 1 1 5F90F082
+P 10775 975
+F 0 "#PWR073" H 10775 825 50  0001 C CNN
+F 1 "+2V8" H 10790 1148 50  0000 C CNN
+F 2 "" H 10775 975 50  0001 C CNN
+F 3 "" H 10775 975 50  0001 C CNN
+	1    10775 975 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR067
+U 1 1 5F90F6E7
+P 9700 1050
+F 0 "#PWR067" H 9700 800 50  0001 C CNN
+F 1 "GND" H 9705 877 50  0000 C CNN
+F 2 "" H 9700 1050 50  0001 C CNN
+F 3 "" H 9700 1050 50  0001 C CNN
+	1    9700 1050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9700 1050 9700 1025
+Wire Wire Line
+	9700 1025 9725 1025
+Wire Wire Line
+	10725 1025 10775 1025
+Wire Wire Line
+	10775 1025 10775 975 
+Text Notes 4900 5350 0    71   Italic 14
+SEL2 - COM2\n 0       NC2\n 1       NO2
+Text Notes 10375 2675 0    71   Italic 14
+SEL1 - COM1\n 0       NC1\n 1       NO1
+Wire Wire Line
+	10300 2425 10300 2550
+$Comp
+L power:GND #PWR074
+U 1 1 5F9C5776
+P 10775 1375
+F 0 "#PWR074" H 10775 1125 50  0001 C CNN
+F 1 "GND" H 10780 1202 50  0000 C CNN
+F 2 "" H 10775 1375 50  0001 C CNN
+F 3 "" H 10775 1375 50  0001 C CNN
+	1    10775 1375
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	10775 1375 10775 1350
+Wire Wire Line
+	10775 1050 10775 1025
+Connection ~ 10775 1025
+Wire Wire Line
+	3850 5975 6500 5975
+Wire Wire Line
+	3550 5975 3650 5975
+Wire Wire Line
+	3550 5675 3675 5675
+Text Notes 9425 1850 0    71   Italic 14
+2.8V
+Text Notes 9425 2075 0    71   Italic 14
+1.55V
+Text Label 5025 6575 0    59   ~ 0
+RFI_N
+Wire Wire Line
+	10900 4450 10900 4425
+Text Notes 6875 3875 0    71   Italic 14
+RFO HP Matching
+Text Notes 6825 6050 0    71   Italic 14
+RFO LP Matching
+Text Notes 5700 6575 0    71   Italic 14
+Rx Matching
+Wire Wire Line
+	3550 6275 5400 6275
+Wire Wire Line
+	3550 6575 5400 6575
+Wire Wire Line
+	5875 6275 8150 6275
+Wire Notes Line
+	4125 500  4125 2700
+Wire Notes Line
+	500  2700 4125 2700
+Wire Notes Line
+	500  500  4125 500 
+Wire Wire Line
+	3450 1975 3450 2050
+Wire Wire Line
+	3450 1975 3625 1975
+Wire Wire Line
+	3625 1900 3625 1975
+Connection ~ 3625 1975
+Wire Wire Line
+	3625 1975 3775 1975
+Wire Wire Line
+	3450 2350 3450 2425
+Wire Wire Line
+	3450 2425 3625 2425
+Wire Wire Line
+	3775 2425 3775 2350
+Wire Wire Line
+	3625 2475 3625 2425
+Connection ~ 3625 2425
+Wire Wire Line
+	3625 2425 3775 2425
+Connection ~ 5125 2000
+Wire Wire Line
+	5125 2000 5300 2000
+Wire Wire Line
+	5000 2000 5125 2000
+Wire Wire Line
+	2325 1075 2325 1125
+Wire Wire Line
+	2325 1500 1900 1500
+Wire Wire Line
+	2325 1425 2325 1500
+Connection ~ 1900 1500
+Text Notes 1450 1050 0    50   ~ 0
+37
+$Comp
+L power:+2V8 #PWR041
+U 1 1 5FDAA6B1
+P 2775 1025
+F 0 "#PWR041" H 2775 875 50  0001 C CNN
+F 1 "+2V8" H 2790 1198 50  0000 C CNN
+F 2 "" H 2775 1025 50  0001 C CNN
+F 3 "" H 2775 1025 50  0001 C CNN
+	1    2775 1025
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2775 1025 2775 1050
+Wire Wire Line
+	1350 4475 1225 4475
+Wire Wire Line
+	1225 4475 1225 4375
+Connection ~ 1225 4375
+$Comp
+L power:PWR_FLAG #FLG04
+U 1 1 5FDF0A6B
+P 9150 3500
+F 0 "#FLG04" H 9150 3575 50  0001 C CNN
+F 1 "PWR_FLAG" H 9150 3650 50  0000 C CNN
+F 2 "" H 9150 3500 50  0001 C CNN
+F 3 "~" H 9150 3500 50  0001 C CNN
+	1    9150 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9150 3500 9150 3550
+Wire Wire Line
+	2775 1050 3050 1050
+Text GLabel 3050 1050 2    59   Output ~ 12
+VDDRF
+NoConn ~ 11100 4425
+Wire Wire Line
+	8850 3550 8850 3800
+Wire Wire Line
+	9050 3550 9050 3800
+Wire Wire Line
+	8950 2975 8950 3800
+$Comp
+L node-lib-v1:STM32WLxx_QFN48 U5
+U 1 1 5EA76256
+P 1650 4175
+F 0 "U5" H 1750 4250 60  0000 C CNB
+F 1 "STM32WLE5CC" H 2450 4250 79  0000 C CNB
+F 2 "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.45x5.45mm" H 2450 1775 60  0001 C CNN
+F 3 "https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf" H 1350 3475 60  0001 C CNN
+F 4 "STM32WLE5CCU6" H 1650 4175 50  0001 C CNN "MPN"
+F 5 "https://www.st.com/content/st_com/en/products/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus/stm32-wireless-mcus/stm32wl-series/stm32wlex/stm32wle5cc.html#sample-buy" H 1650 4175 50  0001 C CNN "URL"
+	1    1650 4175
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C25
+U 1 1 5EA82E59
+P 4325 4600
+F 0 "C25" H 4250 4600 50  0000 R CNN
+F 1 "47nF" H 4300 4675 50  0000 R CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4325 4600 50  0001 C CNN
+F 3 "~" H 4325 4600 50  0001 C CNN
+F 4 "CC0402KRX7R8BB473" H 4325 4600 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R8BB473_C107020.html" H 4325 4600 50  0001 C CNN "URL"
+	1    4325 4600
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C26
+U 1 1 5EA83310
+P 4525 4600
+F 0 "C26" H 4600 4600 50  0000 L CNN
+F 1 "68pF" H 4575 4525 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4525 4600 50  0001 C CNN
+F 3 "~" H 4525 4600 50  0001 C CNN
+F 4 "CC0402JRNPO9BN680" H 4525 4600 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402JRNPO9BN680_C107009.html" H 4525 4600 50  0001 C CNN "URL"
+	1    4525 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C30
+U 1 1 5EA8F784
+P 5400 6700
+F 0 "C30" H 5600 6625 50  0000 R CNN
+F 1 "2.7pF" H 5650 6775 50  0000 R CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5400 6700 50  0001 C CNN
+F 3 "~" H 5400 6700 50  0001 C CNN
+F 4 "CC0402BRNPO9BN2R7" H 5400 6700 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN2R7_C326937.html" H 5400 6700 50  0001 C CNN "URL"
+	1    5400 6700
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:L_Small L5
+U 1 1 5EA90E42
+P 5400 6425
+F 0 "L5" H 5325 6350 50  0000 C CNN
+F 1 "11nH" H 5275 6425 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 5400 6425 50  0001 C CNN
+F 3 "~" H 5400 6425 50  0001 C CNN
+F 4 "LQW15AN11NG00" V 5400 6425 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Inductors-SMD_Murata-Electronics-LQW15AN11NG00D_C113109.html" H 5400 6425 50  0001 C CNN "URL"
+	1    5400 6425
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C31
+U 1 1 5EA91261
+P 5775 6275
+F 0 "C31" V 5650 6275 50  0000 C CNN
+F 1 "3.6pF" V 5900 6275 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5775 6275 50  0001 C CNN
+F 3 "~" H 5775 6275 50  0001 C CNN
+F 4 "0402N3R6B500" H 5775 6275 50  0001 C CNN "MPN"
+F 5 "" H 5775 6275 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Walsin-Tech-Corp-0402N3R6B500_C123485.html" H 5775 6275 50  0001 C CNN "URL"
+F 7 "CC0402BRNPO9BN3R6" H 5775 6275 50  0001 C CNN "ALT_MPN"
+	1    5775 6275
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:C_Small C50
+U 1 1 5EABDBE5
+P 9150 3700
+F 0 "C50" H 9300 3700 50  0000 C CNN
+F 1 "1nF" H 9275 3775 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 9150 3700 50  0001 C CNN
+F 3 "~" H 9150 3700 50  0001 C CNN
+F 4 "CC0402KRX7R7BB102" H 9150 3700 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB102_C189467.html" H 9150 3700 50  0001 C CNN "URL"
+	1    9150 3700
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:R_Small R8
+U 1 1 5EABE05F
+P 9400 3550
+F 0 "R8" V 9325 3550 50  0000 C CNN
+F 1 "100R" V 9475 3550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 9400 3550 50  0001 C CNN
+F 3 "~" H 9400 3550 50  0001 C CNN
+F 4 "RC0402FR-07100RL" V 9400 3550 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100RL_C106232.html" H 9400 3550 50  0001 C CNN "URL"
+	1    9400 3550
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:L_Small L6
+U 1 1 5EAC08CC
+P 6100 4350
+F 0 "L6" V 6175 4350 50  0000 C CNN
+F 1 "47nH" V 6150 4175 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 6100 4350 50  0001 C CNN
+F 3 "~" H 6100 4350 50  0001 C CNN
+F 4 "LQW15AN47NJ00#" V 6100 4350 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq55" H 6100 4350 50  0001 C CNN "URL"
+	1    6100 4350
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	2000 1075 2000 1225
-Text HLabel 7775 3750 2    59   Output ~ 12
-VCC_FLASH
 $Comp
-L power:GND #PWR017
-U 1 1 5F01C425
-P 3975 2675
-F 0 "#PWR017" H 3975 2425 50  0001 C CNN
-F 1 "GND" H 3980 2502 50  0000 C CNN
-F 2 "" H 3975 2675 50  0001 C CNN
-F 3 "" H 3975 2675 50  0001 C CNN
-	1    3975 2675
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3975 2650 3975 2675
-$Comp
-L power:PWR_FLAG #FLG02
-U 1 1 5F023D29
-P 3975 2650
-F 0 "#FLG02" H 3975 2725 50  0001 C CNN
-F 1 "PWR_FLAG" H 3975 2823 50  0000 C CNN
-F 2 "" H 3975 2650 50  0001 C CNN
-F 3 "~" H 3975 2650 50  0001 C CNN
-	1    3975 2650
-	1    0    0    -1  
-$EndComp
-Text Notes 9125 4950 0    98   Italic 20
-Enclosure & Logos
-$Comp
-L Mechanical:Fiducial FID2
-U 1 1 5F77251A
-P 9375 5750
-F 0 "FID2" H 9300 5875 50  0000 L CNN
-F 1 "Fiducial" H 9250 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 9375 5750 50  0001 C CNN
-F 3 "~" H 9375 5750 50  0001 C CNN
-F 4 "~" H 9375 5750 50  0001 C CNN "MPN"
-F 5 "~" H 9375 5750 50  0001 C CNN "URL"
-	1    9375 5750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector:Conn_01x01_Female J1
-U 1 1 5F78564C
-P 825 4125
-F 0 "J1" V 950 4150 50  0000 R CNN
-F 1 "S1001-46R" V 875 4350 50  0000 R CNN
-F 2 "node-lib-v1:RF_Shield_Clip_S1001-46R" H 825 4125 50  0001 C CNN
-F 3 "~" H 825 4125 50  0001 C CNN
-F 4 "DNM" V 825 4125 50  0001 C CNN "MPN"
-F 5 "" H 825 4125 50  0001 C CNN "DNM_MPN"
-F 6 "https://www.digikey.com/short/zwbq0r" H 825 4125 50  0001 C CNN "URL"
-F 7 "S1001-46R" H 825 4125 50  0001 C CNN "ALT_MPN"
-	1    825  4125
+L Device:L_Small L7
+U 1 1 5EAC2726
+P 6100 4550
+F 0 "L7" V 6150 4550 50  0000 C CNN
+F 1 "47nH" V 6150 4350 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 6100 4550 50  0001 C CNN
+F 3 "~" H 6100 4550 50  0001 C CNN
+F 4 "LQW15AN47NJ00#" V 6100 4550 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq55" H 6100 4550 50  0001 C CNN "URL"
+	1    6100 4550
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:GND #PWR01
-U 1 1 5F786EBB
-P 825 4400
-F 0 "#PWR01" H 825 4150 50  0001 C CNN
-F 1 "GND" H 830 4227 50  0000 C CNN
-F 2 "" H 825 4400 50  0001 C CNN
-F 3 "" H 825 4400 50  0001 C CNN
-	1    825  4400
-	1    0    0    -1  
+L Device:C_Small C33
+U 1 1 5EAC42FB
+P 5850 4775
+F 0 "C33" H 5700 4775 50  0000 C CNN
+F 1 "33pF" H 5700 4700 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5850 4775 50  0001 C CNN
+F 3 "~" H 5850 4775 50  0001 C CNN
+F 4 "CC0402GRNPO9BN330" H 5850 4775 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402GRNPO9BN330_C325461.html" H 5850 4775 50  0001 C CNN "URL"
+	1    5850 4775
+	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	825  4325 825  4400
 $Comp
-L Connector:Conn_01x01_Female J6
-U 1 1 5F7B3B03
-P 2400 4125
-F 0 "J6" V 2525 4175 50  0000 R CNN
-F 1 "S1001-46R" V 2450 4375 50  0000 R CNN
-F 2 "node-lib-v1:RF_Shield_Clip_S1001-46R" H 2400 4125 50  0001 C CNN
-F 3 "~" H 2400 4125 50  0001 C CNN
-F 4 "DNM" V 2400 4125 50  0001 C CNN "MPN"
-F 5 "" H 2400 4125 50  0001 C CNN "DNM_MPN"
-F 6 "https://www.digikey.com/short/zwbq0r" H 2400 4125 50  0001 C CNN "URL"
-F 7 "S1001-46R" H 2400 4125 50  0001 C CNN "ALT_MPN"
-	1    2400 4125
+L Device:C_Small C32
+U 1 1 5EAC77FB
+P 5850 4175
+F 0 "C32" H 5700 4250 50  0000 C CNN
+F 1 "33pF" H 5675 4175 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5850 4175 50  0001 C CNN
+F 3 "~" H 5850 4175 50  0001 C CNN
+F 4 "CC0402GRNPO9BN330" H 5850 4175 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402GRNPO9BN330_C325461.html" H 5850 4175 50  0001 C CNN "URL"
+	1    5850 4175
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C39
+U 1 1 5EAD2F2A
+P 7175 5550
+F 0 "C39" H 7325 5575 50  0000 C CNN
+F 1 "3.3pF" H 7350 5650 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7175 5550 50  0001 C CNN
+F 3 "~" H 7175 5550 50  0001 C CNN
+F 4 "CC0402BRNPO9BN3R3" H 7175 5550 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN3R3_C327287.html" H 7175 5550 50  0001 C CNN "URL"
+F 6 "" H 7175 5550 50  0001 C CNN "DNM_MPN"
+F 7 "GJM1555C1H3R3WB01" H 7175 5550 50  0001 C CNN "ALT_MPN"
+	1    7175 5550
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:L_Small L12
+U 1 1 5EAD3747
+P 7750 5400
+F 0 "L12" V 7850 5400 50  0000 C CNN
+F 1 "8.7nH" V 7675 5400 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 7750 5400 50  0001 C CNN
+F 3 "~" H 7750 5400 50  0001 C CNN
+F 4 "LQW15AN8N7H00" V 7750 5400 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq9f" H 7750 5400 50  0001 C CNN "URL"
+	1    7750 5400
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:GND #PWR08
-U 1 1 5F7B3B0D
-P 2400 4400
-F 0 "#PWR08" H 2400 4150 50  0001 C CNN
-F 1 "GND" H 2405 4227 50  0000 C CNN
-F 2 "" H 2400 4400 50  0001 C CNN
-F 3 "" H 2400 4400 50  0001 C CNN
-	1    2400 4400
-	1    0    0    -1  
+L Device:C_Small C42
+U 1 1 5EAD3C92
+P 7475 5400
+F 0 "C42" V 7350 5400 50  0000 C CNN
+F 1 "33pF" V 7575 5375 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7475 5400 50  0001 C CNN
+F 3 "~" H 7475 5400 50  0001 C CNN
+F 4 "CC0402GRNPO9BN330" H 7475 5400 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402GRNPO9BN330_C325461.html" H 7475 5400 50  0001 C CNN "URL"
+	1    7475 5400
+	0    -1   1    0   
 $EndComp
-Wire Wire Line
-	2400 4325 2400 4400
 $Comp
-L Connector:Conn_01x01_Female J3
-U 1 1 5F7CC5D0
-P 1325 4125
-F 0 "J3" V 1450 4150 50  0000 R CNN
-F 1 "S1001-46R" V 1375 4325 50  0000 R CNN
-F 2 "node-lib-v1:RF_Shield_Clip_S1001-46R" H 1325 4125 50  0001 C CNN
-F 3 "~" H 1325 4125 50  0001 C CNN
-F 4 "DNM" V 1325 4125 50  0001 C CNN "MPN"
-F 5 "" H 1325 4125 50  0001 C CNN "DNM_MPN"
-F 6 "https://www.digikey.com/short/zwbq0r" H 1325 4125 50  0001 C CNN "URL"
-F 7 "S1001-46R" H 1325 4125 50  0001 C CNN "ALT_MPN"
-	1    1325 4125
+L Device:L_Small L8
+U 1 1 5EAD4E83
+P 6925 5400
+F 0 "L8" V 7000 5400 50  0000 C CNN
+F 1 "3nH" V 6850 5400 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 6925 5400 50  0001 C CNN
+F 3 "~" H 6925 5400 50  0001 C CNN
+F 4 "LQW15AN3N0B00" V 6925 5400 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Inductors-SMD_Murata-Electronics-LQW15AN3N0B00D_C269824.html" H 6925 5400 50  0001 C CNN "URL"
+	1    6925 5400
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:GND #PWR03
-U 1 1 5F7CC5DA
-P 1325 4400
-F 0 "#PWR03" H 1325 4150 50  0001 C CNN
-F 1 "GND" H 1330 4227 50  0000 C CNN
-F 2 "" H 1325 4400 50  0001 C CNN
-F 3 "" H 1325 4400 50  0001 C CNN
-	1    1325 4400
-	1    0    0    -1  
+L Device:C_Small C37
+U 1 1 5EAD5496
+P 6925 5150
+F 0 "C37" V 6696 5150 50  0000 C CNN
+F 1 "2.7pF" V 6787 5150 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 6925 5150 50  0001 C CNN
+F 3 "~" H 6925 5150 50  0001 C CNN
+F 4 "CC0402BRNPO9BN2R7" H 6925 5150 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN2R7_C326937.html" H 6925 5150 50  0001 C CNN "URL"
+	1    6925 5150
+	0    -1   1    0   
 $EndComp
-Wire Wire Line
-	1325 4325 1325 4400
 $Comp
-L Connector:Conn_01x01_Female J5
-U 1 1 5F7D2826
-P 1875 4125
-F 0 "J5" V 2000 4175 50  0000 R CNN
-F 1 "S1001-46R" V 1925 4350 50  0000 R CNN
-F 2 "node-lib-v1:RF_Shield_Clip_S1001-46R" H 1875 4125 50  0001 C CNN
-F 3 "~" H 1875 4125 50  0001 C CNN
-F 4 "DNM" V 1875 4125 50  0001 C CNN "MPN"
-F 5 "" H 1875 4125 50  0001 C CNN "DNM_MPN"
-F 6 "https://www.digikey.com/short/zwbq0r" H 1875 4125 50  0001 C CNN "URL"
-F 7 "S1001-46R" H 1875 4125 50  0001 C CNN "ALT_MPN"
-	1    1875 4125
+L Device:C_Small C35
+U 1 1 5EAD94AF
+P 6675 5550
+F 0 "C35" H 6900 5575 50  0000 R CNN
+F 1 "5.6pF" H 6900 5650 50  0000 R CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 6675 5550 50  0001 C CNN
+F 3 "~" H 6675 5550 50  0001 C CNN
+F 4 "CC0402BRNPO9BN5R6" H 6675 5550 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN5R6_C505468.html" H 6675 5550 50  0001 C CNN "URL"
+	1    6675 5550
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C45
+U 1 1 5EAEBA9C
+P 7950 5550
+F 0 "C45" H 7800 5600 50  0000 C CNN
+F 1 "1.3pF" H 7825 5675 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7950 5550 50  0001 C CNN
+F 3 "~" H 7950 5550 50  0001 C CNN
+F 4 "CC0402BRNPO9BN1R3" H 7950 5550 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN1R3_C327229.html" H 7950 5550 50  0001 C CNN "URL"
+	1    7950 5550
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C40
+U 1 1 5EAFB695
+P 7200 4500
+F 0 "C40" H 7350 4550 50  0000 C CNN
+F 1 "3.9pF" H 7325 4625 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7200 4500 50  0001 C CNN
+F 3 "~" H 7200 4500 50  0001 C CNN
+F 4 "CC0402BRNPO9BN3R9" H 7200 4500 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN3R9_C505474.html" H 7200 4500 50  0001 C CNN "URL"
+	1    7200 4500
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:L_Small L11
+U 1 1 5EAFB6A0
+P 7650 4350
+F 0 "L11" V 7750 4350 50  0000 C CNN
+F 1 "6.8nH" V 7600 4350 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 7650 4350 50  0001 C CNN
+F 3 "~" H 7650 4350 50  0001 C CNN
+F 4 "LQW15AN6N8H00" V 7650 4350 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq90" H 7650 4350 50  0001 C CNN "URL"
+	1    7650 4350
 	0    -1   -1   0   
 $EndComp
 $Comp
-L power:GND #PWR06
-U 1 1 5F7D2830
-P 1875 4400
-F 0 "#PWR06" H 1875 4150 50  0001 C CNN
-F 1 "GND" H 1880 4227 50  0000 C CNN
-F 2 "" H 1875 4400 50  0001 C CNN
-F 3 "" H 1875 4400 50  0001 C CNN
-	1    1875 4400
+L Device:C_Small C41
+U 1 1 5EAFB6AB
+P 7400 4350
+F 0 "C41" V 7300 4350 50  0000 C CNN
+F 1 "33pF" V 7500 4325 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7400 4350 50  0001 C CNN
+F 3 "~" H 7400 4350 50  0001 C CNN
+F 4 "CC0402GRNPO9BN330" H 7400 4350 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402GRNPO9BN330_C325461.html" H 7400 4350 50  0001 C CNN "URL"
+	1    7400 4350
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:L_Small L9
+U 1 1 5EAFB6B6
+P 6950 4350
+F 0 "L9" V 7025 4350 50  0000 C CNN
+F 1 "3.3nH" V 6875 4350 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 6950 4350 50  0001 C CNN
+F 3 "~" H 6950 4350 50  0001 C CNN
+F 4 "LQW15AN3N3C80D" V 6950 4350 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq2m" H 6950 4350 50  0001 C CNN "URL"
+	1    6950 4350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:C_Small C38
+U 1 1 5EAFB6C1
+P 6950 4100
+F 0 "C38" V 6825 4100 50  0000 C CNN
+F 1 "2.4pF" V 6900 3950 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 6950 4100 50  0001 C CNN
+F 3 "~" H 6950 4100 50  0001 C CNN
+F 4 "CC0402BRNPO9BN2R4" H 6950 4100 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN2R4_C541334.html" H 6950 4100 50  0001 C CNN "URL"
+	1    6950 4100
+	0    -1   1    0   
+$EndComp
+$Comp
+L Device:C_Small C36
+U 1 1 5EAFB6CC
+P 6700 4500
+F 0 "C36" H 6925 4525 50  0000 R CNN
+F 1 "6.8pF" H 6975 4600 50  0000 R CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 6700 4500 50  0001 C CNN
+F 3 "~" H 6700 4500 50  0001 C CNN
+F 4 "CC0402BRNPO9BN6R8" H 6700 4500 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN6R8_C327291.html" H 6700 4500 50  0001 C CNN "URL"
+	1    6700 4500
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C44
+U 1 1 5EAFB6F8
+P 7925 4500
+F 0 "C44" H 7775 4500 50  0000 C CNN
+F 1 "2.7pF" H 7775 4625 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7925 4500 50  0001 C CNN
+F 3 "~" H 7925 4500 50  0001 C CNN
+F 4 "CC0402BRNPO9BN2R7" H 7925 4500 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN2R7_C326937.html" H 7925 4500 50  0001 C CNN "URL"
+	1    7925 4500
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:R_Small R6
+U 1 1 5EB0C489
+P 8625 2975
+F 0 "R6" V 8550 2975 50  0000 C CNN
+F 1 "100R" V 8700 2975 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 8625 2975 50  0001 C CNN
+F 3 "~" H 8625 2975 50  0001 C CNN
+F 4 "RC0402FR-07100RL" V 8625 2975 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100RL_C106232.html" H 8625 2975 50  0001 C CNN "URL"
+	1    8625 2975
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C_Small C47
+U 1 1 5EB0C7AA
+P 8775 3175
+F 0 "C47" H 8625 3175 50  0000 C CNN
+F 1 "1nF" H 8625 3250 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8775 3175 50  0001 C CNN
+F 3 "~" H 8775 3175 50  0001 C CNN
+F 4 "CC0402KRX7R7BB102" H 8775 3175 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB102_C189467.html" H 8775 3175 50  0001 C CNN "URL"
+	1    8775 3175
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:R_Small R7
+U 1 1 5EB0CB2F
+P 8625 3550
+F 0 "R7" V 8550 3550 50  0000 C CNN
+F 1 "100R" V 8700 3550 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 8625 3550 50  0001 C CNN
+F 3 "~" H 8625 3550 50  0001 C CNN
+F 4 "RC0402FR-07100RL" V 8625 3550 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07100RL_C106232.html" H 8625 3550 50  0001 C CNN "URL"
+	1    8625 3550
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C_Small C48
+U 1 1 5EB0CFA4
+P 8775 3700
+F 0 "C48" H 8625 3725 50  0000 C CNN
+F 1 "1nF" H 8650 3800 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8775 3700 50  0001 C CNN
+F 3 "~" H 8775 3700 50  0001 C CNN
+F 4 "CC0402KRX7R7BB102" H 8775 3700 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB102_C189467.html" H 8775 3700 50  0001 C CNN "URL"
+	1    8775 3700
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:Crystal Y1
+U 1 1 5EB1246C
+P 8725 1700
+F 0 "Y1" H 8675 1550 50  0000 L CNN
+F 1 "32.768KHz" H 8525 1850 50  0000 L CNN
+F 2 "node-lib-v1:Crystal_SMD_NX2012SA_32.768KHz" H 8725 1700 50  0001 C CNN
+F 3 "~" H 8725 1700 50  0001 C CNN
+F 4 "X1A000061002100" V 8725 1700 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/SMD-Crystal-Resonators_Seiko-Epson_X1A000061002100_Seiko-Epson-X1A000061002100_C255767.html" H 8725 1700 50  0001 C CNN "URL"
+	1    8725 1700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C49
+U 1 1 5EB1422A
+P 8950 2025
+F 0 "C49" H 9100 1975 50  0000 C CNN
+F 1 "5.6pF" H 9100 2100 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8950 2025 50  0001 C CNN
+F 3 "~" H 8950 2025 50  0001 C CNN
+F 4 "CC0402BRNPO9BN5R6" H 8950 2025 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN5R6_C505468.html" H 8950 2025 50  0001 C CNN "URL"
+	1    8950 2025
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C43
+U 1 1 5EB16252
+P 7575 1350
+F 0 "C43" H 7675 1275 50  0000 C CNN
+F 1 "10pF" H 7700 1425 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7575 1350 50  0001 C CNN
+F 3 "~" H 7575 1350 50  0001 C CNN
+F 4 "C0402C100K5RAC7867" H 7575 1350 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.nl/short/z0nzzw" H 7575 1350 50  0001 C CNN "URL"
+	1    7575 1350
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:C C15
+U 1 1 5EB1BFFA
+P 1275 2225
+F 0 "C15" H 1390 2271 50  0000 L CNN
+F 1 "4.7uF" H 1390 2180 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1313 2075 50  0001 C CNN
+F 3 "~" H 1275 2225 50  0001 C CNN
+F 4 "CL10A475KO8NNNC" H 1275 2225 50  0001 C CNN "MPN"
+F 5 "" H 1275 2225 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A475KO8NNNC_4-7uF-475-10-16V_C19666.html" H 1275 2225 50  0001 C CNN "URL"
+F 7 "C1608X5R1C475K080AC" H 1275 2225 50  0001 C CNN "ALT_MPN"
+	1    1275 2225
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C13
+U 1 1 5ED0DD89
+P 725 1275
+F 0 "C13" H 840 1321 50  0000 L CNN
+F 1 "4.7uF" H 800 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 763 1125 50  0001 C CNN
+F 3 "~" H 725 1275 50  0001 C CNN
+F 4 "CL10A475KO8NNNC" H 725 1275 50  0001 C CNN "MPN"
+F 5 "" H 725 1275 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A475KO8NNNC_4-7uF-475-10-16V_C19666.html" H 725 1275 50  0001 C CNN "URL"
+F 7 "C1608X5R1C475K080AC" H 725 1275 50  0001 C CNN "ALT_MPN"
+	1    725  1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C14
+U 1 1 5ED16FA7
+P 1100 1275
+F 0 "C14" H 1215 1321 50  0000 L CNN
+F 1 "100nF" H 1175 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1138 1125 50  0001 C CNN
+F 3 "~" H 1100 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 1100 1275 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 1100 1275 50  0001 C CNN "URL"
+	1    1100 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C18
+U 1 1 5ED1DE4C
+P 1900 1275
+F 0 "C18" H 2015 1321 50  0000 L CNN
+F 1 "100nF" H 1975 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1938 1125 50  0001 C CNN
+F 3 "~" H 1900 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 1900 1275 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 1900 1275 50  0001 C CNN "URL"
+	1    1900 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C16
+U 1 1 5ED1E17D
+P 1475 1275
+F 0 "C16" H 1575 1275 50  0000 L CNN
+F 1 "100nF" H 1550 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1513 1125 50  0001 C CNN
+F 3 "~" H 1475 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 1475 1275 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 1475 1275 50  0001 C CNN "URL"
+	1    1475 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C20
+U 1 1 5ED3A35C
+P 2325 1275
+F 0 "C20" H 2425 1300 50  0000 L CNN
+F 1 "100nF" H 2400 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2363 1125 50  0001 C CNN
+F 3 "~" H 2325 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 2325 1275 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 2325 1275 50  0001 C CNN "URL"
+	1    2325 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C17
+U 1 1 5EE0EF3D
+P 1725 2225
+F 0 "C17" H 1825 2250 50  0000 L CNN
+F 1 "100nF" H 1825 2150 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1763 2075 50  0001 C CNN
+F 3 "~" H 1725 2225 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 1725 2225 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 1725 2225 50  0001 C CNN "URL"
+	1    1725 2225
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Ferrite_Bead_Small FB1
+U 1 1 5EE16EA1
+P 950 2050
+F 0 "FB1" V 850 2050 50  0000 C CNN
+F 1 "600R @100MHz" V 1075 1975 50  0000 C CNN
+F 2 "Inductor_SMD:L_0603_1608Metric" V 880 2050 50  0001 C CNN
+F 3 "~" H 950 2050 50  0001 C CNN
+F 4 "BLM18AG601SN1D" V 950 2050 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Ferrite-Beads_Murata-Electronics-BLM18AG601SN1D_C19330.html" H 950 2050 50  0001 C CNN "URL"
+	1    950  2050
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5EDED5FF
+P 7575 1650
+F 0 "R5" H 7645 1696 50  0000 L CNN
+F 1 "220R" H 7645 1605 50  0000 L CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" V 7505 1650 50  0001 C CNN
+F 3 "~" H 7575 1650 50  0001 C CNN
+F 4 "RC0402FR-07220RL" H 7575 1650 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-07220RL_C112291.html" H 7575 1650 50  0001 C CNN "URL"
+	1    7575 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:L_Small L10
+U 1 1 5EDEF451
+P 6975 1300
+F 0 "L10" H 6775 1350 50  0000 L CNN
+F 1 "1400R @1GHz" H 6425 1250 50  0000 L CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 6975 1300 50  0001 C CNN
+F 3 "~" H 6975 1300 50  0001 C CNN
+F 4 "BLM15HG102SN1D" H 6975 1300 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Ferrite-Beads_Murata-Electronics-BLM15HG102SN1D_C76889.html" H 6975 1300 50  0001 C CNN "URL"
+	1    6975 1300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C34
+U 1 1 5EDF004D
+P 6575 1575
+F 0 "C34" H 6675 1500 50  0000 C CNN
+F 1 "10nF" H 6675 1650 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 6575 1575 50  0001 C CNN
+F 3 "~" H 6575 1575 50  0001 C CNN
+F 4 "CC0402KRX7R7BB103" H 6575 1575 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB103_C327009.html" H 6575 1575 50  0001 C CNN "URL"
+	1    6575 1575
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:C_Small C46
+U 1 1 5EB1375D
+P 8475 2025
+F 0 "C46" H 8300 1975 50  0000 C CNN
+F 1 "5.6pF" H 8325 2100 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8475 2025 50  0001 C CNN
+F 3 "~" H 8475 2025 50  0001 C CNN
+F 4 "CC0402BRNPO9BN5R6" H 8475 2025 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN5R6_C505468.html" H 8475 2025 50  0001 C CNN "URL"
+	1    8475 2025
+	1    0    0    1   
+$EndComp
+$Comp
+L Device:L L4
+U 1 1 5F0C1493
+P 4850 2000
+F 0 "L4" V 4950 2000 50  0000 C CNN
+F 1 "15uH" V 4800 2000 50  0000 C CNN
+F 2 "node-lib-v1:L_0805_2012Metric_custom" H 4850 2000 50  0001 C CNN
+F 3 "~" H 4850 2000 50  0001 C CNN
+F 4 "MLZ2012M150W" V 4850 2000 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbqfq" H 4850 2000 50  0001 C CNN "URL"
+	1    4850 2000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:C C28
+U 1 1 5F0D0C20
+P 5125 2225
+F 0 "C28" H 5240 2271 50  0000 L CNN
+F 1 "470nF" H 5200 2150 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5163 2075 50  0001 C CNN
+F 3 "~" H 5125 2225 50  0001 C CNN
+F 4 "CC0603KRX7R7BB474" H 5125 2225 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R7BB474_C106851.html" H 5125 2225 50  0001 C CNN "URL"
+	1    5125 2225
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:C C27
+U 1 1 5F13D2BD
+P 4900 1275
+F 0 "C27" H 5015 1321 50  0000 L CNN
+F 1 "4.7uF" H 5015 1230 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 4938 1125 50  0001 C CNN
+F 3 "~" H 4900 1275 50  0001 C CNN
+F 4 "CL10A475KO8NNNC" H 4900 1275 50  0001 C CNN "MPN"
+F 5 "" H 4900 1275 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL10A475KO8NNNC_4-7uF-475-10-16V_C19666.html" H 4900 1275 50  0001 C CNN "URL"
+F 7 "C1608X5R1C475K080AC" H 4900 1275 50  0001 C CNN "ALT_MPN"
+	1    4900 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C29
+U 1 1 5F13D912
+P 5325 1275
+F 0 "C29" H 5440 1321 50  0000 L CNN
+F 1 "100nF" H 5400 1200 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 5363 1125 50  0001 C CNN
+F 3 "~" H 5325 1275 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 5325 1275 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 5325 1275 50  0001 C CNN "URL"
+	1    5325 1275
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C19
+U 1 1 5F1EA165
+P 2300 2200
+F 0 "C19" H 2415 2246 50  0000 L CNN
+F 1 "33pF" H 2375 2125 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2338 2050 50  0001 C CNN
+F 3 "~" H 2300 2200 50  0001 C CNN
+F 4 "CC0402FRNPO9BN330" H 2300 2200 50  0001 C CNN "MPN"
+F 5 "" H 2300 2200 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Others_YAGEO-CC0402FRNPO9BN330_C327064.html" H 2300 2200 50  0001 C CNN "URL"
+F 7 "CC0402JRNPO9BN330" H 2300 2200 50  0001 C CNN "ALT_MPN"
+	1    2300 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C21
+U 1 1 5F2093FF
+P 2650 2200
+F 0 "C21" H 2765 2246 50  0000 L CNN
+F 1 "33pF" H 2725 2125 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2688 2050 50  0001 C CNN
+F 3 "~" H 2650 2200 50  0001 C CNN
+F 4 "CC0402FRNPO9BN330" H 2650 2200 50  0001 C CNN "MPN"
+F 5 "" H 2650 2200 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Others_YAGEO-CC0402FRNPO9BN330_C327064.html" H 2650 2200 50  0001 C CNN "URL"
+F 7 "CC0402JRNPO9BN330" H 2650 2200 50  0001 C CNN "ALT_MPN"
+	1    2650 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C22
+U 1 1 5F219A28
+P 3050 2200
+F 0 "C22" H 3165 2246 50  0000 L CNN
+F 1 "33pF" H 3125 2125 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 3088 2050 50  0001 C CNN
+F 3 "~" H 3050 2200 50  0001 C CNN
+F 4 "CC0402FRNPO9BN330" H 3050 2200 50  0001 C CNN "MPN"
+F 5 "" H 3050 2200 50  0001 C CNN "DNM_MPN"
+F 6 "https://lcsc.com/product-detail/Others_YAGEO-CC0402FRNPO9BN330_C327064.html" H 3050 2200 50  0001 C CNN "URL"
+F 7 "CC0402JRNPO9BN330" H 3050 2200 50  0001 C CNN "ALT_MPN"
+	1    3050 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C24
+U 1 1 5F5CCD33
+P 3775 2200
+F 0 "C24" H 3890 2246 50  0000 L CNN
+F 1 "100nF" H 3850 2125 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 3813 2050 50  0001 C CNN
+F 3 "~" H 3775 2200 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 3775 2200 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 3775 2200 50  0001 C CNN "URL"
+	1    3775 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:L_Small L2
+U 1 1 5EA7A4AD
+P 3750 5975
+F 0 "L2" V 3825 5975 50  0000 C CNN
+F 1 "3.3nH" V 3700 5950 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 3750 5975 50  0001 C CNN
+F 3 "~" H 3750 5975 50  0001 C CNN
+F 4 "LQW15AN3N3C80D" V 3750 5975 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/zwbq2m" H 3750 5975 50  0001 C CNN "URL"
+	1    3750 5975
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:L_Small L3
+U 1 1 5EA79E2B
+P 3775 5675
+F 0 "L3" V 3850 5675 50  0000 C CNN
+F 1 "3.6nH" V 3700 5675 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 3775 5675 50  0001 C CNN
+F 3 "~" H 3775 5675 50  0001 C CNN
+F 4 "LQW15AN3N6C10D" V 3775 5675 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Inductors-SMD_Murata-Electronics-LQW15AN3N6C10D_C408158.html" H 3775 5675 50  0001 C CNN "URL"
+	1    3775 5675
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Jumper:SolderJumper_3_Bridged12 JP1
+U 1 1 5F992F44
+P 9675 2975
+F 0 "JP1" H 9675 3075 50  0000 C CNN
+F 1 "VDD_RF_SW" H 9450 2800 50  0000 C CNN
+F 2 "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm_NumberLabels" H 9675 2975 50  0001 C CNN
+F 3 "~" H 9675 2975 50  0001 C CNN
+F 4 "~" H 9675 2975 50  0001 C CNN "MPN"
+F 5 "~" H 9675 2975 50  0001 C CNN "URL"
+	1    9675 2975
+	-1   0    0    -1  
+$EndComp
+$Comp
+L node-lib-v1:TCXO-xxxMHz X1
+U 1 1 5F060E9A
+P 6975 1825
+F 0 "X1" H 7319 1871 50  0000 L CNN
+F 1 "32MHz" H 7050 1550 50  0000 L CNN
+F 2 "Crystal:Crystal_SMD_Abracon_ABM10-4Pin_2.5x2.0mm" H 7675 1475 50  0001 C CNN
+F 3 "" H 6875 1825 50  0001 C CNN
+F 4 "TYETBCSANF-32.000000" H 6975 1825 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.com/short/z0b1h8" H 6975 1825 50  0001 C CNN "URL"
+	1    6975 1825
+	1    0    0    -1  
+$EndComp
+$Comp
+L node-lib-v1:TS3A5223RSWR U6
+U 1 1 5F742F99
+P 10225 1925
+F 0 "U6" H 10225 2350 50  0000 C CNB
+F 1 "TS3A5223RSWR" H 10225 2275 50  0000 C CNN
+F 2 "Package_DFN_QFN:UQFN-10_1.4x1.8mm_P0.4mm" H 10225 1550 50  0001 C CNN
+F 3 "https://www.ti.com/lit/ds/symlink/ts3a5223.pdf" H 9175 1475 50  0001 C CNN
+F 4 "TS3A5223RSWR" H 10225 1925 50  0001 C CNN "MPN"
+F 5 "https://www.ti.com/store/ti/en/p/product/?p=TS3A5223RSWR" H 10225 1925 50  0001 C CNN "URL"
+	1    10225 1925
+	-1   0    0    -1  
+$EndComp
+$Comp
+L node-lib-v1:TS3A5223RSWR U6
+U 2 1 5F7454D3
+P 5250 4450
+F 0 "U6" H 5250 4900 50  0000 C CNB
+F 1 "TS3A5223RSWR" H 5250 4800 50  0000 C CNN
+F 2 "Package_DFN_QFN:UQFN-10_1.4x1.8mm_P0.4mm" H 5250 4075 50  0001 C CNN
+F 3 "https://www.ti.com/lit/ds/symlink/ts3a5223.pdf" H 4200 4000 50  0001 C CNN
+F 4 "TS3A5223RSWR" H 5250 4450 50  0001 C CNN "MPN"
+F 5 "https://www.ti.com/store/ti/en/p/product/?p=TS3A5223RSWR" H 5250 4450 50  0001 C CNN "URL"
+	2    5250 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L node-lib-v1:TS3A5223RSWR U6
+U 3 1 5F746D51
+P 10225 1025
+F 0 "U6" V 10025 1025 50  0000 C CNB
+F 1 "TS3A5223RSWR" V 10425 1025 50  0000 C CNN
+F 2 "Package_DFN_QFN:UQFN-10_1.4x1.8mm_P0.4mm" H 10225 650 50  0001 C CNN
+F 3 "https://www.ti.com/lit/ds/symlink/ts3a5223.pdf" H 9175 575 50  0001 C CNN
+F 4 "TS3A5223RSWR" V 10225 1025 50  0001 C CNN "MPN"
+F 5 "https://www.ti.com/store/ti/en/p/product/?p=TS3A5223RSWR" H 10225 1025 50  0001 C CNN "URL"
+	3    10225 1025
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C57
+U 1 1 5F9C576C
+P 10775 1200
+F 0 "C57" H 10525 1200 50  0000 L CNN
+F 1 "100nF" H 10475 1100 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 10813 1050 50  0001 C CNN
+F 3 "~" H 10775 1200 50  0001 C CNN
+F 4 "CC0402KRX7R7BB104" H 10775 1200 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402KRX7R7BB104_C60474.html" H 10775 1200 50  0001 C CNN "URL"
+	1    10775 1200
+	-1   0    0    -1  
+$EndComp
+$Comp
+L Device:C C23
+U 1 1 5FAC6C58
+P 3450 2200
+F 0 "C23" H 3475 2275 50  0000 L CNN
+F 1 "47pF" H 3450 2100 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 3488 2050 50  0001 C CNN
+F 3 "~" H 3450 2200 50  0001 C CNN
+F 4 "CC0402JRNPO9BN470" H 3450 2200 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402JRNPO9BN470_C60137.html" H 3450 2200 50  0001 C CNN "URL"
+	1    3450 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L node-lib-v1:BGS13S4N9 U7
+U 1 1 5EA970BD
+P 8950 4450
+F 0 "U7" H 8475 4150 50  0000 L CNN
+F 1 "BGS13S4N9" H 8450 4050 50  0000 L CNB
+F 2 "node-lib-v1:RFSW_BGS13S4N9E6327XTSA1" H 8950 4450 50  0001 C CNN
+F 3 "" H 8950 4450 50  0001 C CNN
+F 4 "BGS13S4N9E6327XTSA1" H 8950 4450 50  0001 C CNN "MPN"
+F 5 "https://www.newark.com/infineon/bgs13s4n9e6327xtsa1/rf-switch-3ghz-40-to-85deg-c/dp/81AC4458?CMP=AFC-OP" H 8950 4450 50  0001 C CNN "URL"
+	1    8950 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Antenna_Chip AE1
+U 1 1 5FB22E46
+P 11000 4325
+F 0 "AE1" H 11275 4500 50  0000 R CNN
+F 1 "NN02-201" H 11525 4425 50  0000 R CNN
+F 2 "node-lib-v1:Antenna_Fractus_NN02-201" H 10900 4500 50  0001 C CNN
+F 3 "~" H 10900 4500 50  0001 C CNN
+F 4 "NN02-201" H 11000 4325 50  0001 C CNN "MPN"
+F 5 "https://www.digikey.nl/short/zdc4q9" H 11000 4325 50  0001 C CNN "URL"
+	1    11000 4325
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	10700 4450 10900 4450
+$Comp
+L Connector:Conn_Coaxial J7
+U 1 1 5EAA0081
+P 10375 5200
+F 0 "J7" H 10475 5175 50  0000 L CNN
+F 1 "U.FL/iPEX" H 10200 5325 50  0000 L CNB
+F 2 "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical" H 10375 5200 50  0001 C CNN
+F 3 " ~" H 10375 5200 50  0001 C CNN
+F 4 "U.FL-R-SMT-1(10)" H 10375 5200 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/RF-Connectors-Coaxial-Connectors_HRS-Hirose-U-FL-R-SMT-1-10_C88373.html" H 10375 5200 50  0001 C CNN "URL"
+	1    10375 5200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1875 4325 1875 4400
-Text Notes 675  4975 0    98   Italic 20
-EMI Shield Can & Clips
+	10375 5400 10375 5450
 $Comp
-L Device:RF_Shield_One_Piece J4
-U 1 1 5F868A15
-P 1575 3425
-F 0 "J4" H 1075 3350 50  0000 L CNN
-F 1 "RF_Shield_One_Piece" H 1175 3575 50  0000 L CNN
-F 2 "node-lib-v1:RF_Shield_SnapOn_30x20mm_w_Cutout_n_GND_Pads" H 1575 3325 50  0001 C CNN
-F 3 "~" H 1575 3325 50  0001 C CNN
-F 4 "DNM" H 1575 3425 50  0001 C CNN "MPN"
-F 5 "" H 1575 3425 50  0001 C CNN "DNM_MPN"
-F 6 "https://www.digikey.com/short/zwbq0z" H 1575 3425 50  0001 C CNN "URL"
-F 7 "S02-30200250" H 1575 3425 50  0001 C CNN "ALT_MPN"
-	1    1575 3425
+L power:GND #PWR072
+U 1 1 5EAA0E36
+P 10375 5450
+F 0 "#PWR072" H 10375 5200 50  0001 C CNN
+F 1 "GND" H 10380 5277 50  0000 C CNN
+F 2 "" H 10375 5450 50  0001 C CNN
+F 3 "" H 10375 5450 50  0001 C CNN
+	1    10375 5450
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR05
-U 1 1 5F86BFE7
-P 1575 3850
-F 0 "#PWR05" H 1575 3600 50  0001 C CNN
-F 1 "GND" H 1575 3700 50  0000 C CNN
-F 2 "" H 1575 3850 50  0001 C CNN
-F 3 "" H 1575 3850 50  0001 C CNN
-	1    1575 3850
-	1    0    0    -1  
-$EndComp
+Connection ~ 10425 4450
 Wire Wire Line
-	1575 3825 1575 3850
+	10500 4450 10425 4450
 $Comp
-L Mechanical:Fiducial FID3
-U 1 1 5F8BAC43
-P 9700 5750
-F 0 "FID3" H 9625 5875 50  0000 L CNN
-F 1 "Fiducial" H 9575 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 9700 5750 50  0001 C CNN
-F 3 "~" H 9700 5750 50  0001 C CNN
-F 4 "~" H 9700 5750 50  0001 C CNN "MPN"
-F 5 "~" H 9700 5750 50  0001 C CNN "URL"
-	1    9700 5750
-	1    0    0    -1  
+L Device:L_Small L14
+U 1 1 5FAAC4ED
+P 10425 4575
+F 0 "L14" H 10550 4650 50  0000 C CNN
+F 1 "4.3nH" H 10575 4725 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 10425 4575 50  0001 C CNN
+F 3 "~" H 10425 4575 50  0001 C CNN
+F 4 "LQW15AN4N3G80" V 10425 4575 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Inductors-SMD_Murata-Electronics-LQW15AN4N3G80D_C412333.html" H 10425 4575 50  0001 C CNN "URL"
+	1    10425 4575
+	1    0    0    1   
 $EndComp
 $Comp
-L Mechanical:Fiducial FID4
-U 1 1 5F8BAF2F
-P 10000 5750
-F 0 "FID4" H 9925 5875 50  0000 L CNN
-F 1 "Fiducial" H 9875 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 10000 5750 50  0001 C CNN
-F 3 "~" H 10000 5750 50  0001 C CNN
-F 4 "~" H 10000 5750 50  0001 C CNN "MPN"
-F 5 "~" H 10000 5750 50  0001 C CNN "URL"
-	1    10000 5750
-	1    0    0    -1  
+L Device:L_Small L13
+U 1 1 5FA83A36
+P 10600 4450
+F 0 "L13" V 10700 4450 50  0000 C CNN
+F 1 "23nH" V 10525 4450 50  0000 C CNN
+F 2 "Inductor_SMD:L_0402_1005Metric" H 10600 4450 50  0001 C CNN
+F 3 "~" H 10600 4450 50  0001 C CNN
+F 4 "LQW18AN23NG80" V 10600 4450 50  0001 C CNN "MPN"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/LQW18AN23NG80D?qs=%2Fha2pyFadug8Ql1GMILMa4e8D3o%2FBwlHnfioKu%252BIqW14uzyZQfuvKQ==&utm_source=octopart&utm_medium=aggregator&utm_campaign=81-LQW18AN23NG80D&utm_content=Murata" H 10600 4450 50  0001 C CNN "URL"
+	1    10600 4450
+	0    -1   -1   0   
 $EndComp
 $Comp
-L Power_Supervisor:TPS3839DBZ U2
-U 1 1 5F8F8E7B
-P 6175 1425
-F 0 "U2" H 6350 1675 50  0000 R CNN
-F 1 "TPS3839G25" H 7000 1350 50  0000 R CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 6175 1425 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/sbvs193d/sbvs193d.pdf" H 6175 1425 50  0001 C CNN
-F 4 "TPS3839G25DBZ" H 6175 1425 50  0001 C CNN "MPN"
-F 5 "https://www.ti.com/store/ti/en/p/product/?p=TPS3839G25DBZR&HQS=OCB-tistore-null-storeinv-invf-store-octopart-wwe" H 6175 1425 50  0001 C CNN "URL"
-	1    6175 1425
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6175 1125 6175 975 
-Connection ~ 6175 975 
-Wire Wire Line
-	6175 975  7025 975 
-Connection ~ 7025 975 
-Wire Wire Line
-	6575 1425 7150 1425
-$Comp
-L power:GND #PWR022
-U 1 1 5F931F97
-P 6175 1750
-F 0 "#PWR022" H 6175 1500 50  0001 C CNN
-F 1 "GND" H 6180 1577 50  0000 C CNN
-F 2 "" H 6175 1750 50  0001 C CNN
-F 3 "" H 6175 1750 50  0001 C CNN
-	1    6175 1750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6175 1725 6175 1750
-Text Notes 5025 1900 0    71   ~ 0
-Voltage Supervisor\nVcut-off = 2.325V
-Text GLabel 1450 950  0    59   Input ~ 12
-Vin
-Wire Wire Line
-	1450 950  1500 950 
-Wire Wire Line
-	1500 950  1500 1225
-Wire Wire Line
-	9900 1550 9900 1625
-$Comp
-L Connector:TestPoint_Probe TP5
-U 1 1 5EB52341
-P 9900 1550
-F 0 "TP5" V 10075 1625 50  0000 C CNN
-F 1 "VCC" V 9900 1700 50  0000 C CNN
-F 2 "TestPoint:TestPoint_Pad_D1.5mm" H 10100 1550 50  0001 C CNN
-F 3 "~" H 10100 1550 50  0001 C CNN
-F 4 "DNM" H 9900 1550 50  0001 C CNN "MPN"
-F 5 "~" H 9900 1550 50  0001 C CNN "URL"
-	1    9900 1550
+L Device:C_Small C54
+U 1 1 5EEF33D2
+P 10250 4450
+F 0 "C54" V 10350 4450 50  0000 C CNN
+F 1 "3.3pF" V 10150 4475 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 10250 4450 50  0001 C CNN
+F 3 "~" H 10250 4450 50  0001 C CNN
+F 4 "CC0402BRNPO9BN3R3" H 10250 4450 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN3R3_C327287.html" H 10250 4450 50  0001 C CNN "URL"
+F 6 "" H 10250 4450 50  0001 C CNN "DNM_MPN"
+F 7 "GJM1555C1H3R3WB01" H 10250 4450 50  0001 C CNN "ALT_MPN"
+	1    10250 4450
 	0    1    -1   0   
 $EndComp
 $Comp
-L Mechanical:Fiducial FID5
-U 1 1 5F973FFD
-P 10325 5750
-F 0 "FID5" H 10250 5875 50  0000 L CNN
-F 1 "Fiducial" H 10200 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 10325 5750 50  0001 C CNN
-F 3 "~" H 10325 5750 50  0001 C CNN
-F 4 "~" H 10325 5750 50  0001 C CNN "MPN"
-F 5 "~" H 10325 5750 50  0001 C CNN "URL"
-	1    10325 5750
+L Device:C_Small C55
+U 1 1 5EAB3DDE
+P 10075 4575
+F 0 "C55" H 9950 4650 50  0000 C CNN
+F 1 "DNM" H 9950 4725 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 10075 4575 50  0001 C CNN
+F 3 "~" H 10075 4575 50  0001 C CNN
+F 4 "" H 10075 4575 50  0001 C CNN "DNM_MPN"
+F 5 "DNM" H 10075 4575 50  0001 C CNN "MPN"
+F 6 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0402BRNPO9BN3R3_C327287.html" H 10075 4575 50  0001 C CNN "URL"
+F 7 "CC0402BRNPO9BN3R3" H 10075 4575 50  0001 C CNN "ALT_MPN"
+	1    10075 4575
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	10425 4475 10425 4450
+Wire Wire Line
+	10350 4450 10425 4450
+Wire Wire Line
+	10425 4675 10425 4700
+$Comp
+L power:GND #PWR070
+U 1 1 5EAB6014
+P 10425 4700
+F 0 "#PWR070" H 10425 4450 50  0001 C CNN
+F 1 "GND" H 10430 4527 50  0000 C CNN
+F 2 "" H 10425 4700 50  0001 C CNN
+F 3 "" H 10425 4700 50  0001 C CNN
+	1    10425 4700
 	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10075 4450 10075 4475
+Wire Wire Line
+	10075 4675 10075 4700
+$Comp
+L power:GND #PWR069
+U 1 1 5EAAFD23
+P 10075 4700
+F 0 "#PWR069" H 10075 4450 50  0001 C CNN
+F 1 "GND" H 10080 4527 50  0000 C CNN
+F 2 "" H 10075 4700 50  0001 C CNN
+F 3 "" H 10075 4700 50  0001 C CNN
+	1    10075 4700
+	1    0    0    -1  
+$EndComp
+Connection ~ 10075 4450
+Wire Wire Line
+	9675 5200 9750 5200
+Wire Notes Line style solid
+	9725 4100 9725 5050
+Wire Wire Line
+	9950 5200 10175 5200
+$Comp
+L Device:R_Small R9
+U 1 1 5F99AE38
+P 9850 4450
+F 0 "R9" V 9775 4450 50  0000 C CNN
+F 1 "0R" V 9850 4450 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 9850 4450 50  0001 C CNN
+F 3 "~" H 9850 4450 50  0001 C CNN
+F 4 "RC0402FR-070RL" V 9850 4450 50  0001 C CNN "MPN"
+F 5 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0402FR-070RL_C106231.html" H 9850 4450 50  0001 C CNN "URL"
+	1    9850 4450
+	0    1    1    0   
 $EndComp
 $Comp
-L Mechanical:Fiducial FID6
-U 1 1 5F974224
-P 10675 5750
-F 0 "FID6" H 10600 5875 50  0000 L CNN
-F 1 "Fiducial" H 10550 5650 50  0000 L CNN
-F 2 "Fiducial:Fiducial_0.5mm_Mask1.5mm" H 10675 5750 50  0001 C CNN
-F 3 "~" H 10675 5750 50  0001 C CNN
-F 4 "~" H 10675 5750 50  0001 C CNN "MPN"
-F 5 "~" H 10675 5750 50  0001 C CNN "URL"
-	1    10675 5750
-	1    0    0    -1  
+L Device:R_Small R10
+U 1 1 5EAABACA
+P 9850 5200
+F 0 "R10" V 9775 5200 50  0000 C CNN
+F 1 "DNM" V 9925 5200 50  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" H 9850 5200 50  0001 C CNN
+F 3 "~" H 9850 5200 50  0001 C CNN
+F 4 "DNM" V 9850 5200 50  0001 C CNN "MPN"
+F 5 "~" H 9850 5200 50  0001 C CNN "URL"
+	1    9850 5200
+	0    1    1    0   
 $EndComp
+Wire Wire Line
+	9950 4450 10075 4450
+Wire Notes Line style solid
+	9775 5100 9725 5100
+Wire Notes Line style solid
+	9775 5100 9775 5050
+Wire Notes Line style solid
+	9725 5050 9775 5100
+Wire Notes Line style solid
+	9775 4300 9750 4275
+Wire Notes Line style solid
+	9775 4300 9800 4275
+Wire Notes Line style solid
+	9775 4100 9775 4300
+Wire Notes Line style solid
+	9725 4100 10650 4100
+Text Notes 9700 4100 0    59   ~ 12
+R9 & R10\nshare a common pad
+Wire Wire Line
+	9675 4450 9750 4450
+Wire Wire Line
+	9600 4450 9675 4450
+Connection ~ 9675 4450
+Wire Wire Line
+	9675 4450 9675 5200
+Wire Wire Line
+	10075 4450 10150 4450
+Wire Notes Line
+	9975 4250 9975 4925
+Wire Notes Line
+	9975 4925 11075 4925
+Wire Notes Line
+	11075 4925 11075 5400
+Wire Notes Line
+	11075 5400 10575 5400
+Wire Notes Line
+	9975 4250 10750 4250
+Wire Notes Line
+	10750 4250 10750 4925
+Text Notes 10600 5375 0    59   ~ 0
+Antenna\nMatching\nNetwork
+Wire Notes Line
+	10575 5400 10575 5350
 $EndSCHEMATC
