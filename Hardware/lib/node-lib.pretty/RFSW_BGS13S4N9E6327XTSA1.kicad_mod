@@ -43,7 +43,7 @@
   (pad "" smd circle (at 0.4 -0.4 90) (size 0.25 0.25) (layers F.Paste))
   (pad "" smd circle (at 0 -0.4 90) (size 0.25 0.25) (layers F.Paste))
   (pad "" smd circle (at 0 0 90) (size 0.25 0.25) (layers F.Paste))
-  (model C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/packages3d/node-lib-v1.3dshapes/BGS13S4N9E6327XTSA1.stp
+  (model ${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/BGS13S4N9E6327XTSA1.stp
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

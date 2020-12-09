@@ -36,7 +36,7 @@
   (fp_line (start -4.2 -2.84) (end -4.2 -5.96) (layer F.CrtYd) (width 0.05))
   (pad 1 thru_hole circle (at 0 -3.81) (size 2.55 2.55) (drill 1.7) (layers *.Cu *.Mask))
   (pad 1 thru_hole circle (at 0 3.81) (size 2.55 2.55) (drill 1.7) (layers *.Cu *.Mask))
-  (model C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/packages3d/node-lib-v1.3dshapes/BK-92.STEP
+  (model ${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/BK-92.STEP
     (offset (xyz 0 1 -4))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))

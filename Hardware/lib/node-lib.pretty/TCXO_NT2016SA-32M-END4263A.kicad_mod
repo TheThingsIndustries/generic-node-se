@@ -35,7 +35,7 @@
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))
   )
-  (model "C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/packages3d/node-lib-v1.3dshapes/NT2016SA-32MHZ Crystal (NDK).step"
+  (model "${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/NT2016SA-32MHZ Crystal (NDK).step"
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz -90 0 0))
