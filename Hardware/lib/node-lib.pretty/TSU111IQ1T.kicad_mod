@@ -29,7 +29,7 @@
   (pad 4 smd rect (at -0.4 0.362) (size 0.25 0.475) (layers F.Cu F.Paste F.Mask))
   (pad 5 smd rect (at 0 0.362) (size 0.25 0.475) (layers F.Cu F.Paste F.Mask))
   (pad 6 smd rect (at 0.4 0.362) (size 0.25 0.475) (layers F.Cu F.Paste F.Mask))
-  (model C:\Users\Admin\OneDrive\TTI_Files\ST_Node\Hardware\SamacSys_Parts.3dshapes\LD39130SPUR.stp
+  (model ${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/D39130SPUR.stp
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

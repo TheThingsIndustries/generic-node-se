@@ -32,7 +32,7 @@
   (pad 3 smd roundrect (at 0.925 0.5) (size 0.55 0.35) (layers F.Cu F.Mask) (roundrect_rratio 0.25))
   (pad 2 smd roundrect (at -0.925 0.5) (size 0.55 0.35) (layers F.Cu F.Mask) (roundrect_rratio 0.25))
   (pad 1 smd roundrect (at -0.925 -0.5) (size 0.55 0.35) (layers F.Cu F.Mask) (roundrect_rratio 0.25))
-  (model C:/Users/Admin/OneDrive/TTI_Files/ST_Node/Hardware/Libs/packages3d/node-lib-v1.3dshapes/SHTC3.step
+  (model ${KIPRJMOD}/../lib/packages3d/node-lib.3dshapes/SHTC3.step
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 -90))
