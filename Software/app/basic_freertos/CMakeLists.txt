@@ -11,6 +11,7 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
     "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
     "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Utilities/*.c"
     #GCC ARM_CM3 seems functional with ARM CM4
     "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3/*.c"
     "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/MemMang/heap_4.c"
@@ -39,6 +40,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/lib/BUZZER
     ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
     ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/include
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Utilities
     ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3
     )
 target_link_libraries(${PROJECT_NAME}.elf
