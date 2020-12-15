@@ -68,3 +68,13 @@ void TIM17_IRQHandler(void)
 {
   HAL_TIM_IRQHandler(&htim17);
 }
+
+void USART2_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&GNSE_BSP_debug_usart);
+}
+
+void DMA1_Channel5_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&GNSE_BSP_hdma_tx);
+}

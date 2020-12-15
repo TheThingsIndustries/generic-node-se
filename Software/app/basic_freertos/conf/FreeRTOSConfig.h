@@ -52,6 +52,7 @@
   #include <stdint.h>
   extern uint32_t SystemCoreClock;
 #endif
+#include "stm32_adv_trace.h"
 #define configENABLE_FPU                         1
 #define configENABLE_MPU                         0
 
@@ -64,7 +65,7 @@
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 56 )
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE                    ((size_t)4096)
+#define configTOTAL_HEAP_SIZE                    ((size_t)8120)
 #define configMAX_TASK_NAME_LEN                  ( 16 )
 #define configUSE_TRACE_FACILITY                 1
 #define configUSE_16_BIT_TICKS                   0
@@ -143,6 +144,26 @@ header file. */
 /* USER CODE BEGIN 1 */
 #define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }
 /* USER CODE END 1 */
+
+/* Logging task definitions. */
+extern UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_t Region, uint32_t TimeStampState, const char *strFormat, ...);
+
+void vLoggingPrintf( const char * pcFormat,
+                     ... );
+
+/* Map the FreeRTOS printf() to the logging task printf. */
+#define configPRINTF( x )          vLoggingPrintf x
+
+/* Map the logging task's printf to the board specific output function. */
+#define configPRINT_STRING( x )    UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_OFF, x);
+
+/* Sets the length of the buffers into which logging messages are written - so
+ * also defines the maximum length of each log message. */
+#define configLOGGING_MAX_MESSAGE_LENGTH            160
+
+/* Set to 1 to prepend each log message with a message number, the task name,
+ * and a time stamp. */
+#define configLOGGING_INCLUDE_TIME_AND_TASK_NAME    1
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */

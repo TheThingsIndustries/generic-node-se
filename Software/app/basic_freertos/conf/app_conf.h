@@ -24,10 +24,14 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define APP_LOG_ENABLED 0
+#define APP_LOG_ENABLED 1
+
+#define mainLOGGING_TASK_PRIORITY 24
+#define mainLOGGING_TASK_STACK_SIZE (512)
+#define mainLOGGING_MESSAGE_QUEUE_LENGTH (15)
 
 /* The rate at which the Tx task sends to the queue. */
-#define TX_DELAY                 (500)
+#define TX_DELAY                 (5000)
 
 /* The length of time the LED will remain on for.  It is on just long enough
 to be able to see with the human eye so as not to distort the power readings too
