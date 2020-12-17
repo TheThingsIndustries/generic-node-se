@@ -134,6 +134,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         gpio_init_structure.Alternate = SENSOR_I2C1_SCL_SDA_AF;
         HAL_GPIO_Init(SENSOR_I2C1_SDA_GPIO_PORT, &gpio_init_structure);
     }
+#if (GNSE_BSP_VERSION == GNSE_BSP_V_0_1)
     else if (i2cHandle-> Instance == SEC_ELM_I2C2)
     {
         RCC_PeriphCLKInitStruct.PeriphClockSelection = SEC_ELM_I2C2_PERIPH_CLK;
@@ -155,6 +156,29 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         gpio_init_structure.Alternate = SEC_ELM_I2C2_SCL_SDA_AF;
         HAL_GPIO_Init(SEC_ELM_I2C2_SDA_GPIO_PORT, &gpio_init_structure);
     }
+#elif (GNSE_BSP_VERSION == GNSE_BSP_V_0_2)
+    else if (i2cHandle-> Instance == EXT_SENSOR_I2C2)
+    {
+        RCC_PeriphCLKInitStruct.PeriphClockSelection = EXT_SENSOR_I2C2_PERIPH_CLK;
+        RCC_PeriphCLKInitStruct.I2c2ClockSelection = EXT_SENSOR_I2C2_SOURCE_CLK;
+        HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphCLKInitStruct);
+
+        EXT_SENSOR_I2C2_SDA_GPIO_CLK_ENABLE();
+        EXT_SENSOR_I2C2_SCL_GPIO_CLK_ENABLE();
+        EXT_SENSOR_I2C2_CLK_ENABLE();
+
+        gpio_init_structure.Pin = EXT_SENSOR_I2C2_SCL_PIN;
+        gpio_init_structure.Mode = GPIO_MODE_AF_OD;
+        gpio_init_structure.Pull = GPIO_PULLUP;
+        gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        gpio_init_structure.Alternate = EXT_SENSOR_I2C2_SCL_SDA_AF;
+        HAL_GPIO_Init(EXT_SENSOR_I2C2_SCL_GPIO_PORT, &gpio_init_structure);
+
+        gpio_init_structure.Pin = EXT_SENSOR_I2C2_SDA_PIN;
+        gpio_init_structure.Alternate = EXT_SENSOR_I2C2_SCL_SDA_AF;
+        HAL_GPIO_Init(EXT_SENSOR_I2C2_SDA_GPIO_PORT, &gpio_init_structure);
+    }
+#endif
     else
     {
         msp_error_handler();
