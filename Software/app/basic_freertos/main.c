@@ -22,6 +22,7 @@
 
 #include "app.h"
 #include "cmsis_os.h"
+#include "FreeRTOS_iot_log_task.h"
 
 uint32_t osQueueMsg;
 uint32_t Queue_value = 100;
@@ -31,14 +32,14 @@ osThreadId_t TxThreadHandle;
 const osThreadAttr_t TxThread_attributes = {
     .name = "TxThread",
     .priority = (osPriority_t)osPriorityBelowNormal,
-    .stack_size = 128 * 4};
+    .stack_size = 512 * 4};
 
 /* Definitions for RxThread */
 osThreadId_t RxThreadHandle;
 const osThreadAttr_t RxThread_attributes = {
     .name = "RxThread",
     .priority = (osPriority_t)osPriorityNormal,
-    .stack_size = 128 * 4};
+    .stack_size = 512 * 4};
 
 /* Definitions for osqueue */
 osMessageQueueId_t osqueueHandle;
@@ -62,6 +63,9 @@ void QueueSendThread(void *argument)
 {
   for (;;)
   {
+#if (APP_LOG_ENABLED)
+    configPRINTF(("\r\n Send a Tx msg \r\n"));
+#endif
     /* Place this thread into the blocked state until it is time to run again.
        The kernel will place the MCU into the Retention low power sleep state
        when the idle thread next runs. */
@@ -89,6 +93,9 @@ void QueueReceiveThread(void *argument)
 
     if (status == osOK)
     {
+#if (APP_LOG_ENABLED)
+      configPRINTF(("\r\n Received Rx msg \r\n"));
+#endif
       if (osQueueMsg == Queue_value)
       {
         GNSE_BSP_LED_On(LED_BLUE);
@@ -114,8 +121,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   {
     HAL_IncTick();
   }
-
 }
+
+#if (APP_LOG_ENABLED)
+void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
+{
+  /*
+  Left empty
+  This is a UART Rx interrupt call back.
+  Can be used to triger specific events based on the user input.
+  */
+}
+#endif
 
 int main(void)
 {
@@ -134,6 +151,15 @@ int main(void)
   /* Init scheduler */
   osKernelInitialize();
 
+#if (APP_LOG_ENABLED)
+  UTIL_ADV_TRACE_Init();
+  UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
+  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
+
+  xLoggingTaskInitialize(mainLOGGING_TASK_STACK_SIZE,
+                         mainLOGGING_TASK_PRIORITY,
+                         mainLOGGING_MESSAGE_QUEUE_LENGTH);
+#endif
   /* Create the queue(s) */
   /* creation of osqueue */
   osqueueHandle = osMessageQueueNew(1, sizeof(uint16_t), &osqueue_attributes);
