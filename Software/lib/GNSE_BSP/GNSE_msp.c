@@ -359,6 +359,25 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef *rtcHandle)
     }
 }
 
+
+void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
+{
+
+  if(adcHandle->Instance == VBAT_ADC)
+  {
+    __HAL_RCC_ADC_CLK_ENABLE();
+  }
+}
+
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
+{
+
+  if(adcHandle->Instance == VBAT_ADC)
+  {
+    __HAL_RCC_ADC_CLK_DISABLE();
+  }
+}
+
 static void msp_error_handler()
 {
     while (1)
