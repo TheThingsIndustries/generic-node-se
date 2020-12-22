@@ -29,8 +29,14 @@
 #include "GNSE_bsp_conf.h"
 
 extern UART_HandleTypeDef GNSE_BSP_debug_usart;
+#if (GNSE_BSP_VERSION == GNSE_BSP_V_0_1)
 extern I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
 extern I2C_HandleTypeDef GNSE_BSP_sec_elm_i2c2;
+#elif (GNSE_BSP_VERSION == GNSE_BSP_V_0_2)
+extern I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
+extern I2C_HandleTypeDef GNSE_BSP_ext_sensor_i2c2;
+#define GNSE_BSP_sec_elm_i2c2 GNSE_BSP_sensor_i2c1 //TODO: Remove after testing, see https://github.com/TheThingsIndustries/generic-node-se/issues/74
+#endif
 extern SPI_HandleTypeDef GNSE_BSP_flash_spi;
 extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
@@ -118,6 +124,28 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 #define SEC_ELM_I2C2_SDA_GPIO_PORT              GPIOA
 #define SEC_ELM_I2C2_SCL_SDA_AF                 GPIO_AF4_I2C2
 
+#define EXT_SENSOR_I2C2                  I2C2
+#define EXT_SENSOR_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
+#define EXT_SENSOR_I2C2_TIMOUT           100U //Read and write operattions timeout in ms
+#define EXT_SENSOR_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
+#define EXT_SENSOR_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
+#define EXT_SENSOR_I2C2_FASTMODEPLUS    I2C_FASTMODEPLUS_I2C2
+
+#define EXT_SENSOR_I2C2_CLK_ENABLE()    __HAL_RCC_I2C2_CLK_ENABLE()
+#define EXT_SENSOR_I2C2_CLK_DISABLE()   __HAL_RCC_I2C2_CLK_DISABLE()
+
+#define EXT_SENSOR_I2C2_SDA_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+#define EXT_SENSOR_I2C2_SCL_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
+
+#define EXT_SENSOR_I2C2_FORCE_RESET()              __HAL_RCC_I2C2_FORCE_RESET()
+#define EXT_SENSOR_I2C2_RELEASE_RESET()            __HAL_RCC_I2C2_RELEASE_RESET()
+
+#define EXT_SENSOR_I2C2_SCL_PIN                    GPIO_PIN_12
+#define EXT_SENSOR_I2C2_SCL_GPIO_PORT              GPIOA
+#define EXT_SENSOR_I2C2_SDA_PIN                    GPIO_PIN_11
+#define EXT_SENSOR_I2C2_SDA_GPIO_PORT              GPIOA
+#define EXT_SENSOR_I2C2_SCL_SDA_AF                 GPIO_AF4_I2C2
+
 #define FLASH_SPI SPI1
 #define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_256
 #define Flash_SPI_TIMOUT 100U        //Read and write operattions timeout in ms
@@ -147,6 +175,7 @@ int32_t GNSE_BSP_UART_DMA_Init(void);
 
 int32_t GNSE_BSP_Sensor_I2C1_Init(void);
 int32_t GNSE_BSP_SEC_ELM_I2C2_Init(void);
+int32_t GNSE_BSP_Ext_Sensor_I2C2_Init(void);
 
 int32_t GNSE_BSP_Flash_SPI_Init(void);
 
