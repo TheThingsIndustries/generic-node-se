@@ -31,6 +31,7 @@ void secure_element_read_info(void);
 void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void flash_read_write(void);
+void battery_report(void);
 
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
@@ -48,6 +49,9 @@ int main(void)
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
 
   APP_PPRINTF("\r\n -------------- Starting GNSE basic app -------------- \r\n");
+
+  APP_PPRINTF("\r\n Testing battery monitoring functionality \r\n");
+  battery_report();
 
   APP_PPRINTF("\r\n Testing LED functionality \r\n");
   led_toggle(NUMBER_LED_TOGGLE, LED_TOGGLE_INTERVAL);
