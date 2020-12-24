@@ -133,10 +133,24 @@ typedef enum
 #define LOAD_SWITCH3_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 #define LOAD_SWITCH3_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
 
-#define VBAT_PIN GPIO_PIN_4
-#define VBAT_PORT GPIOB
-#define VBAT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define VBAT_READ_PIN GPIO_PIN_4
+#define VBAT_READ_PORT GPIOB
+#define VBAT_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOB_CLK_ENABLE()
 #define VBAT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
+
+#define VBAT_ADC_PIN GPIO_PIN_2
+#define VBAT_ADC_PORT GPIOB
+#define VBAT_ADC_CHANNEL_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOB_CLK_ENABLE()
+#define VBAT_ADC_CHANNEL_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
+
+#define VBAT_ADC                             ADC
+#define VBAT_ADC_RES                         ADC_RESOLUTION_12B
+#define VBAT_ADC_CHANNEL                     ADC_CHANNEL_4
+#define VREF_ADC_CHANNEL                     ADC_CHANNEL_VREFINT
+#define VBAT_ADC_CLK_ENABLE()               __HAL_RCC_ADC_CLK_ENABLE()
+#define VBAT_ADC_CLK_DISABLE()              __HAL_RCC_ADC_CLK_DISABLE()
+#define VBAT_ADC_FORCE_RESET()              __HAL_RCC_ADC_FORCE_RESET()
+#define VBAT_ADC_RELEASE_RESET()            __HAL_RCC_ADC_RELEASE_RESET()
 
 #elif (GNSE_BSP_VERSION == GNSE_BSP_V_0_2)
 
@@ -262,10 +276,24 @@ typedef enum
       LOAD_SWITCH2_GPIO_CLK_DISABLE();           \
   } while (0)
 
-#define VBAT_PIN GPIO_PIN_4
-#define VBAT_PORT GPIOB
-#define VBAT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
+#define VBAT_READ_PIN GPIO_PIN_4
+#define VBAT_READ_PORT GPIOB
+#define VBAT_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOB_CLK_ENABLE()
 #define VBAT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
+
+#define VBAT_ADC_PIN GPIO_PIN_2
+#define VBAT_ADC_PORT GPIOB
+#define VBAT_ADC_CHANNEL_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOB_CLK_ENABLE()
+#define VBAT_ADC_CHANNEL_GPIO_CLK_DISABLE() __HAL_RCC_GPIOB_CLK_DISABLE()
+
+#define VBAT_ADC                             ADC
+#define VBAT_ADC_RES                         ADC_RESOLUTION_12B
+#define VBAT_ADC_CHANNEL                     ADC_CHANNEL_4
+#define VREF_ADC_CHANNEL                     ADC_CHANNEL_VREFINT
+#define VBAT_ADC_CLK_ENABLE()               __HAL_RCC_ADC_CLK_ENABLE()
+#define VBAT_ADC_CLK_DISABLE()              __HAL_RCC_ADC_CLK_DISABLE()
+#define VBAT_ADC_FORCE_RESET()              __HAL_RCC_ADC_FORCE_RESET()
+#define VBAT_ADC_RELEASE_RESET()            __HAL_RCC_ADC_RELEASE_RESET()
 #endif
 
 /**
@@ -297,5 +325,7 @@ int32_t GNSE_BSP_BM_DeInit();
 int32_t GNSE_BSP_BM_Enable();
 int32_t GNSE_BSP_BM_Disable();
 int32_t GNSE_BSP_BM_GetState();
+int32_t GNSE_BSP_BM_ConfChannel(uint32_t channel);
+uint32_t GNSE_BSP_BM_ReadChannel();
 
 #endif /* GNSE_BSP_GPIO_H */

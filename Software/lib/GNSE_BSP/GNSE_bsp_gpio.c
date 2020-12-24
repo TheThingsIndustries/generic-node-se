@@ -24,6 +24,7 @@
 
 typedef void (*GNSE_BSP_EXTI_LineCallback)(void);
 EXTI_HandleTypeDef hpb_exti[BUTTONn];
+ADC_HandleTypeDef GNSE_BSP_voltage_adc;
 
 #if (GNSE_BSP_VERSION == GNSE_BSP_V_0_1)
 static GPIO_TypeDef *LED_PORT[LEDn] = {LED1_GPIO_PORT, LED2_GPIO_PORT};
@@ -396,21 +397,54 @@ int32_t GNSE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)
  */
 int32_t GNSE_BSP_BM_Init(void)
 {
-    GPIO_InitTypeDef gpio_init_structure = {0};
+  GPIO_InitTypeDef gpio_init_structure = {0};
+  GPIO_InitTypeDef adc_gpio_init_structure = {0};
 
-    /* Enable the VBAT PORT Clock */
-    VBAT_GPIO_CLK_ENABLE();
+  VBAT_GPIO_CLK_ENABLE();
+  VBAT_ADC_CHANNEL_GPIO_CLK_ENABLE() ;
 
-    /* Configure the VBAT pin */
-    gpio_init_structure.Pin = VBAT_PIN;
-    gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
-    gpio_init_structure.Pull = GPIO_NOPULL;
-    gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+  /* Configure the VBAT pin */
+  gpio_init_structure.Pin = VBAT_READ_PIN;
+  gpio_init_structure.Mode = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure.Pull = GPIO_NOPULL;
+  gpio_init_structure.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(VBAT_READ_PORT, &gpio_init_structure);
+  HAL_GPIO_WritePin(VBAT_READ_PORT, VBAT_READ_PIN, GPIO_PIN_RESET);
 
-    HAL_GPIO_Init(VBAT_PORT, &gpio_init_structure);
-    HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
+  adc_gpio_init_structure.Pin = VBAT_ADC_PIN;
+  adc_gpio_init_structure.Mode = GPIO_MODE_ANALOG;
+  adc_gpio_init_structure.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(VBAT_ADC_PORT, &adc_gpio_init_structure);
 
-    //TODO: Add ADC init here, see https://github.com/TheThingsIndustries/generic-node-se/issues/29
+  GNSE_BSP_voltage_adc.Instance = VBAT_ADC;
+  GNSE_BSP_voltage_adc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  GNSE_BSP_voltage_adc.Init.Resolution = VBAT_ADC_RES;
+  GNSE_BSP_voltage_adc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  GNSE_BSP_voltage_adc.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  GNSE_BSP_voltage_adc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  GNSE_BSP_voltage_adc.Init.LowPowerAutoWait = DISABLE;
+  GNSE_BSP_voltage_adc.Init.LowPowerAutoPowerOff = DISABLE;
+  GNSE_BSP_voltage_adc.Init.ContinuousConvMode = DISABLE;
+  GNSE_BSP_voltage_adc.Init.NbrOfConversion = 1;
+  GNSE_BSP_voltage_adc.Init.DiscontinuousConvMode = DISABLE;
+  GNSE_BSP_voltage_adc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  GNSE_BSP_voltage_adc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  GNSE_BSP_voltage_adc.Init.DMAContinuousRequests = DISABLE;
+  GNSE_BSP_voltage_adc.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+  GNSE_BSP_voltage_adc.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_160CYCLES_5;
+  GNSE_BSP_voltage_adc.Init.SamplingTimeCommon2 = ADC_SAMPLETIME_160CYCLES_5;
+  GNSE_BSP_voltage_adc.Init.OversamplingMode = DISABLE;
+  GNSE_BSP_voltage_adc.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
+  if (HAL_ADC_Init(&GNSE_BSP_voltage_adc) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+
+  /* Start Calibration */
+  if (HAL_ADCEx_Calibration_Start(&GNSE_BSP_voltage_adc) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
 
     return GNSE_BSP_ERROR_NONE;
 }
@@ -423,12 +457,12 @@ int32_t GNSE_BSP_BM_Init(void)
 int32_t GNSE_BSP_BM_DeInit(void)
 {
     /* Turn off VBAT pin */
-    HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(VBAT_READ_PORT, VBAT_READ_PIN, GPIO_PIN_RESET);
 
     /* DeInit the VBAT pin */
-    HAL_GPIO_DeInit(VBAT_PORT, VBAT_PIN);
+    HAL_GPIO_DeInit(VBAT_READ_PORT, VBAT_READ_PIN);
 
-    //TODO: Add ADC Deinit here, see https://github.com/TheThingsIndustries/generic-node-se/issues/29
+    HAL_ADC_DeInit(&GNSE_BSP_voltage_adc);
 
     return GNSE_BSP_ERROR_NONE;
 }
@@ -440,9 +474,8 @@ int32_t GNSE_BSP_BM_DeInit(void)
  */
 int32_t GNSE_BSP_BM_Enable(void)
 {
-    HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_SET);
-
-    return GNSE_BSP_ERROR_NONE;
+  HAL_GPIO_WritePin(VBAT_READ_PORT, VBAT_READ_PIN, GPIO_PIN_SET);
+  return GNSE_BSP_ERROR_NONE;
 }
 
 /**
@@ -452,8 +485,7 @@ int32_t GNSE_BSP_BM_Enable(void)
  */
 int32_t GNSE_BSP_BM_Disable(void)
 {
-    HAL_GPIO_WritePin(VBAT_PORT, VBAT_PIN, GPIO_PIN_RESET);
-
+    HAL_GPIO_WritePin(VBAT_READ_PORT, VBAT_READ_PIN, GPIO_PIN_RESET);
     return GNSE_BSP_ERROR_NONE;
 }
 
@@ -464,5 +496,46 @@ int32_t GNSE_BSP_BM_Disable(void)
  */
 int32_t GNSE_BSP_BM_GetState(void)
 {
-    return (int32_t)HAL_GPIO_ReadPin(VBAT_PORT, VBAT_PIN);
+    return (int32_t)HAL_GPIO_ReadPin(VBAT_READ_PORT, VBAT_READ_PIN);
+}
+
+/**
+ * @brief Configures the ADC Channel used for measurement.
+ *
+ * @param channel can be VREF_ADC_CHANNEL or VBAT_ADC_CHANNEL
+ * @return GNSE_BSP status
+ */
+int32_t GNSE_BSP_BM_ConfChannel(uint32_t channel)
+{
+    ADC_ChannelConfTypeDef channel_config = {0};
+    channel_config.Channel = channel; // typically: VREF_ADC_CHANNEL or VBAT_ADC_CHANNEL
+    channel_config.Rank = ADC_REGULAR_RANK_1;
+    channel_config.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;
+    if (HAL_ADC_ConfigChannel(&GNSE_BSP_voltage_adc, &channel_config) != HAL_OK)
+    {
+        return GNSE_BSP_ERROR_NO_INIT;
+    }
+    return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+ * @brief Reads (measures) Channel ADC value
+ *
+ * @return uint32_t measurement value or 0 in case of read failure
+ */
+uint32_t GNSE_BSP_BM_ReadChannel(void)
+{
+    uint32_t raw_adc_read = 0;
+
+    if (HAL_ADC_Start(&GNSE_BSP_voltage_adc) == HAL_OK)
+    {
+        HAL_ADC_PollForConversion(&GNSE_BSP_voltage_adc, HAL_MAX_DELAY);
+        HAL_ADC_Stop(&GNSE_BSP_voltage_adc); /* it calls also ADC_Disable() */
+        raw_adc_read = HAL_ADC_GetValue(&GNSE_BSP_voltage_adc);
+    }
+    else
+    {
+        // Do nothing and retuen a 0 RAW value indicating an error
+    }
+    return raw_adc_read;
 }
