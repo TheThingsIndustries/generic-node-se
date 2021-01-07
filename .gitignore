@@ -73,8 +73,15 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Build folder
-Software/build/*
+# CMAKE build path
+/Software/build/*
 
 # Visual Studio Code IDE files
 .vscode/
+
+# STM32CubeIDE (eclipse) build path
+/Software/app/basic*/Debug/
+/Software/app/basic*/.settings/
+
+# STM32CubeIDE (eclipse)
+*.launch
