@@ -71,9 +71,6 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 #define DEBUG_USART_IRQn                      USART2_IRQn
 
-#define DEBUG_USART_PRIORITY 2
-#define DEBUG_USART_DMA_PRIORITY 2
-
 #define SENSOR_I2C1                  I2C1
 #define SENSOR_I2C1_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
 #define SENSOR_I2C1_TIMOUT           100U //Read and write operattions timeout in ms

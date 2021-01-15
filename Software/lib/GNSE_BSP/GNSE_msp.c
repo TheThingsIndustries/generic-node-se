@@ -81,7 +81,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         __HAL_LINKDMA(uartHandle, hdmatx, GNSE_BSP_hdma_tx);
 
         /* NVIC for DEBUG_USART, to catch the TX complete */
-        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_PRIORITY, 0);
+        HAL_NVIC_SetPriority(DEBUG_USART_IRQn, DEBUG_USART_IT_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(DEBUG_USART_IRQn);
 
         /* Enable DEBUG_USART wakeup interrupt */
@@ -251,7 +251,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *timerHandle)
         HAL_GPIO_Init(BUZZER_TIMER_PWM_PORT, &gpio_init_structure);
         HAL_GPIO_WritePin(BUZZER_TIMER_PWM_PORT, BUZZER_TIMER_PWM_PIN, GPIO_PIN_RESET);
 
-        HAL_NVIC_SetPriority(BUZZER_TIMER_IRQn, BUZZER_TIMER_PRIORITY, 0);
+        HAL_NVIC_SetPriority(BUZZER_TIMER_IRQn, GNSE_BSP_BUZZER_TIMER_IT_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(BUZZER_TIMER_IRQn);
     }
     else
@@ -282,7 +282,7 @@ void HAL_SUBGHZ_MspInit(SUBGHZ_HandleTypeDef *subghzHandle)
     __HAL_RCC_SUBGHZSPI_CLK_ENABLE();
 
     /* SUBGHZ interrupt Init */
-    HAL_NVIC_SetPriority(SUBGHZ_Radio_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(SUBGHZ_Radio_IRQn, GNSE_BSP_SUBGHZ_RADIO_IT_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(SUBGHZ_Radio_IRQn);
 }
 
@@ -314,9 +314,9 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *rtcHandle)
         __HAL_RCC_RTCAPB_CLK_ENABLE();
 
         /* RTC interrupt Init */
-        HAL_NVIC_SetPriority(TAMP_STAMP_LSECSS_SSRU_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(TAMP_STAMP_LSECSS_SSRU_IRQn, GNSE_BSP_RTC_IT_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(TAMP_STAMP_LSECSS_SSRU_IRQn);
-        HAL_NVIC_SetPriority(RTC_Alarm_IRQn, 0, 0);
+        HAL_NVIC_SetPriority(RTC_Alarm_IRQn, GNSE_BSP_RTC_IT_PRIORITY, 0);
         HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
     }
 }
