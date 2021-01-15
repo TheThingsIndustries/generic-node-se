@@ -9,3 +9,5 @@ The device enters stop mode in between tranmisions to reduce power consumption.
 [basic_bootloader](./basic_bootloader) contains a bootloader that allows for application/internal bootloader jumps.
 
 [basic_freertos](./basic_freertos) contains a basic FreeRTOS low power application that creates two threads and passes messages via a queue triggering a blinking LED with each passed message.
+
+[freertos_lorawan](./basic_freertos) contains a multi-thread FreeRTOS LoRaWAN Class A demo app that joins over OTAA and sends uplink data.
