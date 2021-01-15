@@ -20,3 +20,5 @@ This folder contains the libraries developed to support the application layer.
 [MCU_FLASH](./MCU_FLASH) contains hal APIs for controlling the SOC internal flash memory.
 
 [FreeRTOS-Kernel](./FreeRTOS-Kernel) contains the FreeRTOS kernel.
+
+[FreeRTOS-LoRaWAN](./FreeRTOS-LoRaWAN) contains the FreeRTOS LoRaWAN abtraction layer.
