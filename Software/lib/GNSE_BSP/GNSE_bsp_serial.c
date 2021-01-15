@@ -82,7 +82,7 @@ int32_t GNSE_BSP_UART_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, DEBUG_USART_DMA_PRIORITY, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, DEBUG_USART_DMA_IT_PRIORITY, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
   return GNSE_BSP_ERROR_NONE;

@@ -64,8 +64,6 @@ extern RTC_HandleTypeDef GNSE_BSP_rtc;
 #define BUZZER_TIMER_IRQn TIM2_IRQn
 #define BUZZER_TIMER_IT TIM_IT_UPDATE
 
-#define BUZZER_TIMER_PRIORITY 0
-
 int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
 
 int32_t GNSE_BSP_RTC_Init(void);

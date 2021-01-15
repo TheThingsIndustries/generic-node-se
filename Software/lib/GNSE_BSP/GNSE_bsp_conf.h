@@ -27,7 +27,16 @@
  extern "C" {
 #endif
 
-/* IRQ priorities */
+/* IRQ priorities
+* Can be from 0 to 15 with 0 as the highest
+* With OS, the lowest value should be the scheduler timer IRQ
+* In FreeRTOS this is configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY
+*/
+#define GNSE_BSP_SUBGHZ_RADIO_IT_PRIORITY       5U
+#define GNSE_BSP_RTC_IT_PRIORITY                5U
+#define DEBUG_USART_IT_PRIORITY                 7U
+#define DEBUG_USART_DMA_IT_PRIORITY             7U
+#define GNSE_BSP_BUZZER_TIMER_IT_PRIORITY       8U
 #define GNSE_BSP_BUTTON_SWx_IT_PRIORITY         15U
 
 #ifdef __cplusplus
