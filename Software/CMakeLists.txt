@@ -38,7 +38,8 @@ set (APP_LIST
 "basic"
 "basic_lorawan"
 "basic_bootloader"
-"basic_freertos")
+"basic_freertos"
+"freertos_lorawan")
 #-------------------
 # MCU Setup
 #-------------------

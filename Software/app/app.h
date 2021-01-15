@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "stm32_adv_trace.h"
-#include "stm32_systime.h"
 
 /**
  * GNSE Libraries
