@@ -24,7 +24,6 @@
 
 UART_HandleTypeDef GNSE_BSP_debug_usart;
 I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
-I2C_HandleTypeDef GNSE_BSP_sec_elm_i2c2;
 I2C_HandleTypeDef GNSE_BSP_ext_sensor_i2c2;
 SPI_HandleTypeDef GNSE_BSP_flash_spi;
 DMA_HandleTypeDef GNSE_BSP_hdma_tx;
@@ -124,45 +123,6 @@ int32_t GNSE_BSP_Sensor_I2C1_Init(void)
   }
 
   HAL_I2CEx_EnableFastModePlus(SENSOR_I2C1_FASTMODEPLUS);
-
-  return GNSE_BSP_ERROR_NONE;
-}
-
-/**
- * @brief Init the Secure Element I2C2 bus.
- *
- * @return GNSE_BSP status
- */
-int32_t GNSE_BSP_SEC_ELM_I2C2_Init(void)
-{
-  GNSE_BSP_sec_elm_i2c2.Instance = SEC_ELM_I2C2;
-  GNSE_BSP_sec_elm_i2c2.Init.Timing = SEC_ELM_I2C2_TIMING; // I2C2 bus frequency config
-  GNSE_BSP_sec_elm_i2c2.Init.OwnAddress1 = 0x00;
-  GNSE_BSP_sec_elm_i2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  GNSE_BSP_sec_elm_i2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  GNSE_BSP_sec_elm_i2c2.Init.OwnAddress2 = 0x00;
-  GNSE_BSP_sec_elm_i2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  GNSE_BSP_sec_elm_i2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-
-  if (HAL_I2C_Init(&GNSE_BSP_sec_elm_i2c2) != HAL_OK)
-  {
-    return GNSE_BSP_ERROR_NO_INIT;
-  }
-
-  /* Enable the Analog I2C Filter */
-  if (HAL_I2CEx_ConfigAnalogFilter(&GNSE_BSP_sec_elm_i2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
-  {
-    return GNSE_BSP_ERROR_NO_INIT;
-  }
-
-  /** Configure Digital filter
-  */
-  if (HAL_I2CEx_ConfigDigitalFilter(&GNSE_BSP_sec_elm_i2c2, 0) != HAL_OK)
-  {
-    return GNSE_BSP_ERROR_NO_INIT;
-  }
-
-  HAL_I2CEx_EnableFastModePlus(SEC_ELM_I2C2_FASTMODEPLUS);
 
   return GNSE_BSP_ERROR_NONE;
 }

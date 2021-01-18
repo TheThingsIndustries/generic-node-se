@@ -29,14 +29,8 @@
 #include "GNSE_bsp_conf.h"
 
 extern UART_HandleTypeDef GNSE_BSP_debug_usart;
-#if (GNSE_BSP_VERSION == GNSE_BSP_V_0_1)
-extern I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
-extern I2C_HandleTypeDef GNSE_BSP_sec_elm_i2c2;
-#elif (GNSE_BSP_VERSION == GNSE_BSP_V_0_2)
 extern I2C_HandleTypeDef GNSE_BSP_sensor_i2c1;
 extern I2C_HandleTypeDef GNSE_BSP_ext_sensor_i2c2;
-#define GNSE_BSP_sec_elm_i2c2 GNSE_BSP_sensor_i2c1 //TODO: Remove after testing, see https://github.com/TheThingsIndustries/generic-node-se/issues/74
-#endif
 extern SPI_HandleTypeDef GNSE_BSP_flash_spi;
 extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
@@ -174,7 +168,6 @@ int32_t GNSE_BSP_USART_Init(void);
 int32_t GNSE_BSP_UART_DMA_Init(void);
 
 int32_t GNSE_BSP_Sensor_I2C1_Init(void);
-int32_t GNSE_BSP_SEC_ELM_I2C2_Init(void);
 int32_t GNSE_BSP_Ext_Sensor_I2C2_Init(void);
 
 int32_t GNSE_BSP_Flash_SPI_Init(void);
