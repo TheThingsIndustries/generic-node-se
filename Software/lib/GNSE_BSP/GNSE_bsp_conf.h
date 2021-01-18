@@ -27,11 +27,6 @@
  extern "C" {
 #endif
 
-#define GNSE_BSP_V_0_1 01
-#define GNSE_BSP_V_0_2 02
-
-#define GNSE_BSP_VERSION GNSE_BSP_V_0_1
-
 /* IRQ priorities */
 #define GNSE_BSP_BUTTON_SWx_IT_PRIORITY         15U
 

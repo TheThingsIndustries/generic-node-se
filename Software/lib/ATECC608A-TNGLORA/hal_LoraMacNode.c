@@ -119,7 +119,7 @@ ATCA_STATUS hal_i2c_send(ATCAIface iface, uint8_t word_address, uint8_t *txdata,
 {
     txdata[0] = 0x3;
     txlength++;
-    if (HAL_I2C_Master_Transmit(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, txdata, (size_t)txlength, ATCA_HAL_ATECC608A_LONG_TIMEOUT) == HAL_OK)
+    if (HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, txdata, (size_t)txlength, ATCA_HAL_ATECC608A_LONG_TIMEOUT) == HAL_OK)
     {
         return ATCA_SUCCESS;
     }
@@ -147,7 +147,7 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t word_address, uint8_t *rxda
     int retries = iface->mIfaceCFG->rx_retries;
     while (--retries > 0 && r != HAL_OK)
     {
-        r = HAL_I2C_Master_Receive(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, lengthPackage, 1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+        r = HAL_I2C_Master_Receive(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, lengthPackage, 1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
     }
 
     if (r != HAL_OK)
@@ -169,7 +169,7 @@ ATCA_STATUS hal_i2c_receive(ATCAIface iface, uint8_t word_address, uint8_t *rxda
     retries = iface->mIfaceCFG->rx_retries;
     while (--retries > 0 && r != HAL_OK)
     {
-        r = HAL_I2C_Master_Receive(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, rxdata + 1, bytesToRead, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+        r = HAL_I2C_Master_Receive(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, rxdata + 1, bytesToRead, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
     }
 
     if (r != HAL_OK)
@@ -199,7 +199,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
 {
     // 2. Send NULL buffer to address 0x0 (NACK)
     uint8_t emptybuff[1] = {0};
-    HAL_StatusTypeDef r = HAL_I2C_Master_Transmit(&GNSE_BSP_sec_elm_i2c2, 0x00, emptybuff, (size_t)0, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+    HAL_StatusTypeDef r = HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, 0x00, emptybuff, (size_t)0, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
 
     // 3. Wait for wake_delay
     atca_delay_us(iface->mIfaceCFG->wake_delay);
@@ -211,7 +211,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
     int retries = iface->mIfaceCFG->rx_retries;
     while (--retries > 0 && r != HAL_OK)
     {
-        r = HAL_I2C_Master_Receive(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, rx_buffer, 4, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+        r = HAL_I2C_Master_Receive(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, rx_buffer, 4, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
     }
 
     // 5. Set frequency back to requested one
@@ -236,7 +236,7 @@ ATCA_STATUS hal_i2c_wake(ATCAIface iface)
 ATCA_STATUS hal_i2c_idle(ATCAIface iface)
 {
     uint8_t buffer[1] = {0x2}; // idle word address value
-    HAL_I2C_Master_Transmit(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, buffer, (size_t)1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+    HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, buffer, (size_t)1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
     return ATCA_SUCCESS;
 }
 
@@ -247,7 +247,7 @@ ATCA_STATUS hal_i2c_idle(ATCAIface iface)
 ATCA_STATUS hal_i2c_sleep(ATCAIface iface)
 {
     uint8_t buffer[1] = {0x1}; // sleep word address value
-    HAL_I2C_Master_Transmit(&GNSE_BSP_sec_elm_i2c2, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, buffer, (size_t)1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
+    HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, (uint16_t)iface->mIfaceCFG->atcai2c.slave_address, buffer, (size_t)1, ATCA_HAL_ATECC608A_LONG_TIMEOUT);
     return ATCA_SUCCESS;
 }
 
