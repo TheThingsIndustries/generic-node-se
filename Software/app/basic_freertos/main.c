@@ -106,23 +106,6 @@ void QueueReceiveThread(void *argument)
   }
 }
 
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM17 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-
-  if (htim->Instance == TIM17)
-  {
-    HAL_IncTick();
-  }
-}
-
 #if (APP_LOG_ENABLED)
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
