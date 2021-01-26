@@ -115,6 +115,11 @@ typedef struct
      * \param [IN] channelDetected    Channel Activity detected during the CAD
      */
     void ( *CadDone ) ( bool channelActivityDetected );
+
+    /*!
+     * \brief Notify of a radio event from ISR.
+     */
+    void  ( *notify )( void );
 }RadioEvents_t;
 
 /*!
@@ -387,6 +392,11 @@ struct Radio_s
      * \brief Process radio irq
      */
     void ( *IrqProcess )( void );
+    /*!
+     * \brief Set radio notification.
+     */
+    void ( *SetEventNotify )( void ( * notify ) ( void ) );
+
     /*
      * The next functions are available only on SX126x radios.
      */

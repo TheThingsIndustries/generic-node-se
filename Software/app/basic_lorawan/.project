@@ -85,7 +85,7 @@
 		<link>
 			<name>lib/Utilities</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>target/STM32WLxx_HAL_Driver</name>
@@ -126,6 +126,71 @@
 			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_adv_trace.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_adv_trace.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_adv_trace.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_adv_trace.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_lpm.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_lpm.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_lpm.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_lpm.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_mem.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_mem.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_mem.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_mem.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_tiny_vsnprintf.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_tiny_vsnprintf.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/stm32_tiny_vsnprintf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_tiny_vsnprintf.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/usart_if.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/usart_if.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/usart_if.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/usart_if.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/utilities_conf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/utilities_conf.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto</name>
@@ -181,6 +246,36 @@
 			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_seq.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_seq.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_seq.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_seq.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_systime.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_systime.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_systime.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_systime.h</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_timer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_timer.c</locationURI>
+		</link>
+		<link>
+			<name>lib/Utilities/baremetal/stm32_timer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_timer.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/.DS_Store</name>

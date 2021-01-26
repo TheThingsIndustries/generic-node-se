@@ -3,17 +3,14 @@
 #-------------------
 file(GLOB LORAWAN_SRC
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Crypto/*.c"
-    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/*.c"
-    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages/LmhpCompliance.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
-    "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/freertos/*.c"
     "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/*.c"
-
     )
 add_library(lorawan STATIC
     ${LORAWAN_SRC}
@@ -24,20 +21,20 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/${MCU_DIR}/Include
     ${PROJECT_SOURCE_DIR}/${CMSIS_DIR}/Core/Include
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Crypto
-    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler
-    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic
     ${PROJECT_SOURCE_DIR}/lib/Utilities
-    ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/freertos
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/include
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     )
 target_compile_definitions(lorawan
@@ -48,17 +45,21 @@ target_compile_definitions(lorawan
 # Main elf
 #-------------------
 file(GLOB MAIN_SRC
-        "${PROJECT_SOURCE_DIR}/app/basic_lorawan/*.c"
-        "${PROJECT_SOURCE_DIR}/target/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/LIS2DH12/*.c"
-        "${PROJECT_SOURCE_DIR}/lib/BUZZER/*.c"
-        )
+    "${PROJECT_SOURCE_DIR}/app/freertos_lorawan/*.c"
+    "${PROJECT_SOURCE_DIR}/target/*.c"
+    "${PROJECT_SOURCE_DIR}/target/FreeRTOS_CMSIS/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MCU_FLASH/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/freertos/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-LoRaWAN/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/*.c"
+    #GCC ARM_CM3 seems functional with ARM CM4
+    "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/MemMang/heap_4.c"
+    )
 set(SOURCES
     ${MAIN_SRC}
     ${PROJECT_SOURCE_DIR}/${STARTUP_FILE}
@@ -70,18 +71,23 @@ add_executable(${PROJECT_NAME}.elf
 target_include_directories(${PROJECT_NAME}.elf
     PUBLIC
     ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/target/FreeRTOS_CMSIS
     ${PROJECT_SOURCE_DIR}/app
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
-    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAl
+    ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH
     ${PROJECT_SOURCE_DIR}/lib/Utilities
-    ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/freertos
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635
     ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
     ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-LoRaWAN
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/include
+    ${PROJECT_SOURCE_DIR}/lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3
     )
 target_link_libraries(${PROJECT_NAME}.elf
     PUBLIC
@@ -101,4 +107,4 @@ target_compile_definitions(${PROJECT_NAME}.elf
     "${PROJECT_NAME}.map"
     "${PROJECT_NAME}.bin"
     "${PROJECT_NAME}.hex"
-)
+    )

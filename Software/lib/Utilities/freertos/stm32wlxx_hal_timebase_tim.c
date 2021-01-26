@@ -43,21 +43,21 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32wlxx_hal.h"
 #include "stm32wlxx_hal_tim.h"
- 
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef        htim17; 
+TIM_HandleTypeDef        htim17;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
 /**
-  * @brief  This function configures the TIM17 as a time base source. 
-  *         The time source is configured  to have 1ms time base with a dedicated 
-  *         Tick interrupt priority. 
+  * @brief  This function configures the TIM17 as a time base source.
+  *         The time source is configured  to have 1ms time base with a dedicated
+  *         Tick interrupt priority.
   * @note   This function is called  automatically at the beginning of program after
-  *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig(). 
+  *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig().
   * @param  TickPriority: Tick interrupt priority.
   * @retval HAL status
   */
@@ -70,19 +70,19 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   HAL_StatusTypeDef     status = HAL_OK;
   /* Enable TIM17 clock */
   __HAL_RCC_TIM17_CLK_ENABLE();
-  
+
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);
-  
+
   /* Compute TIM17 clock */
   uwTimclock = HAL_RCC_GetPCLK2Freq();
-   
+
   /* Compute the prescaler value to have TIM17 counter clock equal to 1MHz */
   uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
-  
+
   /* Initialize TIM17 */
   htim17.Instance = TIM17;
-  
+
   /* Initialize TIMx peripheral as follow:
   + Period = [(TIM17CLK/1000) - 1]. to have a (1/1000) s time base.
   + Prescaler = (uwTimclock/1000000 - 1) to have a 1MHz counter clock.
@@ -102,7 +102,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
     if (status == HAL_OK)
     {
     /* Enable the TIM17 global Interrupt */
-        HAL_NVIC_EnableIRQ(TIM17_IRQn); 
+        HAL_NVIC_EnableIRQ(TIM17_IRQn);
       /* Configure the SysTick IRQ priority */
       if (TickPriority < (1UL << __NVIC_PRIO_BITS))
       {
@@ -129,7 +129,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 void HAL_SuspendTick(void)
 {
   /* Disable TIM17 update Interrupt */
-  __HAL_TIM_DISABLE_IT(&htim17, TIM_IT_UPDATE);                                                  
+  __HAL_TIM_DISABLE_IT(&htim17, TIM_IT_UPDATE);
 }
 
 /**
@@ -142,6 +142,23 @@ void HAL_ResumeTick(void)
 {
   /* Enable TIM17 Update interrupt */
   __HAL_TIM_ENABLE_IT(&htim17, TIM_IT_UPDATE);
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM17 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+
+  if (htim->Instance == TIM17)
+  {
+    HAL_IncTick();
+  }
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

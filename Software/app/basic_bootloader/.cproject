@@ -44,6 +44,7 @@
 									<listOptionValue builtIn="false" value="../../../lib/GNSE_BSP"/>
 									<listOptionValue builtIn="false" value="../../../lib/GNSE_HAL"/>
 									<listOptionValue builtIn="false" value="../../../lib/Utilities"/>
+									<listOptionValue builtIn="false" value="../../../lib/Utilities/baremetal"/>
 									<listOptionValue builtIn="false" value="../../../lib/SHTC3"/>
 									<listOptionValue builtIn="false" value="../../../lib/MX25R1635"/>
 									<listOptionValue builtIn="false" value="../../../lib/LIS2DH12"/>
@@ -70,7 +71,7 @@
 							</tool>
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.1142257337" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.1811958847" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" useByScannerDiscovery="false" value="../../../target/bootloader.ld" valueType="string"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories.1554551078" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories" useByScannerDiscovery="false" valueType="libPaths">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories.1554551078" name="Library search path (-L)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="../../../target"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.957039483" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
