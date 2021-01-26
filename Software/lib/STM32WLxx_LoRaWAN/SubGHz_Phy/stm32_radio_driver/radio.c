@@ -76,6 +76,11 @@ typedef struct SubgRf_s
 void RadioIrqProcess( void );
 
 /*!
+ * @brief Notify application layer of radio events
+ */
+void RadioSetEventNotify( void ( * notify ) ( void ) );
+
+/*!
  * @brief Tx timeout timer callback
  */
 void RadioOnTxTimeoutIrq( void * context );
@@ -445,6 +450,7 @@ const struct Radio_s Radio =
     RadioSetPublicNetwork,
     RadioGetWakeUpTime,
     RadioIrqProcess,
+    RadioSetEventNotify,
     RadioRxBoosted,
     RadioSetRxDutyCycle,
     RadioTxPrbs,
@@ -732,7 +738,7 @@ void RadioSetRxConfig( RadioModems_t modem, uint32_t bandwidth,
             SUBGRF_SetSyncWord( ( uint8_t[] ){0xB2, 0x27, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } );
             SUBGRF_SetWhiteningSeed( 0x01FF );
 
-            /*•	NO gfo reset (better sensitivity). Reg 0x8b8, bit4 = 0*/
+            /*ï¿½	NO gfo reset (better sensitivity). Reg 0x8b8, bit4 = 0*/
             modReg= RadioRead(0x8b8);
             modReg&=RADIO_BIT_MASK(4);
 //            modReg =modReg & (1<<2);
@@ -740,17 +746,17 @@ void RadioSetRxConfig( RadioModems_t modem, uint32_t bandwidth,
             /*3.	Lower the threshold of cfo_reset */
             RadioWrite(0x8b9, 0x4 ); 
             
-            /*•Bigger rssi_len (stability AGC). Reg 0x89b, bits[2 :4] = 0x1 */
+            /*ï¿½Bigger rssi_len (stability AGC). Reg 0x89b, bits[2 :4] = 0x1 */
             modReg= RadioRead(0x89b);
             modReg&=( RADIO_BIT_MASK(2) & RADIO_BIT_MASK(3) & RADIO_BIT_MASK(4) );
             RadioWrite(0x89b, (modReg| (0x1<<3) ) ); 
 
-            /*•Biger afc_pbl_len (better frequency correction). Reg 0x6d1, bits[3 :4] = 0x3 */
+            /*ï¿½Biger afc_pbl_len (better frequency correction). Reg 0x6d1, bits[3 :4] = 0x3 */
             modReg= RadioRead(0x6d1);
             modReg&=( RADIO_BIT_MASK(3) & RADIO_BIT_MASK(4) );
             RadioWrite(0x6d1, (modReg| (0x3<<3) )); 
 
-            /*••Use of new bit synchronizer (to avoid CRC errors during PER for payloads with a small amount of transitions). Reg 0x6ac, bits[4 :6] = 0x5 */
+            /*ï¿½ï¿½Use of new bit synchronizer (to avoid CRC errors during PER for payloads with a small amount of transitions). Reg 0x6ac, bits[4 :6] = 0x5 */
             modReg= RadioRead(0x6ac);
             modReg&=( RADIO_BIT_MASK(4) & RADIO_BIT_MASK(5) & RADIO_BIT_MASK(6) );
             RadioWrite(0x6ac, (modReg| (0x5<<4) ));
@@ -965,7 +971,7 @@ void RadioSetTxConfig( RadioModems_t modem, int8_t power, uint32_t fdev,
             break;
     }
 
-    // WORKAROUND - Modulation Quality with 500 kHz LoRa® Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
+    // WORKAROUND - Modulation Quality with 500 kHz LoRaï¿½ Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
     if( ( modem == MODEM_LORA ) && ( SubgRf.ModulationParams.Params.LoRa.Bandwidth == LORA_BW_500 ) )
     {
         // RegTxModulation = @address 0x0889
@@ -1416,11 +1422,23 @@ void RadioOnRxTimeoutIrq( void* context )
     }
 }
 
+void RadioSetEventNotify( void ( * notify ) ( void ) )
+{
+    if( RadioEvents != NULL )
+    {
+        RadioEvents->notify = notify;
+     }
+ }
+
 void RadioOnDioIrq( RadioIrqMasks_t radioIrq )
 {
   SubgRf.radioIrq=radioIrq;  
   
   RadioIrqProcess();
+  if( ( RadioEvents != NULL ) && ( RadioEvents->notify != NULL ) )
+  {
+    RadioEvents->notify();
+  }
 }
 
 void RadioIrqProcess( void )
@@ -1842,7 +1860,7 @@ int32_t RadioSetTxGenericConfig( GenericModems_t modem, TxConfigGeneric_t* confi
             RadioSetModem( MODEM_LORA );
             SUBGRF_SetModulationParams( &SubgRf.ModulationParams );
             SUBGRF_SetPacketParams( &SubgRf.PacketParams );
-            // WORKAROUND - Modulation Quality with 500 kHz LoRa® Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
+            // WORKAROUND - Modulation Quality with 500 kHz LoRaï¿½ Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
             if( SubgRf.ModulationParams.Params.LoRa.Bandwidth == LORA_BW_500 )
             {
                 // RegTxModulation = @address 0x0889

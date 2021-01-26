@@ -44,6 +44,7 @@
 									<listOptionValue builtIn="false" value="../../../lib/GNSE_BSP"/>
 									<listOptionValue builtIn="false" value="../../../lib/GNSE_HAL"/>
 									<listOptionValue builtIn="false" value="../../../lib/Utilities"/>
+									<listOptionValue builtIn="false" value="../../../lib/Utilities/baremetal"/>
 									<listOptionValue builtIn="false" value="../../../lib/SHTC3"/>
 									<listOptionValue builtIn="false" value="../../../lib/MX25R1635"/>
 									<listOptionValue builtIn="false" value="../../../lib/LIS2DH12"/>
@@ -181,6 +182,13 @@
 			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/basic"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/basic"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>
