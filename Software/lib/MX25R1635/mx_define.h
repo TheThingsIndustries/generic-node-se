@@ -1,5 +1,5 @@
 
-/** Copyright © 2020 The Things Industries B.V.
+/** Copyright © 2021 The Things Industries B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 /**
  * @file mx_define.h
  *
- * @copyright Copyright (c) 2020 The Things Industries B.V.
+ * @copyright Copyright (c) 2021 The Things Industries B.V.
  *
  */
 #ifndef MX_DEFINE_H
