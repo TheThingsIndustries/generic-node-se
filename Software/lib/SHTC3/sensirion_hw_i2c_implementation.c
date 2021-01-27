@@ -31,7 +31,7 @@
 
 #include "stm32wlxx_hal.h"
 #include "sensirion_i2c.h"
-#include "GNSE_BSP.h"
+#include "GNSE_bsp.h"
 
 /**
  * Initialize all hard- and software components that are needed for the I2C
