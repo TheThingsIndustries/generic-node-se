@@ -14,6 +14,7 @@
 #-----------------------------
 # Important: TOOLCHAIN_PREFIX must be configured as it's system and user dependant
 # MAC OSX and Linux Example -> set(TOOLCHAIN_PREFIX "/Users/USER/opt/gcc-arm-none-eabi-9-2020-q2-update/")
+# Ubuntu install from 'sudo apt install gcc-arm-none-eabi' -> set(TOOLCHAIN_PREFIX "/usr")
 # Windows Example -> set(TOOLCHAIN_PREFIX "C:/Program Files (x86)/GNU Tools ARM Embedded/9 2020-q2-update/")
 # Docker Example -> set(TOOLCHAIN_PREFIX "/toolchain/gcc-arm-none-eabi-9-2020-q2-update/")
 

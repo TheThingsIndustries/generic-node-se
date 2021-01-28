@@ -19,7 +19,7 @@
   ******************************************************************************
   */
 
-#include "GNSE_BSP.h"
+#include "GNSE_bsp.h"
 #include "stm32wlxx_it.h"
 
 extern TIM_HandleTypeDef htim17;
