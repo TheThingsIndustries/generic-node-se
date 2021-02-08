@@ -10,4 +10,6 @@ The device enters stop mode in between tranmisions to reduce power consumption.
 
 [basic_freertos](./basic_freertos) contains a basic FreeRTOS low power application that creates two threads and passes messages via a queue triggering a blinking LED with each passed message.
 
+[freefall_lorawan](./freefall_lorawan) contains a simple application to join via OTAA and waits to send a message until the device is free-falling
+
 [freertos_lorawan](./basic_freertos) contains a multi-thread FreeRTOS LoRaWAN Class A demo app that joins over OTAA and sends uplink data.

@@ -81,6 +81,7 @@ dkms.conf
 
 # STM32CubeIDE (eclipse) build path
 /Software/app/basic*/Debug/
+/Software/app/freefall_lorawan/Debug/
 /Software/app/basic*/.settings/
 
 # STM32CubeIDE (eclipse)
