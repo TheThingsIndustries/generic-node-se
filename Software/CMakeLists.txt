@@ -15,7 +15,8 @@
 cmake_minimum_required(VERSION 3.11.1)
 
 if(NOT CMAKE_TOOLCHAIN_FILE)
-    message(FATAL_ERROR "[ERRR] CMAKE_TOOLCHAIN_FILE not specified")
+    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/cross.cmake" CACHE STRING "Choose the toolchain file." FORCE)
+    message(WARNING "[WARN] CMAKE_TOOLCHAIN_FILE not specified: Using ${CMAKE_TOOLCHAIN_FILE} by default")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
