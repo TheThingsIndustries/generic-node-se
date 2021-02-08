@@ -18,6 +18,8 @@
 # Windows Example -> set(TOOLCHAIN_PREFIX "C:/Program Files (x86)/GNU Tools ARM Embedded/9 2020-q2-update/")
 # Docker Example -> set(TOOLCHAIN_PREFIX "/toolchain/gcc-arm-none-eabi-9-2020-q2-update/")
 
+set(TOOLCHAIN_PREFIX "/usr" CACHE STRING "Toolchain installation directory." FORCE)
+
 if(NOT TOOLCHAIN_PREFIX)
     message(FATAL_ERROR "[ERRR] TOOLCHAIN_PREFIX not specified, please update the with compiler toolchain location")
 endif()
