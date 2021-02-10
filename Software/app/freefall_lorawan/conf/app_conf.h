@@ -36,6 +36,20 @@
 #define LOW_POWER_DISABLE 0
 
 /**
+  * FF_THRESHOLD is defined as the value all axis are +/-0g, depending on the scale
+  * @2g scale 1 LSb = 16 mg
+  * @4g scale 1 LSb = 32 mg
+  * @8g scale 1 LSb = 62 mg
+  * @16g scale 1 LSb = 186 mg
+  * FF_DURATION is defined as the time below the threshold times the ODR
+  * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold. 
+  */
+#define FF_THRESHOLD 0x15
+#define FF_DURATION 0x03
+#define FF_SCALE LIS2DH12_2g
+#define FF_ODR LIS2DH12_ODR_100Hz //100 Hz
+
+/**
   * Supported requester to the MCU Low Power Manager - can be increased up  to 32
   * It lists a bit mapping of all user of the Low Power Manager
   */
