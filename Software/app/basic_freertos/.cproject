@@ -58,8 +58,8 @@
 									<listOptionValue builtIn="false" value="../../../lib/cryptoauthlib/lib/host"/>
 									<listOptionValue builtIn="false" value="../../"/>
 									<listOptionValue builtIn="false" value="../conf"/>
-									<listOptionValue builtIn="false" value="../../../target/STM32WLxx_HAL_Driver/CMSIS/core/include"/>
-									<listOptionValue builtIn="false" value="../../../target/STM32WLxx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../target/CMSIS/Core/include"/>
+									<listOptionValue builtIn="false" value="../../../target/stm32wlxx_hal_driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Kernel/include"/>
 									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Utilities"/>
 									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3"/>
