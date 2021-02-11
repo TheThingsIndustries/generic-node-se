@@ -30,7 +30,10 @@ stmdev_ctx_t dev_ctx;
 int8_t freefall_init(void) 
 {
     freefall_io_init();
-    freefall_registers_init();
+    if (freefall_registers_init())
+    {
+        return 1;
+    }
     
     return 0;
 }
@@ -67,7 +70,7 @@ static int8_t freefall_registers_init(void)
     
     acc_check = LIS2DH12_init(&dev_ctx);
     acc_check += (int8_t)lis2dh12_device_id_get(&dev_ctx, &whoami);
-    if(whoami != LIS2DH12_ID)
+    if (whoami != LIS2DH12_ID)
     {
         return 1;
     }
@@ -107,9 +110,8 @@ static int8_t freefall_registers_init(void)
     };
     acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg); 
 
-    if(acc_check != 0)
+    if (acc_check != 0)
     {
-        APP_PRINTF("Accel failed %d\r\n", acc_check);
         return 1;
     }
     

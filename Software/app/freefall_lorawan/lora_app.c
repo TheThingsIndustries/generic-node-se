@@ -166,7 +166,14 @@ void LoRaWAN_Init(void)
   }
   else
   {
-    freefall_init();
+    if (freefall_init())
+    {
+      APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
+    }
+    else
+    {
+      APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
+    }
   }
 }
 
