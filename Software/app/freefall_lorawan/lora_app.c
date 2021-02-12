@@ -50,6 +50,13 @@ typedef enum TxEventType_e
 static void SendTxData(void);
 
 /**
+  * @brief  Special TX timer to handle retransmission after failed TX attempt
+  * @param  none
+  * @return none
+  */
+static void OnTxTimerRetransmission(void *context);
+
+/**
   * @brief  TX timer callback function
   * @param  timer context
   * @return none
@@ -243,6 +250,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 
 static void SendTxData(void)
 {
+  static uint8_t freefall_log_amount;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
   UTIL_TIMER_Create(&TxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTimerLedEvent, NULL);
@@ -253,19 +261,30 @@ static void SendTxData(void)
   UTIL_TIMER_Start(&TxLedTimer);
 
   AppData.Port = LORAWAN_APP_PORT;
-  AppData.BufferSize = 3;
-  AppData.Buffer[0] = 0xAA;
-  AppData.Buffer[1] = 0xBB;
-  AppData.Buffer[2] = 0xCC;
+  AppData.BufferSize = 1;
+  AppData.Buffer[0] = freefall_log_amount;
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
     APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
+    freefall_log_amount = 0;
   }
   else if (nextTxIn > 0)
   {
     APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
+    freefall_log_amount++;
+
+    // Set timer for next available transmission
+    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerRetransmission, NULL);
+    UTIL_TIMER_SetPeriod(&TxTimer, nextTxIn);
+    UTIL_TIMER_Start(&TxTimer);
   }
+}
+
+static void OnTxTimerRetransmission(void *context)
+{
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  UTIL_TIMER_Stop(&TxTimer);
 }
 
 static void OnTxTimerEvent(void *context)

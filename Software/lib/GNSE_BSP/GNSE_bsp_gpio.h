@@ -207,4 +207,7 @@ int32_t GNSE_BSP_BM_GetState();
 int32_t GNSE_BSP_BM_ConfChannel(uint32_t channel);
 uint32_t GNSE_BSP_BM_ReadChannel();
 
+int32_t GNSE_BSP_Acc_Int_Init(void);
+int32_t GNSE_BSP_Acc_Int_Deinit(void);
+
 #endif /* GNSE_BSP_GPIO_H */
