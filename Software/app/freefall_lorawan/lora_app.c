@@ -50,6 +50,13 @@ typedef enum TxEventType_e
 static void SendTxData(void);
 
 /**
+  * @brief  Special TX timer to handle retransmission after failed TX attempt
+  * @param  none
+  * @return none
+  */
+static void OnTxTimerRetransmission(void *context);
+
+/**
   * @brief  TX timer callback function
   * @param  timer context
   * @return none
@@ -266,7 +273,18 @@ static void SendTxData(void)
   {
     APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
     freefall_log_amount++;
+
+    /* send every time timer elapses */
+    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerRetransmission, NULL);
+    UTIL_TIMER_SetPeriod(&TxTimer, nextTxIn);
+    UTIL_TIMER_Start(&TxTimer);
   }
+}
+
+static void OnTxTimerRetransmission(void *context)
+{
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  UTIL_TIMER_Stop(&TxTimer);
 }
 
 static void OnTxTimerEvent(void *context)
