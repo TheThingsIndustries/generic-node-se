@@ -22,44 +22,31 @@
 
 #include "freefall.h"
 
-static int8_t freefall_io_init(void);
 static int8_t freefall_registers_init(void);
 
 stmdev_ctx_t dev_ctx;
 
 int8_t freefall_init(void) 
 {
-    freefall_io_init();
+    /* Turn on Load Switch */
+    GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+    GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+    HAL_Delay(100);
+
+    GNSE_BSP_Sensor_I2C1_Init();
+    HAL_Delay(100);
+
+    /* Set interrupt pin */
+    if (GNSE_BSP_Acc_Int_Init())
+    {
+        return 1;
+    }
+    /* Set registers */ 
     if (freefall_registers_init())
     {
         return 1;
     }
     
-    return 0;
-}
-
-static int8_t freefall_io_init(void)
-{
-    GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
-    GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-    HAL_Delay(100);
-    GNSE_BSP_Sensor_I2C1_Init();
-    HAL_Delay(100);
-    
-    // Setup interrupt pin
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    /* GPIO Ports Clock Enable */
-    ACC_INT_GPIO_CLK_ENABLE();
-    
-    GPIO_InitStruct.Pin = ACC_INT_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(ACC_INT_PORT, &GPIO_InitStruct);
-    HAL_NVIC_SetPriority(ACC_INT_IRQ, 3, 0);
-    HAL_NVIC_EnableIRQ(ACC_INT_IRQ);
-
     return 0;
 }
 

@@ -528,3 +528,41 @@ uint32_t GNSE_BSP_BM_ReadChannel(void)
     }
     return raw_adc_read;
 }
+
+
+/**
+  * @brief  Configures accelerometer interrupt GPIO.
+  * @return GNSE_BSP status
+  */
+int32_t GNSE_BSP_Acc_Int_Init(void)
+{
+    GPIO_InitTypeDef gpio_init_structure = {0};
+
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    /* GPIO Ports Clock Enable */
+    ACC_INT_GPIO_CLK_ENABLE();
+    
+    GPIO_InitStruct.Pin = ACC_INT_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(ACC_INT_PORT, &GPIO_InitStruct);
+    HAL_NVIC_SetPriority(ACC_INT_IRQ, 3, 0);
+    HAL_NVIC_EnableIRQ(ACC_INT_IRQ);
+
+    return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  DeInit accelerometer interrupt GPIO.
+  * @note Acc DeInit does not disable the GPIO clock
+  * @return GNSE_BSP status
+  */
+int32_t GNSE_BSP_Acc_Int_Deinit(void)
+{
+    HAL_NVIC_DisableIRQ(ACC_INT_IRQ);
+    HAL_GPIO_DeInit(ACC_INT_PORT, ACC_INT_PIN);
+
+    return GNSE_BSP_ERROR_NONE;
+}
