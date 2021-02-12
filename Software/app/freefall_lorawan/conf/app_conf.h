@@ -50,6 +50,11 @@
 #define FF_ODR LIS2DH12_ODR_100Hz //100 Hz
 
 /**
+ * This variable sets the LoRaWAN transmission port
+ */
+#define FF_LORA_PORT 2
+
+/**
   * Supported requester to the MCU Low Power Manager - can be increased up  to 32
   * It lists a bit mapping of all user of the Low Power Manager
   */
