@@ -531,7 +531,7 @@ uint32_t GNSE_BSP_BM_ReadChannel(void)
 
 
 /**
-  * @brief  Configures accelerometer interrupt GPIO.
+  * @brief Configures accelerometer interrupt GPIO.
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_Acc_Int_Init(void)
@@ -555,7 +555,7 @@ int32_t GNSE_BSP_Acc_Int_Init(void)
 }
 
 /**
-  * @brief  DeInit accelerometer interrupt GPIO.
+  * @brief DeInit accelerometer interrupt GPIO.
   * @note Acc DeInit does not disable the GPIO clock
   * @return GNSE_BSP status
   */
