@@ -274,7 +274,7 @@ static void SendTxData(void)
     APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
     freefall_log_amount++;
 
-    /* send every time timer elapses */
+    // Set timer for next available transmission
     UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerRetransmission, NULL);
     UTIL_TIMER_SetPeriod(&TxTimer, nextTxIn);
     UTIL_TIMER_Start(&TxTimer);
