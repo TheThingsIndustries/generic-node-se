@@ -36,21 +36,21 @@
 #define LOW_POWER_DISABLE 0
 
 /**
-  * FF_THRESHOLD is defined as the value all axis are +/-0g, depending on the scale
+  * FF_THRESHOLD is defined as the value all axes are +/-0g, depending on the scale
   * @2g scale 1 LSb = 16 mg
   * @4g scale 1 LSb = 32 mg
   * @8g scale 1 LSb = 62 mg
   * @16g scale 1 LSb = 186 mg
-  * FF_DURATION is defined as the time below the threshold times the ODR
+  * FF_DURATION is defined as the time below the threshold times the Output Data Rate
   * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold. 
   */
 #define FF_THRESHOLD 0x15
 #define FF_DURATION 0x03
 #define FF_SCALE LIS2DH12_2g
-#define FF_ODR LIS2DH12_ODR_100Hz //100 Hz
+#define FF_ODR LIS2DH12_ODR_100Hz
 
 /**
- * This variable sets the LoRaWAN transmission port
+ * This variable sets the LoRaWAN transmission port of Freefall events
  */
 #define FF_LORA_PORT 2
 
