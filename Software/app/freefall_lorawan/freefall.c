@@ -28,7 +28,7 @@ stmdev_ctx_t dev_ctx;
 
 int8_t freefall_init(void) 
 {
-    // Turn on Load Switch
+    /* Set load switch */
     GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
     GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
     HAL_Delay(100);
@@ -36,12 +36,12 @@ int8_t freefall_init(void)
     GNSE_BSP_Sensor_I2C1_Init();
     HAL_Delay(100);
 
-    // Set interrupt pin
+    /* Set interrupt pin */
     if (GNSE_BSP_Acc_Int_Init())
     {
         return 1;
     }
-    // Set registers
+    /* Set registers */
     if (freefall_registers_init())
     {
         return 1;
@@ -56,18 +56,21 @@ static int8_t freefall_registers_init(void)
     uint8_t whoami;
     
     acc_check = LIS2DH12_init(&dev_ctx);
+
+    /* Check device ID */
     acc_check += (int8_t)lis2dh12_device_id_get(&dev_ctx, &whoami);
     if (whoami != LIS2DH12_ID)
     {
         return 1;
     }
+    /* Set Output Data rate */
     acc_check += (int8_t)lis2dh12_data_rate_set(&dev_ctx, FF_ODR);
+
+    /* Set full scale */
     acc_check += (int8_t)lis2dh12_full_scale_set(&dev_ctx, FF_SCALE);
 
 
-    lis2dh12_int1_src_t int1_getdata;
-    acc_check += (int8_t)lis2dh12_int1_gen_source_get(&dev_ctx, &int1_getdata);
-
+    /* Map interrupt 1 on INT2 pin */
     lis2dh12_ctrl_reg6_t ctrl6_set = {
         .not_used_01 = 0,
         .int_polarity = 0,
@@ -79,8 +82,14 @@ static int8_t freefall_registers_init(void)
         .i2_click = 0
     };
     acc_check += (int8_t)lis2dh12_pin_int2_config_set(&dev_ctx, &ctrl6_set); 
+
+    /* Set interrupt threshold */
     acc_check += (int8_t)lis2dh12_int1_gen_threshold_set(&dev_ctx, FF_THRESHOLD); 
+
+    /* Set interrupt threshold duration */
     acc_check += (int8_t)lis2dh12_int1_gen_duration_set(&dev_ctx, FF_DURATION); 
+
+    /* Set all axes with low event detection and AND operator */
     lis2dh12_int1_cfg_t accel_cfg = {
         .xlie = 1,
         .xhie = 0,
@@ -93,6 +102,7 @@ static int8_t freefall_registers_init(void)
     };
     acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg); 
 
+    /* See if all checks were passed */
     if (acc_check != 0)
     {
         return 1;
