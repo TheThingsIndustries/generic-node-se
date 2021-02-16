@@ -36,8 +36,7 @@
 #define __RADIO_EX_H__
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 
@@ -198,7 +197,7 @@ typedef enum
 }RADIO_FSK_DcFree_t;
 
 typedef struct{
-  uint32_t StopTimerOnPreambleDetect; /*0 inactive, oterwise active*/
+  uint32_t StopTimerOnPreambleDetect; /*0 inactive, otherwise active*/
   RADIO_LoRaSpreadingFactors_t SpreadingFactor;
   RADIO_LoRaBandwidths_t Bandwidth;
   RADIO_LoRaCodingRates_t Coderate;
@@ -241,7 +240,7 @@ typedef struct{
   RADIO_LoRaSpreadingFactors_t SpreadingFactor;
   RADIO_LoRaBandwidths_t Bandwidth;
   RADIO_LoRaCodingRates_t Coderate;
-  RADIO_Ld_Opt_t LowDatarateOptimize;/*0 inactive, oterwise active*/
+  RADIO_Ld_Opt_t LowDatarateOptimize;/*0 inactive, otherwise active*/
   uint16_t PreambleLen;
   RADIO_LoRaPacketLengthsMode_t LengthMode;
   RADIO_LoRaCrcModes_t CrcMode;
@@ -268,10 +267,6 @@ typedef struct{
   generic_param_tx_lora_t lora;
   generic_param_tx_bpsk_t bpsk;
 } TxConfigGeneric_t;
-
-int32_t RadioSetRxGenericConfig( GenericModems_t modem, RxConfigGeneric_t* config, uint32_t rxContinuous, uint32_t symbTimeout);
-
-int32_t RadioSetTxGenericConfig( GenericModems_t modem, TxConfigGeneric_t* config, int8_t power, uint32_t timeout );
 
 #ifdef __cplusplus
 }
