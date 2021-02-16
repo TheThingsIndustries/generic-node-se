@@ -86,7 +86,7 @@ typedef enum
 typedef enum
 {
   CFG_SEQ_Task_LmHandlerPackageProcess,
-  CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent,
+  CFG_SEQ_Task_LoRaSendOnFreefall,
   CFG_SEQ_Task_NBR
 } CFG_SEQ_Task_Id_t;
 

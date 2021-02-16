@@ -27,21 +27,6 @@
 #include "LmHandler.h"
 #include "freefall.h"
 
-/*!
- * LoRa State Machine states
- */
-typedef enum TxEventType_e
-{
-  /*!
-   * @brief Applicaiton data transmission issue based on timer with APP_TX_DUTYCYCLE
-   */
-  TX_ON_TIMER,
-  /*!
-   * @brief Application data transmission on external event (button press)
-   */
-  TX_ON_EVENT
-} TxEventType_t;
-
 /**
   * @brief  LoRa endNode send request
   * @param  none
@@ -55,13 +40,6 @@ static void SendTxData(void);
   * @return none
   */
 static void OnTxTimerRetransmission(void *context);
-
-/**
-  * @brief  TX timer callback function
-  * @param  timer context
-  * @return none
-  */
-static void OnTxTimerEvent(void *context);
 
 /**
   * @brief  LED timer callback function
@@ -136,11 +114,6 @@ static LmHandlerParams_t LmHandlerParams =
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
 /*!
- * Type of Event to generate application Tx
- */
-static TxEventType_t EventType = TX_ON_EVENT;
-
-/*!
  * Timer to handle the application Tx
  */
 static UTIL_TIMER_Object_t TxTimer;
@@ -158,42 +131,27 @@ void LoRaWAN_Init(void)
   LmHandlerInit(&LmHandlerCallbacks);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerPackageProcess), UTIL_SEQ_RFU, LmHandlerPackagesProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), UTIL_SEQ_RFU, SendTxData);
 
   LmHandlerConfigure(&LmHandlerParams);
 
   LmHandlerJoin(ActivationType);
 
-  if (EventType == TX_ON_TIMER)
+  if (freefall_init())
   {
-    /* send every time timer elapses */
-    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerEvent, NULL);
-    UTIL_TIMER_SetPeriod(&TxTimer, APP_TX_DUTYCYCLE);
-    UTIL_TIMER_Start(&TxTimer);
+    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
   }
   else
   {
-    if (freefall_init())
-    {
-      APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
-    }
-    else
-    {
-      APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
-    }
+    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
   }
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == BUTTON_SW1)
-  {
-    /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
-    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
-  }
   if (GPIO_Pin == ACC_INT_PIN)
   {
-    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), CFG_SEQ_Prio_0);
   }
 }
 
@@ -283,16 +241,8 @@ static void SendTxData(void)
 
 static void OnTxTimerRetransmission(void *context)
 {
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), CFG_SEQ_Prio_0);
   UTIL_TIMER_Stop(&TxTimer);
-}
-
-static void OnTxTimerEvent(void *context)
-{
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
-
-  /*Wait for next tx slot*/
-  UTIL_TIMER_Start(&TxTimer);
 }
 
 static void OnTimerLedEvent(void *context)

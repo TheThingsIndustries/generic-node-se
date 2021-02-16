@@ -536,8 +536,6 @@ uint32_t GNSE_BSP_BM_ReadChannel(void)
   */
 int32_t GNSE_BSP_Acc_Int_Init(void)
 {
-    GPIO_InitTypeDef gpio_init_structure = {0};
-
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     /* GPIO Ports Clock Enable */
@@ -548,7 +546,7 @@ int32_t GNSE_BSP_Acc_Int_Init(void)
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(ACC_INT_PORT, &GPIO_InitStruct);
-    HAL_NVIC_SetPriority(ACC_INT_IRQ, 3, 0);
+    HAL_NVIC_SetPriority(ACC_INT_IRQ, ACC_INT_PRIORITY, 0);
     HAL_NVIC_EnableIRQ(ACC_INT_IRQ);
 
     return GNSE_BSP_ERROR_NONE;

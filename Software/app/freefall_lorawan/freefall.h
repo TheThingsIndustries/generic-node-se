@@ -23,6 +23,4 @@
 #include "app.h"
 #include "LIS2DH12.h"
 
-extern stmdev_ctx_t dev_ctx;
-
 int8_t freefall_init(void);

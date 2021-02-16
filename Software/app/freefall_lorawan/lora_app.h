@@ -27,11 +27,6 @@ extern "C" {
 #define ACTIVE_REGION        LORAMAC_REGION_EU868
 
 /*!
- * Defines the application data transmission duty cycle. 10s, value in [ms].
- */
-#define APP_TX_DUTYCYCLE                            10000
-
-/*!
  * LoRaWAN application port
  * @note do not use 224. It is reserved for certification
  */

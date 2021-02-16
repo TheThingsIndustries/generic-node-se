@@ -24,8 +24,6 @@
 
 static int8_t freefall_registers_init(void);
 
-stmdev_ctx_t dev_ctx;
-
 int8_t freefall_init(void) 
 {
     /* Set load switch */
@@ -54,6 +52,7 @@ static int8_t freefall_registers_init(void)
 {
     int8_t acc_check;
     uint8_t whoami;
+    stmdev_ctx_t dev_ctx;
     
     acc_check = LIS2DH12_init(&dev_ctx);
 
