@@ -29,7 +29,7 @@
  */
 uint16_t GNSE_BM_GetInternalRefVoltage(void)
 {
-    uint16_t intenal_ref_mV = 0;
+    uint16_t internal_ref_mV = 0;
     uint32_t adc_measurement = 0;
 
     GNSE_BSP_BM_ConfChannel(VREF_ADC_CHANNEL);
@@ -42,9 +42,9 @@ uint16_t GNSE_BM_GetInternalRefVoltage(void)
              * (uint32_t)*VREFINT_CAL_ADDR
              * __LL_ADC_CALC_VREFANALOG_VOLTAGE(measuredLevel, ADC_RESOLUTION_12B)
              */
-        intenal_ref_mV = GNSE_BM_VREFINT_CAL / adc_measurement;
+        internal_ref_mV = GNSE_BM_VREFINT_CAL / adc_measurement;
     }
-    return intenal_ref_mV;
+    return internal_ref_mV;
 }
 
 /**
@@ -55,14 +55,14 @@ uint16_t GNSE_BM_GetInternalRefVoltage(void)
 uint16_t GNSE_BM_GetBatteryVoltage(void)
 {
     uint16_t battery_mV = 0;
-    uint16_t intenal_ref_mV = 0;
+    uint16_t internal_ref_mV = 0;
     uint32_t adc_measurement = 0;
-    intenal_ref_mV = GNSE_BM_GetInternalRefVoltage();
+    internal_ref_mV = GNSE_BM_GetInternalRefVoltage();
     GNSE_BSP_BM_ConfChannel(VBAT_ADC_CHANNEL);
     adc_measurement = GNSE_BSP_BM_ReadChannel();
     if (adc_measurement != 0)
     {
-        battery_mV = __LL_ADC_CALC_DATA_TO_VOLTAGE(intenal_ref_mV, adc_measurement, VBAT_ADC_RES);
+        battery_mV = __LL_ADC_CALC_DATA_TO_VOLTAGE(internal_ref_mV, adc_measurement, VBAT_ADC_RES);
         battery_mV = battery_mV * GNSE_BM_OUTPUT_DIVISION_RATIO;
     }
     return battery_mV;

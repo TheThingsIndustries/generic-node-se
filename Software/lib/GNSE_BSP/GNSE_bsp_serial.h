@@ -73,7 +73,7 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 #define SENSOR_I2C1                  I2C1
 #define SENSOR_I2C1_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
-#define SENSOR_I2C1_TIMOUT           100U //Read and write operattions timeout in ms
+#define SENSOR_I2C1_TIMOUT           100U //Read and write operations timeout in ms
 #define SENSOR_I2C1_PERIPH_CLK      RCC_PERIPHCLK_I2C1
 #define SENSOR_I2C1_SOURCE_CLK      RCC_I2C1CLKSOURCE_SYSCLK
 #define SENSOR_I2C1_FASTMODEPLUS    I2C_FASTMODEPLUS_I2C1
@@ -95,7 +95,7 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 #define SEC_ELM_I2C2                  I2C2
 #define SEC_ELM_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
-#define SEC_ELM_I2C2_TIMOUT           100U //Read and write operattions timeout in ms
+#define SEC_ELM_I2C2_TIMOUT           100U //Read and write operations timeout in ms
 #define SEC_ELM_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
 #define SEC_ELM_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
 #define SEC_ELM_I2C2_FASTMODEPLUS    I2C_FASTMODEPLUS_I2C2
@@ -117,7 +117,7 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 #define EXT_SENSOR_I2C2                  I2C2
 #define EXT_SENSOR_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
-#define EXT_SENSOR_I2C2_TIMOUT           100U //Read and write operattions timeout in ms
+#define EXT_SENSOR_I2C2_TIMOUT           100U //Read and write operations timeout in ms
 #define EXT_SENSOR_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
 #define EXT_SENSOR_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
 #define EXT_SENSOR_I2C2_FASTMODEPLUS    I2C_FASTMODEPLUS_I2C2
@@ -139,7 +139,7 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 
 #define FLASH_SPI SPI1
 #define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_256
-#define Flash_SPI_TIMOUT 100U        //Read and write operattions timeout in ms
+#define Flash_SPI_TIMOUT 100U        //Read and write operations timeout in ms
 
 #define FLASH_SPI_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
 #define FLASH_SPI_CLK_DISABLE() __HAL_RCC_SPI1_CLK_DISABLE()

@@ -75,7 +75,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
-    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAl
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
     ${PROJECT_SOURCE_DIR}/lib/SHTC3

@@ -37,7 +37,7 @@ extern "C" {
 
 /*
  * RP605Z283B Battery Monitor division ratio of the battery voltage
- * The converted ADC value represents the battery volatge divided by the ratio
+ * The converted ADC value represents the battery voltage divided by the ratio
  */
 #define GNSE_BM_OUTPUT_DIVISION_RATIO 3U
 
