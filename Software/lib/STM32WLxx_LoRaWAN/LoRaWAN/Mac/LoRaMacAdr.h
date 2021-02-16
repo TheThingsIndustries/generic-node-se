@@ -42,6 +42,8 @@ extern "C"
 {
 #endif
 
+/*! \} defgroup LORAMACADR */
+
 /*
  * Parameter structure for the function CalcNextAdr.
  */
@@ -109,5 +111,3 @@ bool LoRaMacAdrCalcNext( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* tx
 #endif
 
 #endif // __LORAMACADR_H__
-
-/*! \} defgroup LORAMACADR */

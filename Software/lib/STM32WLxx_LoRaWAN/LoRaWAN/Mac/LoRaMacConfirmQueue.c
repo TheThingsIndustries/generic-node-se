@@ -32,7 +32,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "timer.h"
 #include "utilities.h"
+#include "LoRaMac.h"
 #include "LoRaMacConfirmQueue.h"
 
 

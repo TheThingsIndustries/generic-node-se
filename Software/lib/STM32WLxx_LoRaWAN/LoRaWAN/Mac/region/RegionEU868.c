@@ -28,9 +28,10 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
 */
+#include "utilities.h"
+
 #include "RegionCommon.h"
 #include "RegionEU868.h"
-#include "mw_log_conf.h"
 
 // Definitions
 #define CHANNELS_MASK_SIZE              1
@@ -143,6 +144,23 @@ static bool VerifyRfFreq( uint32_t freq, uint8_t *band )
     return true;
 }
 
+static TimerTime_t GetTimeOnAir( int8_t datarate, uint16_t pktLen )
+{
+    int8_t phyDr = DataratesEU868[datarate];
+    uint32_t bandwidth = GetBandwidth( datarate );
+    TimerTime_t timeOnAir = 0;
+
+    if( datarate == DR_7 )
+    { // High Speed FSK channel
+        timeOnAir = Radio.TimeOnAir( MODEM_FSK, bandwidth, phyDr * 1000, 0, 5, false, pktLen, true );
+    }
+    else
+    {
+        timeOnAir = Radio.TimeOnAir( MODEM_LORA, bandwidth, phyDr, 1, 8, false, pktLen, true );
+    }
+    return timeOnAir;
+}
+
 PhyParam_t RegionEU868GetPhyParam( GetPhyParams_t* getPhy )
 {
     PhyParam_t phyParam = { 0 };
@@ -192,6 +210,11 @@ PhyParam_t RegionEU868GetPhyParam( GetPhyParams_t* getPhy )
         case PHY_MAX_PAYLOAD:
         {
             phyParam.Value = MaxPayloadOfDatarateEU868[getPhy->Datarate];
+            break;
+        }
+        case PHY_MAX_PAYLOAD_REPEATER:
+        {
+            phyParam.Value = MaxPayloadOfDatarateRepeaterEU868[getPhy->Datarate];
             break;
         }
         case PHY_DUTY_CYCLE:
@@ -312,14 +335,14 @@ PhyParam_t RegionEU868GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = EU868_PING_SLOT_CHANNEL_DR;
             break;
         }
-        case PHY_BW_FROM_DR:
-        {
-            phyParam.Value = GetBandwidth(getPhy->Datarate);
-            break;
-        }
         case PHY_SF_FROM_DR:
         {
             phyParam.Value = DataratesEU868[getPhy->Datarate];
+            break;
+        }
+        case PHY_BW_FROM_DR:
+        {
+            phyParam.Value = GetBandwidth( getPhy->Datarate );
             break;
         }
         default:
@@ -333,7 +356,8 @@ PhyParam_t RegionEU868GetPhyParam( GetPhyParams_t* getPhy )
 
 void RegionEU868SetBandTxDone( SetBandTxDoneParams_t* txDone )
 {
-    RegionCommonSetBandTxDone( txDone->Joined, &NvmCtx.Bands[NvmCtx.Channels[txDone->Channel].Band], txDone->LastTxDoneTime );
+    RegionCommonSetBandTxDone( &NvmCtx.Bands[NvmCtx.Channels[txDone->Channel].Band],
+                               txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
 }
 
 void RegionEU868InitDefaults( InitDefaultsParams_t* params )
@@ -350,24 +374,37 @@ void RegionEU868InitDefaults( InitDefaultsParams_t* params )
 
     switch( params->Type )
     {
-        case INIT_TYPE_BANDS:
+        case INIT_TYPE_DEFAULTS:
         {
-            // Initialize bands
+            // Default bands
             memcpy1( ( uint8_t* )NvmCtx.Bands, ( uint8_t* )bands, sizeof( Band_t ) * EU868_MAX_NB_BANDS );
-            break;
-        }
-        case INIT_TYPE_INIT:
-        {
-            // Channels
+
+            // Default channels
             NvmCtx.Channels[0] = ( ChannelParams_t ) EU868_LC1;
             NvmCtx.Channels[1] = ( ChannelParams_t ) EU868_LC2;
             NvmCtx.Channels[2] = ( ChannelParams_t ) EU868_LC3;
 
-            // Initialize the channels default mask
+            // Default ChannelsMask
             NvmCtx.ChannelsDefaultMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 );
 
             // Update the channels mask
-            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, NvmCtx.ChannelsDefaultMask, 1 );
+            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, NvmCtx.ChannelsDefaultMask, CHANNELS_MASK_SIZE );
+            break;
+        }
+        case INIT_TYPE_RESET_TO_DEFAULT_CHANNELS:
+        {
+            // Reset Channels Rx1Frequency to default 0
+            NvmCtx.Channels[0].Rx1Frequency = 0;
+            NvmCtx.Channels[1].Rx1Frequency = 0;
+            NvmCtx.Channels[2].Rx1Frequency = 0;
+            // Update the channels mask
+            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, NvmCtx.ChannelsDefaultMask, CHANNELS_MASK_SIZE );
+            break;
+        }
+        case INIT_TYPE_ACTIVATE_DEFAULT_CHANNELS:
+        {
+            // Restore channels default mask
+            NvmCtx.ChannelsMask[0] |= NvmCtx.ChannelsDefaultMask[0];
             break;
         }
         case INIT_TYPE_RESTORE_CTX:
@@ -376,17 +413,6 @@ void RegionEU868InitDefaults( InitDefaultsParams_t* params )
             {
                 memcpy1( (uint8_t*) &NvmCtx, (uint8_t*) params->NvmCtx, sizeof( NvmCtx ) );
             }
-            break;
-        }
-        case INIT_TYPE_RESTORE_DEFAULT_CHANNELS:
-        {
-            // Restore channels default mask
-            NvmCtx.ChannelsMask[0] |= NvmCtx.ChannelsDefaultMask[0];
-
-            // Channels
-            NvmCtx.Channels[0] = ( ChannelParams_t ) EU868_LC1;
-            NvmCtx.Channels[1] = ( ChannelParams_t ) EU868_LC2;
-            NvmCtx.Channels[2] = ( ChannelParams_t ) EU868_LC3;
             break;
         }
         default:
@@ -519,7 +545,9 @@ bool RegionEU868ChanMaskSet( ChanMaskSetParams_t* chanMaskSet )
 
 void RegionEU868ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams )
 {
-    double tSymbol = 0.0;
+    /* ST_WORKAROUND_BEGIN: remove float/double */
+    uint32_t tSymbol = 0;
+    /* ST_WORKAROUND_END */
 
     // Get the datarate, perform a boundary check
     rxConfigParams->Datarate = MIN( datarate, EU868_RX_MAX_DATARATE );
@@ -541,9 +569,9 @@ bool RegionEU868RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
 {
     RadioModems_t modem;
     int8_t dr = rxConfig->Datarate;
+    uint8_t maxPayload = 0;
     int8_t phyDr = 0;
     uint32_t frequency = rxConfig->Frequency;
-    const char *slotStrings[] = { "1", "2", "C", "Multi_C", "P", "Multi_P" };
 
     if( Radio.GetStatus( ) != RF_IDLE )
     {
@@ -578,15 +606,19 @@ bool RegionEU868RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
         Radio.SetRxConfig( modem, rxConfig->Bandwidth, phyDr, 1, 0, 8, rxConfig->WindowTimeout, false, 0, false, 0, 0, true, rxConfig->RxContinuous );
     }
 
-    Radio.SetMaxPayloadLength( modem, MaxPayloadOfDatarateEU868[dr] + LORA_MAC_FRMPAYLOAD_OVERHEAD );
-    if ( rxConfig->RxSlot < RX_SLOT_NONE )
+    if( rxConfig->RepeaterSupport == true )
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX_%s on freq %d Hz at DR %d\r\n", slotStrings[rxConfig->RxSlot], frequency, dr );
+        maxPayload = MaxPayloadOfDatarateRepeaterEU868[dr];
     }
     else
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX on freq %d Hz at DR %d\r\n", frequency, dr );
+        maxPayload = MaxPayloadOfDatarateEU868[dr];
     }
+
+    Radio.SetMaxPayloadLength( modem, maxPayload + LORAMAC_FRAME_PAYLOAD_OVERHEAD_SIZE );
+    /* ST_WORKAROUND_BEGIN: Print Rx config */
+    RegionCommonRxConfigPrint(rxConfig->RxSlot, frequency, dr);
+    /* ST_WORKAROUND_END */
 
     *datarate = (uint8_t) dr;
     return true;
@@ -610,19 +642,20 @@ bool RegionEU868TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     { // High Speed FSK channel
         modem = MODEM_FSK;
         Radio.SetTxConfig( modem, phyTxPower, 25000, bandwidth, phyDr * 1000, 0, 5, false, true, 0, 0, false, 4000 );
-        // Get the time-on-air of the next tx frame
-        *txTimeOnAir = Radio.TimeOnAir( modem, bandwidth, phyDr * 1000, 0, 5, false, txConfig->PktLen, true );
     }
     else
     {
         modem = MODEM_LORA;
         Radio.SetTxConfig( modem, phyTxPower, 0, bandwidth, phyDr, 1, 8, false, true, 0, 0, false, 4000 );
-        // Get the time-on-air of the next tx frame
-        *txTimeOnAir = Radio.TimeOnAir( modem, bandwidth, phyDr, 1, 8, false, txConfig->PktLen, true );
     }
-    MW_LOG(TS_ON, VLEVEL_M,  "TX on freq %d Hz at DR %d\r\n", NvmCtx.Channels[txConfig->Channel].Frequency, txConfig->Datarate );
+    /* ST_WORKAROUND_BEGIN: Print Tx config */
+    RegionCommonTxConfigPrint(NvmCtx.Channels[txConfig->Channel].Frequency, txConfig->Datarate);
+    /* ST_WORKAROUND_END */
 
-    // Setup maximum payload lenght of the radio driver
+    // Update time-on-air
+    *txTimeOnAir = GetTimeOnAir( txConfig->Datarate, txConfig->PktLen );
+
+    // Setup maximum payload length of the radio driver
     Radio.SetMaxPayloadLength( modem, txConfig->PktLen );
 
     *txPower = txPowerLimited;
@@ -632,7 +665,7 @@ bool RegionEU868TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 uint8_t RegionEU868LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, int8_t* txPowOut, uint8_t* nbRepOut, uint8_t* nbBytesParsed )
 {
     uint8_t status = 0x07;
-    RegionCommonLinkAdrParams_t linkAdrParams;
+    RegionCommonLinkAdrParams_t linkAdrParams = { 0 };
     uint8_t nextIndex = 0;
     uint8_t bytesProcessed = 0;
     uint16_t chMask = 0;
@@ -849,22 +882,6 @@ int8_t RegionEU868AlternateDr( int8_t currentDr, AlternateDrType_t type )
     return currentDr;
 }
 
-void RegionEU868CalcBackOff( CalcBackOffParams_t* calcBackOff )
-{
-    RegionCommonCalcBackOffParams_t calcBackOffParams;
-
-    calcBackOffParams.Channels = NvmCtx.Channels;
-    calcBackOffParams.Bands = NvmCtx.Bands;
-    calcBackOffParams.LastTxIsJoinRequest = calcBackOff->LastTxIsJoinRequest;
-    calcBackOffParams.Joined = calcBackOff->Joined;
-    calcBackOffParams.DutyCycleEnabled = calcBackOff->DutyCycleEnabled;
-    calcBackOffParams.Channel = calcBackOff->Channel;
-    calcBackOffParams.ElapsedTime = calcBackOff->ElapsedTime;
-    calcBackOffParams.TxTimeOnAir = calcBackOff->TxTimeOnAir;
-
-    RegionCommonCalcBackOff( &calcBackOffParams );
-}
-
 LoRaMacStatus_t RegionEU868NextChannel( NextChanParams_t* nextChanParams, uint8_t* channel, TimerTime_t* time, TimerTime_t* aggregatedTimeOff )
 {
     uint8_t nbEnabledChannels = 0;
@@ -893,15 +910,14 @@ LoRaMacStatus_t RegionEU868NextChannel( NextChanParams_t* nextChanParams, uint8_
     identifyChannelsParam.DutyCycleEnabled = nextChanParams->DutyCycleEnabled;
     identifyChannelsParam.MaxBands = EU868_MAX_NB_BANDS;
 
+    identifyChannelsParam.ElapsedTimeSinceStartUp = nextChanParams->ElapsedTimeSinceStartUp;
+    identifyChannelsParam.LastTxIsJoinRequest = nextChanParams->LastTxIsJoinRequest;
+    identifyChannelsParam.ExpectedTimeOnAir = GetTimeOnAir( nextChanParams->Datarate, nextChanParams->PktLen );
+
     identifyChannelsParam.CountNbOfEnabledChannelsParam = &countChannelsParams;
 
     status = RegionCommonIdentifyChannels( &identifyChannelsParam, aggregatedTimeOff, enabledChannels,
                                            &nbEnabledChannels, &nbRestrictedChannels, time );
-
-    if( nextChanParams->QueryNextTxDelayOnly == true )
-    {
-        return status;
-    }
 
     if( status == LORAMAC_STATUS_OK )
     {

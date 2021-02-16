@@ -20,6 +20,34 @@
  ******************************************************************************
   @endverbatim
 
+### V2.2.1/2-Oct-2020 ###
+===============================
+   + Multiple tools write to the same file' if AES + LoRaWAN + option .c/.h
+
+   + Update file-license
+   
+   + remove KMS init from LoRaWAN Middleware (move to application part)
+   
+   + Update Key List usage with a reworked init part: set a static const + memcpy to prevent a Stop/Restart of LoRaMAC
+   
+   + Release Notes update
+
+### V2.2.0/4-Sept-2020 ###
+===============================
+   + Implements LoRa Mac from Semtech/StackForce develop branch (26-May-2020 commits, version 4.4.4)
+
+   + Fixed SetLoRaSymbNumTimeout. RX Continuous bug on ClassC
+   
+   + revert AU915 regional parameters 1.0.3 errata feature
+   
+   + Remove LoRaWAN 1.1 + MC Group[1..3] Keys
+   
+   + Add missing ping_slot_nb_channels case to getPhy regions (hopping feature)
+   
+   + RepeaterSupport feature set back
+   
+   + LmHandlerSend error codes implementation
+
 ### V2.1.0/29-June-2020 ###
 ===============================
    + Moves the contents of folder Patterns/Advanced/ to LmHandler/
@@ -31,11 +59,11 @@
       - Update of CryptoJoinAccept with fix of security vulnerabilities
       - Fix uplink messages burst with ClassB usage
 
-   + new LmHandler services addition: Firmware Management and Data Distribution
+   + New LmHandler services addition: Firmware Management and Data Distribution
 
    + Fix some Keil-related issues
 
-   + update files license and copyright year
+   + Update files license and copyright year
 
    + Known limitations:
      - IN865 ClassB beacon reception
@@ -52,7 +80,7 @@
       - integration of Semtech LmHandler
       - ST specific certif features factorization
       - rearchitecture : removal of lora.c
-      - new services addition: compliancy, clock sync, multicast & fragmentation
+      - new services addition: compliance, clock sync, multicast & fragmentation
       
    + KMS integration done in Crypto & LmHandler folders (mbed-crypto called)
    
@@ -233,8 +261,8 @@
 ### V1.0.0/01-July-2016 ###
 ===============================
    + First R1.0.0 customized version for STM32Cube solution.
-   + Comissioning_template.h in /Conf contains all Lora Ids to connect on LoRa network
-         It is provided as a template. It must be moved to /Projects/inc/ as Comissioning.h
+   + Commissioning_template.h in /Conf contains all Lora Ids to connect on LoRa network
+         It is provided as a template. It must be moved to /Projects/inc/ as Commissioning.h
    + All files in Conf/src are provided as template and must be copied in /Projects/src. 
    + All files in Conf/inc are provided as template and must be copied in /Projects/inc.
 		#if 0 and #endif must be removed to enable the template in the user directory

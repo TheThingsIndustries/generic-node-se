@@ -44,6 +44,9 @@ extern "C"
 {
 #endif
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "LoRaMac.h"
 
 /*!
@@ -199,5 +202,3 @@ bool LoRaMacConfirmQueueIsFull( void );
 #endif
 
 #endif // __LORAMAC_CONFIRMQUEUE_H__
-
-/*! \} defgroup LORAMACCONFIRMQUEUE */

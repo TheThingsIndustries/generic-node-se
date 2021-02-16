@@ -37,16 +37,16 @@ DEALINGS WITH THE SOFTWARE
 #define _CMAC_H_
 
 #ifdef __cplusplus
-extern "C"
+extern "C" {
 #endif
 
-#include "aes.h" 
+#include "lorawan_aes.h" 
   
 #define AES_CMAC_KEY_LENGTH     16
 #define AES_CMAC_DIGEST_LENGTH  16
  
 typedef struct _AES_CMAC_CTX {
-            aes_context    rijndael;
+            lorawan_aes_context    rijndael;
             uint8_t        X[16];
             uint8_t        M_last[16];
             uint32_t       M_n;

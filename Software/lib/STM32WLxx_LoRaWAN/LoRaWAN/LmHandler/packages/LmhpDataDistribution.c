@@ -9,10 +9,10 @@
   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -30,14 +30,13 @@
 #include "flash_if.h"
 #include "se_def_metadata.h"
 
-#if defined (__ICCARM__) || defined(__GNUC__)
-#include "mapping_export.h"         /* to access to the definition of REGION_SLOT_1_START*/
-#elif defined(__CC_ARM)
-#include "mapping_fwimg.h"
-#endif /* __ICCARM__ | __GNUC__ | __CC_ARM */
+#define SFU_FWIMG_COMMON_C
+#include "sfu_fwimg_regions.h"
 
 /* Private typedef -----------------------------------------------------------*/
-/*structure containing values related to the management of multi-images in Flash*/
+/*! 
+ * Structure containing values related to the management of multi-images in Flash
+ */
 typedef struct
 {
   uint32_t  MaxSizeInBytes;        /*!< The maximum allowed size for the FwImage in User Flash (in Bytes) */
@@ -75,10 +74,14 @@ typedef struct
  */
 #define UNFRAGMENTED_DATA_SIZE                      ( FRAG_MAX_NB * FRAG_MAX_SIZE )
 
-/*starting offset to add to the  first address */
+/*!
+ * Starting offset to add to the  first address
+ */
 #define SFU_IMG_IMAGE_OFFSET                        ((uint32_t)512U)
 
-/*size of header to write in Swap sector to trigger installation*/
+/*!
+ * Size of header to write in Swap sector to trigger installation
+ */
 #define INSTALLED_LENGTH                            ((uint32_t)512U)
 
 #define SFU_IMG_SWAP_REGION_SIZE                    ((uint32_t)(SWAP_END - SWAP_START + 1U))
@@ -249,7 +252,7 @@ static uint8_t FragDecoderErase(uint32_t addr, uint32_t size)
     UnfragmentedData[addr + i] = 0xFF;
   }
 #else /* INTEROP_TEST_MODE == 0 */
-  if (FLASH_Erase((void *)(SLOT_DWL_1_START + addr), size) != HAL_OK)
+  if (FLASH_Erase((void *)(SlotStartAdd[SLOT_DWL_1] + addr), size) != HAL_OK)
   {
     return -1;
   }
@@ -269,7 +272,7 @@ static uint8_t FragDecoderWrite(uint32_t addr, uint8_t *data, uint32_t size)
     UnfragmentedData[addr + i] = data[i];
   }
 #else /* INTEROP_TEST_MODE == 0 */
-  if (FLASH_Write(SLOT_DWL_1_START + addr, data, size) != HAL_OK)
+  if (FLASH_Write(SlotStartAdd[SLOT_DWL_1] + addr, data, size) != HAL_OK)
   {
     return -1;
   }
@@ -291,7 +294,7 @@ static uint8_t FragDecoderRead(uint32_t addr, uint8_t *data, uint32_t size)
     data[i] = UnfragmentedData[addr + i];
   }
 #else /* INTEROP_TEST_MODE == 0 */
-  if (FLASH_Read((void *)(SLOT_DWL_1_START + addr), data, size) != HAL_OK)
+  if (FLASH_Read((void *)(SlotStartAdd[SLOT_DWL_1] + addr), data, size) != HAL_OK)
   {
     return -1;
   }

@@ -287,6 +287,135 @@ typedef struct sLoRaMacClassBParams
  */
 typedef void ( *LoRaMacClassBNvmEvent )( void );
 
+/*
+ * LoRaMac Class B Context structure for NVM parameters
+ * related to ping slots
+ */
+typedef struct sLoRaMacClassBPingSlotNvmCtx
+{
+    struct sPingSlotCtrlNvm
+    {
+        /*!
+         * Set when the server assigned a ping slot to the node
+         */
+        uint8_t Assigned         : 1;
+        /*!
+         * Set when a custom frequency is used
+         */
+        uint8_t CustomFreq       : 1;
+    }Ctrl;
+    /*!
+     * Number of ping slots
+     */
+    uint8_t PingNb;
+    /*!
+     * Period of the ping slots
+     */
+    uint16_t PingPeriod;
+    /*!
+     * Reception frequency of the ping slot windows
+     */
+    uint32_t Frequency;
+    /*!
+     * Datarate of the ping slot
+     */
+    int8_t Datarate;
+} LoRaMacClassBPingSlotNvmCtx_t;
+
+/*
+ * LoRaMac Class B Context structure for NVM parameters
+ * related to beaconing
+ */
+typedef struct sLoRaMacClassBBeaconNvmCtx
+{
+    struct sBeaconCtrlNvm
+    {
+        /*!
+         * Set if the node has a custom frequency for beaconing and ping slots
+         */
+        uint8_t CustomFreq          : 1;
+    }Ctrl;
+    /*!
+     * Beacon reception frequency
+     */
+    uint32_t Frequency;
+    /*!
+     * State of the beaconing mechanism
+     */
+    BeaconState_t BeaconState;
+} LoRaMacClassBBeaconNvmCtx_t;
+
+/*
+ * LoRaMac Class B Context structure
+ */
+typedef struct sLoRaMacClassBNvmCtx
+{
+    /*!
+    * Class B ping slot context
+    */
+    LoRaMacClassBPingSlotNvmCtx_t PingSlotCtx;
+    /*!
+    * Class B beacon context
+    */
+    LoRaMacClassBBeaconNvmCtx_t BeaconCtx;
+} LoRaMacClassBNvmCtx_t;
+
+/*
+ * LoRaMac Class B Context structure
+ */
+typedef struct sLoRaMacClassBCtx
+{
+    /*!
+    * Class B ping slot context
+    */
+    PingSlotContext_t PingSlotCtx;
+    /*!
+    * Class B beacon context
+    */
+    BeaconContext_t BeaconCtx;
+    /*!
+    * State of the beaconing mechanism
+    */
+    BeaconState_t BeaconState;
+    /*!
+    * State of the ping slot mechanism
+    */
+    PingSlotState_t PingSlotState;
+    /*!
+    * State of the multicast slot mechanism
+    */
+    PingSlotState_t MulticastSlotState;
+    /*!
+    * Timer for CLASS B beacon acquisition and tracking.
+    */
+    TimerEvent_t BeaconTimer;
+    /*!
+    * Timer for CLASS B ping slot timer.
+    */
+    TimerEvent_t PingSlotTimer;
+    /*!
+    * Timer for CLASS B multicast ping slot timer.
+    */
+    TimerEvent_t MulticastSlotTimer;
+    /*!
+    * Container for the callbacks related to class b.
+    */
+    LoRaMacClassBCallback_t LoRaMacClassBCallbacks;
+    /*!
+    * Data structure which holds the parameters which needs to be set
+    * in class b operation.
+    */
+    LoRaMacClassBParams_t LoRaMacClassBParams;
+    /*
+     * Callback function to notify the upper layer about context change
+     */
+    LoRaMacClassBNvmEvent LoRaMacClassBNvmEvent;
+    /*!
+    * Non-volatile module context.
+    */
+    LoRaMacClassBNvmCtx_t* NvmCtx;
+} LoRaMacClassBCtx_t;
+
 /*!
  * \brief Initialize LoRaWAN Class B
  *
@@ -532,140 +661,8 @@ void LoRaMacClassBSetMulticastPeriodicity( MulticastCtx_t* multicastChannel );
 
 void LoRaMacClassBProcess( void );
 
-
-/*
- * LoRaMac Class B Context structure for NVM parameters
- * related to ping slots
- */
-typedef struct sLoRaMacClassBPingSlotNvmCtx
-{
-    struct sPingSlotCtrlNvm
-    {
-        /*!
-         * Set when the server assigned a ping slot to the node
-         */
-        uint8_t Assigned         : 1;
-        /*!
-         * Set when a custom frequency is used
-         */
-        uint8_t CustomFreq       : 1;
-    }Ctrl;
-    /*!
-     * Number of ping slots
-     */
-    uint8_t PingNb;
-    /*!
-     * Period of the ping slots
-     */
-    uint16_t PingPeriod;
-    /*!
-     * Reception frequency of the ping slot windows
-     */
-    uint32_t Frequency;
-    /*!
-     * Datarate of the ping slot
-     */
-    int8_t Datarate;
-} LoRaMacClassBPingSlotNvmCtx_t;
-
-/*
- * LoRaMac Class B Context structure for NVM parameters
- * related to beaconing
- */
-typedef struct sLoRaMacClassBBeaconNvmCtx
-{
-    struct sBeaconCtrlNvm
-    {
-        /*!
-         * Set if the node has a custom frequency for beaconing and ping slots
-         */
-        uint8_t CustomFreq          : 1;
-    }Ctrl;
-    /*!
-     * Beacon reception frequency
-     */
-    uint32_t Frequency;
-    /*!
-     * State of the beaconing mechanism
-     */
-    BeaconState_t BeaconState;
-} LoRaMacClassBBeaconNvmCtx_t;
-
-/*
- * LoRaMac Class B Context structure
- */
-typedef struct sLoRaMacClassBNvmCtx
-{
-    /*!
-    * Class B ping slot context
-    */
-    LoRaMacClassBPingSlotNvmCtx_t PingSlotCtx;
-    /*!
-    * Class B beacon context
-    */
-    LoRaMacClassBBeaconNvmCtx_t BeaconCtx;
-} LoRaMacClassBNvmCtx_t;
-
-/*
- * LoRaMac Class B Context structure
- */
-typedef struct sLoRaMacClassBCtx
-{
-    /*!
-    * Class B ping slot context
-    */
-    PingSlotContext_t PingSlotCtx;
-    /*!
-    * Class B beacon context
-    */
-    BeaconContext_t BeaconCtx;
-    /*!
-    * State of the beaconing mechanism
-    */
-    BeaconState_t BeaconState;
-    /*!
-    * State of the ping slot mechanism
-    */
-    PingSlotState_t PingSlotState;
-    /*!
-    * State of the multicast slot mechanism
-    */
-    PingSlotState_t MulticastSlotState;
-    /*!
-    * Timer for CLASS B beacon acquisition and tracking.
-    */
-    TimerEvent_t BeaconTimer;
-    /*!
-    * Timer for CLASS B ping slot timer.
-    */
-    TimerEvent_t PingSlotTimer;
-    /*!
-    * Timer for CLASS B multicast ping slot timer.
-    */
-    TimerEvent_t MulticastSlotTimer;
-    /*!
-    * Container for the callbacks related to class b.
-    */
-    LoRaMacClassBCallback_t LoRaMacClassBCallbacks;
-    /*!
-    * Data structure which holds the parameters which needs to be set
-    * in class b operation.
-    */
-    LoRaMacClassBParams_t LoRaMacClassBParams;
-    /*
-     * Callback function to notify the upper layer about context change
-     */
-    LoRaMacClassBNvmEvent LoRaMacClassBNvmEvent;
-    /*!
-    * Non-volatile module context.
-    */
-    LoRaMacClassBNvmCtx_t* NvmCtx;
-} LoRaMacClassBCtx_t;
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __LORAMACCLASSB_H__
-
-/*! \} defgroup LORAMACCLASSB */

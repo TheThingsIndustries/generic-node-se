@@ -52,11 +52,11 @@ extern "C" {
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-LmhPackage_t *LmhpRemoteMcastSetupPackageFactory( void );
+LmhPackage_t *LmhpRemoteMcastSetupPackageFactory(void);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __LMHP_REMOTE_MCAST_SETUP_H__
+#endif /* __LMHP_REMOTE_MCAST_SETUP_H__ */

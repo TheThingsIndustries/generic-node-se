@@ -30,11 +30,13 @@
  */
 
 #include <math.h>
-#include "radio.h"
+#include "utilities.h"
 #include "secure-element.h"
+#include "LoRaMac.h"
 #include "Region.h"
 #include "LoRaMacClassB.h"
 #include "LoRaMacClassBConfig.h"
+#include "LoRaMacCrypto.h"
 #include "LoRaMacConfirmQueue.h"
 
 #if ( LORAMAC_CLASSB_ENABLED == 1 )
@@ -198,8 +200,14 @@ static uint32_t CalcDownlinkChannelAndFrequency( uint32_t devAddr, TimerTime_t b
     uint32_t channel = 0;
     uint8_t nbChannels = 0;
 
-    // Beacon or Ping Slot channels
-    getPhy.Attribute = PHY_BEACON_NB_CHANNELS;
+    // Default initialization - ping slot channels
+    getPhy.Attribute = PHY_PING_SLOT_NB_CHANNELS;
+
+    if( isBeacon == true )
+    {
+        // Beacon channels
+        getPhy.Attribute = PHY_BEACON_NB_CHANNELS;
+    }
     phyParam = RegionGetPhyParam( *Ctx.LoRaMacClassBParams.LoRaMacRegion, &getPhy );
     nbChannels = ( uint8_t ) phyParam.Value;
 
@@ -369,7 +377,7 @@ static void GetTemperature( LoRaMacClassBCallback_t *callbacks, BeaconContext_t 
     // Measure temperature, if available
     if( ( callbacks != NULL ) && ( callbacks->GetTemperatureLevel != NULL ) )
     {
-        beaconCtx->Temperature = (float) callbacks->GetTemperatureLevel( );
+        beaconCtx->Temperature = callbacks->GetTemperatureLevel( );
     }
 }
 
@@ -970,6 +978,7 @@ static void LoRaMacClassBProcessPingSlot( void )
 
                 pingSlotRxConfig.Datarate = Ctx.NvmCtx->PingSlotCtx.Datarate;
                 pingSlotRxConfig.DownlinkDwellTime = Ctx.LoRaMacClassBParams.LoRaMacParams->DownlinkDwellTime;
+                pingSlotRxConfig.RepeaterSupport = Ctx.LoRaMacClassBParams.LoRaMacParams->RepeaterSupport;
                 pingSlotRxConfig.Frequency = frequency;
                 pingSlotRxConfig.RxContinuous = false;
                 pingSlotRxConfig.RxSlot = RX_SLOT_WIN_CLASS_B_PING_SLOT;
@@ -1040,7 +1049,7 @@ static void LoRaMacClassBProcessMulticastSlot( void )
         case PINGSLOT_STATE_CALC_PING_OFFSET:
         {
             // Compute all offsets for every multicast slots
-            for( uint8_t i = 0; i < 4; i++ )
+            for( uint8_t i = 0; i < LORAMAC_MAX_MC_CTX; i++ )
             {
                 ComputePingOffset( Ctx.BeaconCtx.BeaconTime.Seconds,
                                    cur->ChannelParams.Address,
@@ -1056,7 +1065,7 @@ static void LoRaMacClassBProcessMulticastSlot( void )
             cur = Ctx.LoRaMacClassBParams.MulticastChannels;
             Ctx.PingSlotCtx.NextMulticastChannel = NULL;
 
-            for( uint8_t i = 0; i < 4; i++ )
+            for( uint8_t i = 0; i < LORAMAC_MAX_MC_CTX; i++ )
             {
                 // Calculate the next slot time for every multicast slot
                 if( CalcNextSlotTime( cur->PingOffset, cur->PingPeriod, cur->PingNb, &slotTime ) == true )
@@ -1124,6 +1133,7 @@ static void LoRaMacClassBProcessMulticastSlot( void )
 
             multicastSlotRxConfig.Datarate = Ctx.PingSlotCtx.NextMulticastChannel->ChannelParams.RxParams.ClassB.Datarate;
             multicastSlotRxConfig.DownlinkDwellTime = Ctx.LoRaMacClassBParams.LoRaMacParams->DownlinkDwellTime;
+            multicastSlotRxConfig.RepeaterSupport = Ctx.LoRaMacClassBParams.LoRaMacParams->RepeaterSupport;
             multicastSlotRxConfig.Frequency = frequency;
             multicastSlotRxConfig.RxContinuous = false;
             multicastSlotRxConfig.RxSlot = RX_SLOT_WIN_CLASS_B_MULTICAST_SLOT;
@@ -1220,7 +1230,8 @@ bool LoRaMacClassBRxBeacon( uint8_t *payload, uint16_t size )
             if( beaconProcessed == true )
             {
                 uint32_t spreadingFactor = 0;
-                uint32_t bandwith = 0;
+                uint32_t bandwidth = 0;
+
                 getPhy.Attribute = PHY_BEACON_CHANNEL_DR;
                 phyParam = RegionGetPhyParam( *Ctx.LoRaMacClassBParams.LoRaMacRegion, &getPhy );
 
@@ -1231,9 +1242,9 @@ bool LoRaMacClassBRxBeacon( uint8_t *payload, uint16_t size )
 
                 getPhy.Attribute = PHY_BW_FROM_DR;
                 phyParam = RegionGetPhyParam( *Ctx.LoRaMacClassBParams.LoRaMacRegion, &getPhy );
-                bandwith = phyParam.Value;
+                bandwidth = phyParam.Value;
 
-                TimerTime_t time = Radio.TimeOnAir( MODEM_LORA, bandwith, spreadingFactor, 1, 10, true, size, false );
+                TimerTime_t time = Radio.TimeOnAir( MODEM_LORA, bandwidth, spreadingFactor, 1, 10, true, size, false );
                 SysTime_t timeOnAir;
                 timeOnAir.Seconds = time / 1000;
                 timeOnAir.SubSeconds = time - timeOnAir.Seconds * 1000;

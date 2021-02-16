@@ -46,18 +46,18 @@ extern "C" {
  * \remark This value must be unique amongst the packages
  */
 #define PACKAGE_ID_CLOCK_SYNC                       1
-  
+
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-LmhPackage_t *LmphClockSyncPackageFactory( void );
+LmhPackage_t *LmphClockSyncPackageFactory(void);
 
-LmHandlerErrorStatus_t LmhpClockSyncAppTimeReq( void );
+LmHandlerErrorStatus_t LmhpClockSyncAppTimeReq(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __LMHP_CLOCK_SYNC_H__
+#endif /* __LMHP_CLOCK_SYNC_H__ */

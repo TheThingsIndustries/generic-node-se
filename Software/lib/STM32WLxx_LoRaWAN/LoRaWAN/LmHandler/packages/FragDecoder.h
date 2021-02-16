@@ -106,8 +106,8 @@ typedef struct sFragDecoderCallbacks
   /*!
    * Init `data` buffer of `size` starting at address `addr`
    *
-   * \param [IN] addr Address start index to erase.
-   * \param [IN] size number of bytes.
+   * \param [in] addr Address start index to erase.
+   * \param [in] size number of bytes.
    *
    * \retval status Write operation status [0: Success, -1 Fail]
    */
@@ -115,9 +115,9 @@ typedef struct sFragDecoderCallbacks
   /*!
    * Writes `data` buffer of `size` starting at address `addr`
    *
-   * \param [IN] addr Address start index to write to.
-   * \param [IN] data Data buffer to be written.
-   * \param [IN] size Size of data buffer to be written.
+   * \param [in] addr Address start index to write to.
+   * \param [in] data Data buffer to be written.
+   * \param [in] size Size of data buffer to be written.
    *
    * \retval status Write operation status [0: Success, -1 Fail]
    */
@@ -125,9 +125,9 @@ typedef struct sFragDecoderCallbacks
   /*!
    * Reads `data` buffer of `size` starting at address `addr`
    *
-   * \param [IN] addr Address start index to read from.
-   * \param [IN] data Data buffer to be read.
-   * \param [IN] size Size of data buffer to be read.
+   * \param [in] addr Address start index to read from.
+   * \param [in] data Data buffer to be read.
+   * \param [in] size Size of data buffer to be read.
    *
    * \retval status Read operation status [0: Success, -1 Fail]
    */
@@ -140,9 +140,9 @@ typedef struct sFragDecoderCallbacks
 /*!
  * \brief Initializes the fragmentation decoder
  *
- * \param [IN] fragNb     Number of expected fragments (without redundancy packets)
- * \param [IN] fragSize   Size of a fragment
- * \param [IN] callbacks  Pointer to the Write/Read functions.
+ * \param [in] fragNb     Number of expected fragments (without redundancy packets)
+ * \param [in] fragSize   Size of a fragment
+ * \param [in] callbacks  Pointer to the Write/Read functions.
  */
 void FragDecoderInit(uint16_t fragNb, uint8_t fragSize, FragDecoderCallbacks_t *callbacks);
 
@@ -157,8 +157,8 @@ uint32_t FragDecoderGetMaxFileSize(void);
  * \brief Function to decode and reconstruct the binary file
  *        Called for each receive frame
  *
- * \param [IN] fragCounter Fragment counter [1..(FragDecoder.FragNb + FragDecoder.Redundancy)]
- * \param [IN] rawData     Pointer to the fragment to be processed (length = FragDecoder.FragSize)
+ * \param [in] fragCounter Fragment counter [1..(FragDecoder.FragNb + FragDecoder.Redundancy)]
+ * \param [in] rawData     Pointer to the fragment to be processed (length = FragDecoder.FragSize)
  *
  * \retval status          Process status. [FRAG_SESSION_ONGOING,
  *                                          FRAG_SESSION_FINISHED or
@@ -177,4 +177,4 @@ FragDecoderStatus_t FragDecoderGetStatus(void);
 }
 #endif
 
-#endif // __FRAG_DECODER_H__
+#endif /* __FRAG_DECODER_H__ */

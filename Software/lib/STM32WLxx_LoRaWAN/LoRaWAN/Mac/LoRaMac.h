@@ -81,14 +81,14 @@
  * \example   classC/NucleoL476/main.c
  *            LoRaWAN class C application example for the NucleoL476.
  *
- * \example   classA/SAML21/main.c
- *            LoRaWAN class A application example for the SAML21.
+ * \example   classA/SAMR34/main.c
+ *            LoRaWAN class A application example for the SAMR34.
  *
- * \example   classB/SAML21/main.c
- *            LoRaWAN class B application example for the SAML21.
+ * \example   classB/SAMR34/main.c
+ *            LoRaWAN class B application example for the SAMR34.
  *
- * \example   classC/SAML21/main.c
- *            LoRaWAN class C application example for the SAML21.
+ * \example   classC/SAMR34/main.c
+ *            LoRaWAN class C application example for the SAMR34.
  *
  * \example   classA/SKiM880B/main.c
  *            LoRaWAN class A application example for the SKiM880B.
@@ -136,6 +136,12 @@ extern "C"
 {
 #endif
 
+#include <stdint.h>
+#include <stdbool.h>
+#include "utilities.h"
+#include "timer.h"
+#include "systime.h"
+#include "radio.h"
 #include "LoRaMacTypes.h"
 #include "lorawan_conf.h"
 
@@ -155,27 +161,9 @@ extern "C"
 #define DOWN_LINK                                   1
 
 /*!
- * Sets the length of the LoRaMAC footer field.
- * Mainly indicates the MIC field length
- */
-#define LORAMAC_MFR_LEN                             4
-
-/*!
  * LoRaMac MLME-Confirm queue length
  */
 #define LORA_MAC_MLME_CONFIRM_QUEUE_LEN             5
-
-/*!
- * FRMPayload overhead to be used when setting the Radio.SetMaxPayloadLength
- * in RxWindowSetup function.
- * Maximum PHYPayload = MaxPayloadOfDatarate + LORA_MAC_FRMPAYLOAD_OVERHEAD
- */
-#define LORA_MAC_FRMPAYLOAD_OVERHEAD                13 // MHDR(1) + FHDR(7) + Port(1) + MIC(4)
-
-/*!
- * Maximum number of multicast context
- */
-#define   LORAMAC_MAX_MC_CTX       4
 
 /*!
  * Start value for multicast keys enumeration
@@ -450,6 +438,10 @@ typedef struct sLoRaMacParams
      * Antenna gain of the node
      */
     float AntennaGain;
+    /*!
+     * Indicates if the node supports repeaters
+     */
+    bool RepeaterSupport;
 }LoRaMacParams_t;
 
 /*!
@@ -688,6 +680,19 @@ typedef enum eMcps
 }Mcps_t;
 
 /*!
+ * Structure which defines return parameters for requests.
+ */
+typedef struct sRequestReturnParam
+{
+    /*!
+     * This value reports the time in milliseconds which
+     * an application must wait before its possible to send
+     * the next uplink.
+     */
+    TimerTime_t DutyCycleWaitTime;
+}RequestReturnParam_t;
+
+/*!
  * LoRaMAC MCPS-Request for an unconfirmed frame
  */
 typedef struct sMcpsReqUnconfirmed
@@ -807,6 +812,11 @@ typedef struct sMcpsReq
          */
         McpsReqProprietary_t Proprietary;
     }Req;
+
+    /*!
+     * MCPS-Request return parameters
+     */
+    RequestReturnParam_t ReqReturn;
 }McpsReq_t;
 
 /*!
@@ -949,6 +959,10 @@ typedef struct sMcpsIndication
  */
 typedef enum eMlme
 {
+    /*!
+     * An unknown MLME service
+     */
+    MLME_UNKNOWN,
     /*!
      * Initiates the Over-the-Air activation
      *
@@ -1144,6 +1158,11 @@ typedef struct sMlmeReq
          */
         MlmeReqDeriveMcSessionKeyPair_t DeriveMcSessionKeyPair;
     }Req;
+
+    /*!
+     * MLME-Request return parameters
+     */
+    RequestReturnParam_t ReqReturn;
 }MlmeReq_t;
 
 /*!
@@ -1221,7 +1240,6 @@ typedef struct sMlmeIndication
  * \ref MIB_ADR                                  | YES | YES
  * \ref MIB_NET_ID                               | YES | YES
  * \ref MIB_DEV_ADDR                             | YES | YES
- * \ref MIB_GEN_APP_KEY                          | NO  | YES
  * \ref MIB_APP_KEY                              | NO  | YES
  * \ref MIB_NWK_KEY                              | NO  | YES
  * \ref MIB_J_S_INT_KEY                          | NO  | YES
@@ -1244,6 +1262,7 @@ typedef struct sMlmeIndication
  * \ref MIB_MC_APP_S_KEY_3                       | NO  | YES
  * \ref MIB_MC_NWK_S_KEY_3                       | NO  | YES
  * \ref MIB_PUBLIC_NETWORK                       | YES | YES
+ * \ref MIB_REPEATER_SUPPORT                     | YES | YES
  * \ref MIB_CHANNELS                             | YES | NO
  * \ref MIB_RX2_CHANNEL                          | YES | YES
  * \ref MIB_RX2_DFAULT_CHANNEL                   | YES | YES
@@ -1336,12 +1355,6 @@ typedef enum eMib
      */
     MIB_DEV_ADDR,
     /*!
-     * Application root key - 1.0.x devices only.
-     *
-     * LoRaWAN Remote Multicast Setup v1.0.0 Specification, chapter 4.3
-     */
-    MIB_GEN_APP_KEY,
-    /*!
      * Application root key
      *
      * LoRaWAN Specification V1.1.0, chapter 6.1.1.3
@@ -1353,6 +1366,7 @@ typedef enum eMib
      * LoRaWAN Specification V1.1.0, chapter 6.1.1.3
      */
     MIB_NWK_KEY,
+#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
     /*!
      * Join session integrity key
      *
@@ -1383,6 +1397,12 @@ typedef enum eMib
      * LoRaWAN Specification V1.1.0, chapter 6.1.2.4
      */
     MIB_NWK_S_ENC_KEY,
+#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
+    /*!
+     * Network session key
+     */
+    MIB_NWK_S_KEY,
+#endif /* USE_LRWAN_1_1_X_CRYPTO */
     /*!
      * Application session key
      *
@@ -1413,6 +1433,7 @@ typedef enum eMib
      * LoRaWAN - Secure element specification v1
      */
     MIB_MC_NWK_S_KEY_0,
+#if ( LORAMAC_MAX_MC_CTX > 1 )
     /*!
      * Multicast root key index 1
      *
@@ -1467,6 +1488,7 @@ typedef enum eMib
      * LoRaWAN - Secure element specification v1
      */
     MIB_MC_NWK_S_KEY_3,
+#endif /* LORAMAC_MAX_MC_CTX > 1 */
     /*!
      * Set the network type to public or private
      *
@@ -1475,6 +1497,14 @@ typedef enum eMib
      * [true: public network, false: private network]
      */
     MIB_PUBLIC_NETWORK,
+    /*!
+     * Support the operation with repeaters
+     *
+     * LoRaWAN Regional Parameters V1.0.2rB
+     *
+     * [true: repeater support enabled, false: repeater support disabled]
+     */
+    MIB_REPEATER_SUPPORT,
     /*!
      * Communication channels. A get request will return a
      * pointer which references the first entry of the channel list. The
@@ -1710,13 +1740,13 @@ typedef union uMibParam
      */
     ActivationType_t NetworkActivation;
     /*!
-     * LoRaWAN device class
+     * LoRaWAN device EUI
      *
      * Related MIB type: \ref MIB_DEV_EUI
      */
     uint8_t* DevEui;
     /*!
-     * LoRaWAN device class
+     * LoRaWAN Join server EUI
      *
      * Related MIB type: \ref MIB_JOIN_EUI
      */
@@ -1740,12 +1770,6 @@ typedef union uMibParam
      */
     uint32_t DevAddr;
     /*!
-     * Application root key - 1.0.x device only
-     *
-     * Related MIB type: \ref MIB_GEN_APP_KEY
-     */
-    uint8_t* GenAppKey;
-    /*!
      * Application root key
      *
      * Related MIB type: \ref MIB_APP_KEY
@@ -1757,6 +1781,7 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_NWK_KEY
      */
     uint8_t* NwkKey;
+#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
     /*!
      * Join session integrity key
      *
@@ -1787,6 +1812,14 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_NWK_S_ENC_KEY
      */
     uint8_t* NwkSEncKey;
+#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
+    /*!
+     * Network session key
+     *
+     * Related MIB type: \ref MIB_NWK_S_KEY
+     */
+    uint8_t* NwkSKey;
+#endif /* USE_LRWAN_1_1_X_CRYPTO */
     /*!
      * Application session key
      *
@@ -1877,6 +1910,12 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_PUBLIC_NETWORK
      */
     bool EnablePublicNetwork;
+    /*!
+     * Enable or disable repeater support
+     *
+     * Related MIB type: \ref MIB_REPEATER_SUPPORT
+     */
+    bool EnableRepeaterSupport;
     /*!
      * LoRaWAN Channel
      *
@@ -2475,30 +2514,6 @@ void LoRaMacProcess( void );
 
 /*!
  * \brief   Queries the LoRaMAC if it is possible to send the next frame with
- *          a given datarate.
- *
- * \param   [IN] datarate - The datarate which should be used for the next uplink. Please
- *                          note that in case ADR is enabled, the function will utilize
- *                          the datarate defined by ADR and will disregard this input parameter.
- *
- * \param   [OUT] time    - The remaining time for which the next uplink tranmission
- *                          is restricted. Will be 0, if the MAC is able to perform
- *                          a transmission without duty cycle restriction resp. delay.
- *
- * \retval  LoRaMacStatus_t Status of the operation. When the parameters are
- *          not valid, the function returns \ref LORAMAC_STATUS_PARAMETER_INVALID.
- *          In case the MAC is limited due to a duty cycle restriction, the function
- *          returns \ref LORAMAC_STATUS_DUTYCYCLE_RESTRICTED. If the MAC has not found
- *          a valid channel for the given datarate, it returns \ref LORAMAC_STATUS_NO_CHANNEL_FOUND.
- *          In the latter case, this function does not reenable default channels
- *          automatically.
- *          In case there is no delay due to the duty cycle,
- *          the function returns \ref LORAMAC_STATUS_OK.
- */
-LoRaMacStatus_t LoRaMacQueryNextTxDelay( int8_t datarate, TimerTime_t* time );
-
-/*!
- * \brief   Queries the LoRaMAC if it is possible to send the next frame with
  *          a given application data payload size. The LoRaMAC takes scheduled
  *          MAC commands into account and reports, when the frame can be send or not.
  *
@@ -2751,10 +2766,10 @@ LoRaMacStatus_t LoRaMacMcpsRequest( McpsReq_t* mcpsRequest, bool allowDelayedTx 
 LoRaMacStatus_t LoRaMacDeInitialization( void );
 
 
+/*! \} defgroup LORAMAC */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __LORAMAC_H__
-
-/*! \} defgroup LORAMAC */
