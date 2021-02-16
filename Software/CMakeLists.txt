@@ -54,7 +54,7 @@ set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
 #-------------------
 # HAL Setup
 #-------------------
-set(HAL_DIR target/STM32WLxx_HAL_Driver)
+set(HAL_DIR target/stm32wlxx_hal_driver)
 #-------------------
 # LoRaWAN Setup
 #-------------------
@@ -63,7 +63,7 @@ set(LORAWAN_DIR lib/STM32WLxx_LoRaWAN)
 # CMSIS Setup
 #-------------------
 # Set the path to the CMSIS folder
-set(CMSIS_DIR target/STM32WLxx_HAL_Driver/CMSIS)
+set(CMSIS_DIR target/CMSIS)
 #-------------------
 # General Flags
 #-------------------
