@@ -28,7 +28,7 @@ extern "C" {
 #include "stm32_systime.h"
 
 /* Region configuration */
-/* 1- Configuretion Region listed below will be linked in the MW code */
+/* 1- Configuration Region listed below will be linked in the MW code */
 /* 2- Must also configure ACTIVE_REGION in the application */
 
 #define REGION_EU868

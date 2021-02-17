@@ -118,7 +118,7 @@ void vLorawanClassATask( void * params )
     {
         /*
          * Adaptive data rate is set to ON by default but this can be changed runtime if needed
-         * for mobiled devices with no fixed locations.
+         * for mobile devices with no fixed locations.
          */
 
         LoRaWAN_SetAdaptiveDataRate( true );

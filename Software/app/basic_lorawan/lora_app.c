@@ -32,7 +32,7 @@
 typedef enum TxEventType_e
 {
   /*!
-   * @brief Applicaiton data transmission issue based on timer with APP_TX_DUTYCYCLE
+   * @brief Application data transmission issue based on timer with APP_TX_DUTYCYCLE
    */
   TX_ON_TIMER,
   /*!
