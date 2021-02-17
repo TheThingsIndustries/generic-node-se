@@ -35,7 +35,7 @@
 static void Gpio_PreInit(void);
 
 /**
-  * @brief  Initiliszes the system for debugging or low power mode debending on DEBUGGER_ON
+  * @brief  Initialises the system for debugging or low power mode depending on DEBUGGER_ON
   * @param none
   * @return None
   */
@@ -113,7 +113,7 @@ uint8_t GetBatteryLevel(void)
 
 uint16_t GetTemperatureLevel(void)
 {
-  return 20; // Dumy value to use in the basic app, user can add desired implementation depending on the board.
+  return 20; // Dummy value to use in the basic app, user can add desired implementation depending on the board.
 }
 
 uint32_t GetRandomSeed(void)

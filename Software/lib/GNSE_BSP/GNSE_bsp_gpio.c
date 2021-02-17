@@ -524,7 +524,7 @@ uint32_t GNSE_BSP_BM_ReadChannel(void)
     }
     else
     {
-        // Do nothing and retuen a 0 RAW value indicating an error
+        // Do nothing and return a 0 RAW value indicating an error
     }
     return raw_adc_read;
 }

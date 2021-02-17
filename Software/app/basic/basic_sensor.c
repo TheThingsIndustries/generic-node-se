@@ -34,7 +34,7 @@ typedef union
     uint8_t u8bit[2];
 } axis1bit16_t;
 
-void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay)
+void temperature_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay)
 {
     int32_t temperature = 0;
     int32_t humidity = 0;
@@ -43,7 +43,7 @@ void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay)
     sensirion_i2c_init();
     if (SHTC3_probe() != SHTC3_STATUS_OK)
     {
-        APP_PPRINTF("\r\n Failed to initialize SHTC3 Tempreture Sensor\r\n");
+        APP_PPRINTF("\r\n Failed to initialize SHTC3 Temperature Sensor\r\n");
     }
     for (read_counter = 0; read_counter < n_reads; read_counter++)
     {

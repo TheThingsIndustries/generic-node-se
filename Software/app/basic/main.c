@@ -28,7 +28,7 @@ static void Error_Handler(void);
 void led_toggle(uint8_t n_toggles, uint32_t toggle_delay);
 void buzzer_play(uint8_t n_plays, uint32_t play_delay);
 void secure_element_read_info(void);
-void tempreture_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
+void temperature_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void flash_read_write(void);
 void battery_report(void);
@@ -68,8 +68,8 @@ int main(void)
 
   APP_PPRINTF("\r\n Testing on board sensors functionality \r\n");
   APP_PPRINTF("\r\n Attempting to read sensors data \r\n");
-  tempreture_sensor_read_data_polling(NUMBER_TEMPRETURE_SENSOR_READ, TEMPRETURE_SENSOR_READ_INTERVAL);
-  accelerometer_read_data_polling(NUMBER_ACCLEROMETER_READ, ACCELEROMETER_READ_INTERVAL);
+  temperature_sensor_read_data_polling(NUMBER_TEMPERATURE_SENSOR_READ, TEMPERATURE_SENSOR_READ_INTERVAL);
+  accelerometer_read_data_polling(NUMBER_ACCELEROMETER_READ, ACCELEROMETER_READ_INTERVAL);
 
   APP_PPRINTF("\r\n Testing on board external flash functionality \r\n");
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_FLASH \r\n");

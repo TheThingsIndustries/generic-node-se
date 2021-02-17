@@ -28,7 +28,7 @@
 
 #define APP_LOG_ENABLED 1
 
-/* if ON (=1) it enables the debbugger plus 4 dgb pins */
+/* if ON (=1) it enables the debugger plus 4 dgb pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
 #define DEBUGGER_ON       1
 
@@ -94,7 +94,7 @@
 /**
  * @brief Defines a random jitter bound in milliseconds for application data transmission duty cycle.
  *
- * This allows devices to space their transmissions slighltly between each other in cases like all devices reboots and tries to
+ * This allows devices to space their transmissions slightly between each other in cases like all devices reboots and tries to
  * join server at same time.
  */
 #define LORAWAN_APPLICATION_JITTER_MS          ( 500 )

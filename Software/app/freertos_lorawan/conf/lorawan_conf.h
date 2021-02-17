@@ -30,7 +30,7 @@ extern "C" {
 #include "freertos_systime.h"
 
 /* Region configuration */
-/* 1- Configuretion Region listed below will be linked in the MW code */
+/* 1- Configuration Region listed below will be linked in the MW code */
 /* 2- Must also configure ACTIVE_REGION in the application */
 
 #define REGION_EU868
@@ -86,7 +86,7 @@ extern "C" {
 /**
  * @brief Defines a random jitter bound in milliseconds for application data transmission duty cycle.
  *
- * This allows devices to space their transmissions slighltly between each other in cases like all devices reboots and tries to
+ * This allows devices to space their transmissions slightly between each other in cases like all devices reboots and tries to
  * join server at same time.
  */
 #define lorawanConfigMAX_JITTER_MS    ( 500 )
@@ -117,7 +117,7 @@ extern "C" {
  * @brief Maximum payload length defined by LoRaWAN spec
  *
  * This can be used to cap the maximum packet size that can be transferred anytime by the application.
- * LoRaWAN payload can vary upto 222 bytes. However applications should take care of duty cycle restrictions and
+ * LoRaWAN payload can vary up to 222 bytes. However applications should take care of duty cycle restrictions and
  * fair access policies for each region while determining the size of a message to be transmitted.
  * Larger messages leads to longer air-time and increased power consumption for the
  * radio as well as using up all of the duty cycle for a channel.
@@ -127,13 +127,13 @@ extern "C" {
 /**
  * @brief Size of response queue used to receive responses to requests.
  * Queue is used to separate out events from responses so application can do a synchronous call to
- * join to a network or send a confirmed message. Since there is atmost 1 LoRaWAN operation at a time, queue size
+ * join to a network or send a confirmed message. Since there is at most 1 LoRaWAN operation at a time, queue size
  * is set to 1.
  */
 #define lorawanConfigRESPONSE_QUEUE_SIZE    ( 1 )
 
 /**
- * @breif Queue size for downlink data.
+ * @brief Queue size for downlink data.
  *
  * Class A application sends an uplink and then polls for downlink messages, the next two receive windows. Only one message is sent
  * by downlink server for each uplink. Hence setting the queue size to 1.
@@ -141,7 +141,7 @@ extern "C" {
 #define lorawanConfigDOWNLINK_QUEUE_SIZE    ( 1 )
 
 /**
- * @breif Queue size for downlink events.
+ * @brief Queue size for downlink events.
  *
  * For class A application at most 4 events can be received downlink per uplink at any time (SRV_MAC_LINK_CHECK_ANS, SRV_MAC_DEVICE_TIME_ANS, FRAME LOSS, DOWNLINK DATA)
  * Queue size can be adjusted based on application needs.
@@ -162,7 +162,7 @@ extern "C" {
 #define lorawanConfigLORAMAC_TASK_PRIORITY      ( configMAX_PRIORITIES - 1 )
 
 /**
- * @brief Device EUI is a globaly Unique identifier used to identify the devices across LoRaWAN networks.
+ * @brief Device EUI is a globally Unique identifier used to identify the devices across LoRaWAN networks.
  * Device EUI is a 64 bit value and returned as an array of 8 hex byte values in big endian form.
  * Example: { 0x11, 0x22, 0x33, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE }
  *
@@ -172,7 +172,7 @@ extern void getDeviceEUI( uint8_t * deviceEUI );
 #define lorawanConfigGET_DEV_EUI    getDeviceEUI
 
 /**
- * @brief IN EUI or APP EUI is a globaly Unique identifier used to identify the application this device is associated with..
+ * @brief IN EUI or APP EUI is a globally Unique identifier used to identify the application this device is associated with..
  * Join EUI is a 64 bit value and returned as an array of 8 hex values in big endian form.
  * Example: { 0x11, 0x22, 0x33, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE }
  *

@@ -89,7 +89,7 @@ extern "C" {
 
 /*!
  * Application root key
- * WARNING: NOT USED FOR 1.0.x DEVICES, TODO: Improve redability of this file, see https://github.com/TheThingsIndustries/generic-node-se/issues/56
+ * WARNING: NOT USED FOR 1.0.x DEVICES, TODO: Improve readability of this file, see https://github.com/TheThingsIndustries/generic-node-se/issues/56
  */
 #define LORAWAN_APP_KEY            00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
