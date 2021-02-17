@@ -32,6 +32,15 @@
  *  @{
  */
 
+/**
+ *  @brief  memory address of the trace buffer location.
+ *  This define can be used, to change the buffer location.
+ *
+ */
+#if !defined(UTIL_ADV_TRACE_MEMLOCATION)
+#define UTIL_ADV_TRACE_MEMLOCATION
+#endif
+
 #if defined(UTIL_ADV_TRACE_OVERRUN)
 /**
  *  @brief  List the overrun status.
@@ -57,7 +66,7 @@ typedef enum {
 typedef enum {
   TRACE_UNCHUNK_NONE = 0,     /*!<unchunk status none.                            */
   TRACE_UNCHUNK_DETECTED,     /*!<unchunk status an unchunk has been detected.    */
-  TRACE_UNCHUNK_TRANSFER      /*!<unchunk status an unchunk transfert is ongoing. */
+  TRACE_UNCHUNK_TRANSFER      /*!<unchunk status an unchunk transfer is ongoing. */
 } TRACE_UNCHUNK_STATUS;
 #endif
 /**
@@ -81,17 +90,17 @@ typedef enum {
  *  @brief  ADV_TRACE_Context.
  *  this structure contains all the data to handle the trace context.
  *
- *  @note some part of the context are depend with the selecte switch inside the configuration file
+ *  @note some part of the context are depend with the selected switch inside the configuration file
  *  UTIL_ADV_TRACE_UNCHUNK_MODE, UTIL_ADV_TRACE_OVERRUN, UTIL_ADV_TRACE_CONDITIONNAL
  */
 typedef struct {
 #if defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
   uint16_t unchunk_enabled;                              /*!<unchunck enable.                           */
-  TRACE_UNCHUNK_STATUS unchunk_status;                   /*!<unchunk transfert status.                  */
+  TRACE_UNCHUNK_STATUS unchunk_status;                   /*!<unchunk transfer status.                  */
 #endif
 #if defined(UTIL_ADV_TRACE_OVERRUN)
-  TRACE_OVERRUN_STATUS OverRunStatus;                    /*!<overun status.                             */
-  cb_overrun *overrun_func;                               /*!<overun function                            */
+  TRACE_OVERRUN_STATUS OverRunStatus;                    /*!<overrun status.                             */
+  cb_overrun *overrun_func;                               /*!<overrun function                            */
 #endif
 #if defined(UTIL_ADV_TRACE_CONDITIONNAL)
   cb_timestamp *timestamp_func;                           /*!<ptr of function used to insert time stamp. */
@@ -102,7 +111,6 @@ typedef struct {
   uint16_t TraceWrPtr;                                   /*!<write pointer the trace system.            */
   uint16_t TraceSentSize;                                /*!<size of the latest transfer.               */
   uint16_t TraceLock;                                    /*!<lock counter of the trace system.          */
-  uint8_t TraceBuffer[UTIL_ADV_TRACE_FIFO_SIZE];         /*!<fifo of the trace system.                  */
 } ADV_TRACE_Context;
 
 /**
@@ -120,7 +128,15 @@ typedef struct {
  * this variable contains all the internal data of the advanced trace system.
  */
 static ADV_TRACE_Context ADV_TRACE_Ctx;
+static UTIL_ADV_TRACE_MEMLOCATION uint8_t ADV_TRACE_Buffer[UTIL_ADV_TRACE_FIFO_SIZE];
 
+#if defined(UTIL_ADV_TRACE_CONDITIONNAL) && defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
+/**
+ * @brief temporary buffer used by UTIL_ADV_TRACE_COND_FSend
+ * a temporary buffers variable used to evaluate a formatted string size.
+ */
+static uint8_t sztmp[UTIL_ADV_TRACE_TMP_BUF_SIZE];
+#endif
 /**
  * @}
  */
@@ -151,14 +167,15 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Init(void)
 {
   /* initialize the Ptr for Read/Write */
   (void)UTIL_ADV_TRACE_MEMSET8(&ADV_TRACE_Ctx, 0x0, sizeof(ADV_TRACE_Context));
+  (void)UTIL_ADV_TRACE_MEMSET8(&ADV_TRACE_Buffer, 0x0, sizeof(ADV_TRACE_Buffer));
 
 #if defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
   UTIL_ADV_TRACE_DEBUG("\nUNCHUNK_MODE\n");
 #endif
   /* Allocate Lock resource */
   UTIL_ADV_TRACE_INIT_CRITICAL_SECTION();
-
-  /* Initialize the Low Level interface */
+  
+  /* Initialize the Low Level interface */  
   return UTIL_TraceDriver.Init(TRACE_TxCpltCallback);
 }
 
@@ -178,23 +195,85 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_StartRxProcess(void (*UserCallback)(uint8
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_t Region, uint32_t TimeStampState, const char *strFormat, ...)
 {
   va_list vaArgs;
-  uint8_t buf[UTIL_ADV_TRACE_TMP_BUF_SIZE + UTIL_ADV_TRACE_TMP_MAX_TIMESTMAP_SIZE];
+#if defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
+  uint8_t buf[UTIL_ADV_TRACE_TMP_MAX_TIMESTMAP_SIZE];
+  uint16_t timestamp_size = 0u;
+  uint16_t writepos;
+  uint16_t idx;
+#else
+  uint8_t buf[UTIL_ADV_TRACE_TMP_BUF_SIZE+UTIL_ADV_TRACE_TMP_MAX_TIMESTMAP_SIZE];
+#endif
   uint16_t buff_size = 0u;
 
   /* check verbose level */
   if (!( ADV_TRACE_Ctx.CurrentVerboseLevel >= VerboseLevel))
   {
-	  return UTIL_ADV_TRACE_GIVEUP;
+    return UTIL_ADV_TRACE_GIVEUP;
   }
 
   if(( Region & ADV_TRACE_Ctx.RegionMask) != Region)
   {
-	  return UTIL_ADV_TRACE_REGIONMASKED;
+    return UTIL_ADV_TRACE_REGIONMASKED;
   }
 
+#if defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
   if((ADV_TRACE_Ctx.timestamp_func != NULL) && (TimeStampState != 0u))
   {
-	  ADV_TRACE_Ctx.timestamp_func(buf,&buff_size);
+    ADV_TRACE_Ctx.timestamp_func(buf,&timestamp_size);
+  }
+
+  va_start( vaArgs, strFormat);
+  buff_size =(uint16_t)UTIL_ADV_TRACE_VSNPRINTF((char *)sztmp,UTIL_ADV_TRACE_TMP_BUF_SIZE, strFormat, vaArgs);
+
+  TRACE_Lock();
+
+  /* if allocation is ok, write data into the buffer */
+  if (TRACE_AllocateBufer((buff_size+timestamp_size),&writepos) != -1)
+  {
+#if defined(UTIL_ADV_TRACE_OVERRUN)
+    UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION();
+    if(ADV_TRACE_Ctx.OverRunStatus == TRACE_OVERRUN_EXECUTED)
+    {
+      /* clear the over run */
+      ADV_TRACE_Ctx.OverRunStatus = TRACE_OVERRUN_NONE;
+    }
+    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+#endif
+
+    /* copy the timestamp */
+    for (idx = 0u; idx < timestamp_size; idx++)
+    {
+      ADV_TRACE_Buffer[writepos] = buf[idx];
+      writepos = writepos + 1u;
+    }
+
+    /* copy the data */
+    (void)UTIL_ADV_TRACE_VSNPRINTF((char *)(&ADV_TRACE_Buffer[writepos]), UTIL_ADV_TRACE_TMP_BUF_SIZE, strFormat, vaArgs);
+    va_end(vaArgs);
+
+    TRACE_UnLock();
+
+    return TRACE_Send();
+  }
+
+  va_end(vaArgs);
+  TRACE_UnLock();
+#if defined(UTIL_ADV_TRACE_OVERRUN)
+  UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION();
+  if((ADV_TRACE_Ctx.OverRunStatus == TRACE_OVERRUN_NONE ) && (NULL != ADV_TRACE_Ctx.overrun_func))
+  {
+    UTIL_ADV_TRACE_DEBUG("UTIL_ADV_TRACE_Send:TRACE_OVERRUN_INDICATION");
+    ADV_TRACE_Ctx.OverRunStatus = TRACE_OVERRUN_INDICATION;
+  }
+  UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+#endif
+
+  return UTIL_ADV_TRACE_MEM_FULL;
+
+#else
+  if((ADV_TRACE_Ctx.timestamp_func != NULL) && (TimeStampState != 0u))
+  {
+    ADV_TRACE_Ctx.timestamp_func(buf,&buff_size);
   }
 
   va_start( vaArgs, strFormat);
@@ -202,18 +281,19 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_
   va_end(vaArgs);
 
   return UTIL_ADV_TRACE_Send(buf, buff_size);
+#endif
 }
 #endif
 
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_FSend(const char *strFormat, ...)
 {
   uint8_t buf[UTIL_ADV_TRACE_TMP_BUF_SIZE];
-  va_list vaArgs;
+  va_list vaArgs; 
 
   va_start( vaArgs, strFormat);
   uint16_t bufSize=(uint16_t)UTIL_ADV_TRACE_VSNPRINTF((char *)buf ,UTIL_ADV_TRACE_TMP_BUF_SIZE, strFormat, vaArgs);
   va_end(vaArgs);
-
+  
   return UTIL_ADV_TRACE_Send(buf, bufSize);
 }
 
@@ -230,20 +310,20 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_ZCSend_Allocation(uint32_t VerboseLe
   {
     return UTIL_ADV_TRACE_GIVEUP;
   }
-
+  
   if(( Region & ADV_TRACE_Ctx.RegionMask) != Region)
   {
 	  return UTIL_ADV_TRACE_REGIONMASKED;
   }
-
+  
   if((ADV_TRACE_Ctx.timestamp_func != NULL) && (TimeStampState != 0u))
   {
 	  ADV_TRACE_Ctx.timestamp_func(timestamp_ptr,&timestamp_size);
   }
 
   TRACE_Lock();
-
-  /* if allocation is ok, write data into the bufffer */
+  
+  /* if allocation is ok, write data into the buffer */
   if (TRACE_AllocateBufer(length+timestamp_size, &writepos) != -1)
   {
 #if defined(UTIL_ADV_TRACE_OVERRUN)
@@ -255,16 +335,16 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_ZCSend_Allocation(uint32_t VerboseLe
     }
     UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
 #endif
-
+    
     /* fill time stamp information */
     for(uint16_t index = 0u; index < timestamp_size; index++)
     {
-      ADV_TRACE_Ctx.TraceBuffer[writepos] = timestamp_ptr[index];
+      ADV_TRACE_Buffer[writepos] = timestamp_ptr[index];
       writepos = (uint16_t)((writepos + 1u) % UTIL_ADV_TRACE_FIFO_SIZE);
     }
-
+    
     /*user fill */
-    *pData = ADV_TRACE_Ctx.TraceBuffer;
+    *pData = ADV_TRACE_Buffer;
     *FifoSize = (uint16_t)UTIL_ADV_TRACE_FIFO_SIZE;
     *WritePos = writepos;
   }
@@ -298,7 +378,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_ZCSend_Allocation(uint16_t Length, uint8_
 
   TRACE_Lock();
 
-  /* if allocation is ok, write data into the bufffer */
+  /* if allocation is ok, write data into the buffer */
   if (TRACE_AllocateBufer(Length,&writepos)  != -1)
   {
 #if defined(UTIL_ADV_TRACE_OVERRUN)
@@ -312,7 +392,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_ZCSend_Allocation(uint16_t Length, uint8_
 #endif
 
 	/*user fill */
-	*pData = ADV_TRACE_Ctx.TraceBuffer;
+	*pData = ADV_TRACE_Buffer;
 	*FifoSize = UTIL_ADV_TRACE_FIFO_SIZE;
 	*WritePos = (uint16_t)writepos;
   }
@@ -343,7 +423,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_ZCSend_Finalize(void)
 #if defined(UTIL_ADV_TRACE_CONDITIONNAL)
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_Send(uint32_t VerboseLevel, uint32_t Region, uint32_t TimeStampState, const uint8_t *pData, uint16_t Length)
 {
-  UTIL_ADV_TRACE_Status_t ret;
+  UTIL_ADV_TRACE_Status_t ret;  
   uint16_t writepos;
   uint32_t  idx;
   uint8_t timestamp_ptr[UTIL_ADV_TRACE_TMP_MAX_TIMESTMAP_SIZE];
@@ -367,7 +447,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_Send(uint32_t VerboseLevel, uint32_t
 
   TRACE_Lock();
 
-  /* if allocation is ok, write data into the bufffer */
+  /* if allocation is ok, write data into the buffer */
   if (TRACE_AllocateBufer(Length + timestamp_size, &writepos) != -1)
   {
 #if defined(UTIL_ADV_TRACE_OVERRUN)
@@ -379,17 +459,17 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_Send(uint32_t VerboseLevel, uint32_t
     }
     UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
 #endif
-
+    
     /* fill time stamp information */
     for( idx = 0; idx < timestamp_size; idx++)
     {
-      ADV_TRACE_Ctx.TraceBuffer[writepos] = timestamp_ptr[idx];
+      ADV_TRACE_Buffer[writepos] = timestamp_ptr[idx];
       writepos = (uint16_t)((writepos + 1u) % UTIL_ADV_TRACE_FIFO_SIZE);
     }
-
+    
     for (idx = 0u; idx < Length; idx++)
     {
-      ADV_TRACE_Ctx.TraceBuffer[writepos] = pData[idx];
+      ADV_TRACE_Buffer[writepos] = pData[idx];
       writepos = (uint16_t)((writepos + 1u) % UTIL_ADV_TRACE_FIFO_SIZE);
     }
 
@@ -417,13 +497,13 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_Send(uint32_t VerboseLevel, uint32_t
 
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Send(const uint8_t *pData, uint16_t Length)
 {
-  UTIL_ADV_TRACE_Status_t ret;
+  UTIL_ADV_TRACE_Status_t ret;  
   uint16_t writepos;
-  uint32_t  idx;
+  uint32_t  idx;  
 
   TRACE_Lock();
 
-  /* if allocation is ok, write data into the bufffer */
+  /* if allocation is ok, write data into the buffer */
   if (TRACE_AllocateBufer(Length,&writepos) != -1)
   {
 
@@ -436,15 +516,15 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Send(const uint8_t *pData, uint16_t Lengt
     }
     UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
 #endif
-
+    
     /* initialize the Ptr for Read/Write */
     for (idx = 0u; idx < Length; idx++)
     {
-      ADV_TRACE_Ctx.TraceBuffer[writepos] = pData[idx];
+      ADV_TRACE_Buffer[writepos] = pData[idx];
       writepos = (uint16_t)((writepos + 1u) % UTIL_ADV_TRACE_FIFO_SIZE);
     }
     TRACE_UnLock();
-
+    
     ret = TRACE_Send();
   }
   else
@@ -527,11 +607,11 @@ __WEAK void UTIL_ADV_TRACE_PostSendHook (void)
   */
 static UTIL_ADV_TRACE_Status_t TRACE_Send(void)
 {
-  UTIL_ADV_TRACE_Status_t ret = UTIL_ADV_TRACE_OK;
+  UTIL_ADV_TRACE_Status_t ret = UTIL_ADV_TRACE_OK;  
   uint8_t *ptr = NULL;
-
-  UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION();
-
+  
+  UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION();  
+  
   if(TRACE_IsLocked() == 0u)
   {
     TRACE_Lock();
@@ -557,16 +637,16 @@ static UTIL_ADV_TRACE_Status_t TRACE_Send(void)
         ADV_TRACE_Ctx.TraceSentSize = (uint16_t)(ADV_TRACE_Ctx.unchunk_enabled - ADV_TRACE_Ctx.TraceRdPtr);
         ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_TRANSFER;
         ADV_TRACE_Ctx.unchunk_enabled = 0;
-
+        
         UTIL_ADV_TRACE_DEBUG("\nTRACE_TxCpltCallback::unchunk start(%d,%d)\n",ADV_TRACE_Ctx.unchunk_enabled, ADV_TRACE_Ctx.TraceRdPtr);
-
+        
         if (0u == ADV_TRACE_Ctx.TraceSentSize)
         {
           ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_NONE;
           ADV_TRACE_Ctx.TraceRdPtr = 0;
         }
    	  }
-
+      
    	  if(TRACE_UNCHUNK_NONE == ADV_TRACE_Ctx.unchunk_status)
    	  {
 #endif
@@ -582,10 +662,10 @@ static UTIL_ADV_TRACE_Status_t TRACE_Send(void)
 #ifdef UTIL_ADV_TRACE_UNCHUNK_MODE
       }
 #endif
-      ptr = &ADV_TRACE_Ctx.TraceBuffer[ADV_TRACE_Ctx.TraceRdPtr];
+      ptr = &ADV_TRACE_Buffer[ADV_TRACE_Ctx.TraceRdPtr];
 
       UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
-      UTIL_ADV_TRACE_PreSendHook();
+      UTIL_ADV_TRACE_PreSendHook(); 
 
       UTIL_ADV_TRACE_DEBUG("\n--TRACE_Send(%d-%d)--\n",ADV_TRACE_Ctx.TraceRdPtr, ADV_TRACE_Ctx.TraceSentSize);
       ret = UTIL_TraceDriver.Send(ptr, ADV_TRACE_Ctx.TraceSentSize);
@@ -593,14 +673,14 @@ static UTIL_ADV_TRACE_Status_t TRACE_Send(void)
     else
     {
       TRACE_UnLock();
-      UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
-    }
+      UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();  
+    }    
   }
   else
   {
-    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();  
   }
-
+  
   return ret;
 }
 
@@ -610,9 +690,9 @@ static UTIL_ADV_TRACE_Status_t TRACE_Send(void)
   * @retval none
   */
 static void TRACE_TxCpltCallback(void *Ptr)
-{
+{ 
   UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION();
-
+  
 #if defined(UTIL_ADV_TRACE_OVERRUN)
   if(ADV_TRACE_Ctx.OverRunStatus == TRACE_OVERRUN_TRANSFERT )
   {
@@ -621,7 +701,7 @@ static void TRACE_TxCpltCallback(void *Ptr)
     ADV_TRACE_Ctx.TraceSentSize = 0u;
   }
 #endif
-
+  
 #if defined(UTIL_ADV_TRACE_UNCHUNK_MODE)
   if(TRACE_UNCHUNK_TRANSFER == ADV_TRACE_Ctx.unchunk_status)
   {
@@ -636,12 +716,12 @@ static void TRACE_TxCpltCallback(void *Ptr)
 #else
   ADV_TRACE_Ctx.TraceRdPtr = (ADV_TRACE_Ctx.TraceRdPtr + ADV_TRACE_Ctx.TraceSentSize) % UTIL_ADV_TRACE_FIFO_SIZE;
 #endif
-
+  
 #if defined(UTIL_ADV_TRACE_OVERRUN)
 	if(ADV_TRACE_Ctx.OverRunStatus == TRACE_OVERRUN_INDICATION )
 	{
 		uint8_t *ptr = NULL;
-
+    
 		ADV_TRACE_Ctx.OverRunStatus = TRACE_OVERRUN_TRANSFERT;
 		UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
 		ADV_TRACE_Ctx.overrun_func(&ptr, &ADV_TRACE_Ctx.TraceSentSize);
@@ -650,7 +730,7 @@ static void TRACE_TxCpltCallback(void *Ptr)
     return;
 	}
 #endif
-
+  
   if((ADV_TRACE_Ctx.TraceRdPtr != ADV_TRACE_Ctx.TraceWrPtr) && (1u == ADV_TRACE_Ctx.TraceLock))
   {
 #ifdef UTIL_ADV_TRACE_UNCHUNK_MODE
@@ -659,16 +739,16 @@ static void TRACE_TxCpltCallback(void *Ptr)
    		ADV_TRACE_Ctx.TraceSentSize = ADV_TRACE_Ctx.unchunk_enabled - ADV_TRACE_Ctx.TraceRdPtr;
    		ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_TRANSFER;
    		ADV_TRACE_Ctx.unchunk_enabled = 0;
-
+      
     	UTIL_ADV_TRACE_DEBUG("\nTRACE_TxCpltCallback::unchunk start(%d,%d)\n",ADV_TRACE_Ctx.unchunk_enabled, ADV_TRACE_Ctx.TraceRdPtr);
-
+      
     	if (0u == ADV_TRACE_Ctx.TraceSentSize)
       {
         ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_NONE;
         ADV_TRACE_Ctx.TraceRdPtr = 0;
       }
     }
-
+    
     if(TRACE_UNCHUNK_NONE == ADV_TRACE_Ctx.unchunk_status)
     {
 #endif
@@ -683,14 +763,14 @@ static void TRACE_TxCpltCallback(void *Ptr)
 #ifdef UTIL_ADV_TRACE_UNCHUNK_MODE
     }
 #endif
-    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION(); 
     UTIL_ADV_TRACE_DEBUG("\n--TRACE_Send(%d-%d)--\n", ADV_TRACE_Ctx.TraceRdPtr, ADV_TRACE_Ctx.TraceSentSize);
-    UTIL_TraceDriver.Send(&ADV_TRACE_Ctx.TraceBuffer[ADV_TRACE_Ctx.TraceRdPtr], ADV_TRACE_Ctx.TraceSentSize);
+    UTIL_TraceDriver.Send(&ADV_TRACE_Buffer[ADV_TRACE_Ctx.TraceRdPtr], ADV_TRACE_Ctx.TraceSentSize);
   }
   else
   {
-    UTIL_ADV_TRACE_PostSendHook();
-    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+    UTIL_ADV_TRACE_PostSendHook();      
+    UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION(); 
     TRACE_UnLock();
   }
 }
@@ -710,8 +790,19 @@ static int16_t TRACE_AllocateBufer(uint16_t Size, uint16_t *Pos)
 
   if (ADV_TRACE_Ctx.TraceWrPtr == ADV_TRACE_Ctx.TraceRdPtr)
   {
-    /* need to add buffer full managment*/
+#ifdef UTIL_ADV_TRACE_UNCHUNK_MODE
+    freesize = (uint16_t)(UTIL_ADV_TRACE_FIFO_SIZE - ADV_TRACE_Ctx.TraceWrPtr);
+    if((Size >= freesize) && (ADV_TRACE_Ctx.TraceRdPtr > Size))
+    {
+      ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_DETECTED;
+      ADV_TRACE_Ctx.unchunk_enabled = ADV_TRACE_Ctx.TraceWrPtr;
+      freesize = ADV_TRACE_Ctx.TraceRdPtr;
+      ADV_TRACE_Ctx.TraceWrPtr = 0;
+    }
+#else
+    /* need to add buffer full management*/
     freesize = (int16_t)UTIL_ADV_TRACE_FIFO_SIZE;
+#endif
   }
   else
   {
@@ -719,7 +810,7 @@ static int16_t TRACE_AllocateBufer(uint16_t Size, uint16_t *Pos)
     if (ADV_TRACE_Ctx.TraceWrPtr > ADV_TRACE_Ctx.TraceRdPtr)
     {
       freesize = (uint16_t)(UTIL_ADV_TRACE_FIFO_SIZE - ADV_TRACE_Ctx.TraceWrPtr);
-      if((Size >= freesize) && (ADV_TRACE_Ctx.TraceRdPtr > Size))
+      if((Size >= freesize) && (ADV_TRACE_Ctx.TraceRdPtr > Size)) 
       {
         ADV_TRACE_Ctx.unchunk_status = TRACE_UNCHUNK_DETECTED;
         ADV_TRACE_Ctx.unchunk_enabled = ADV_TRACE_Ctx.TraceWrPtr;
@@ -742,13 +833,13 @@ static int16_t TRACE_AllocateBufer(uint16_t Size, uint16_t *Pos)
     }
 #endif
   }
-
+  
   if (freesize > Size)
   {
     *Pos = ADV_TRACE_Ctx.TraceWrPtr;
     ADV_TRACE_Ctx.TraceWrPtr = (ADV_TRACE_Ctx.TraceWrPtr + Size) % UTIL_ADV_TRACE_FIFO_SIZE;
     ret = 0;
-
+    
 #ifdef UTIL_ADV_TRACE_UNCHUNK_MODE
     UTIL_ADV_TRACE_DEBUG("\n--TRACE_AllocateBufer(%d-%d-%d::%d-%d)--\n",freesize - Size, Size, ADV_TRACE_Ctx.unchunk_enabled, ADV_TRACE_Ctx.TraceRdPtr, ADV_TRACE_Ctx.TraceWrPtr);
 #else
@@ -756,7 +847,7 @@ static int16_t TRACE_AllocateBufer(uint16_t Size, uint16_t *Pos)
 #endif
   }
 
-  UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();
+  UTIL_ADV_TRACE_EXIT_CRITICAL_SECTION();  
   return ret;
 }
 
@@ -800,3 +891,4 @@ static uint32_t TRACE_IsLocked(void)
  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

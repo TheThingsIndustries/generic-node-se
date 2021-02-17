@@ -21,6 +21,9 @@
 #include "usart_if.h"
 
 /* Private typedef -----------------------------------------------------------*/
+/**
+  * @brief Trace driver callbacks handler
+  */
 const UTIL_ADV_TRACE_Driver_s UTIL_TraceDriver =
 {
   vcom_Init,
@@ -31,23 +34,31 @@ const UTIL_ADV_TRACE_Driver_s UTIL_TraceDriver =
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-/* Uart Handle */
+/**
+  * @brief UART handle
+  */
 extern UART_HandleTypeDef GNSE_BSP_debug_usart;
 #define UartHandle GNSE_BSP_debug_usart
+
+/**
+  * @brief buffer to receive 1 character
+  */
 uint8_t charRx;
 
 /* Private function prototypes -----------------------------------------------*/
 /**
 * @brief  TX complete callback
 * @param  None
-* @return None
+* @return none
 */
 static void (*TxCpltCallback)(void*);
 /**
-* @brief  RX complete callback
-* @param  char sent by user
-* @return None
-*/
+  * @brief  RX complete callback
+  * @param  rxChar ptr of chars buffer sent by user
+  * @param  size buffer size
+  * @param  error errorcode
+  * @return none
+  */
 static void (*RxCpltCallback)(uint8_t *rxChar, uint16_t size, uint8_t error);
 
 /* Functions Definition ------------------------------------------------------*/

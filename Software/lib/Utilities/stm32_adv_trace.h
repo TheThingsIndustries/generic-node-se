@@ -143,7 +143,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Send(const uint8_t *pdata, uint16_t lengt
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_ZCSend_Allocation(uint16_t Length, uint8_t **pData, uint16_t *FifoSize, uint16_t *WritePos);
 
 /**
- * @brief ZCSend finalize the data transfert
+ * @brief ZCSend finalize the data transfer
  * @retval Status based on @ref UTIL_ADV_TRACE_Status_t
  */
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_ZCSend_Finalize(void);
@@ -173,7 +173,7 @@ void UTIL_ADV_TRACE_RegisterOverRunFunction(cb_overrun *cb);
 #if defined(UTIL_ADV_TRACE_CONDITIONNAL)
 
 /**
- * @brief conditionnal FSend decode the strFormat and post it to the circular queue for printing
+ * @brief conditional FSend decode the strFormat and post it to the circular queue for printing
  * @param VerboseLevel verbose level of the trace
  * @param Region region of the trace
  * @param TimeStampState 0 no time stamp insertion, 1 time stamp inserted inside the trace data
@@ -183,7 +183,7 @@ void UTIL_ADV_TRACE_RegisterOverRunFunction(cb_overrun *cb);
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_t Region,uint32_t TimeStampState, const char *strFormat, ...);
 
 /**
- * @brief conditionnal ZCSend Write user formatted data directly in the FIFO (Z-Cpy)
+ * @brief conditional ZCSend Write user formatted data directly in the FIFO (Z-Cpy)
  * @param VerboseLevel verbose level of the trace
  * @param Region region of the trace
  * @param TimeStampState 0 no time stamp insertion, 1 time stamp inserted inside the trace data
@@ -196,7 +196,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_ZCSend_Allocation(uint32_t VerboseLevel, uint32_t Region, uint32_t TimeStampState, uint16_t length,uint8_t **pData, uint16_t *FifoSize, uint16_t *WritePos);
 
 /**
- * @brief conditionnal ZCSend finalize the data transfer
+ * @brief conditional ZCSend finalize the data transfer
  * @retval Status based on @ref UTIL_ADV_TRACE_Status_t
  */
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_ZCSend_Finalize(void);
