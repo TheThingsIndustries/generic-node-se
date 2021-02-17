@@ -29,48 +29,11 @@ extern "C" {
 
 #include "stm32_lpm.h"
 
-/**
-  * @brief Enters Low Power Off Mode
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_EnterOffMode(void);
-/**
-  * @brief Exits Low Power Off Mode
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_ExitOffMode(void);
-
-/**
-  * @brief Enters Low Power Stop Mode
-  * @note ARM exists the function when waking up
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_EnterStopMode(void);
-/**
-  * @brief Exits Low Power Stop Mode
-  * @note Enable the pll at 32MHz
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_ExitStopMode(void);
-
-/**
-  * @brief Enters Low Power Sleep Mode
-  * @note ARM exits the function when waking up
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_EnterSleepMode(void);
-
-/**
-  * @brief Enters Low Power Sleep Mode
-  * @note ARM exits the function when waking up
-  * @param none
-  * @return none
-  */
 void GNSE_LPM_ExitSleepMode(void);
 
 #ifdef __cplusplus

@@ -23,6 +23,9 @@
 #include "GNSE_lpm.h"
 #include "usart_if.h"
 
+/**
+  * @brief Power driver callbacks handler
+  */
 const struct UTIL_LPM_Driver_s UTIL_PowerDriver =
 {
   GNSE_LPM_EnterSleepMode,
@@ -103,7 +106,7 @@ void GNSE_LPM_EnterSleepMode(void)
 }
 
 /**
-  * @brief Enters Low Power Sleep Mode
+  * @brief Exists Low Power Sleep Mode
   * @note ARM exits the function when waking up
   * @param none
   * @return none

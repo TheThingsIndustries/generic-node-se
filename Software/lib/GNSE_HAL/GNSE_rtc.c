@@ -27,44 +27,63 @@
 
 #define RtcHandle GNSE_BSP_rtc
 
-#define MIN_ALARM_DELAY               3 /* in ticks */
-/* RTC Ticks/ms conversion */
+/**
+  * @brief Minimum timeout delay of Alarm in ticks
+  */
+#define MIN_ALARM_DELAY               3
+
+/**
+  * @brief Backup seconds register
+  */
 #define RTC_BKP_SECONDS    RTC_BKP_DR0
+
+/**
+  * @brief Backup subseconds register
+  */
 #define RTC_BKP_SUBSECONDS RTC_BKP_DR1
+
+/**
+  * @brief Backup msbticks register
+  */
 #define RTC_BKP_MSBTICKS   RTC_BKP_DR2
 
 /* #define RTIF_DEBUG */
 
 #ifdef RTIF_DEBUG
-#include "sys_app.h" /*for app_log*/
+#include "stm32_adv_trace.h" /*for app_log*/
+/**
+  * @brief Post the RTC log string format to the circular queue for printing in using the polling mode
+  */
 #define GNSE_RTC_DBG_PRINTF(...) do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ALWAYS, T_REG_OFF, TS_OFF, __VA_ARGS__);} }while(0);
 #else
+/**
+  * @brief not used
+  */
 #define GNSE_RTC_DBG_PRINTF(...)
 #endif /* RTIF_DEBUG */
 
 /*!
- * \brief Indicates if the RTC is already Initialized or not
+ * @brief Indicates if the RTC is already Initialized or not
  */
 static bool RTC_Initialized = false;
 
 /*!
- * \brief RtcTimerContext
+ * @brief RtcTimerContext
  */
 static uint32_t RtcTimerContext = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 /*!
- * \brief Get rtc timer Value in rtc tick
- * \param [IN] None
- * \return val the rtc timer value (upcounting)
+ * @brief Get rtc timer Value in rtc tick
+ * @return val the rtc timer value (upcounting)
  */
 static inline uint32_t GetTimerTicks(void);
 
 /*!
  * @brief Writes MSBticks to backup register
  * Absolute RTC time in tick is (MSBticks)<<32 + (32bits binary counter)
- * @Note MSBticks incremented every time the 32bits RTC timer wraps around (~44days)
- * @param [IN] MSBticks
+ * @note MSBticks incremented every time the 32bits RTC timer wraps around (~44days)
+ * @param [in] MSBticks
  * @return None
  */
 static void GNSE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks);
@@ -72,13 +91,14 @@ static void GNSE_RTC_BkUp_Write_MSBticks(uint32_t MSBticks);
 /*!
  * @brief Reads MSBticks from backup register
  * Absolute RTC time in tick is (MSBticks)<<32 + (32bits binary counter)
- * @Note MSBticks incremented every time the 32bits RTC timer wraps around (~44days)
- * @param [IN] None
+ * @note MSBticks incremented every time the 32bits RTC timer wraps around (~44days)
  * @return MSBticks
  */
 static uint32_t GNSE_RTC_BkUp_Read_MSBticks(void);
 
-/*Timer driver*/
+/**
+  * @brief Timer driver callbacks handler
+  */
 const UTIL_TIMER_Driver_s UTIL_TimerDriver =
 {
   GNSE_RTC_Init,
@@ -108,17 +128,25 @@ const UTIL_SYSTIM_Driver_s UTIL_SYSTIMDriver =
   GNSE_RTC_GetTime,
 };
 
+/**
+  * @brief Init RTC hardware
+  * @return Status based on @ref UTIL_TIMER_Status_t
+  */
 UTIL_TIMER_Status_t GNSE_RTC_Init(void)
 {
   if (RTC_Initialized == false)
   {
     GNSE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
 
+    /*Init RTC*/
     GNSE_BSP_RTC_Init();
     /** Stop Timer */
     GNSE_RTC_StopTimer();
-    /** Configure the Alarm A */
+    /** DeActivate the Alarm A enabled by MX during GNSE_BSP_RTC_Init() */
     HAL_RTC_DeactivateAlarm(&GNSE_BSP_rtc, RTC_ALARM_A);
+    /*Overload RTC feature enable*/
+    GNSE_BSP_rtc.IsEnabled.RtcFeatures = UINT32_MAX;
+
     /*Enable Direct Read of the calendar registers (not through Shadow) */
     HAL_RTCEx_EnableBypassShadow(&GNSE_BSP_rtc);
     /*initialise MSB ticks*/
@@ -131,6 +159,12 @@ UTIL_TIMER_Status_t GNSE_RTC_Init(void)
   return UTIL_TIMER_OK;
 }
 
+/**
+  * @brief Set the alarm
+  * @note The alarm is set at timeout from timer Reference (TimerContext)
+  * @param timeout Duration of the Timer in ticks
+  * @return Status based on @ref UTIL_TIMER_Status_t
+  */
 UTIL_TIMER_Status_t GNSE_RTC_StartTimer(uint32_t timeout)
 {
   RTC_AlarmTypeDef sAlarm = {0};
@@ -152,6 +186,10 @@ UTIL_TIMER_Status_t GNSE_RTC_StartTimer(uint32_t timeout)
   return UTIL_TIMER_OK;
 }
 
+/**
+  * @brief Stop the Alarm
+  * @return Status based on @ref UTIL_TIMER_Status_t
+  */
 UTIL_TIMER_Status_t GNSE_RTC_StopTimer(void)
 {
   /* Clear RTC Alarm Flag */
@@ -163,6 +201,10 @@ UTIL_TIMER_Status_t GNSE_RTC_StopTimer(void)
   return UTIL_TIMER_OK;
 }
 
+/**
+  * @brief set timer Reference (TimerContext)
+  * @return  Timer Reference Value in Ticks
+  */
 uint32_t GNSE_RTC_SetTimerContext(void)
 {
   /*store time context*/
@@ -172,6 +214,10 @@ uint32_t GNSE_RTC_SetTimerContext(void)
   return RtcTimerContext;
 }
 
+/**
+  * @brief Get the RTC timer Reference
+  * @return Timer Value in  Ticks
+  */
 uint32_t GNSE_RTC_GetTimerContext(void)
 {
   GNSE_RTC_DBG_PRINTF("GNSE_RTC_GetTimerContext=%d\n\r", RtcTimerContext);
@@ -179,11 +225,19 @@ uint32_t GNSE_RTC_GetTimerContext(void)
   return RtcTimerContext;
 }
 
+/**
+  * @brief Get the timer elapsed time since timer Reference (TimerContext) was set
+  * @return RTC Elapsed time in ticks
+  */
 uint32_t GNSE_RTC_GetTimerElapsedTime(void)
 {
   return ((uint32_t)(GetTimerTicks() - RtcTimerContext));
 }
 
+/**
+  * @brief Get the timer value
+  * @return RTC Timer value in ticks
+  */
 uint32_t GNSE_RTC_GetTimerValue(void)
 {
   if (RTC_Initialized == true)
@@ -196,21 +250,39 @@ uint32_t GNSE_RTC_GetTimerValue(void)
   }
 }
 
+/**
+  * @brief Return the minimum timeout in ticks the RTC is able to handle
+  * @return minimum value for a timeout in ticks
+  */
 uint32_t GNSE_RTC_GetMinimumTimeout(void)
 {
   return (MIN_ALARM_DELAY);
 }
 
+/**
+  * @brief converts time in ms to time in ticks
+  * @param[in] timeMilliSec time in milliseconds
+  * @return time in timer ticks
+  */
 uint32_t GNSE_RTC_Convert_ms2Tick(uint32_t timeMilliSec)
 {
   return ((uint32_t)((((uint64_t) timeMilliSec) << RTC_N_PREDIV_S) / 1000));
 }
 
+/**
+  * @brief converts time in ticks to time in ms
+  * @param[in] tick time in timer ticks
+  * @return time in timer milliseconds
+  */
 uint32_t GNSE_RTC_Convert_Tick2ms(uint32_t tick)
 {
   return ((uint32_t)((((uint64_t)(tick)) * 1000) >> RTC_N_PREDIV_S));
 }
 
+/**
+  * @brief a delay of delay ms by polling RTC
+  * @param delay in ms
+  */
 void GNSE_RTC_DelayMs(uint32_t delay)
 {
   uint32_t delayTicks = GNSE_RTC_Convert_ms2Tick(delay);
@@ -248,6 +320,11 @@ void HAL_RTCEx_SSRUEventCallback(RTC_HandleTypeDef *hrtc)
   GNSE_RTC_BkUp_Write_MSBticks(MSB_ticks + 1);
 }
 
+/**
+  * @brief Get rtc time
+  * @param[out] subSeconds in ticks
+  * @return time seconds
+  */
 uint32_t GNSE_RTC_GetTime(uint16_t *mSeconds)
 {
   uint64_t ticks;
@@ -265,21 +342,41 @@ uint32_t GNSE_RTC_GetTime(uint16_t *mSeconds)
   return seconds;
 }
 
+/**
+  * @brief write seconds in backUp register
+  * @note Used to store seconds difference between RTC time and Unix time
+  * @param[in] Seconds time in seconds
+  */
 void GNSE_RTC_BkUp_Write_Seconds(uint32_t Seconds)
 {
   HAL_RTCEx_BKUPWrite(&GNSE_BSP_rtc, RTC_BKP_SECONDS, Seconds);
 }
 
+/**
+  * @brief writes SubSeconds in backUp register
+  * @note Used to store SubSeconds difference between RTC time and Unix time
+  * @param[in] SubSeconds time in SubSeconds
+  */
 void GNSE_RTC_BkUp_Write_SubSeconds(uint32_t SubSeconds)
 {
   HAL_RTCEx_BKUPWrite(&GNSE_BSP_rtc, RTC_BKP_SUBSECONDS, SubSeconds);
 }
 
+/**
+  * @brief reads seconds from backUp register
+  * @note Used to store seconds difference between RTC time and Unix time
+  * @return Time in seconds
+  */
 uint32_t GNSE_RTC_BkUp_Read_Seconds(void)
 {
   return HAL_RTCEx_BKUPRead(&GNSE_BSP_rtc, RTC_BKP_SECONDS);
 }
 
+/**
+  * @brief reads SubSeconds from backUp register
+  * @note Used to store SubSeconds difference between RTC time and Unix time
+  * @return Time in SubSeconds
+  */
 uint32_t GNSE_RTC_BkUp_Read_SubSeconds(void)
 {
   return HAL_RTCEx_BKUPRead(&GNSE_BSP_rtc, RTC_BKP_SUBSECONDS);
