@@ -64,4 +64,13 @@
 #error "APP_LOG_ENABLED not defined or out of range <0,1>"
 #endif
 
+/**
+ * Accelerometer interrupt initialisation return types
+ */
+typedef enum
+{
+    ACC_OP_SUCCESS = 0,
+    ACC_OP_FAIL = 1,
+} ACC_op_result_t;
+
 #endif /* APP_H */

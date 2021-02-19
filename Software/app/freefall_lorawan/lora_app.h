@@ -30,7 +30,7 @@ extern "C" {
  * LoRaWAN application port
  * @note do not use 224. It is reserved for certification
  */
-#define LORAWAN_APP_PORT                            FF_LORA_PORT
+#define LORAWAN_APP_PORT                            ACC_FF_LORA_PORT
 
 /**
  * Used for testing and switching the device between Classes A & B & C

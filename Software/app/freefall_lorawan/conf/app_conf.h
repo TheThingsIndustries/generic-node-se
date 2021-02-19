@@ -44,15 +44,15 @@
   * FF_DURATION is defined as the time below the threshold times the Output Data Rate
   * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold. 
   */
-#define FF_THRESHOLD 0x16
-#define FF_DURATION 0x03
-#define FF_SCALE LIS2DH12_2g
-#define FF_ODR LIS2DH12_ODR_100Hz
+#define ACC_FF_THRESHOLD 0x16
+#define ACC_FF_DURATION 0x03
+#define ACC_FF_SCALE LIS2DH12_2g
+#define ACC_FF_ODR LIS2DH12_ODR_100Hz
 
 /**
  * This variable sets the LoRaWAN transmission port of Freefall events
  */
-#define FF_LORA_PORT 2
+#define ACC_FF_LORA_PORT 2
 
 /**
   * Supported requester to the MCU Low Power Manager - can be increased up  to 32

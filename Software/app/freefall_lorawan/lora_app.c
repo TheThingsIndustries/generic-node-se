@@ -25,7 +25,6 @@
 #include "stm32_seq.h"
 #include "stm32_lpm.h"
 #include "LmHandler.h"
-#include "freefall.h"
 
 /**
   * @brief  LoRa endNode send request
@@ -137,13 +136,14 @@ void LoRaWAN_Init(void)
 
   LmHandlerJoin(ActivationType);
 
-  if (freefall_init())
+  if (Accelerometer_Init() != ACC_OP_SUCCESS)
   {
     APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
   }
   else
   {
     APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
+    Accelerometer_FreeFall_Enable();
   }
 }
 

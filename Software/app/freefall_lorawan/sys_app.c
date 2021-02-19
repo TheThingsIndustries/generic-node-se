@@ -53,6 +53,87 @@ static void TimestampNow(uint8_t *buff, uint16_t *size);
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
 
+ACC_op_result_t Accelerometer_Init(void)
+{
+    /* Set load switch */
+    GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+    GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+    HAL_Delay(100);
+
+    GNSE_BSP_Sensor_I2C1_Init();
+    HAL_Delay(100);
+    
+    return ACC_OP_SUCCESS;
+}
+
+ACC_op_result_t Accelerometer_FreeFall_Enable(void)
+{
+    int8_t acc_check;
+    uint8_t whoami;
+    stmdev_ctx_t dev_ctx;
+    
+    acc_check = LIS2DH12_init(&dev_ctx);
+
+    /* Check device ID */
+    acc_check += (int8_t)lis2dh12_device_id_get(&dev_ctx, &whoami);
+    if (whoami != LIS2DH12_ID)
+    {
+        return ACC_OP_FAIL;
+    }
+    /* Set Output Data rate */
+    acc_check += (int8_t)lis2dh12_data_rate_set(&dev_ctx, ACC_FF_ODR);
+
+    /* Set full scale */
+    acc_check += (int8_t)lis2dh12_full_scale_set(&dev_ctx, ACC_FF_SCALE);
+
+
+    /* Map interrupt 1 on INT2 pin */
+    lis2dh12_ctrl_reg6_t ctrl6_set = {
+        .not_used_01 = 0,
+        .int_polarity = 0,
+        .not_used_02 = 0,
+        .i2_act = 0,
+        .i2_boot = 0,
+        .i2_ia2 = 0,
+        .i2_ia1 = 1,
+        .i2_click = 0
+    };
+    acc_check += (int8_t)lis2dh12_pin_int2_config_set(&dev_ctx, &ctrl6_set); 
+
+    /* Set interrupt threshold */
+    acc_check += (int8_t)lis2dh12_int1_gen_threshold_set(&dev_ctx, ACC_FF_THRESHOLD); 
+
+    /* Set interrupt threshold duration */
+    acc_check += (int8_t)lis2dh12_int1_gen_duration_set(&dev_ctx, ACC_FF_DURATION); 
+
+    /* Set all axes with low event detection and AND operator */
+    lis2dh12_int1_cfg_t accel_cfg = {
+        .xlie = 1,
+        .xhie = 0,
+        .ylie = 1,
+        .yhie = 0,
+        .zlie = 1,
+        .zhie = 0,
+        ._6d = 0,
+        .aoi = 1
+    };
+    acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg); 
+
+    /* See if all checks were passed */
+    if (acc_check != 0)
+    {
+        return ACC_OP_FAIL;
+    }
+
+    /* Set interrupt pin */
+    if (GNSE_BSP_Acc_Int_Init() != GNSE_BSP_ERROR_NONE)
+    {
+        return ACC_OP_FAIL;
+    }
+    
+    return ACC_OP_SUCCESS;
+}
+
 /**
   * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
   * @param none
