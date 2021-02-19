@@ -24,6 +24,8 @@
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
 #include "GNSE_rtc.h"
+#include "GNSE_acc.h"
+#include "freefall.h"
 
 #define MAX_TS_SIZE (int)16
 
@@ -35,7 +37,7 @@
 static void Gpio_PreInit(void);
 
 /**
-  * @brief  Initiliszes the system for debugging or low power mode debending on DEBUGGER_ON
+  * @brief  Initialises the system for debugging or low power mode depending on DEBUGGER_ON
   * @param none
   * @return None
   */
@@ -53,89 +55,8 @@ static void TimestampNow(uint8_t *buff, uint16_t *size);
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
 
-ACC_op_result_t Accelerometer_Init(void)
-{
-    /* Set load switch */
-    GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
-    GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-    HAL_Delay(100);
-
-    GNSE_BSP_Sensor_I2C1_Init();
-    HAL_Delay(100);
-    
-    return ACC_OP_SUCCESS;
-}
-
-ACC_op_result_t Accelerometer_FreeFall_Enable(void)
-{
-    int8_t acc_check;
-    uint8_t whoami;
-    stmdev_ctx_t dev_ctx;
-    
-    acc_check = LIS2DH12_init(&dev_ctx);
-
-    /* Check device ID */
-    acc_check += (int8_t)lis2dh12_device_id_get(&dev_ctx, &whoami);
-    if (whoami != LIS2DH12_ID)
-    {
-        return ACC_OP_FAIL;
-    }
-    /* Set Output Data rate */
-    acc_check += (int8_t)lis2dh12_data_rate_set(&dev_ctx, ACC_FF_ODR);
-
-    /* Set full scale */
-    acc_check += (int8_t)lis2dh12_full_scale_set(&dev_ctx, ACC_FF_SCALE);
-
-
-    /* Map interrupt 1 on INT2 pin */
-    lis2dh12_ctrl_reg6_t ctrl6_set = {
-        .not_used_01 = 0,
-        .int_polarity = 0,
-        .not_used_02 = 0,
-        .i2_act = 0,
-        .i2_boot = 0,
-        .i2_ia2 = 0,
-        .i2_ia1 = 1,
-        .i2_click = 0
-    };
-    acc_check += (int8_t)lis2dh12_pin_int2_config_set(&dev_ctx, &ctrl6_set); 
-
-    /* Set interrupt threshold */
-    acc_check += (int8_t)lis2dh12_int1_gen_threshold_set(&dev_ctx, ACC_FF_THRESHOLD); 
-
-    /* Set interrupt threshold duration */
-    acc_check += (int8_t)lis2dh12_int1_gen_duration_set(&dev_ctx, ACC_FF_DURATION); 
-
-    /* Set all axes with low event detection and AND operator */
-    lis2dh12_int1_cfg_t accel_cfg = {
-        .xlie = 1,
-        .xhie = 0,
-        .ylie = 1,
-        .yhie = 0,
-        .zlie = 1,
-        .zhie = 0,
-        ._6d = 0,
-        .aoi = 1
-    };
-    acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg); 
-
-    /* See if all checks were passed */
-    if (acc_check != 0)
-    {
-        return ACC_OP_FAIL;
-    }
-
-    /* Set interrupt pin */
-    if (GNSE_BSP_Acc_Int_Init() != GNSE_BSP_ERROR_NONE)
-    {
-        return ACC_OP_FAIL;
-    }
-    
-    return ACC_OP_SUCCESS;
-}
-
 /**
-  * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
+  * @brief initialises the system (dbg pins, trace, mbmux, systimer, LPM, ...)
   * @param none
   * @return  none
   * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/generic-node-se/issues/57
@@ -158,6 +79,28 @@ void SystemApp_Init(void)
 
   /*Set verbose LEVEL*/
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_M);
+
+  /* Set load switch */
+  GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+  GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+  HAL_Delay(100);
+
+  /* Set I2C interface */
+  GNSE_BSP_Sensor_I2C1_Init();
+  HAL_Delay(100);
+
+  /* Set accelerometer */
+  if (GNSE_ACC_Init() != ACC_OP_SUCCESS)
+  {
+    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
+  }
+  else
+  {
+    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
+  }
+
+  /* Set free fall events */
+  ACC_FreeFall_Enable();
 
   /* Here user can init the board peripherals and sensors */
 
@@ -186,7 +129,7 @@ void UTIL_SEQ_Idle(void)
 
 uint8_t GetBatteryLevel(void)
 {
-  uint8_t batteryLevel = 3; // Dumy value to use in the basic app, user can add desired implementation depending on the board.
+  uint8_t batteryLevel = 3; // Dummy value to use in the basic app, user can add desired implementation depending on the board.
   APP_LOG(TS_ON, VLEVEL_M, "VDDA= %d (Dummy value)\n\r", batteryLevel);
 
   return batteryLevel;
@@ -194,7 +137,7 @@ uint8_t GetBatteryLevel(void)
 
 uint16_t GetTemperatureLevel(void)
 {
-  return 20; // Dumy value to use in the basic app, user can add desired implementation depending on the board.
+  return 20; // Dummy value to use in the basic app, user can add desired implementation depending on the board.
 }
 
 uint32_t GetRandomSeed(void)
@@ -364,6 +307,19 @@ uint32_t HAL_GetTick(void)
 void HAL_Delay(__IO uint32_t Delay)
 {
   GNSE_RTC_DelayMs(Delay); /* based on RTC */
+}
+
+/**
+  * @brief Handle external interrupt events
+  * @param GPIO_PIN: Pin an interrupt was triggered for
+  * @return None
+  */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == ACC_INT_PIN)
+  {
+    ACC_FreeFall_IT_Handler();
+  }
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

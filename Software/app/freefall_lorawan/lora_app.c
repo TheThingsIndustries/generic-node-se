@@ -27,27 +27,6 @@
 #include "LmHandler.h"
 
 /**
-  * @brief  LoRa endNode send request
-  * @param  none
-  * @return none
-  */
-static void SendTxData(void);
-
-/**
-  * @brief  Special TX timer to handle retransmission after failed TX attempt
-  * @param  none
-  * @return none
-  */
-static void OnTxTimerRetransmission(void *context);
-
-/**
-  * @brief  LED timer callback function
-  * @param  LED context
-  * @return none
-  */
-static void OnTimerLedEvent(void *context);
-
-/**
   * @brief  join event callback function
   * @param  params
   * @return none
@@ -112,16 +91,6 @@ static LmHandlerParams_t LmHandlerParams =
         .TxDatarate = LORAWAN_DEFAULT_DATA_RATE,
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
-/*!
- * Timer to handle the application Tx
- */
-static UTIL_TIMER_Object_t TxTimer;
-
-/*!
- * Timer to handle the application Tx Led to toggle
- */
-static UTIL_TIMER_Object_t TxLedTimer;
-
 void LoRaWAN_Init(void)
 {
   // User can add any indication here (LED manipulation or Buzzer)
@@ -130,124 +99,32 @@ void LoRaWAN_Init(void)
   LmHandlerInit(&LmHandlerCallbacks);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerPackageProcess), UTIL_SEQ_RFU, LmHandlerPackagesProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), UTIL_SEQ_RFU, SendTxData);
 
   LmHandlerConfigure(&LmHandlerParams);
 
   LmHandlerJoin(ActivationType);
 
-  if (Accelerometer_Init() != ACC_OP_SUCCESS)
-  {
-    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer failed to initialize properly \r\n");
-  }
-  else
-  {
-    APP_LOG(TS_ON, VLEVEL_H, "\r\nAccelerometer initialized \r\n");
-    Accelerometer_FreeFall_Enable();
-  }
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void LoRaWAN_Send_Payload(uint8_t *lora_tx_data, uint8_t lora_tx_size)
 {
-  if (GPIO_Pin == ACC_INT_PIN)
-  {
-    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), CFG_SEQ_Prio_0);
-  }
-}
-
-static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
-{
-  if ((appData != NULL) && (params != NULL))
-  {
-    static const char *slotStrings[] = {"1", "2", "C", "C Multicast", "B Ping-Slot", "B Multicast Ping-Slot"};
-
-    APP_LOG(TS_OFF, VLEVEL_M, "\r\n ###### ========== MCPS-Indication ==========\r\n");
-    APP_LOG(TS_OFF, VLEVEL_M, "\r\n ###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
-            params->DownlinkCounter, slotStrings[params->RxSlot], appData->Port, params->Datarate, params->Rssi, params->Snr);
-    switch (appData->Port)
-    {
-    case LRAWAN_APP_SWITCH_CLASS_PORT:
-      /*this port switches the class*/
-      if (appData->BufferSize == 1)
-      {
-        switch (appData->Buffer[0])
-        {
-        case LRAWAN_APP_SWITCH_CLASS_A:
-        {
-          LmHandlerRequestClass(CLASS_A);
-          break;
-        }
-        case LRAWAN_APP_SWITCH_CLASS_B:
-        {
-#if defined(LORAMAC_CLASSB_ENABLED) && (LORAMAC_CLASSB_ENABLED == 1)
-          LmHandlerRequestClass(CLASS_B);
-#else
-          APP_LOG(TS_OFF, VLEVEL_M, "\r\n Configure LORAMAC_CLASSB_ENABLED to be able to switch to this class \r\n");
-#endif
-          break;
-        }
-        case LRAWAN_APP_SWITCH_CLASS_C:
-        {
-          LmHandlerRequestClass(CLASS_C);
-          break;
-        }
-        default:
-          break;
-        }
-      }
-      break;
-    case LORAWAN_APP_PORT:
-      APP_LOG(TS_OFF, VLEVEL_M, "\r\n Recieved %d bytes on LORAWAN_APP_PORT: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
-      break;
-    default:
-      APP_LOG(TS_OFF, VLEVEL_M, "\r\n Recieved %d bytes on undefined port: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
-      break;
-    }
-  }
-}
-
-static void SendTxData(void)
-{
-  static uint8_t freefall_log_amount;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
-  UTIL_TIMER_Create(&TxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTimerLedEvent, NULL);
-  UTIL_TIMER_SetPeriod(&TxLedTimer, 200);
-
-  // User can add any indication here (LED manipulation or Buzzer)
-
-  UTIL_TIMER_Start(&TxLedTimer);
-
   AppData.Port = LORAWAN_APP_PORT;
-  AppData.BufferSize = 1;
-  AppData.Buffer[0] = freefall_log_amount;
+  AppData.BufferSize = lora_tx_size;
+  for (int i = 0; i < AppData.BufferSize; i++)
+  {
+    AppData.Buffer[i] = lora_tx_data[i];
+  }
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
     APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
-    freefall_log_amount = 0;
   }
   else if (nextTxIn > 0)
   {
     APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
-    freefall_log_amount++;
-
-    // Set timer for next available transmission
-    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerRetransmission, NULL);
-    UTIL_TIMER_SetPeriod(&TxTimer, nextTxIn);
-    UTIL_TIMER_Start(&TxTimer);
   }
-}
-
-static void OnTxTimerRetransmission(void *context)
-{
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnFreefall), CFG_SEQ_Prio_0);
-  UTIL_TIMER_Stop(&TxTimer);
-}
-
-static void OnTimerLedEvent(void *context)
-{
-  // User can add any indication here (LED manipulation or Buzzer)
 }
 
 static void OnTxData(LmHandlerTxParams_t *params)
@@ -268,6 +145,16 @@ static void OnTxData(LmHandlerTxParams_t *params)
       APP_LOG(TS_OFF, VLEVEL_H, "UNCONFIRMED\r\n");
     }
   }
+}
+
+static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
+{
+/**
+* User can add handling of Downlink data here
+*/
+    static const char *slotStrings[] = {"1", "2", "C", "C Multicast", "B Ping-Slot", "B Multicast Ping-Slot"};
+    APP_LOG(TS_OFF, VLEVEL_M, "\r\n ###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
+        params->DownlinkCounter, slotStrings[params->RxSlot], appData->Port, params->Datarate, params->Rssi, params->Snr);
 }
 
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)

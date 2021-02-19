@@ -87,6 +87,14 @@ extern "C" {
   */
 void LoRaWAN_Init(void);
 
+/**
+  * @brief Set data buffer with LoRa
+  * @param lora_tx_data: Byte to store in the data buffer
+  * @param lora_tx_size: Size of the buffer
+  * @return None
+  */
+void LoRaWAN_Send_Payload(uint8_t *lora_tx_data, uint8_t lora_tx_size);
+
 #ifdef __cplusplus
 }
 #endif

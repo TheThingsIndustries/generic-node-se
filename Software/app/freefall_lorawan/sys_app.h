@@ -29,7 +29,7 @@ extern "C" {
 #include "app.h"
 
 /**
-  * @brief initialises the system (dbg pins, trace, systiemr, LPM, ...)
+  * @brief initialises the system (dbg pins, trace, systimer, LPM, ...)
   * @param none
   * @return  none
   */
@@ -62,20 +62,6 @@ uint32_t GetRandomSeed(void);
   * @return none
   */
 void GetUniqueId(uint8_t *id);
-
-/**
-  * @brief  Initialises the accelerometer hardware
-  * @param  none
-  * @return ACC_op_result_t
-  */
-ACC_op_result_t Accelerometer_Init(void);
-
-/**
-  * @brief  Sets the accelerometer registers to detect free-fall events
-  * @param  none
-  * @return ACC_op_result_t
-  */
-ACC_op_result_t Accelerometer_FreeFall_Enable(void);
 
 #ifdef __cplusplus
 }
