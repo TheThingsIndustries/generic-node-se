@@ -36,10 +36,10 @@ extern "C" {
 
 #ifdef MW_LOG_ENABLED
 #define MW_LOG(TS,VL, ...)   do{ {UTIL_ADV_TRACE_COND_FSend(VL, T_REG_OFF, TS, __VA_ARGS__);} }while(0)
-#else  /* MW_LOG_ENABLED */
+#else
 #define VLEVEL_ABOVE_H   4    /* this level will be always filtered because too High */
 #define MW_LOG(TS,VL, ...)    do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ABOVE_H, T_REG_OFF, TS, __VA_ARGS__);} }while(0)
-#endif /* MW_LOG_ENABLED */
+#endif
 
 #ifdef __cplusplus
 }

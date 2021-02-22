@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "freertos_systime.h"
+#include "lora_info.h"
 
 /* Region configuration */
 /* 1- Configuration Region listed below will be linked in the MW code */
@@ -35,6 +36,8 @@ extern "C" {
 
 #define REGION_EU868
 // #define REGION_US915
+
+#define LORAMAC_CLASSB_ENABLED  0
 
 #ifndef CRITICAL_SECTION_BEGIN
 #define CRITICAL_SECTION_BEGIN( )      UTILS_ENTER_CRITICAL_SECTION( )
