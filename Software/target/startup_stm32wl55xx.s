@@ -61,6 +61,9 @@ Reset_Handler:
   ldr   r0, =_estack
   mov   sp, r0          /* set stack pointer */
 
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+
 /* Copy the data segment initializers from flash to SRAM */
   ldr r0, =_sdata
   ldr r1, =_edata
@@ -92,8 +95,6 @@ LoopFillZerobss:
   cmp r2, r4
   bcc FillZerobss
 
-/* Call the clock system intitialization function.*/
-  bl  SystemInit
 /* Call static constructors */
   bl __libc_init_array
 /* Call the application's entry point.*/
