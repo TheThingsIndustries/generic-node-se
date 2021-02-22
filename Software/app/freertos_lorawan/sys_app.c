@@ -177,4 +177,14 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
   UTIL_ADV_TRACE_VSNPRINTF(buf, maxsize, strFormat, vaArgs);
   va_end(vaArgs);
 }
+
+/**
+  * @brief This function provides delay (in ms)
+  * @param Delay: specifies the delay time length, in milliseconds.
+  * @return None
+  */
+void HAL_Delay(__IO uint32_t Delay)
+{
+  vTaskDelay( pdMS_TO_TICKS( Delay )); /* FreeRTOS delay */
+}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
