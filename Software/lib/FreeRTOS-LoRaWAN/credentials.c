@@ -37,27 +37,27 @@
 /**
  * @brief Device EUI needed for both OTAA and ABP activation.
  */
-static const uint8_t devEUI[ 8 ] = {LORAWAN_DEVICE_EUI};
+static const uint8_t devEUI[ 8 ] = LORAWAN_DEVICE_EUI;
 
 /**
  * @brief JOIN EUI needed for both OTAA and ABP activation.
  */
-static const uint8_t joinEUI[ 8 ] = {LORAWAN_JOIN_EUI};
+static const uint8_t joinEUI[ 8 ] = LORAWAN_JOIN_EUI;
 
 /**
  * @brief App key required for OTAA activation.
  */
-static const uint8_t appKey[ 16 ] = {LORAWAN_APP_KEY};
+static const uint8_t appKey[ 16 ] = LORAWAN_APP_KEY;
 
 /**
  * @brief App session key required for ABP activation.
  */
-static const uint8_t appSessionKey[ 16 ] = { LORAWAN_APP_S_KEY };
+static const uint8_t appSessionKey[ 16 ] = LORAWAN_APP_S_KEY;
 
 /**
  * @brief Network Session key required for ABP activation.
  */
-static const uint8_t nwkSessionKey[ 16 ] = { LORAWAN_NWK_S_KEY };
+static const uint8_t nwkSessionKey[ 16 ] = LORAWAN_NWK_S_KEY;
 
 /**
  * @brief End device address required for ABP activation.

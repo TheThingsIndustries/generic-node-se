@@ -1,13 +1,13 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    stm32g0xx_hal_timebase_tim.c
+  * @file    stm32wlxx_hal_timebase_tim.c
   * @author  MCD Application Team
   * @brief   HAL time base based on the hardware TIM.
   *
   *          This file overrides the native HAL time base functions (defined as weak)
   *          the TIM time base:
-  *           + Intializes the TIM peripheral to generate a Period elapsed Event each 1ms
+  *           + Initializes the TIM peripheral to generate a Period elapsed Event each 1ms
   *           + HAL_IncTick is called inside HAL_TIM_PeriodElapsedCallback ie each 1ms
   *
  @verbatim
@@ -16,7 +16,7 @@
   ==============================================================================
     [..]
     This file must be copied to the application folder and modified as follows:
-    (#) Rename it to 'stm32g0xx_hal_timebase_tim.c'
+    (#) Rename it to 'stm32wlxx_hal_timebase_tim.c'
     (#) Add this file and the TIM HAL driver files to your project and make sure
        HAL_TIM_MODULE_ENABLED is defined in stm32l4xx_hal_conf.h
 
@@ -68,6 +68,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   uint32_t              uwPrescalerValue = 0;
   uint32_t              pFLatency;
   HAL_StatusTypeDef     status = HAL_OK;
+
   /* Enable TIM17 clock */
   __HAL_RCC_TIM17_CLK_ENABLE();
 
@@ -76,9 +77,8 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 
   /* Compute TIM17 clock */
   uwTimclock = HAL_RCC_GetPCLK2Freq();
-
   /* Compute the prescaler value to have TIM17 counter clock equal to 1MHz */
-  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000) - 1);
+  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000U) - 1U);
 
   /* Initialize TIM17 */
   htim17.Instance = TIM17;
@@ -89,7 +89,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   + ClockDivision = 0
   + Counter direction = Up
   */
-  htim17.Init.Period = (1000000 / 1000) - 1;
+  htim17.Init.Period = (1000000U / 1000U) - 1U;
   htim17.Init.Prescaler = uwPrescalerValue;
   htim17.Init.ClockDivision = 0;
   htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -142,23 +142,6 @@ void HAL_ResumeTick(void)
 {
   /* Enable TIM17 Update interrupt */
   __HAL_TIM_ENABLE_IT(&htim17, TIM_IT_UPDATE);
-}
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM17 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-
-  if (htim->Instance == TIM17)
-  {
-    HAL_IncTick();
-  }
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
