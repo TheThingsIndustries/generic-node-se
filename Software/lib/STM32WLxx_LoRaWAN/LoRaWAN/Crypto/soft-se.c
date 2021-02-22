@@ -51,12 +51,12 @@
 #include "LoRaMacHeaderTypes.h"
 #include "secure-element.h"
 #include "se-identity.h"
+#include "mw_log_conf.h"
 
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
 #include "lorawan_aes.h"
 #include "cmac.h"
 #else /* LORAWAN_KMS == 1 */
-#include "mw_log_conf.h"   /* needed for MW_LOG */
 #include "kms_if.h"
 #endif /* LORAWAN_KMS */
 

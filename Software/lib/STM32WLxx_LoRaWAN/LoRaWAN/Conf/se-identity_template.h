@@ -372,7 +372,7 @@ extern "C" {
             .KeyValue = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
                           0x00 },                                                                                   \
         },                                                                                                          \
-    },
+    }
 
 #ifdef __cplusplus
 }
