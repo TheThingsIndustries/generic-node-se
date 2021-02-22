@@ -24,6 +24,16 @@
 
 SUBGHZ_HandleTypeDef hsubghz;
 
+int32_t GNSE_BSP_SUBGHZ_Init(void)
+{
+    hsubghz.Init.BaudratePrescaler = SUBGHZSPI_BAUDRATEPRESCALER_4;
+    if (HAL_SUBGHZ_Init(&hsubghz) != HAL_OK)
+    {
+        return GNSE_BSP_ERROR_NO_INIT;
+    }
+    return GNSE_BSP_ERROR_NONE;
+}
+
 int32_t RBI_Init(void)
 {
     GPIO_InitTypeDef gpio_init_structure = {0};
