@@ -58,7 +58,7 @@
 									<listOptionValue builtIn="false" value="../../../lib/cryptoauthlib/lib/host"/>
 									<listOptionValue builtIn="false" value="../../"/>
 									<listOptionValue builtIn="false" value="../conf"/>
-									<listOptionValue builtIn="false" value="../../../target/CMSIS/Core/include"/>
+									<listOptionValue builtIn="false" value="../../../target/CMSIS/Core/Include"/>
 									<listOptionValue builtIn="false" value="../../../target/stm32wlxx_hal_driver/Inc"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.1165198300" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles"/>
