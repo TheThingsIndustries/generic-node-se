@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
  *
- * \defgroup  LORAMACCLASSBCONFIG LoRa MAC Class B configuration
+ * \defgroup  LORAMACCLASSB LoRa MAC Class B configuration
  *            This header file contains parameters to configure the class b operation.
  *            By default, all parameters are set according to the specification.
  * \{
@@ -62,7 +62,7 @@ extern "C"
 #define CLASSB_BEACON_WINDOW                        122880
 
 /*!
- * Beacon window time in numer of slots
+ * Beacon window time in number of slots
  */
 #define CLASSB_BEACON_WINDOW_SLOTS                  4096
 
@@ -122,5 +122,3 @@ extern "C"
 #endif
 
 #endif // __LORAMACCLASSBCONFIG_H__
-
-/*! \} defgroup LORAMACCLASSBCONFIG */

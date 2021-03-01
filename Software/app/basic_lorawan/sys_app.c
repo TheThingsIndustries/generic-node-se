@@ -103,67 +103,6 @@ void UTIL_SEQ_Idle(void)
   UTIL_LPM_EnterLowPower();
 }
 
-uint8_t GetBatteryLevel(void)
-{
-  uint8_t batteryLevel = 3; // Dumy value to use in the basic app, user can add desired implementation depending on the board.
-  APP_LOG(TS_ON, VLEVEL_M, "VDDA= %d (Dummy value)\n\r", batteryLevel);
-
-  return batteryLevel;
-}
-
-uint16_t GetTemperatureLevel(void)
-{
-  return 20; // Dummy value to use in the basic app, user can add desired implementation depending on the board.
-}
-
-uint32_t GetRandomSeed(void)
-{
-  uint32_t val = 0;
-  val = LL_FLASH_GetUDN();
-  if (val == 0xFFFFFFFF)
-  {
-    return ((HAL_GetUIDw0()) ^ (HAL_GetUIDw1()) ^ (HAL_GetUIDw2()));
-  }
-  else
-  {
-    return val;
-  }
-}
-
-void GetUniqueId(uint8_t *id)
-{
-  uint32_t val = 0;
-  val = LL_FLASH_GetUDN();
-  if (val == 0xFFFFFFFF)
-  {
-    uint32_t ID_1_3_val = HAL_GetUIDw0() + HAL_GetUIDw2();
-    uint32_t ID_2_val = HAL_GetUIDw1();
-
-    id[7] = (ID_1_3_val) >> 24;
-    id[6] = (ID_1_3_val) >> 16;
-    id[5] = (ID_1_3_val) >> 8;
-    id[4] = (ID_1_3_val);
-    id[3] = (ID_2_val) >> 24;
-    id[2] = (ID_2_val) >> 16;
-    id[1] = (ID_2_val) >> 8;
-    id[0] = (ID_2_val);
-  }
-  else
-  {
-    id[7] = val & 0xFF;
-    id[6] = (val >> 8) & 0xFF;
-    id[5] = (val >> 16) & 0xFF;
-    id[4] = (val >> 24) & 0xFF;
-    val = LL_FLASH_GetDeviceID();
-    id[3] = val & 0xFF;
-    val = LL_FLASH_GetSTCompanyID();
-    id[2] = val & 0xFF;
-    id[1] = (val >> 8) & 0xFF;
-    id[0] = (val >> 16) & 0xFF;
-  }
-}
-
-
 static void TimestampNow(uint8_t *buff, uint16_t *size)
 {
   SysTime_t curtime = SysTimeGet();

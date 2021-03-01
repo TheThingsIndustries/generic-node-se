@@ -36,8 +36,7 @@
 #define __RADIO_DRIVER_H__
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 
@@ -47,125 +46,214 @@ extern "C"
 /* Exported constants --------------------------------------------------------*/
 #define RFO_LP                                      1
 #define RFO_HP                                      2
- 
+
 /*!
  * Generic SUBGRF_ error code
  */
 #define SUBGRF_OK 0
 #define SUBGRF_ERROR -1
-    
+
 /*!
- * @brief Radio complete Wake-up Time with margin for temperature compensation
+ * \brief Radio complete Wake-up Time with margin for temperature compensation
  */
 #define RADIO_WAKEUP_TIME                           3 // [ms]
 
 /*!
- * @brief Compensation delay for SetAutoTx/Rx functions in 15.625 microseconds
+ * \brief Compensation delay for SetAutoTx/Rx functions in 15.625 microseconds
  */
 #define AUTO_RX_TX_OFFSET                           2
 
 /*!
- * @brief LFSR initial value to compute IBM type CRC
+ * \brief LFSR initial value to compute IBM type CRC
  */
 #define CRC_IBM_SEED                                0xFFFF
 
 /*!
- * @brief LFSR initial value to compute CCIT type CRC
+ * \brief LFSR initial value to compute CCIT type CRC
  */
 #define CRC_CCITT_SEED                              0x1D0F
 
 /*!
- * @brief Polynomial used to compute IBM CRC
+ * \brief Polynomial used to compute IBM CRC
  */
 #define CRC_POLYNOMIAL_IBM                          0x8005
 
 /*!
- * @brief Polynomial used to compute CCIT CRC
+ * \brief Polynomial used to compute CCIT CRC
  */
 #define CRC_POLYNOMIAL_CCITT                        0x1021
 
 /*!
- * @brief The address of the register holding the first byte defining the CRC seed
+ * \brief The address of the register holding the first byte defining the CRC seed
  *
  */
 #define REG_LR_CRCSEEDBASEADDR                      0x06BC
 
 /*!
- * @brief The address of the register holding the first byte defining the CRC polynomial
+ * \brief The address of the register holding the first byte defining the CRC polynomial
  */
 #define REG_LR_CRCPOLYBASEADDR                      0x06BE
 
 /*!
- * @brief The address of the register holding the first byte defining the whitening seed
+ * \brief The address of the register holding the first byte defining the whitening seed
  */
 #define REG_LR_WHITSEEDBASEADDR_MSB                 0x06B8
 #define REG_LR_WHITSEEDBASEADDR_LSB                 0x06B9
 
 /*!
- * @brief The address of the register holding the packet configuration
+ * \brief The address of the register holding the packet configuration
  */
 #define REG_LR_PACKETPARAMS                         0x0704
 
 /*!
- * @brief The address of the register holding the payload size
+ * \brief The address of the register holding the payload size
  */
 #define REG_LR_PAYLOADLENGTH                        0x0702
 
 /*!
- * @brief The addresses of the registers holding SyncWords values
+ * \brief The address of the register holding the re-calculated number of symbols
+ */
+#define REG_LR_SYNCH_TIMEOUT                        0x0706
+
+/*!
+ * \brief The addresses of the registers holding SyncWords values
  */
 #define REG_LR_SYNCWORDBASEADDRESS                  0x06C0
 
 /*!
- * @brief The addresses of the register holding LoRa Modem SyncWord value
+ * \brief The addresses of the register holding LoRa Modem SyncWord value
  */
 #define REG_LR_SYNCWORD                             0x0740
 
 /*!
- * @brief Syncword for Private LoRa networks
+ * \brief Syncword for Private LoRa networks
  */
 #define LORA_MAC_PRIVATE_SYNCWORD                   0x1424
 
 /*!
- * @brief Syncword for Public LoRa networks
+ * \brief Syncword for Public LoRa networks
  */
 #define LORA_MAC_PUBLIC_SYNCWORD                    0x3444
 
 /*!
- * @brief The address of the register giving a 4 bytes random number
+ * \brief The address of the register giving a 32-bit random number
  */
 #define RANDOM_NUMBER_GENERATORBASEADDR             0x0819
 
 /*!
- * @brief The address of the register holding RX Gain value (0x94: power saving, 0x96: rx boosted)
+ * \brief The address of the register used to disable the LNA
+ */
+#define REG_ANA_LNA                                 0x08E2
+
+/*!
+ * The address of the register used to disable the mixer
+ */
+#define REG_ANA_MIXER                               0x08E5
+
+/*!
+ * \brief The address of the register holding RX Gain value (0x94: power saving, 0x96: rx boosted)
  */
 #define REG_RX_GAIN                                 0x08AC
- 
+
 /*!
- * @brief The address of the register holding Bit Sync configuration
+ * \brief The address of the register holding Bit Sync configuration
  */
 #define REG_BIT_SYNC                                0x06AC
 
 /*!
- * @brief Change the value on the device internal trimming capacitor
+ * \brief Change the value on the device internal trimming capacitor
  */
 #define REG_XTA_TRIM                                0x0911
 
 /*!
- * @brief Set the current max value in the over current protection
+ * \brief Change the value on the device internal trimming capacitor
+ */
+#define REG_XTB_TRIM                                0x0912
+
+/*!
+ * \brief Set the current max value in the over current protection
  */
 #define REG_OCP                                     0x08E7
-  
+
 /*!
- * @brief PA Clamping threshold
+ * \brief PA Clamping threshold
  */
 #define REG_TX_CLAMP                                0x08D8
 
+/**
+  * @brief  Sub-GHz radio register (re) definition
+  * @note   The sub-GHz radio peripheral registers can be accessed by sub-GHz radio command
+  *         SUBGRF_WriteRegisters() and SUBGRF_ReadRegisters() "
+  */
+/*Sub-GHz radio generic bit synchronization register*/
+#define SUBGHZ_GBSYNCR                              REG_BIT_SYNC
+/*Sub-GHz radio generic packet control 1A register*/
+#define SUBGHZ_GPKTCTL1AR                           REG_LR_WHITSEEDBASEADDR_MSB
+/*Sub-GHz radio generic whitening LSB register*/
+#define SUBGHZ_GWHITEINIRL                          REG_LR_WHITSEEDBASEADDR_LSB  
+/*Sub-GHz radio generic CRC initial MSB register*/
+#define SUBGHZ_GCRCINIRH                            REG_LR_CRCSEEDBASEADDR
+/*Sub-GHz radio generic CRC initial LSB register*/
+#define SUBGHZ_GCRCINIRL                            0x06BD
+/*Sub-GHz radio generic CRC polynomial MSB register*/
+#define SUBGHZ_GCRCPOLRH                            REG_LR_CRCPOLYBASEADDR
+/*Sub-GHz radio generic CRC polynomial LSB register*/
+#define SUBGHZ_GCRCPOLRL                            0x06BF
+/*Sub-GHz radio generic synchronization word control register 7*/
+#define SUBGHZ_GSYNCR7                              REG_LR_SYNCWORDBASEADDRESS
+/*Sub-GHz radio generic synchronization word control register 6*/
+#define SUBGHZ_GSYNCR6                              0x06C1
+/*Sub-GHz radio generic synchronization word control register 5*/
+#define SUBGHZ_GSYNCR5                              0x06C2 
+/*Sub-GHz radio generic synchronization word control register 4*/
+#define SUBGHZ_GSYNCR4                              0x06C3
+/*Sub-GHz radio generic synchronization word control register 3*/
+#define SUBGHZ_GSYNCR3                              0x06C4
+/*Sub-GHz radio generic synchronization word control register 2*/
+#define SUBGHZ_GSYNCR2                              0x06C5
+/*Sub-GHz radio generic synchronization word control register 1*/
+#define SUBGHZ_GSYNCR1                              0x06C6 
+/*Sub-GHz radio generic synchronization word control register 0*/
+#define SUBGHZ_GSYNCR0                              0x06C7
+/*Sub-GHz radio LoRa synchronization word MSB register*/
+#define SUBGHZ_LSYNCRH                              REG_LR_SYNCWORD
+/*Sub-GHz radio LoRa synchronization word LSB register*/
+#define SUBGHZ_LSYNCRL                              0x0741
+/*Sub-GHz radio random number register 3*/
+#define SUBGHZ_RNGR3                                RANDOM_NUMBER_GENERATORBASEADDR
+/*Sub-GHz radio  random number register 2*/
+#define SUBGHZ_RNGR2                                0x081A
+/*Sub-GHz radio  random number register 1*/
+#define SUBGHZ_RNGR1                                0x081B
+/*Sub-GHz radio  random number register 0*/
+#define SUBGHZ_RNGR0                                0x081C
+/*Sub-GHz radio receiver gain control register*/
+#define SUBGHZ_RXGAINCR                             REG_RX_GAIN
+/*Sub-GHz radio PA over current protection register*/
+#define SUBGHZ_PAOCPR                               REG_OCP
+/*Sub-GHz radio HSE32 OSC_IN capacitor trim register*/
+#define SUBGHZ_HSEINTRIMR                           REG_XTA_TRIM 
+/*Sub-GHz radio HSE32 OSC_OUT capacitor trim register*/
+#define SUBGHZ_HSEOUTTRIMR                          REG_XTB_TRIM 
+/*Sub-GHz radio SMPS control 0 register */
+#define SUBGHZ_SMPSC0R                              0x0916
+/*Sub-GHz radio power control register*/
+#define SUBGHZ_PCR                                  0x091A
+/*Sub-GHz radio SMPS control 2 register */
+#define SUBGHZ_SMPSC2R                              0x0923
+
+#define SMPS_CLK_DET_ENABLE ((uint8_t) (1<<6))
+
+#define SMPS_DRV_20  ((uint8_t) ((0x0)<<1))
+#define SMPS_DRV_40  ((uint8_t) ((0x1)<<1))
+#define SMPS_DRV_60  ((uint8_t) ((0x2)<<1))
+#define SMPS_DRV_100 ((uint8_t) ((0x3)<<1))
+#define SMPS_DRV_MASK ((uint8_t) ((0x3)<<1))
+
 
 /* Exported types ------------------------------------------------------------*/
-
 /*!
- * @brief Structure describing the radio status
+ * \brief Structure describing the radio status
  */
 typedef union RadioStatus_u
 {
@@ -180,7 +268,7 @@ typedef union RadioStatus_u
 }RadioStatus_t;
 
 /*!
- * @brief Structure describing the error codes for callback functions
+ * \brief Structure describing the error codes for callback functions
  */
 typedef enum
 {
@@ -199,7 +287,7 @@ enum IrqPblSyncHeaderCode_t
 
 
 /*!
- * @brief Declares the oscillator in use while in standby mode
+ * \brief Declares the oscillator in use while in standby mode
  *
  * Using the STDBY_RC standby mode allow to reduce the energy consumption
  * STDBY_XOSC should be used for time critical applications
@@ -211,7 +299,7 @@ typedef enum
 }RadioStandbyModes_t;
 
 /*!
- * @brief Declares the power regulation used to power the device
+ * \brief Declares the power regulation used to power the device
  *
  * This command allows the user to specify if DC-DC or LDO is used for power regulation.
  * Using only LDO implies that the Rx or Tx current is doubled
@@ -223,7 +311,7 @@ typedef enum
 }RadioRegulatorMode_t;
 
 /*!
- * @brief Represents the possible packet type (i.e. modem) used
+ * \brief Represents the possible packet type (i.e. modem) used
  */
 typedef enum
 {
@@ -235,7 +323,7 @@ typedef enum
 }RadioPacketTypes_t;
 
 /*!
- * @brief Represents the ramping time for power amplifier
+ * \brief Represents the ramping time for power amplifier
  */
 typedef enum
 {
@@ -250,7 +338,7 @@ typedef enum
 }RadioRampTimes_t;
 
 /*!
- * @brief Represents the number of symbols to be used for channel activity detection operation
+ * \brief Represents the number of symbols to be used for channel activity detection operation
  */
 typedef enum
 {
@@ -262,7 +350,7 @@ typedef enum
 }RadioLoRaCadSymbols_t;
 
 /*!
- * @brief Represents the Channel Activity Detection actions after the CAD operation is finished
+ * \brief Represents the Channel Activity Detection actions after the CAD operation is finished
  */
 typedef enum
 {
@@ -272,7 +360,7 @@ typedef enum
 }RadioCadExitModes_t;
 
 /*!
- * @brief Represents the modulation shaping parameter
+ * \brief Represents the modulation shaping parameter
  */
 typedef enum
 {
@@ -285,7 +373,7 @@ typedef enum
 }RadioModShapings_t;
 
 /*!
- * @brief Represents the modulation shaping parameter
+ * \brief Represents the modulation shaping parameter
  */
 typedef enum
 {
@@ -313,7 +401,7 @@ typedef enum
 }RadioRxBandwidth_t;
 
 /*!
- * @brief Represents the possible spreading factor values in LoRa packet types
+ * \brief Represents the possible spreading factor values in LoRa packet types
  */
 typedef enum
 {
@@ -328,7 +416,7 @@ typedef enum
 }RadioLoRaSpreadingFactors_t;
 
 /*!
- * @brief Represents the bandwidth values for LoRa packet type
+ * \brief Represents the bandwidth values for LoRa packet type
  */
 typedef enum
 {
@@ -345,7 +433,7 @@ typedef enum
 }RadioLoRaBandwidths_t;
 
 /*!
- * @brief Represents the coding rate values for LoRa packet type
+ * \brief Represents the coding rate values for LoRa packet type
  */
 typedef enum
 {
@@ -356,7 +444,7 @@ typedef enum
 }RadioLoRaCodingRates_t;
 
 /*!
- * @brief Represents the preamble length used to detect the packet on Rx side
+ * \brief Represents the preamble length used to detect the packet on Rx side
  */
 typedef enum
 {
@@ -368,7 +456,7 @@ typedef enum
 }RadioPreambleDetection_t;
 
 /*!
- * @brief Represents the possible combinations of SyncWord correlators activated
+ * \brief Represents the possible combinations of SyncWord correlators activated
  */
 typedef enum
 {
@@ -378,7 +466,7 @@ typedef enum
 }RadioAddressComp_t;
 
 /*!
- *  @brief Radio packet length mode
+ *  \brief Radio GFSK packet length mode
  */
 typedef enum
 {
@@ -387,7 +475,7 @@ typedef enum
 }RadioPacketLengthModes_t;
 
 /*!
- * @brief Represents the CRC length
+ * \brief Represents the CRC length
  */
 typedef enum
 {
@@ -401,7 +489,7 @@ typedef enum
 }RadioCrcTypes_t;
 
 /*!
- * @brief Radio whitening mode activated or deactivated
+ * \brief Radio whitening mode activated or deactivated
  */
 typedef enum
 {
@@ -410,7 +498,7 @@ typedef enum
 }RadioDcFree_t;
 
 /*!
- * @brief Holds the lengths mode of a LoRa packet type
+ * \brief Holds the Radio lengths mode for the LoRa packet type
  */
 typedef enum
 {
@@ -421,7 +509,7 @@ typedef enum
 }RadioLoRaPacketLengthsMode_t;
 
 /*!
- * @brief Represents the CRC mode for LoRa packet type
+ * \brief Represents the CRC mode for LoRa packet type
  */
 typedef enum
 {
@@ -430,7 +518,7 @@ typedef enum
 }RadioLoRaCrcModes_t;
 
 /*!
- * @brief Represents the IQ mode for LoRa packet type
+ * \brief Represents the IQ mode for LoRa packet type
  */
 typedef enum
 {
@@ -439,7 +527,7 @@ typedef enum
 }RadioLoRaIQModes_t;
 
 /*!
- * @brief Represents the volatge used to control the TCXO on/off from DIO3
+ * \brief Represents the voltage used to control the TCXO on/off VDD_TCXO
  */
 typedef enum
 {
@@ -454,9 +542,9 @@ typedef enum
 }RadioTcxoCtrlVoltage_t;
 
 /*!
- * @brief Represents the interruption masks available for the radio
+ * \brief Represents the interruption masks available for the radio
  *
- * @remark Note that not all these interruptions are available for all packet types
+ * \remark Note that not all these interruptions are available for all packet types
  */
 typedef enum
 {
@@ -477,7 +565,7 @@ typedef enum
 
 
 /*!
- * @brief The type describing the modulation parameters for every packet types
+ * \brief The type describing the modulation parameters for every packet types
  */
 typedef struct
 {
@@ -507,7 +595,7 @@ typedef struct
 }ModulationParams_t;
 
 /*!
- * @brief The type describing the packet parameters for every packet types
+ * \brief The type describing the packet parameters for every packet types
  */
 typedef struct
 {
@@ -515,7 +603,7 @@ typedef struct
     struct
     {
         /*!
-         * @brief Holds the GFSK packet parameters
+         * \brief Holds the GFSK packet parameters
          */
         struct
         {
@@ -529,14 +617,14 @@ typedef struct
             RadioDcFree_t                DcFree;
         }Gfsk;
         /*!
-         * @brief Holds the BPSK packet parameters
+         * \brief Holds the BPSK packet parameters
          */
         struct
         {
             uint8_t                      PayloadLength;     //!< Size of the payload in the BPSK packet
         }Bpsk;
         /*!
-         * @brief Holds the LoRa packet parameters
+         * \brief Holds the LoRa packet parameters
          */
         struct
         {
@@ -550,7 +638,7 @@ typedef struct
 }PacketParams_t;
 
 /*!
- * @brief Represents the packet status for every packet type
+ * \brief Represents the packet status for every packet type
  */
 typedef struct
 {
@@ -575,7 +663,7 @@ typedef struct
 }PacketStatus_t;
 
 /*!
- * @brief Represents the Rx internal counters values when GFSK or LoRa packet type is used
+ * \brief Represents the Rx internal counters values when GFSK or LoRa packet type is used
  */
 typedef struct
 {
@@ -586,7 +674,7 @@ typedef struct
 }RxCounter_t;
 
 /*!
- * @brief Represents a calibration configuration
+ * \brief Represents a calibration configuration
  */
 typedef union
 {
@@ -605,7 +693,7 @@ typedef union
 }CalibrationParams_t;
 
 /*!
- * @brief Represents a sleep mode configuration
+ * \brief Represents a sleep mode configuration
  */
 typedef union
 {
@@ -620,7 +708,7 @@ typedef union
 }SleepParams_t;
 
 /*!
- * @brief Represents the possible radio system error states
+ * \brief Represents the possible radio system error states
  */
 typedef union
 {
@@ -641,7 +729,7 @@ typedef union
 }RadioError_t;
 
 /*!
- * @brief Represents the operating mode the radio is actually running
+ * \brief Represents the operating mode the radio is actually running
  */
 typedef enum
 {
@@ -656,7 +744,7 @@ typedef enum
 }RadioOperatingModes_t;
 
 /*!
- * Radio driver internal state machine states definition
+ * \brief Radio driver internal state machine states definition
  */
 typedef enum
 {
@@ -665,28 +753,9 @@ typedef enum
 }RFState_t;
 
 /*!
- * SUBG_RF definitions
+ * Hardware IO IRQ callback function definition
  */
-
-/*!
- * @brief Provides the frequency of the chip running on the radio and the frequency step
- *
- * @remark These defines are used for computing the frequency divider to set the RF frequency
- */
-#define XTAL_FREQ                                   ( double )32000000
-//#define FREQ_DIV                                    ( double )pow( 2.0, 25.0 )
-//#define FREQ_STEP                                   ( double )( XTAL_FREQ / FREQ_DIV )
-#define FREQ_STEP_14                                15625   /* (XTAL_FREQ / FREQ_DIV) >> 14 */
-
-/* channel = Freq / FREQ_STEP */
-#define SX_FREQ_TO_CHANNEL( channel, freq )                                                                       \
-    do                                                                                                            \
-    {                                                                                                             \
-        uint32_t initialFreqInt, initialFreqFrac;                                                                 \
-        initialFreqInt = freq / FREQ_STEP_14;                                                                      \
-        initialFreqFrac = freq - ( initialFreqInt * FREQ_STEP_14 );                                                \
-        channel = ( initialFreqInt << 14 ) + ( ( ( initialFreqFrac << 14 ) + ( FREQ_STEP_14 / 2 ) ) / FREQ_STEP_14 ); \
-    }while( 0 )
+typedef void ( *DioIrqHandler )( RadioIrqMasks_t radioIrq );
 
 
 
@@ -702,101 +771,84 @@ typedef enum
  * ============================================================================
  */
 
-/*
- * SUBG_RF DIO IRQ callback functions prototype
- */
-
 /*!
- * @brief  DIO IRQ callback : must be provided by SUBG_RF clients
- * @param  none
- * @retval none
+ * \brief Initializes the bus for SUBG_RF driver communication
  */
-void RadioOnDioIrq( RadioIrqMasks_t radioIrq );
-
-/*!
- * @brief Initialises the bus for SUBG_RF driver communication
- * @param none
- * @retval error code 0: OK, negatif: fail
- */
-int32_t SUBGRF_Init( void (*RadioOnDioIrqCb) ( RadioIrqMasks_t radioIrq ) );
+void SUBGRF_Init( DioIrqHandler dioIrq );
 
  /*!
- * @brief  Gets the current Operation Mode of the Radio
- * @param  none
- * @retval RadioOperatingModes_t last operating mode
+ * \brief  Gets the current Operation Mode of the Radio
+ *
+ * \retval      RadioOperatingModes_t last operating mode
  */
 RadioOperatingModes_t SUBGRF_GetOperatingMode( void );
 
 /*!
- * @brief Saves the payload to be send in the radio buffer
- * @param [in]  payload       A pointer to the payload
- * @param [in]  size          The size of the payload
- * @retval none
+ * \brief Saves the payload to be send in the radio buffer
+ *
+ * \param [in]  payload       A pointer to the payload
+ * \param [in]  size          The size of the payload
  */
 void SUBGRF_SetPayload( uint8_t *payload, uint8_t size );
 
 /*!
- * @brief Reads the payload received. If the received payload is longer
+ * \brief Reads the payload received. If the received payload is longer
  * than maxSize, then the method returns 1 and do not set size and payload.
- * @param [out] payload       A pointer to a buffer into which the payload will be copied
- * @param [out] size          A pointer to the size of the payload received
- * @param [in]  maxSize       The maximal size allowed to copy into the buffer
- * @retval none
+ *
+ * \param [out] payload       A pointer to a buffer into which the payload will be copied
+ * \param [out] size          A pointer to the size of the payload received
+ * \param [in]  maxSize       The maximal size allowed to copy into the buffer
  */
 uint8_t SUBGRF_GetPayload( uint8_t *payload, uint8_t *size, uint8_t maxSize );
 
 /*!
- * @brief Sends a payload
- * @param [in]  payload       A pointer to the payload to send
- * @param [in]  size          The size of the payload to send
- * @param [in]  timeout       The timeout for Tx operation
- * @retval none
+ * \brief Sends a payload
+ *
+ * \param [in]  payload       A pointer to the payload to send
+ * \param [in]  size          The size of the payload to send
+ * \param [in]  timeout       The timeout for Tx operation
  */
 void SUBGRF_SendPayload( uint8_t *payload, uint8_t size, uint32_t timeout );
 
 /*!
- * @brief Sets RF switch for TX & RX
- * @param [in]  power       Low Power or High Power board
- * @param [in]  rxtx        RX/TX mode
- * @retval none
- */
-void SUBGRF_SetSwitch (uint8_t power, RFState_t rxtx);
-
-/*!
- * @brief Sets the Sync Word given by index used in GFSK
- * @param [in]  syncWord      SyncWord bytes ( 8 bytes )
- * @retval      status        [0: OK, 1: NOK]
+ * \brief Sets the Sync Word given by index used in GFSK
+ *
+ * \param [in]  syncWord      SyncWord bytes ( 8 bytes )
+ *
+ * \retval      status        [0: OK, 1: NOK]
  */
 uint8_t SUBGRF_SetSyncWord( uint8_t *syncWord );
 
 /*!
- * @brief Sets the Initial value for the LFSR used for the CRC calculation
- * @param [in]  seed          Initial LFSR value ( 2 bytes )
- * @retval none
+ * \brief Sets the Initial value for the LFSR used for the CRC calculation
+ *
+ * \param [in]  seed          Initial LFSR value ( 2 bytes )
+ *
  */
 void SUBGRF_SetCrcSeed( uint16_t seed );
 
 /*!
- * @brief Sets the seed used for the CRC calculation
- * @param [in]  seed          The seed value
- * @retval none
+ * \brief Sets the seed used for the CRC calculation
+ *
+ * \param [in]  seed          The seed value
+ *
  */
 void SUBGRF_SetCrcPolynomial( uint16_t polynomial );
 
 /*!
- * @brief Sets the Initial value of the LFSR used for the whitening in GFSK protocols
- * @param [in]  seed          Initial LFSR value
- * @retval none
+ * \brief Sets the Initial value of the LFSR used for the whitening in GFSK protocols
+ *
+ * \param [in]  seed          Initial LFSR value
  */
 void SUBGRF_SetWhiteningSeed( uint16_t seed );
 
 /*!
- * @brief Gets a 32-bit random value generated by the radio
+ * \brief Gets a 32-bit random value generated by the radio
  *
- * @remark A valid packet type must have been configured with \ref SUBGRF_SetPacketType
+ * \remark A valid packet type must have been configured with \ref SUBGRF_SetPacketType
  *         before using this command.
  *
- * @remark The radio must be in reception mode before executing this function
+ * \remark The radio must be in reception mode before executing this function
  *         This code can potentially result in interrupt generation. It is the responsibility of
  *         the calling code to disable radio interrupts before calling this function,
  *         and re-enable them afterwards if necessary, or be certain that any interrupts
@@ -804,173 +856,150 @@ void SUBGRF_SetWhiteningSeed( uint16_t seed );
  *
  *         Please note that the random numbers produced by the generator do not have a uniform or Gaussian distribution. If
  *         uniformity is needed, perform appropriate software post-processing.
- * @param  none
- * @retval randomValue    32 bits random value
+ *
+ * \retval randomValue    32 bits random value
  */
 uint32_t SUBGRF_GetRandom( void );
 
 /*!
- * @brief Sets the radio in sleep mode
- * @param [in]  sleepConfig   The sleep configuration describing data
+ * \brief Sets the radio in sleep mode
+ *
+ * \param [in]  sleepConfig   The sleep configuration describing data
  *                            retention and RTC wake-up
- * @retval none
  */
 void SUBGRF_SetSleep( SleepParams_t sleepConfig );
 
 /*!
- * @brief Sets the radio in configuration mode
- * @param [in]  mode          The standby mode to put the radio into
- * @retval none
+ * \brief Sets the radio in configuration mode
+ *
+ * \param [in]  mode          The standby mode to put the radio into
  */
 void SUBGRF_SetStandby( RadioStandbyModes_t mode );
 
 /*!
- * @brief  Sets the radio in FS mode
- * @param  none
- * @retval none
+ * \brief Sets the radio in FS mode
  */
 void SUBGRF_SetFs( void );
 
 /*!
- * @brief  Sets the radio in transmission mode
- * @param  [in]  timeout : Structure describing the transmission timeout value
- * @retval none
+ * \brief Sets the radio in transmission mode
+ *
+ * \param [in]  timeout       Structure describing the transmission timeout value
  */
 void SUBGRF_SetTx( uint32_t timeout );
 
 /*!
- * @brief Sets the radio in reception mode
- * @param [in]  timeout : Structure describing the reception timeout value
- * @retval none
+ * \brief Sets the radio in reception mode
+ *
+ * \param [in]  timeout       Structure describing the reception timeout value
  */
 void SUBGRF_SetRx( uint32_t timeout );
 
 /*!
- * @brief Sets the radio in reception mode with Boosted LNA gain
- * @param [in]  timeout       Structure describing the reception timeout value
- * @retval none
+ * \brief Sets the radio in reception mode with Boosted LNA gain
+ *
+ * \param [in]  timeout       Structure describing the reception timeout value
  */
 void SUBGRF_SetRxBoosted( uint32_t timeout );
 
 /*!
- * @brief Sets the Rx duty cycle management parameters
- * @param [in]  rxTime        Structure describing reception timeout value
- * @param [in]  sleepTime     Structure describing sleep timeout value
- * @retval none
+ * \brief Sets the Rx duty cycle management parameters
+ *
+ * \param [in]  rxTime        Structure describing reception timeout value
+ * \param [in]  sleepTime     Structure describing sleep timeout value
  */
 void SUBGRF_SetRxDutyCycle( uint32_t rxTime, uint32_t sleepTime );
 
 /*!
- * @brief Sets the radio in CAD mode
- * @param  none
- * @retval none
+ * \brief Sets the radio in CAD mode
  */
 void SUBGRF_SetCad( void );
 
 /*!
- * @brief Sets the radio in continuous wave transmission mode
- * @param  none
- * @retval none
+ * \brief Sets the radio in continuous wave transmission mode
  */
 void SUBGRF_SetTxContinuousWave( void );
 
 /*!
- * @brief  Sets the radio in continuous preamble transmission mode
- * @param  none
- * @retval none
+ * \brief Sets the radio in continuous preamble transmission mode
  */
 void SUBGRF_SetTxInfinitePreamble( void );
 
 /*!
- * @brief Decide which interrupt will stop the internal radio rx timer.
- * @param [in]  enable          [0: Timer stop after header/syncword detection
+ * \brief Decide which interrupt will stop the internal radio rx timer.
+ *
+ * \param [in]  enable          [0: Timer stop after header/syncword detection
  *                               1: Timer stop after preamble detection]
- * @retval none
  */
 void SUBGRF_SetStopRxTimerOnPreambleDetect( bool enable );
 
 /*!
- * @brief Set the number of symbol the radio will wait to validate a reception
- * @param [in]  SymbNum          number of LoRa symbols
- * @retval none
+ * \brief Set the number of symbol the radio will wait to validate a reception
+ *
+ * \param [in]  symbNum          number of LoRa symbols
  */
-void SUBGRF_SetLoRaSymbNumTimeout( uint8_t SymbNum );
+void SUBGRF_SetLoRaSymbNumTimeout( uint8_t symbNum );
 
 /*!
- * @brief Sets the power regulators operating mode
- * @param [in]  void
- * @retval none
+ * \brief Sets the power regulators operating mode
  */
 void SUBGRF_SetRegulatorMode( void );
 
 /*!
- * @brief Calibrates the given radio block
- * @param [in]  calibParam    The description of blocks to be calibrated
- * @retval none
+ * \brief Calibrates the given radio block
+ *
+ * \param [in]  calibParam    The description of blocks to be calibrated
  */
 void SUBGRF_Calibrate( CalibrationParams_t calibParam );
 
 /*!
- * @brief Calibrates the Image rejection depending of the frequency
- * @param [in]  freq    The operating frequency
- * @retval none
+ * \brief Calibrates the Image rejection depending of the frequency
+ *
+ * \param [in]  freq    The operating frequency
  */
 void SUBGRF_CalibrateImage( uint32_t freq );
 
 /*!
- * @brief Activate the extention of the timeout when long preamble is used
- * @param [in]  enable      The radio will extend the timeout to cope with long preamble
- * @retval none
+ * \brief Activate the extension of the timeout when long preamble is used
+ *
+ * \param [in]  enable      The radio will extend the timeout to cope with long preamble
  */
 void SUBGRF_SetLongPreamble( uint8_t enable );
 
 /*!
- * @brief Sets the transmission parameters
- * @param [in]  paDutyCycle     Duty Cycle for the PA
- * @param [in]  hpMax           0 for RFO_LP, 7 for RFO_HP
- * @param [in]  deviceSel       1 for RFO_LP, 0 for RFO_HP
- * @param [in]  paLut           0 for 14dBm LUT, 1 for 22dBm LUT
- * @retval none
+ * \brief Sets the transmission parameters
+ *
+ * \param [in]  paDutyCycle     Duty Cycle for the PA
+ * \param [in]  hpMax           0 for RFO_LP, 7 for RFO_HP
+ * \param [in]  deviceSel       1 for RFO_LP, 0 for RFO_HP
+ * \param [in]  paLut           0 for 14dBm LUT, 1 for 22dBm LUT
  */
 void SUBGRF_SetPaConfig( uint8_t paDutyCycle, uint8_t hpMax, uint8_t deviceSel, uint8_t paLut );
 
 /*!
- * @brief Defines into which mode the chip goes after a TX / RX done
- * @param [in]  fallbackMode    The mode in which the radio goes
- * @retval none
+ * \brief Defines into which mode the chip goes after a TX / RX done
+ *
+ * \param [in]  fallbackMode    The mode in which the radio goes
  */
 void SUBGRF_SetRxTxFallbackMode( uint8_t fallbackMode );
 
 /*!
- * @brief Write several consecutive radio register
- * @param [in]  address       The address of the first byte to write in the radio
- * @param [in]  buffer        The data to be written in radio's memory
- * @param [in]  size          The number of bytes to write in radio's memory
+ * \brief Write data to the radio memory
+ *
+ * \param [in]  address       The address of the first byte to write in the radio
+ * \param [in]  buffer        The data to be written in radio's memory
+ * \param [in]  size          The number of bytes to write in radio's memory
  */
 void SUBGRF_WriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size );
 
 /*!
- * @brief Read several consecutive radio register
- * @param [in]  address       The address of the first byte to read from the radio
- * @param [out] buffer        The buffer that holds data read from radio
- * @param [in]  size          The number of bytes to read from radio's memory
+ * \brief Read data from the radio memory
+ *
+ * \param [in]  address       The address of the first byte to read from the radio
+ * \param [out] buffer        The buffer that holds data read from radio
+ * \param [in]  size          The number of bytes to read from radio's memory
  */
 void SUBGRF_ReadRegisters( uint16_t address, uint8_t *buffer, uint16_t size );
-
-/*!
- * @brief Write radio register
- * @param [in]  address       The address of the register
- * @param [in]  data          data to write
- * @retval  none
- */
-void SUBGRF_WriteRegister( uint16_t address, uint8_t data );
-
-/*!
- * @brief Read radio register
- * @param [in] address        The adress of the register
- * @retval  Data read
- */
-uint8_t SUBGRF_ReadRegister( uint16_t address );
 
 /*!
  * \brief Write data to the buffer holding the payload in the radio
@@ -991,164 +1020,182 @@ void SUBGRF_WriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size );
 void SUBGRF_ReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size );
 
 /*!
- * @brief   Sets the IRQ mask and DIO masks
- * @param [in]  irqMask       General IRQ mask
- * @param [in]  dio1Mask      DIO1 mask
- * @param [in]  dio2Mask      DIO2 mask
- * @param [in]  dio3Mask      DIO3 mask
- * @retval none
+ * \brief   Sets the IRQ mask and DIO masks
+ *
+ * \param [in]  irqMask       General IRQ mask
+ * \param [in]  dio1Mask      DIO1 mask
+ * \param [in]  dio2Mask      DIO2 mask
+ * \param [in]  dio3Mask      DIO3 mask
  */
 void SUBGRF_SetDioIrqParams( uint16_t irqMask, uint16_t dio1Mask, uint16_t dio2Mask, uint16_t dio3Mask );
 
 /*!
- * @brief Returns the current IRQ status
- * @retval      irqStatus     IRQ status
- * @retval none
+ * \brief Returns the current IRQ status
+ *
+ * \retval      irqStatus     IRQ status
  */
 uint16_t SUBGRF_GetIrqStatus( void );
 
-
 /*!
- * @brief Indicates if the Radio main clock is supplied from a tcxo
- * @param [in] tcxoVoltage     voltage used to control the TCXO
- * @param [in] timeout         time given to the TCXO to go to 32MHz
- * @retval none
+ * \brief Indicates if the Radio main clock is supplied from a tcxo
+ *
+ * \param [in] tcxoVoltage     voltage used to control the TCXO
+ * \param [in] timeout         time given to the TCXO to go to 32MHz
  */
 void SUBGRF_SetTcxoMode( RadioTcxoCtrlVoltage_t tcxoVoltage, uint32_t timeout );
 
 /*!
- * @brief Sets the RF frequency
- * @param [in]  frequency     RF frequency [Hz]
- * @retval none
+ * \brief Sets the RF frequency
+ *
+ * \param [in]  frequency     RF frequency [Hz]
  */
 void SUBGRF_SetRfFrequency( uint32_t frequency );
 
 /*!
- * @brief Sets the radio for the given protocol
- * @param [in]  packetType    [PACKET_TYPE_GFSK, PACKET_TYPE_LORA]
- * @remark This method has to be called before SetRfFrequency,
+ * \brief Sets the radio for the given protocol
+ *
+ * \param [in]  packetType    [PACKET_TYPE_GFSK, PACKET_TYPE_LORA]
+ *
+ * \remark This method has to be called before SetRfFrequency,
  *         SetModulationParams and SetPacketParams
- * @retval none
  */
 void SUBGRF_SetPacketType( RadioPacketTypes_t packetType );
 
 /*!
- * @brief   Gets the current radio protocol
- * @param   none
- * @retval  packetType    [PACKET_TYPE_GFSK, PACKET_TYPE_LORA]
+ * \brief Gets the current radio protocol
+ *
+ * \retval      packetType    [PACKET_TYPE_GFSK, PACKET_TYPE_LORA]
  */
 RadioPacketTypes_t SUBGRF_GetPacketType( void );
 
 /*!
- * @brief Sets the transmission parameters
+ * \brief Sets the transmission parameters
  *
- * @param [in]  paSelect      RegPaConfig PaSelect value (RFO_LP, RFO_HP, etc)
- * @param [in]  power         RF output power [-18..13] dBm
- * @param [in]  rampTime      Transmission ramp up time
- * @retval none
+ * \param [in]  paSelect      RegPaConfig PaSelect value (RFO_LP, RFO_HP, etc)
+ * \param [in]  power         RF output power [-18..13] dBm
+ * \param [in]  rampTime      Transmission ramp up time
  */
 void SUBGRF_SetTxParams( uint8_t paSelect, int8_t power, RadioRampTimes_t rampTime );
 
 /*!
- * @brief Set the Tx End Device conducted power
- * @param [in]  power           Tx power level [0..15]
- * @param [in]  rampTime        Transmission ramp up time
- * @retval      paSelect        [RFO_LP, RFO_HP]
- */
-uint8_t SUBGRF_SetTxPower(  int8_t power, RadioRampTimes_t rampTime );
-
-/*!
- * @brief Set the modulation parameters
- * @param [in]  modParams : structure describing the modulation parameters
- * @retval none
+ * \brief Set the modulation parameters
+ *
+ * \param [in]  modParams     A structure describing the modulation parameters
  */
 void SUBGRF_SetModulationParams( ModulationParams_t *modParams );
 
 /*!
- * @brief Sets the packet parameters
- * @param [in]  packetParams: structure describing the packet parameters
- * @retval none
+ * \brief Sets the packet parameters
+ *
+ * \param [in]  packetParams  A structure describing the packet parameters
  */
 void SUBGRF_SetPacketParams( PacketParams_t *packetParams );
 
 /*!
- * @brief Sets the Channel Activity Detection (CAD) parameters
+ * \brief Sets the Channel Activity Detection (CAD) parameters
  *
- * @param [in]  cadSymbolNum   The number of symbol to use for CAD operations
+ * \param [in]  cadSymbolNum   The number of symbol to use for CAD operations
  *                             [LORA_CAD_01_SYMBOL, LORA_CAD_02_SYMBOL,
  *                              LORA_CAD_04_SYMBOL, LORA_CAD_08_SYMBOL,
  *                              LORA_CAD_16_SYMBOL]
- * @param [in]  cadDetPeak     Limite for detection of SNR peak used in the CAD
- * @param [in]  cadDetMin      Set the minimum symbol recognition for CAD
- * @param [in]  cadExitMode    Operation to be done at the end of CAD action
+ * \param [in]  cadDetPeak     Limit for detection of SNR peak used in the CAD
+ * \param [in]  cadDetMin      Set the minimum symbol recognition for CAD
+ * \param [in]  cadExitMode    Operation to be done at the end of CAD action
  *                             [LORA_CAD_ONLY, LORA_CAD_RX, LORA_CAD_LBT]
- * @param [in]  cadTimeout     Defines the timeout value to abort the CAD activity
- * @retval none
+ * \param [in]  cadTimeout     Defines the timeout value to abort the CAD activity
  */
 void SUBGRF_SetCadParams( RadioLoRaCadSymbols_t cadSymbolNum, uint8_t cadDetPeak, uint8_t cadDetMin, RadioCadExitModes_t cadExitMode, uint32_t cadTimeout );
 
 /*!
- * @brief  Sets the data buffer base address for transmission and reception
- * @param  [in]  txBaseAddress Transmission base address
- * @param  [in]  rxBaseAddress Reception base address
- * @retval none
+ * \brief Sets the data buffer base address for transmission and reception
+ *
+ * \param [in]  txBaseAddress Transmission base address
+ * \param [in]  rxBaseAddress Reception base address
  */
 void SUBGRF_SetBufferBaseAddress( uint8_t txBaseAddress, uint8_t rxBaseAddress );
 
 /*!
- * @brief  Gets the current radio status
- * @param  none
- * @retval Radio status
+ * \brief Gets the current radio status
+ *
+ * \retval      status        Radio status
  */
 RadioStatus_t SUBGRF_GetStatus( void );
 
 /*!
- * @brief  Returns the instantaneous RSSI value for the last packet received
- * @param  none
- * @retval rssiInst      Instantaneous RSSI
+ * \brief Returns the instantaneous RSSI value for the last packet received
+ *
+ * \retval      rssiInst      Instantaneous RSSI
  */
 int8_t SUBGRF_GetRssiInst( void );
 
 /*!
- * @brief Gets the last received packet buffer status
- * @param [out] payloadLength Last received packet payload length
- * @param [out] rxStartBuffer Last received packet buffer address pointer
- * @retval none
+ * \brief Gets the last received packet buffer status
+ *
+ * \param [out] payloadLength Last received packet payload length
+ * \param [out] rxStartBuffer Last received packet buffer address pointer
  */
 void SUBGRF_GetRxBufferStatus( uint8_t *payloadLength, uint8_t *rxStartBuffer );
 
 /*!
- * @brief  Gets the last received packet payload length
- * @param  [out] pktStatus     A structure of packet status
- * @retval none
+ * \brief Gets the last received packet payload length
+ *
+ * \param [out] pktStatus     A structure of packet status
  */
 void SUBGRF_GetPacketStatus( PacketStatus_t *pktStatus );
 
 /*!
- * @brief   Returns the possible system erros
- * @param   none
- * @retval  sysErrors Value representing the possible sys failures
+ * \brief Returns the possible system errors
+ *
+ * \retval sysErrors Value representing the possible sys failures
  */
 RadioError_t SUBGRF_GetDeviceErrors( void );
 
 /*!
- * @brief   Clear all the errors in the device
- * @param   none
- * @retval  none
+ * \brief Clear all the errors in the device
  */
 void SUBGRF_ClearDeviceErrors( void );
 
 /*!
- * @brief Clears the IRQs
- * @param [in]  irq           IRQ(s) to be cleared
- * @retval  none
+ * \brief Clears the IRQs
+ *
+ * \param [in]  irq           IRQ(s) to be cleared
  */
 void SUBGRF_ClearIrqStatus( uint16_t irq );
 
 /*!
- * @brief   Service to get the radio wake-up time.
- * @param   none
- * @retval  Value of the radio wake-up time.
+ * \brief Write radio register
+ * \param [in]  address       The address of the register
+ * \param [in]  data          data to write
+ * \retval  none
+ */
+void SUBGRF_WriteRegister( uint16_t address, uint8_t data );
+
+/*!
+ * \brief Read radio register
+ * \param [in] address        The address of the register
+ * \retval  Data read
+ */
+uint8_t SUBGRF_ReadRegister( uint16_t address );
+
+/*!
+ * \brief Sets RF switch for TX & RX
+ * \param [in]  paSelect       Low Power or High Power board
+ * \param [in]  rxtx        RX/TX mode
+ * \retval none
+ */
+void SUBGRF_SetSwitch (uint8_t paSelect, RFState_t rxtx);
+
+/*!
+ * \brief Set the Tx End Device conducted power
+ * \param [in]  power           Tx power level [0..15]
+ * \retval      paSelect        [RFO_LP, RFO_HP]
+ */
+uint8_t SUBGRF_SetRfTxPower(  int8_t power );
+
+/*!
+ * \brief   Service to get the radio wake-up time.
+ * \param   none
+ * \retval  Value of the radio wake-up time.
  */
 uint32_t SUBGRF_GetRadioWakeUpTime( void );
 

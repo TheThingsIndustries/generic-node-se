@@ -34,33 +34,7 @@ extern "C" {
   */
 void SystemApp_Init(void);
 
-/**
-  * @brief  callback to get the battery level in % of full charge (254 full charge, 0 no charge)
-  * @param  none
-  * @return battery level
-  */
-uint8_t GetBatteryLevel(void);
 
-/**
-  * @brief  callback to get the current temperature in the MCU
-  * @param  none
-  * @return temperature level
-  */
-uint16_t GetTemperatureLevel(void);
-
-/**
-  * @brief  callback to get a pseudo random seed generated using the MCU Unique ID
-  * @param  none
-  * @return seed Generated pseudo random seed
-  */
-uint32_t GetRandomSeed(void);
-
-/**
-  * @brief  callback to get the board 64 bits unique ID
-  * @param  unique ID
-  * @return none
-  */
-void GetUniqueId(uint8_t *id);
 
 #ifdef __cplusplus
 }

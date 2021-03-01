@@ -53,10 +53,10 @@ extern "C"
  */
 void LoRaMacTestSetDutyCycleOn( bool enable );
 
+/*! \} defgroup LORAMACTEST */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __LORAMACTEST_H__
-
-/*! \} defgroup LORAMACTEST */

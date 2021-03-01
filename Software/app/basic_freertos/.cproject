@@ -61,7 +61,6 @@
 									<listOptionValue builtIn="false" value="../../../target/CMSIS/Core/Include"/>
 									<listOptionValue builtIn="false" value="../../../target/stm32wlxx_hal_driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Kernel/include"/>
-									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Utilities"/>
 									<listOptionValue builtIn="false" value="../../../lib/FreeRTOS-Kernel/portable/GCC/ARM_CM3"/>
 									<listOptionValue builtIn="false" value="../../../target/FreeRTOS_CMSIS"/>
 								</option>

@@ -1,57 +1,80 @@
+/*!
+ * \file      Commissioning.h
+ *
+ * \brief     End-device commissioning parameters
+ *
+ * \copyright Revised BSD License, see section \ref LICENSE.
+ *
+ * \code
+ *                ______                              _
+ *               / _____)             _              | |
+ *              ( (____  _____ ____ _| |_ _____  ____| |__
+ *               \____ \| ___ |    (_   _) ___ |/ ___)  _ \
+ *               _____) ) ____| | | || |_| ____( (___| | | |
+ *              (______/|_____)_|_|_| \__)_____)\____)_| |_|
+ *              (C)2013-2020 Semtech
+ *
+ * \endcode
+ */
 /**
   ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
   * @file    Commissioning.h
   * @author  MCD Application Team
-  * @brief   End device commissioning parameters
+  * @brief   End-device commissioning parameters
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
-  *
-  ******************************************************************************
-  */
-#ifndef __LORA_COMMISSIONING_H__
-#define __LORA_COMMISSIONING_H__
+ */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __COMMISSIONING_H__
+#define __COMMISSIONING_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+/*!
+ ******************************************************************************
+ ********************************** WARNING ***********************************
+ ******************************************************************************
+
+ The LoRaWAN AES128 keys are stored and provisionned on secure-elements.
+
+ This project providdes a software emulated secure-element.
+ The LoRaWAN AES128 keys SHALL be updated under
+ src/peripherals/<secure-element name>-se\se-identity.h file.
+
+ ******************************************************************************
+ ******************************************************************************
+ ******************************************************************************
+ */
+#include "se-identity.h"
 
 /*!
- * Mote device IEEE EUI (big endian)
- *
- * \remark see STATIC_DEVICE_EUI comments
+ * When using ABP activation the MAC layer must know in advance to which server
+ * version it will be connected.
  */
-#define LORAWAN_DEVICE_EUI                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define ABP_ACTIVATION_LRWAN_VERSION_V10x                  0x01000300 /* 1.0.3.0 */
+
+#define ABP_ACTIVATION_LRWAN_VERSION                       ABP_ACTIVATION_LRWAN_VERSION_V10x
 
 /*!
- * App/Join server IEEE EUI (big endian)
+ * Indicates if the end-device support the operation with repeaters
  */
-#define LORAWAN_JOIN_EUI                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define LORAWAN_REPEATER_SUPPORT                           false
 
 /*!
- * Application key
+ * Indicates if the end-device is to be connected to a private or public network
  */
-#define LORAWAN_APP_KEY            0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#define LORAWAN_PUBLIC_NETWORK                             true
 
 /*!
- * Application session key
+ * Current network ID
  */
-#define LORAWAN_APP_S_KEY          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
-
-/*!
- * Network session key
- */
-#define LORAWAN_NWK_S_KEY          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#define LORAWAN_NETWORK_ID                                 ( uint32_t )0
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __LORA_COMMISSIONING_H__ */
+#endif /* __COMMISSIONING_H__ */

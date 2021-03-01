@@ -53,6 +53,28 @@
 #endif
 
 /**
+ * @brief macro used to enter the critical section when Entering Low Power 
+ * @note  this macro is only called inside the function UTIL_LPM_EnterLowPower
+ *        and in a basic configuration shall be identcal to the macro 
+ *        UTIL_LPM_EXIT_CRITICAL_SECTION. In general, the request to enter the
+ *        low power mode is already done under a critical section and 
+ *        nesting it is useless (in specific implementations not even possible). 
+ *        So the users could define their own macro)
+ */
+#ifndef UTIL_LPM_ENTER_CRITICAL_SECTION_ELP
+  #define UTIL_LPM_ENTER_CRITICAL_SECTION_ELP( )    UTIL_LPM_ENTER_CRITICAL_SECTION( )
+#endif
+
+/**
+ * @brief macro used to exit the critical section when exting Low Power
+ * @note  the behavior of the macro shall be symmetrical with the macro 
+ *        UTIL_LPM_ENTER_CRITICAL_SECTION_ELP
+ */
+#ifndef UTIL_LPM_EXIT_CRITICAL_SECTION_ELP
+  #define UTIL_LPM_EXIT_CRITICAL_SECTION_ELP( )     UTIL_LPM_EXIT_CRITICAL_SECTION( )
+#endif
+
+/**
  * @}
  */
 /* Private function prototypes -----------------------------------------------*/
@@ -193,7 +215,7 @@ UTIL_LPM_Mode_t UTIL_LPM_GetMode( void )
 
 void UTIL_LPM_EnterLowPower( void )
 {
-  UTIL_LPM_ENTER_CRITICAL_SECTION( );
+  UTIL_LPM_ENTER_CRITICAL_SECTION_ELP( );
 
   if( StopModeDisable != UTIL_LPM_NO_BIT_SET )
   {
@@ -225,7 +247,7 @@ void UTIL_LPM_EnterLowPower( void )
     }
   }
   
-  UTIL_LPM_EXIT_CRITICAL_SECTION( );
+  UTIL_LPM_EXIT_CRITICAL_SECTION_ELP( );
 }
 
 /**

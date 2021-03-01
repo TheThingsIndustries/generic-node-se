@@ -70,7 +70,7 @@ typedef union uLoRaMacCtxsUpdateInfo
      */
     uint8_t Region : 1;
     /*!
-     * Cryto module context
+     * Crypto module context
      */
     uint8_t Crypto : 1;
     /*!
@@ -93,9 +93,9 @@ typedef union uLoRaMacCtxsUpdateInfo
      * FCnt Handler module context
      */
     uint8_t FCntHandlerNvmCtx : 1;
-  }Elements;
-}LoRaMacCtxUpdateStatus_t;
-#endif
+  } Elements;
+} LoRaMacCtxUpdateStatus_t;
+#endif /* CONTEXT_MANAGEMENT_ENABLED == 1 */
 
 /* Private define ------------------------------------------------------------*/
 /*!
@@ -112,9 +112,9 @@ typedef union uLoRaMacCtxsUpdateInfo
 
 #if ( MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 )
 #define NVM_CTX_STORAGE_MASK               0xFF
-#else
+#else /* MAX_PERSISTENT_CTX_MGMT_ENABLED == 0 */
 #define NVM_CTX_STORAGE_MASK               0x8C
-#endif
+#endif /* MAX_PERSISTENT_CTX_MGMT_ENABLED */
 
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -133,159 +133,161 @@ static NvmmDataBlock_t RegionNvmCtxDataBlock;
 static NvmmDataBlock_t CommandsNvmCtxDataBlock;
 static NvmmDataBlock_t ConfirmQueueNvmCtxDataBlock;
 static NvmmDataBlock_t ClassBNvmCtxDataBlock;
-#endif
-#endif
+#endif /* MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 */
+#endif /* CONTEXT_MANAGEMENT_ENABLED == 1 */
 
 /* Exported functions ---------------------------------------------------------*/
-void NvmCtxMgmtEvent( LoRaMacNvmCtxModule_t module )
+void NvmCtxMgmtEvent(LoRaMacNvmCtxModule_t module)
 {
 #if ( CONTEXT_MANAGEMENT_ENABLED == 1 )
-  switch( module )
+  switch (module)
   {
-  case LORAMAC_NVMCTXMODULE_MAC:
+    case LORAMAC_NVMCTXMODULE_MAC:
     {
       CtxUpdateStatus.Elements.Mac = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_REGION:
+    case LORAMAC_NVMCTXMODULE_REGION:
     {
       CtxUpdateStatus.Elements.Region = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_CRYPTO:
+    case LORAMAC_NVMCTXMODULE_CRYPTO:
     {
       CtxUpdateStatus.Elements.Crypto = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_SECURE_ELEMENT:
+    case LORAMAC_NVMCTXMODULE_SECURE_ELEMENT:
     {
       CtxUpdateStatus.Elements.SecureElement = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_COMMANDS:
+    case LORAMAC_NVMCTXMODULE_COMMANDS:
     {
       CtxUpdateStatus.Elements.Commands = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_CLASS_B:
+    case LORAMAC_NVMCTXMODULE_CLASS_B:
     {
       CtxUpdateStatus.Elements.ClassB = 1;
       break;
     }
-  case LORAMAC_NVMCTXMODULE_CONFIRM_QUEUE:
+    case LORAMAC_NVMCTXMODULE_CONFIRM_QUEUE:
     {
       CtxUpdateStatus.Elements.ConfirmQueue = 1;
       break;
     }
-  default:
+    default:
     {
       break;
     }
   }
-#endif
+#endif /* CONTEXT_MANAGEMENT_ENABLED == 1 */
 }
 
-NvmCtxMgmtStatus_t NvmCtxMgmtStore( void )
+NvmCtxMgmtStatus_t NvmCtxMgmtStore(void)
 {
 #if ( CONTEXT_MANAGEMENT_ENABLED == 1 )
-  // Read out the contexts lengths and pointers
+  /* Read out the contexts lengths and pointers */
   MibRequestConfirm_t mibReq;
   mibReq.Type = MIB_NVM_CTXS;
-  LoRaMacMibGetRequestConfirm( &mibReq );
-  LoRaMacCtxs_t* MacContexts = mibReq.Param.Contexts;
-  
-  // Input checks
-  if( ( CtxUpdateStatus.Value & NVM_CTX_STORAGE_MASK ) == 0 )
+  LoRaMacMibGetRequestConfirm(&mibReq);
+  LoRaMacCtxs_t *MacContexts = mibReq.Param.Contexts;
+
+  /* Input checks */
+  if ((CtxUpdateStatus.Value & NVM_CTX_STORAGE_MASK) == 0)
   {
     return NVMCTXMGMT_STATUS_FAIL;
   }
-  if( LoRaMacStop( ) != LORAMAC_STATUS_OK )
+  if (LoRaMacStop() != LORAMAC_STATUS_OK)
   {
     return NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  // Write
-  if( CtxUpdateStatus.Elements.Crypto == 1 )
+
+  /* Write */
+  if (CtxUpdateStatus.Elements.Crypto == 1)
   {
-    if( NvmmWrite( &CryptoNvmCtxDataBlock, MacContexts->CryptoNvmCtx, MacContexts->CryptoNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&CryptoNvmCtxDataBlock, MacContexts->CryptoNvmCtx, MacContexts->CryptoNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
-  if( CtxUpdateStatus.Elements.SecureElement == 1 )
+
+  if (CtxUpdateStatus.Elements.SecureElement == 1)
   {
-    if( NvmmWrite( &SecureElementNvmCtxDataBlock, MacContexts->SecureElementNvmCtx, MacContexts->SecureElementNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&SecureElementNvmCtxDataBlock, MacContexts->SecureElementNvmCtx,
+                  MacContexts->SecureElementNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
+
 #if ( MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 )
-  if( CtxUpdateStatus.Elements.Mac == 1 )
+  if (CtxUpdateStatus.Elements.Mac == 1)
   {
-    if( NvmmWrite( &MacNvmCtxDataBlock, MacContexts->MacNvmCtx, MacContexts->MacNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&MacNvmCtxDataBlock, MacContexts->MacNvmCtx, MacContexts->MacNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
-  if( CtxUpdateStatus.Elements.Region == 1 )
+
+  if (CtxUpdateStatus.Elements.Region == 1)
   {
-    if( NvmmWrite( &RegionNvmCtxDataBlock, MacContexts->RegionNvmCtx, MacContexts->RegionNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&RegionNvmCtxDataBlock, MacContexts->RegionNvmCtx, MacContexts->RegionNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
-  if( CtxUpdateStatus.Elements.Commands == 1 )
+
+  if (CtxUpdateStatus.Elements.Commands == 1)
   {
-    if( NvmmWrite( &CommandsNvmCtxDataBlock, MacContexts->CommandsNvmCtx, MacContexts->CommandsNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&CommandsNvmCtxDataBlock, MacContexts->CommandsNvmCtx, MacContexts->CommandsNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
-  if( CtxUpdateStatus.Elements.ClassB == 1 )
+
+  if (CtxUpdateStatus.Elements.ClassB == 1)
   {
-    if( NvmmWrite( &ClassBNvmCtxDataBlock, MacContexts->ClassBNvmCtx, MacContexts->ClassBNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&ClassBNvmCtxDataBlock, MacContexts->ClassBNvmCtx, MacContexts->ClassBNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-  
-  if( CtxUpdateStatus.Elements.ConfirmQueue == 1 )
+
+  if (CtxUpdateStatus.Elements.ConfirmQueue == 1)
   {
-    if( NvmmWrite( &ConfirmQueueNvmCtxDataBlock, MacContexts->ConfirmQueueNvmCtx, MacContexts->ConfirmQueueNvmCtxSize ) != NVMM_SUCCESS )
+    if (NvmmWrite(&ConfirmQueueNvmCtxDataBlock, MacContexts->ConfirmQueueNvmCtx,
+                  MacContexts->ConfirmQueueNvmCtxSize) != NVMM_SUCCESS)
     {
       return NVMCTXMGMT_STATUS_FAIL;
     }
   }
-#endif
-  
+#endif /* MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 */
+
   CtxUpdateStatus.Value = 0x00;
-  
-  // Resume LoRaMac
-  LoRaMacStart( );
-  
+
+  /* Resume LoRaMac */
+  LoRaMacStart();
+
   return NVMCTXMGMT_STATUS_SUCCESS;
-#else
+#else /* CONTEXT_MANAGEMENT_ENABLED == 0 */
   return NVMCTXMGMT_STATUS_FAIL;
-#endif
+#endif /* CONTEXT_MANAGEMENT_ENABLED */
 }
 
-NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
+NvmCtxMgmtStatus_t NvmCtxMgmtRestore(void)
 {
 #if ( CONTEXT_MANAGEMENT_ENABLED == 1 )
   MibRequestConfirm_t mibReq;
   LoRaMacCtxs_t contexts = { 0 };
   NvmCtxMgmtStatus_t status = NVMCTXMGMT_STATUS_SUCCESS;
-  
-  // Read out the contexts lengths
+
+  /* Read out the contexts lengths */
   mibReq.Type = MIB_NVM_CTXS;
-  LoRaMacMibGetRequestConfirm( &mibReq );
-  
-  
+  LoRaMacMibGetRequestConfirm(&mibReq);
+
+
   uint8_t NvmCryptoCtxRestore[mibReq.Param.Contexts->CryptoNvmCtxSize];
   uint8_t NvmSecureElementCtxRestore[mibReq.Param.Contexts->SecureElementNvmCtxSize];
 #if ( MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 )
@@ -294,11 +296,11 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   uint8_t NvmCommandsCtxRestore[mibReq.Param.Contexts->CommandsNvmCtxSize];
   uint8_t NvmClassBCtxRestore[mibReq.Param.Contexts->ClassBNvmCtxSize];
   uint8_t NvmConfirmQueueCtxRestore[mibReq.Param.Contexts->ConfirmQueueNvmCtxSize];
-#endif
-  
-  if ( NvmmDeclare( &CryptoNvmCtxDataBlock, mibReq.Param.Contexts->CryptoNvmCtxSize ) == NVMM_SUCCESS )
+#endif /* MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 */
+
+  if (NvmmDeclare(&CryptoNvmCtxDataBlock, mibReq.Param.Contexts->CryptoNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &CryptoNvmCtxDataBlock, NvmCryptoCtxRestore, mibReq.Param.Contexts->CryptoNvmCtxSize );
+    NvmmRead(&CryptoNvmCtxDataBlock, NvmCryptoCtxRestore, mibReq.Param.Contexts->CryptoNvmCtxSize);
     contexts.CryptoNvmCtx = &NvmCryptoCtxRestore;
     contexts.CryptoNvmCtxSize = mibReq.Param.Contexts->CryptoNvmCtxSize;
   }
@@ -306,10 +308,10 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  if ( NvmmDeclare( &SecureElementNvmCtxDataBlock, mibReq.Param.Contexts->SecureElementNvmCtxSize ) == NVMM_SUCCESS )
+
+  if (NvmmDeclare(&SecureElementNvmCtxDataBlock, mibReq.Param.Contexts->SecureElementNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &SecureElementNvmCtxDataBlock, NvmSecureElementCtxRestore, mibReq.Param.Contexts->SecureElementNvmCtxSize );
+    NvmmRead(&SecureElementNvmCtxDataBlock, NvmSecureElementCtxRestore, mibReq.Param.Contexts->SecureElementNvmCtxSize);
     contexts.SecureElementNvmCtx = &NvmSecureElementCtxRestore;
     contexts.SecureElementNvmCtxSize = mibReq.Param.Contexts->SecureElementNvmCtxSize;
   }
@@ -317,11 +319,11 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
+
 #if ( MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 )
-  if( NvmmDeclare( &MacNvmCtxDataBlock, mibReq.Param.Contexts->MacNvmCtxSize ) == NVMM_SUCCESS )
+  if (NvmmDeclare(&MacNvmCtxDataBlock, mibReq.Param.Contexts->MacNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &MacNvmCtxDataBlock, NvmMacCtxRestore, mibReq.Param.Contexts->MacNvmCtxSize );
+    NvmmRead(&MacNvmCtxDataBlock, NvmMacCtxRestore, mibReq.Param.Contexts->MacNvmCtxSize);
     contexts.MacNvmCtx = &NvmMacCtxRestore;
     contexts.MacNvmCtxSize = mibReq.Param.Contexts->MacNvmCtxSize;
   }
@@ -329,10 +331,10 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  if ( NvmmDeclare( &RegionNvmCtxDataBlock, mibReq.Param.Contexts->RegionNvmCtxSize ) == NVMM_SUCCESS )
+
+  if (NvmmDeclare(&RegionNvmCtxDataBlock, mibReq.Param.Contexts->RegionNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &RegionNvmCtxDataBlock, NvmRegionCtxRestore, mibReq.Param.Contexts->RegionNvmCtxSize );
+    NvmmRead(&RegionNvmCtxDataBlock, NvmRegionCtxRestore, mibReq.Param.Contexts->RegionNvmCtxSize);
     contexts.RegionNvmCtx = &NvmRegionCtxRestore;
     contexts.RegionNvmCtxSize = mibReq.Param.Contexts->RegionNvmCtxSize;
   }
@@ -340,10 +342,10 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  if ( NvmmDeclare( &CommandsNvmCtxDataBlock, mibReq.Param.Contexts->CommandsNvmCtxSize ) == NVMM_SUCCESS )
+
+  if (NvmmDeclare(&CommandsNvmCtxDataBlock, mibReq.Param.Contexts->CommandsNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &CommandsNvmCtxDataBlock, NvmCommandsCtxRestore, mibReq.Param.Contexts->CommandsNvmCtxSize );
+    NvmmRead(&CommandsNvmCtxDataBlock, NvmCommandsCtxRestore, mibReq.Param.Contexts->CommandsNvmCtxSize);
     contexts.CommandsNvmCtx = &NvmCommandsCtxRestore;
     contexts.CommandsNvmCtxSize = mibReq.Param.Contexts->CommandsNvmCtxSize;
   }
@@ -351,10 +353,10 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  if ( NvmmDeclare( &ClassBNvmCtxDataBlock, mibReq.Param.Contexts->ClassBNvmCtxSize ) == NVMM_SUCCESS )
+
+  if (NvmmDeclare(&ClassBNvmCtxDataBlock, mibReq.Param.Contexts->ClassBNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &ClassBNvmCtxDataBlock, NvmClassBCtxRestore, mibReq.Param.Contexts->ClassBNvmCtxSize );
+    NvmmRead(&ClassBNvmCtxDataBlock, NvmClassBCtxRestore, mibReq.Param.Contexts->ClassBNvmCtxSize);
     contexts.ClassBNvmCtx = &NvmClassBCtxRestore;
     contexts.ClassBNvmCtxSize = mibReq.Param.Contexts->ClassBNvmCtxSize;
   }
@@ -362,10 +364,10 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-  
-  if ( NvmmDeclare( &ConfirmQueueNvmCtxDataBlock, mibReq.Param.Contexts->ConfirmQueueNvmCtxSize ) == NVMM_SUCCESS )
+
+  if (NvmmDeclare(&ConfirmQueueNvmCtxDataBlock, mibReq.Param.Contexts->ConfirmQueueNvmCtxSize) == NVMM_SUCCESS)
   {
-    NvmmRead( &ConfirmQueueNvmCtxDataBlock, NvmConfirmQueueCtxRestore, mibReq.Param.Contexts->ConfirmQueueNvmCtxSize );
+    NvmmRead(&ConfirmQueueNvmCtxDataBlock, NvmConfirmQueueCtxRestore, mibReq.Param.Contexts->ConfirmQueueNvmCtxSize);
     contexts.ConfirmQueueNvmCtx = &NvmConfirmQueueCtxRestore;
     contexts.ConfirmQueueNvmCtxSize = mibReq.Param.Contexts->ConfirmQueueNvmCtxSize;
   }
@@ -373,25 +375,26 @@ NvmCtxMgmtStatus_t NvmCtxMgmtRestore( void )
   {
     status = NVMCTXMGMT_STATUS_FAIL;
   }
-#endif
-  
-  // Enforce storing all contexts
-  if( status == NVMCTXMGMT_STATUS_FAIL )
+#endif /* MAX_PERSISTENT_CTX_MGMT_ENABLED == 1 */
+
+  /* Enforce storing all contexts */
+  if (status == NVMCTXMGMT_STATUS_FAIL)
   {
     CtxUpdateStatus.Value = 0xFF;
-    NvmCtxMgmtStore( );
+    NvmCtxMgmtStore();
   }
   else
-  {  // If successful query the mac to restore contexts
+  {
+    /* If successful query the mac to restore contexts */
     mibReq.Type = MIB_NVM_CTXS;
     mibReq.Param.Contexts = &contexts;
-    LoRaMacMibSetRequestConfirm( &mibReq );
+    LoRaMacMibSetRequestConfirm(&mibReq);
   }
-  
+
   return status;
-#else
+#else /* CONTEXT_MANAGEMENT_ENABLED == 0 */
   return NVMCTXMGMT_STATUS_FAIL;
-#endif
+#endif /* CONTEXT_MANAGEMENT_ENABLED */
 }
 
 /* Private  functions ---------------------------------------------------------*/

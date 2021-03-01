@@ -54,10 +54,6 @@
 
 /* USER CODE END FunctionPrototypes */
 
-/* Pre/Post sleep processing prototypes */
-void PreSleepProcessing(uint32_t ulExpectedIdleTime);
-void PostSleepProcessing(uint32_t ulExpectedIdleTime);
-
 /* USER CODE BEGIN PREPOSTSLEEP */
 /**
   * @brief  Pre Sleep Processing

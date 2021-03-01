@@ -31,9 +31,8 @@
  * \author    Johannes Bruder ( STACKFORCE )
  */
 
-#include "region/Region.h"
+#include "Region.h"
 #include "LoRaMacAdr.h"
-#include "utilities.h"
 
 static bool CalcNextV10X( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* txPowOut, uint32_t* adrAckCounter )
 {
@@ -94,7 +93,7 @@ static bool CalcNextV10X( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* t
                         if( adrNext->UpdateChanMask == true )
                         {
                             InitDefaultsParams_t params;
-                            params.Type = INIT_TYPE_RESTORE_DEFAULT_CHANNELS;
+                            params.Type = INIT_TYPE_ACTIVATE_DEFAULT_CHANNELS;
                             RegionInitDefaults( adrNext->Region, &params );
                         }
                     }

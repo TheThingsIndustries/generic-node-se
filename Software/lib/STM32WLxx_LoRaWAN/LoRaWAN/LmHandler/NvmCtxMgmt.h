@@ -62,15 +62,15 @@ extern "C" {
  */
 typedef enum NvmCtxMgmtStatus_e
 {
-    /*!
-     * Operation was successful
-     */
-    NVMCTXMGMT_STATUS_SUCCESS,
-    /*!
-     * Operation was not successful
-     */
-    NVMCTXMGMT_STATUS_FAIL
-}NvmCtxMgmtStatus_t;
+  /*!
+   * Operation was successful
+   */
+  NVMCTXMGMT_STATUS_SUCCESS,
+  /*!
+   * Operation was not successful
+   */
+  NVMCTXMGMT_STATUS_FAIL
+} NvmCtxMgmtStatus_t;
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
@@ -78,20 +78,20 @@ typedef enum NvmCtxMgmtStatus_e
 /*!
  * \brief Calculates the next datarate to set, when ADR is on or off.
  *
- * \param [IN] adrNext Pointer to the function parameters.
+ * \param [in] adrNext Pointer to the function parameters.
  *
  */
-void NvmCtxMgmtEvent( LoRaMacNvmCtxModule_t module );
+void NvmCtxMgmtEvent(LoRaMacNvmCtxModule_t module);
 
-NvmCtxMgmtStatus_t NvmCtxMgmtStore( void );
+NvmCtxMgmtStatus_t NvmCtxMgmtStore(void);
 
-NvmCtxMgmtStatus_t NvmCtxMgmtRestore(void );
+NvmCtxMgmtStatus_t NvmCtxMgmtRestore(void);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __NVMCTXMGMT_H__
+#endif /* __NVMCTXMGMT_H__ */
 
 /*! \} defgroup NVMCTXMGMT */

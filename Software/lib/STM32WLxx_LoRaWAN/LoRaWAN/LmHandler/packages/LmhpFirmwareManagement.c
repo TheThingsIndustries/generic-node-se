@@ -9,10 +9,10 @@
   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
@@ -20,7 +20,6 @@
 #include "LmHandler.h"
 #include "LmhpFirmwareManagement.h"
 #include "mw_log_conf.h"  /* needed for MW_LOG */
-#include "lora_app_version.h" /* needed for __LORA_CM0_APP_VERSION */
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
@@ -68,15 +67,17 @@ typedef enum LmhpFirmwareManagementUpImageStatus_e
 #define FW_MANAGEMENT_PORT                          203
 #define FW_MANAGEMENT_ID                            4
 #define FW_MANAGEMENT_VERSION                       1
+#define FW_VERSION                                  0x00000000 /* Not yet managed */
+#define HW_VERSION                                  0x00000000 /* Not yet managed */
 
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /*!
  * Initializes the package with provided parameters
  *
- * \param [IN] params            Pointer to the package parameters
- * \param [IN] dataBuffer        Pointer to main application buffer
- * \param [IN] dataBufferMaxSize Main application buffer maximum size
+ * \param [in] params            Pointer to the package parameters
+ * \param [in] dataBuffer        Pointer to main application buffer
+ * \param [in] dataBufferMaxSize Main application buffer maximum size
  */
 static void LmhpFirmwareManagementInit(void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize);
 
@@ -104,7 +105,7 @@ static void LmhpFirmwareManagementProcess(void);
 /*!
  * Processes the MCPS Indication
  *
- * \param [IN] mcpsIndication     MCPS indication primitive data
+ * \param [in] mcpsIndication     MCPS indication primitive data
  */
 static void LmhpFirmwareManagementOnMcpsIndication(McpsIndication_t *mcpsIndication);
 
@@ -201,15 +202,15 @@ static void LmhpFirmwareManagementOnMcpsIndication(McpsIndication_t *mcpsIndicat
       {
         LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = FW_MANAGEMENT_DEV_VERSION_ANS;
         /* FW Version */
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (__LORA_CM0_APP_VERSION >> 0) & 0xFF;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (__LORA_CM0_APP_VERSION >> 8) & 0xFF;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (__LORA_CM0_APP_VERSION >> 16) & 0xFF;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (__LORA_CM0_APP_VERSION >> 24) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (FW_VERSION >> 0) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (FW_VERSION >> 8) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (FW_VERSION >> 16) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (FW_VERSION >> 24) & 0xFF;
         /* HW Version */
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = 0;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = 0;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = 0;
-        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = 0;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (HW_VERSION >> 0) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (HW_VERSION >> 8) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (HW_VERSION >> 16) & 0xFF;
+        LmhpFirmwareManagementState.DataBuffer[dataBufferIndex++] = (HW_VERSION >> 24) & 0xFF;
         break;
       }
       case FW_MANAGEMENT_DEV_REBOOT_TIME_REQ:

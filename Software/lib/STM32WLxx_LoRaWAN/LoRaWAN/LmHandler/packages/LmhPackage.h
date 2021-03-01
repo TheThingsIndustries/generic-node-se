@@ -23,7 +23,7 @@
   *
   *          Portions COPYRIGHT 2020 STMicroelectronics
   *
-  * @file    LmPackage.h
+  * @file    LmhPackage.h
   * @author  MCD Application Team
   * @brief   Header for Package definition API
   ******************************************************************************
@@ -46,6 +46,9 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+/*!
+ * LoRaMac handler package parameters
+ */
 typedef struct LmhPackage_s
 {
   uint8_t Port;
@@ -58,47 +61,47 @@ typedef struct LmhPackage_s
   /*!
    * Initializes the package with provided parameters
    *
-   * \param [IN] params            Pointer to the package parameters
-   * \param [IN] dataBuffer        Pointer to main application buffer
-   * \param [IN] dataBufferMaxSize Main application buffer maximum size
+   * \param [in] params            Pointer to the package parameters
+   * \param [in] dataBuffer        Pointer to main application buffer
+   * \param [in] dataBufferMaxSize Main application buffer maximum size
    */
-  void ( *Init )( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize );
+  void (*Init)(void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize);
   /*!
    * Returns the current package initialization status.
    *
    * \retval status Package initialization status
    *                [true: Initialized, false: Not initialized]
    */
-  bool ( *IsInitialized )( void );
+  bool (*IsInitialized)(void);
   /*!
    * Returns the package operation status.
    *
    * \retval status Package operation status
    *                [true: Running, false: Not running]
    */
-  bool ( *IsRunning )( void );
+  bool (*IsRunning)(void);
   /*!
    * Processes the internal package events.
    */
-  void ( *Process )( void );
+  void (*Process)(void);
   /*!
    * Processes the MCSP Confirm
    *
-   * \param [IN] mcpsConfirm MCPS confirmation primitive data
+   * \param [in] mcpsConfirm MCPS confirmation primitive data
    */
-  void ( *OnMcpsConfirmProcess )( McpsConfirm_t *mcpsConfirm );
+  void (*OnMcpsConfirmProcess)(McpsConfirm_t *mcpsConfirm);
   /*!
    * Processes the MCPS Indication
    *
-   * \param [IN] mcpsIndication     MCPS indication primitive data
+   * \param [in] mcpsIndication     MCPS indication primitive data
    */
-  void ( *OnMcpsIndicationProcess )( McpsIndication_t *mcpsIndication );
+  void (*OnMcpsIndicationProcess)(McpsIndication_t *mcpsIndication);
   /*!
    * Processes the MLME Confirm
    *
-   * \param [IN] mlmeConfirm MLME confirmation primitive data
+   * \param [in] mlmeConfirm MLME confirmation primitive data
    */
-  void ( *OnMlmeConfirmProcess )( MlmeConfirm_t *mlmeConfirm );
+  void (*OnMlmeConfirmProcess)(MlmeConfirm_t *mlmeConfirm);
 
   /*
    *=========================================================================
@@ -108,30 +111,30 @@ typedef struct LmhPackage_s
    */
 
   /*!
-  * Join a LoRa Network in classA
+  * \brief Join a LoRa Network in classA
   *
-  * \Note if the device is ABP, this is a pass through function
-  * 
-  * \param [IN] isOtaa Indicates which activation mode must be used
+  * \note if the device is ABP, this is a pass through function
+  *
+  * \param [in] isOtaa Indicates which activation mode must be used
   */
-  void ( *OnJoinRequest )( ActivationType_t mode );
+  void (*OnJoinRequest)(ActivationType_t mode);
   /*!
-   * Instructs the MAC layer to send a ClassA uplink
+   * \brief Instructs the MAC layer to send a ClassA uplink
    *
-   * \param [IN] appData Data to be sent
-   * \param [IN] isTxConfirmed Indicates if the uplink requires an acknowledgement
+   * \param [in] appData Data to be sent
+   * \param [in] isTxConfirmed Indicates if the uplink requires an acknowledgement
    *
    * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
    *                processed else \ref LORAMAC_HANDLER_ERROR
    */
-  LmHandlerErrorStatus_t ( *OnSendRequest )( LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed, TimerTime_t *nextTxIn, bool allowDelayedTx );
+  LmHandlerErrorStatus_t (*OnSendRequest)(LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed, TimerTime_t *nextTxIn, bool allowDelayedTx);
   /*!
-  * Requests network server time update
+  * \brief Requests network server time update
   *
   * \retval status Returns \ref LORAMAC_HANDLER_SET if joined else \ref LORAMAC_HANDLER_RESET
   */
-  LmHandlerErrorStatus_t ( *OnDeviceTimeRequest )( void );
-}LmhPackage_t;
+  LmHandlerErrorStatus_t (*OnDeviceTimeRequest)(void);
+} LmhPackage_t;
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
@@ -140,4 +143,4 @@ typedef struct LmhPackage_s
 }
 #endif
 
-#endif // __LMH_PACKAGE_H__
+#endif /* __LMH_PACKAGE_H__ */

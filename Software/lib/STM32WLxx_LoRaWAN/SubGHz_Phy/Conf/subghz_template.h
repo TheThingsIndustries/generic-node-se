@@ -1,30 +1,31 @@
 /**
   ******************************************************************************
-  * File Name          : SUBGHZ.h
-  * Description        : This file provides code for the configuration
-  *                      of the SUBGHZ instances.
+  * @file    subghz_template.h
+  * @brief   This file contains all the function prototypes for
+  *          the subghz.c file
   ******************************************************************************
   * @attention
   *
   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __SUBGHZ_H
-#define __SUBGHZ_H
+#ifndef __SUBGHZ_H__
+#define __SUBGHZ_H__
+
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32wlxx_hal.h"
+#include "main.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -36,6 +37,7 @@ extern SUBGHZ_HandleTypeDef hsubghz;
 
 /* USER CODE END Private defines */
 
+void MX_SUBGHZ_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
@@ -44,14 +46,7 @@ extern SUBGHZ_HandleTypeDef hsubghz;
 #ifdef __cplusplus
 }
 #endif
-#endif /*__SUBGHZ_H */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+#endif /* __SUBGHZ_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

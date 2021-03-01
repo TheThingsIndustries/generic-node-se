@@ -51,7 +51,7 @@ typedef struct ComplianceTestState_s
   bool LinkCheck;
   uint8_t DemodMargin;
   uint8_t NbGateways;
-}ComplianceTestState_t;
+} ComplianceTestState_t;
 
 /* Private define ------------------------------------------------------------*/
 /*!
@@ -69,19 +69,19 @@ typedef struct ComplianceTestState_s
 
 /* Private macro -------------------------------------------------------------*/
 #ifndef MIN
-  #define MIN( a, b ) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
+#define MIN( a, b ) ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )
 #endif
 
 /* Private function prototypes -----------------------------------------------*/
 /*!
  * Initializes the compliance tests with provided parameters
  *
- * \param [IN] params Structure containing the initial compliance
+ * \param [in] params Structure containing the initial compliance
  *                    tests parameters.
- * \param [IN] dataBuffer        Pointer to main application buffer
- * \param [IN] dataBufferMaxSize Application buffer maximum size
+ * \param [in] dataBuffer        Pointer to main application buffer
+ * \param [in] dataBufferMaxSize Application buffer maximum size
  */
-static void LmhpComplianceInit( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize );
+static void LmhpComplianceInit(void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize);
 
 /*!
  * Returns the current compliance certification protocol initialization status.
@@ -89,7 +89,7 @@ static void LmhpComplianceInit( void *params, uint8_t *dataBuffer, uint8_t dataB
  * \retval status Compliance certification protocol initialization status
  *                [true: Initialized, false: Not initialized]
  */
-static bool LmhpComplianceIsInitialized( void );
+static bool LmhpComplianceIsInitialized(void);
 
 /*!
  * Returns the current compliance certification protocol handling status.
@@ -97,38 +97,38 @@ static bool LmhpComplianceIsInitialized( void );
  * \retval status Compliance certification protocol handling status
  *                [true: Running, false: Not running]
  */
-static bool LmhpComplianceIsRunning( void );
+static bool LmhpComplianceIsRunning(void);
 
 /*!
  * Processes the LoRaMac Compliance events.
  */
-static void LmhpComplianceProcess( void );
+static void LmhpComplianceProcess(void);
 
 /*!
  * Processes the MCPS Confirm
  *
- * \param [IN] mcpsConfirm MCPS confirmation primitive data
+ * \param [in] mcpsConfirm MCPS confirmation primitive data
  */
-static void LmhpComplianceOnMcpsConfirm( McpsConfirm_t *mcpsConfirm );
+static void LmhpComplianceOnMcpsConfirm(McpsConfirm_t *mcpsConfirm);
 
 /*!
  * Processes the MCPS Indication
  *
- * \param [IN] mcpsIndication     MCPS indication primitive data
+ * \param [in] mcpsIndication     MCPS indication primitive data
  */
-static void LmhpComplianceOnMcpsIndication( McpsIndication_t *mcpsIndication );
+static void LmhpComplianceOnMcpsIndication(McpsIndication_t *mcpsIndication);
 
 /*!
  * Processes the MLME Confirm
  *
- * \param [IN] mlmeConfirm MLME confirmation primitive data
+ * \param [in] mlmeConfirm MLME confirmation primitive data
  */
-static void LmhpComplianceOnMlmeConfirm( MlmeConfirm_t *mlmeConfirm );
+static void LmhpComplianceOnMlmeConfirm(MlmeConfirm_t *mlmeConfirm);
 
 /*!
  * Function executed on TxNextPacket Timeout event
  */
-static void OnComplianceTxNextPacketTimerEvent( void *context );
+static void OnComplianceTxNextPacketTimerEvent(void *context);
 
 /*!
  * Processes the data to transmit on port \ref COMPLIANCE_PORT
@@ -137,7 +137,7 @@ static void OnComplianceTxNextPacketTimerEvent( void *context );
  * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
  *                processed else \ref LORAMAC_HANDLER_ERROR
  */
-static LmHandlerErrorStatus_t LmhpComplianceTxProcess( void );
+static LmHandlerErrorStatus_t LmhpComplianceTxProcess(void);
 
 /* Private variables ---------------------------------------------------------*/
 /*!
@@ -149,7 +149,7 @@ static TimerEvent_t ComplianceTxNextPacketTimer;
  * Holds the compliance test current context
  */
 static ComplianceTestState_t ComplianceTestState =
-{ 
+{
   .Initialized =        false,
   .IsRunning =          false,
   .State =              0,
@@ -167,7 +167,7 @@ static ComplianceTestState_t ComplianceTestState =
 /*!
  * LoRaWAN compliance tests protocol handler parameters
  */
-static LmhpComplianceParams_t* LmhpComplianceParams;
+static LmhpComplianceParams_t *LmhpComplianceParams;
 
 static LmhPackage_t LmhpCompliancePackage =
 {
@@ -179,23 +179,23 @@ static LmhPackage_t LmhpCompliancePackage =
   .OnMcpsConfirmProcess =       LmhpComplianceOnMcpsConfirm,
   .OnMcpsIndicationProcess =    LmhpComplianceOnMcpsIndication,
   .OnMlmeConfirmProcess =       LmhpComplianceOnMlmeConfirm,
-  .OnJoinRequest =              NULL,                           // To be initialized by LmHandler
-  .OnSendRequest =              NULL,                           // To be initialized by LmHandler
-  .OnDeviceTimeRequest =        NULL,                           // To be initialized by LmHandler
+  .OnJoinRequest =              NULL,                           /* To be initialized by LmHandler */
+  .OnSendRequest =              NULL,                           /* To be initialized by LmHandler */
+  .OnDeviceTimeRequest =        NULL,                           /* To be initialized by LmHandler */
 };
 
 /* Exported functions ---------------------------------------------------------*/
-LmhPackage_t *LmphCompliancePackageFactory( void )
+LmhPackage_t *LmphCompliancePackageFactory(void)
 {
   return &LmhpCompliancePackage;
 }
 
 /* Private  functions ---------------------------------------------------------*/
-static void LmhpComplianceInit( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize )
+static void LmhpComplianceInit(void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize)
 {
-  if( ( params != NULL ) && ( dataBuffer != NULL ) )
+  if ((params != NULL) && (dataBuffer != NULL))
   {
-    LmhpComplianceParams = ( LmhpComplianceParams_t* )params;
+    LmhpComplianceParams = (LmhpComplianceParams_t *)params;
     ComplianceTestState.DataBuffer = dataBuffer;
     ComplianceTestState.DataBufferMaxSize = dataBufferMaxSize;
     ComplianceTestState.Initialized = true;
@@ -207,45 +207,45 @@ static void LmhpComplianceInit( void *params, uint8_t *dataBuffer, uint8_t dataB
   }
 }
 
-static bool LmhpComplianceIsInitialized( void )
+static bool LmhpComplianceIsInitialized(void)
 {
   return ComplianceTestState.Initialized;
 }
 
-static bool LmhpComplianceIsRunning( void )
+static bool LmhpComplianceIsRunning(void)
 {
-  if( ComplianceTestState.Initialized == false )
+  if (ComplianceTestState.Initialized == false)
   {
     return false;
   }
-  
+
   return ComplianceTestState.IsRunning;
 }
 
-static void LmhpComplianceOnMcpsConfirm( McpsConfirm_t *mcpsConfirm )
+static void LmhpComplianceOnMcpsConfirm(McpsConfirm_t *mcpsConfirm)
 {
-  if( ComplianceTestState.Initialized == false )
+  if (ComplianceTestState.Initialized == false)
   {
     return;
   }
-  
-  if (( ComplianceTestState.IsRunning == true) && 
-      (mcpsConfirm->McpsRequest == MCPS_CONFIRMED) && 
+
+  if ((ComplianceTestState.IsRunning == true) &&
+      (mcpsConfirm->McpsRequest == MCPS_CONFIRMED) &&
       (mcpsConfirm->AckReceived != 0))
   {
-    // Increment the compliance certification protocol downlink counter
+    /* Increment the compliance certification protocol downlink counter */
     ComplianceTestState.DownLinkCounter++;
   }
 }
 
-static void LmhpComplianceOnMlmeConfirm( MlmeConfirm_t *mlmeConfirm )
+static void LmhpComplianceOnMlmeConfirm(MlmeConfirm_t *mlmeConfirm)
 {
-  if( ComplianceTestState.Initialized == false )
+  if (ComplianceTestState.Initialized == false)
   {
     return;
   }
-  
-  if( mlmeConfirm->MlmeRequest == MLME_LINK_CHECK )
+
+  if (mlmeConfirm->MlmeRequest == MLME_LINK_CHECK)
   {
     ComplianceTestState.LinkCheck = true;
     ComplianceTestState.DemodMargin = mlmeConfirm->DemodMargin;
@@ -253,14 +253,14 @@ static void LmhpComplianceOnMlmeConfirm( MlmeConfirm_t *mlmeConfirm )
   }
 }
 
-static LmHandlerErrorStatus_t LmhpComplianceTxProcess( void )
+static LmHandlerErrorStatus_t LmhpComplianceTxProcess(void)
 {
-  if( ComplianceTestState.Initialized == false )
+  if (ComplianceTestState.Initialized == false)
   {
     return LORAMAC_HANDLER_ERROR;
   }
-  
-  if( ComplianceTestState.LinkCheck == true )
+
+  if (ComplianceTestState.LinkCheck == true)
   {
     ComplianceTestState.LinkCheck = false;
     ComplianceTestState.DataBufferSize = 3;
@@ -271,16 +271,16 @@ static LmHandlerErrorStatus_t LmhpComplianceTxProcess( void )
   }
   else
   {
-    switch( ComplianceTestState.State )
+    switch (ComplianceTestState.State)
     {
-    case 4:
-      ComplianceTestState.State = 1;
-      break;
-    case 1:
-      ComplianceTestState.DataBufferSize = 2;
-      ComplianceTestState.DataBuffer[0] = ComplianceTestState.DownLinkCounter >> 8;
-      ComplianceTestState.DataBuffer[1] = ComplianceTestState.DownLinkCounter;
-      break;
+      case 4:
+        ComplianceTestState.State = 1;
+        break;
+      case 1:
+        ComplianceTestState.DataBufferSize = 2;
+        ComplianceTestState.DataBuffer[0] = ComplianceTestState.DownLinkCounter >> 8;
+        ComplianceTestState.DataBuffer[1] = ComplianceTestState.DownLinkCounter;
+        break;
     }
   }
   LmHandlerAppData_t appData =
@@ -290,49 +290,50 @@ static LmHandlerErrorStatus_t LmhpComplianceTxProcess( void )
     .Port = COMPLIANCE_PORT
   };
   TimerTime_t nextTxIn = 0;
-  
-  // Schedule next transmission
-  TimerStart( &ComplianceTxNextPacketTimer );
-  
-  return LmhpCompliancePackage.OnSendRequest( &appData, ( LmHandlerMsgTypes_t )ComplianceTestState.IsTxConfirmed, &nextTxIn, true );
+
+  /* Schedule next transmission */
+  TimerStart(&ComplianceTxNextPacketTimer);
+
+  return LmhpCompliancePackage.OnSendRequest(&appData, (LmHandlerMsgTypes_t)ComplianceTestState.IsTxConfirmed, &nextTxIn,
+                                             true);
 }
 
-static void LmhpComplianceOnMcpsIndication( McpsIndication_t* mcpsIndication )
+static void LmhpComplianceOnMcpsIndication(McpsIndication_t *mcpsIndication)
 {
-  if( ComplianceTestState.Initialized == false )
+  if (ComplianceTestState.Initialized == false)
   {
     return;
   }
-  
-  if( mcpsIndication->RxData == false )
+
+  if (mcpsIndication->RxData == false)
   {
     return;
   }
-  
-  if (( ComplianceTestState.IsRunning == true) && 
+
+  if ((ComplianceTestState.IsRunning == true) &&
       (mcpsIndication->AckReceived == 0))
   {
-    // Increment the compliance certification protocol downlink counter
+    /* Increment the compliance certification protocol downlink counter */
     ComplianceTestState.DownLinkCounter++;
   }
-  
-  if( mcpsIndication->Port != COMPLIANCE_PORT )
+
+  if (mcpsIndication->Port != COMPLIANCE_PORT)
   {
     return;
   }
-  
-  if( ComplianceTestState.IsRunning == false )
+
+  if (ComplianceTestState.IsRunning == false)
   {
-    // Check compliance test enable command (i)
-    if( ( mcpsIndication->BufferSize == 4 ) &&
-       ( mcpsIndication->Buffer[0] == 0x01 ) &&
-         ( mcpsIndication->Buffer[1] == 0x01 ) &&
-           ( mcpsIndication->Buffer[2] == 0x01 ) &&
-             ( mcpsIndication->Buffer[3] == 0x01 ) )
+    /* Check compliance test enable command (i) */
+    if ((mcpsIndication->BufferSize == 4) &&
+        (mcpsIndication->Buffer[0] == 0x01) &&
+        (mcpsIndication->Buffer[1] == 0x01) &&
+        (mcpsIndication->Buffer[2] == 0x01) &&
+        (mcpsIndication->Buffer[3] == 0x01))
     {
       MibRequestConfirm_t mibReq;
-      
-      // Initialize compliance test mode context
+
+      /* Initialize compliance test mode context */
       ComplianceTestState.IsTxConfirmed = false;
       ComplianceTestState.Port = 224;
       ComplianceTestState.DataBufferSize = 2;
@@ -342,176 +343,176 @@ static void LmhpComplianceOnMcpsIndication( McpsIndication_t* mcpsIndication )
       ComplianceTestState.NbGateways = 0;
       ComplianceTestState.IsRunning = true;
       ComplianceTestState.State = 1;
-      
-      // Enable ADR while in compliance test mode
+
+      /* Enable ADR while in compliance test mode */
       mibReq.Type = MIB_ADR;
       mibReq.Param.AdrEnable = true;
-      LoRaMacMibSetRequestConfirm( &mibReq );
-      
-      // Disable duty cycle enforcement while in compliance test mode
-      LoRaMacTestSetDutyCycleOn( false );
-      
-      // Stop peripherals
-      if( LmhpComplianceParams->StopPeripherals != NULL )
+      LoRaMacMibSetRequestConfirm(&mibReq);
+
+      /* Disable duty cycle enforcement while in compliance test mode */
+      LoRaMacTestSetDutyCycleOn(false);
+
+      /* Stop peripherals */
+      if (LmhpComplianceParams->StopPeripherals != NULL)
       {
-        LmhpComplianceParams->StopPeripherals( );
+        LmhpComplianceParams->StopPeripherals();
       }
-      // Initialize compliance protocol transmission timer
-      TimerInit( &ComplianceTxNextPacketTimer, OnComplianceTxNextPacketTimerEvent );
-      TimerSetValue( &ComplianceTxNextPacketTimer, COMPLIANCE_TX_DUTYCYCLE );
-      
-      // Confirm compliance test protocol activation
-      LmhpComplianceTxProcess ();
+      /* Initialize compliance protocol transmission timer */
+      TimerInit(&ComplianceTxNextPacketTimer, OnComplianceTxNextPacketTimerEvent);
+      TimerSetValue(&ComplianceTxNextPacketTimer, COMPLIANCE_TX_DUTYCYCLE);
+
+      /* Confirm compliance test protocol activation */
+      LmhpComplianceTxProcess();
     }
   }
   else
   {
-    // Parse compliance test protocol
+    /* Parse compliance test protocol */
     ComplianceTestState.State = mcpsIndication->Buffer[0];
-    switch( ComplianceTestState.State )
+    switch (ComplianceTestState.State)
     {
-    case 0: // Check compliance test disable command (ii)
+      case 0: /* Check compliance test disable command (ii) */
       {
         MibRequestConfirm_t mibReq;
-        
-        TimerStop( &ComplianceTxNextPacketTimer );
-        
-        // Disable compliance test mode and reset the downlink counter.
+
+        TimerStop(&ComplianceTxNextPacketTimer);
+
+        /* Disable compliance test mode and reset the downlink counter. */
         ComplianceTestState.DownLinkCounter = 0;
         ComplianceTestState.IsRunning = false;
-        
-        // Restore previous ADR seeting
+
+        /* Restore previous ADR seeting */
         mibReq.Type = MIB_ADR;
         mibReq.Param.AdrEnable = LmhpComplianceParams->AdrEnabled;
-        LoRaMacMibSetRequestConfirm( &mibReq );
-        
-        // Enable duty cycle enforcement
-        LoRaMacTestSetDutyCycleOn( LmhpComplianceParams->DutyCycleEnabled );
-        
-        // Restart peripherals
-        if( LmhpComplianceParams->StartPeripherals != NULL )
+        LoRaMacMibSetRequestConfirm(&mibReq);
+
+        /* Enable duty cycle enforcement */
+        LoRaMacTestSetDutyCycleOn(LmhpComplianceParams->DutyCycleEnabled);
+
+        /* Restart peripherals */
+        if (LmhpComplianceParams->StartPeripherals != NULL)
         {
-          LmhpComplianceParams->StartPeripherals( );
+          LmhpComplianceParams->StartPeripherals();
         }
       }
       break;
-    case 1: // (iii, iv)
-      ComplianceTestState.DataBufferSize = 2;
-      break;
-    case 2: // Enable confirmed messages (v)
-      ComplianceTestState.IsTxConfirmed = true;
-      ComplianceTestState.State = 1;
-      break;
-    case 3:  // Disable confirmed messages (vi)
-      ComplianceTestState.IsTxConfirmed = false;
-      ComplianceTestState.State = 1;
-      break;
-    case 4: // (vii)
-      ComplianceTestState.DataBufferSize = mcpsIndication->BufferSize;
-      
-      ComplianceTestState.DataBuffer[0] = 4;
-      for( uint8_t i = 1; i < MIN( ComplianceTestState.DataBufferSize, ComplianceTestState.DataBufferMaxSize ); i++ )
-      {
-        ComplianceTestState.DataBuffer[i] = mcpsIndication->Buffer[i] + 1;
-      }
-      break;
-    case 5: // (viii)
+      case 1: /* (iii, iv) */
+        ComplianceTestState.DataBufferSize = 2;
+        break;
+      case 2: /* Enable confirmed messages (v) */
+        ComplianceTestState.IsTxConfirmed = true;
+        ComplianceTestState.State = 1;
+        break;
+      case 3:  /* Disable confirmed messages (vi) */
+        ComplianceTestState.IsTxConfirmed = false;
+        ComplianceTestState.State = 1;
+        break;
+      case 4: /* (vii) */
+        ComplianceTestState.DataBufferSize = mcpsIndication->BufferSize;
+
+        ComplianceTestState.DataBuffer[0] = 4;
+        for (uint8_t i = 1; i < MIN(ComplianceTestState.DataBufferSize, ComplianceTestState.DataBufferMaxSize); i++)
+        {
+          ComplianceTestState.DataBuffer[i] = mcpsIndication->Buffer[i] + 1;
+        }
+        break;
+      case 5: /* (viii) */
       {
         MlmeReq_t mlmeReq;
-        
+
         mlmeReq.Type = MLME_LINK_CHECK;
-        
-        LoRaMacMlmeRequest( &mlmeReq );
+
+        LoRaMacMlmeRequest(&mlmeReq);
       }
       break;
-    case 6: // (ix)
+      case 6: /* (ix) */
       {
         MibRequestConfirm_t mibReq;
-        
-        TimerStop( &ComplianceTxNextPacketTimer );
-        
-        // Disable TestMode and revert back to normal operation
-        // Disable compliance test mode and reset the downlink counter.
+
+        TimerStop(&ComplianceTxNextPacketTimer);
+
+        /* Disable TestMode and revert back to normal operation */
+        /* Disable compliance test mode and reset the downlink counter. */
         ComplianceTestState.DownLinkCounter = 0;
         ComplianceTestState.IsRunning = false;
-        
-        // Restore previous ADR seeting
+
+        /* Restore previous ADR seeting */
         mibReq.Type = MIB_ADR;
         mibReq.Param.AdrEnable = LmhpComplianceParams->AdrEnabled;
-        LoRaMacMibSetRequestConfirm( &mibReq );
-        
-        // Enable duty cycle enforcement
-        LoRaMacTestSetDutyCycleOn( LmhpComplianceParams->DutyCycleEnabled );
-        
-        // Restart peripherals
-        if( LmhpComplianceParams->StartPeripherals != NULL )
+        LoRaMacMibSetRequestConfirm(&mibReq);
+
+        /* Enable duty cycle enforcement */
+        LoRaMacTestSetDutyCycleOn(LmhpComplianceParams->DutyCycleEnabled);
+
+        /* Restart peripherals */
+        if (LmhpComplianceParams->StartPeripherals != NULL)
         {
-          LmhpComplianceParams->StartPeripherals( );
+          LmhpComplianceParams->StartPeripherals();
         }
-        
-        LmhpCompliancePackage.OnJoinRequest( ACTIVATION_TYPE_OTAA );
+
+        LmhpCompliancePackage.OnJoinRequest(ACTIVATION_TYPE_OTAA);
       }
       break;
-    case 7: // (x)
+      case 7: /* (x) */
       {
         MlmeReq_t mlmeReq;
-        if( mcpsIndication->BufferSize == 3 )
+        if (mcpsIndication->BufferSize == 3)
         {
           mlmeReq.Type = MLME_TXCW;
-          mlmeReq.Req.TxCw.Timeout = ( uint16_t )( ( mcpsIndication->Buffer[1] << 8 ) | mcpsIndication->Buffer[2] );
+          mlmeReq.Req.TxCw.Timeout = (uint16_t)((mcpsIndication->Buffer[1] << 8) | mcpsIndication->Buffer[2]);
         }
-        else if( mcpsIndication->BufferSize == 7 )
+        else if (mcpsIndication->BufferSize == 7)
         {
           mlmeReq.Type = MLME_TXCW_1;
-          mlmeReq.Req.TxCw.Timeout = ( uint16_t )( ( mcpsIndication->Buffer[1] << 8 ) | mcpsIndication->Buffer[2] );
-          mlmeReq.Req.TxCw.Frequency = ( uint32_t )( ( mcpsIndication->Buffer[3] << 16 ) | ( mcpsIndication->Buffer[4] << 8 ) | mcpsIndication->Buffer[5] ) * 100;
+          mlmeReq.Req.TxCw.Timeout = (uint16_t)((mcpsIndication->Buffer[1] << 8) | mcpsIndication->Buffer[2]);
+          mlmeReq.Req.TxCw.Frequency = (uint32_t)((mcpsIndication->Buffer[3] << 16) | (mcpsIndication->Buffer[4] << 8) | mcpsIndication->Buffer[5]) * 100;
           mlmeReq.Req.TxCw.Power = mcpsIndication->Buffer[6];
         }
-        LoRaMacMlmeRequest( &mlmeReq );
+        LoRaMacMlmeRequest(&mlmeReq);
         ComplianceTestState.State = 1;
       }
       break;
-    case 8: // Send DeviceTimeReq
+      case 8: /* Send DeviceTimeReq */
       {
         MlmeReq_t mlmeReq;
-        
+
         mlmeReq.Type = MLME_DEVICE_TIME;
-        
-        LoRaMacMlmeRequest( &mlmeReq );
+
+        LoRaMacMlmeRequest(&mlmeReq);
       }
       break;
-    case 9: // Switch end device Class
+      case 9: /* Switch end device Class */
       {
         MibRequestConfirm_t mibReq;
-        
+
         mibReq.Type = MIB_DEVICE_CLASS;
-        // CLASS_A = 0, CLASS_B = 1, CLASS_C = 2
-        mibReq.Param.Class = ( DeviceClass_t )mcpsIndication->Buffer[1];;
-        LoRaMacMibSetRequestConfirm( &mibReq );
+        /* CLASS_A = 0, CLASS_B = 1, CLASS_C = 2 */
+        mibReq.Param.Class = (DeviceClass_t)mcpsIndication->Buffer[1];;
+        LoRaMacMibSetRequestConfirm(&mibReq);
       }
       break;
-    case 10: // Send PingSlotInfoReq
+      case 10: /* Send PingSlotInfoReq */
       {
         MlmeReq_t mlmeReq;
-        
+
         mlmeReq.Type = MLME_PING_SLOT_INFO;
         mlmeReq.Req.PingSlotInfo.PingSlot.Value = mcpsIndication->Buffer[1];
-        
-        LoRaMacMlmeRequest( &mlmeReq );
+
+        LoRaMacMlmeRequest(&mlmeReq);
       }
       break;
-    default:
-      break;
+      default:
+        break;
     }
   }
 }
 
-static void LmhpComplianceProcess( void )
+static void LmhpComplianceProcess(void)
 {
-  // Nothing to process
+  /* Nothing to process */
 }
 
-static void OnComplianceTxNextPacketTimerEvent( void* context )
+static void OnComplianceTxNextPacketTimerEvent(void *context)
 {
   LmhpComplianceTxProcess();
 }

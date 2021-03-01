@@ -43,14 +43,11 @@ extern "C"
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include "utilities.h"
 #include "LoRaMacTypes.h"
 #include "LoRaMacMessageTypes.h"
-
-/*!
- * Indicates if LoRaWAN 1.1.x crypto scheme is enabled
- */
-#define USE_LRWAN_1_1_X_CRYPTO                      0
 
 /*!
  * Indicates if a random devnonce must be used or not
@@ -68,7 +65,7 @@ extern "C"
 #define FCNT_DOWN_INITAL_VALUE          0xFFFFFFFF
 
 /*!
- * LoRaMac Cryto Status
+ * LoRaMac Crypto Status
  */
 typedef enum eLoRaMacCryptoStatus
 {

@@ -43,6 +43,7 @@ extern "C"
 {
 #endif
 
+#include <stdint.h>
 #include "LoRaMacCrypto.h"
 
 /*!
@@ -54,11 +55,6 @@ extern "C"
  * Secure-element EUI size in bytes
  */
 #define SE_EUI_SIZE             8
-
-/*!
- * Secure-element pin size in bytes
- */
-#define SE_PIN_SIZE             4
 
 /*!
  * Return values.
@@ -256,10 +252,25 @@ SecureElementStatus_t SecureElementSetJoinEui( uint8_t* joinEui );
  */
 uint8_t* SecureElementGetJoinEui( void );
 
+/*!
+ * Sets the pin
+ *
+ * \param[IN] pin             - Pointer to the 4-byte pin
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementSetPin( uint8_t* pin );
+
+/*!
+ * Gets the Pin
+ *
+ * \retval                    - Pointer to the 4-byte pin
+ */
+uint8_t* SecureElementGetPin( void );
+
+/*! \} defgroup SECUREELEMENT */
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif //  __SECURE_ELEMENT_H__
-
-/*! \} defgroup SECUREELEMENT */

@@ -412,8 +412,8 @@ static LoRaMacStatus_t prvSetABPCredentials( void )
         if( status == LORAMAC_STATUS_OK )
         {
             lorawanConfigGET_NETWORK_SESSION_KEY( nwsKey );
-            mibReq.Type = MIB_NWK_S_ENC_KEY;
-            mibReq.Param.NwkSEncKey = nwsKey;
+            mibReq.Type = MIB_NWK_S_KEY;
+            mibReq.Param.NwkSKey = nwsKey;
             status = LoRaMacMibSetRequestConfirm( &mibReq );
         }
     #endif

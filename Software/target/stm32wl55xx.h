@@ -318,7 +318,6 @@ typedef struct
 /**
   * @brief Digital to Analog Converter
   */
-
 typedef struct
 {
   __IO uint32_t CR;          /*!< DAC control register,                                    Address offset: 0x00 */
@@ -343,6 +342,8 @@ typedef struct
   __IO uint32_t SHRR;        /*!< DAC Sample and Hold refresh time register,               Address offset: 0x4C */
 } DAC_TypeDef;
 
+#if defined(CORE_CM0PLUS)
+#else
 /**
   * @brief Debug MCU
   */
@@ -358,6 +359,7 @@ typedef struct
   __IO uint32_t APB2FZR;     /*!< Debug MCU CPU1 APB2 freeze register,         Address offset: 0x4C */
   __IO uint32_t C2APB2FZR;   /*!< Debug MCU CPU2 APB2 freeze register,         Address offset: 0x50 */
 } DBGMCU_TypeDef;
+#endif
 
 /**
   * @brief DMA Controller
@@ -930,9 +932,10 @@ typedef struct
 #define SRAM2_SIZE              0x00008000UL   /*!< SRAM2 default size : 32 kB  */
 
 /*!< Memory, OTP and Option bytes */
-#define OTP_AREA_BASE           (SYSTEM_FLASH_BASE + 0x00007000UL) /*!< OTP area : 1kB (0x1FFF7000 – 0x1FFF73FF)       */
-#define ENGI_BYTES_BASE         (SYSTEM_FLASH_BASE + 0x00007400UL) /*!< Engi Bytes : 1kB (0x1FFF7400 – 0x1FFF77FF)     */
-#define OPTION_BYTES_BASE       (SYSTEM_FLASH_BASE + 0x00007800UL) /*!< Option Bytes : 2kB (0x1FFF7800 – 0x1FFF7FFF)   */
+#define RSSLIB_PFUNC_BASE       (SYSTEM_FLASH_BASE + 0x00003A00UL) /*!< RSS area                                      */
+#define OTP_AREA_BASE           (SYSTEM_FLASH_BASE + 0x00007000UL) /*!< OTP area : 1kB (0x1FFF7000 – 0x1FFF73FF)      */
+#define ENGI_BYTES_BASE         (SYSTEM_FLASH_BASE + 0x00007400UL) /*!< Engi Bytes : 1kB (0x1FFF7400 – 0x1FFF77FF)    */
+#define OPTION_BYTES_BASE       (SYSTEM_FLASH_BASE + 0x00007800UL) /*!< Option Bytes : 2kB (0x1FFF7800 – 0x1FFF7FFF)  */
 
 /*!< Device Electronic Signature */
 #define PACKAGE_BASE            (ENGI_BYTES_BASE + 0x00000100UL) /*!< Package data register base address     */
@@ -1051,8 +1054,12 @@ typedef struct
 /*!< APB3 peripherals */
 #define SUBGHZSPI_BASE          (APB3PERIPH_BASE + 0x00000000UL)
 
-/* Debug MCU registers base address */
+#if defined(CORE_CM0PLUS)
+#else
+/*!< Peripherals available on CPU1 external PPB bus */
 #define DBGMCU_BASE             (0xE0042000UL)
+#endif
+
 /**
   * @}
   */
@@ -1167,7 +1174,12 @@ typedef struct
 /* Peripherals available on APB3 bus */
 #define SUBGHZSPI               ((SPI_TypeDef *) SUBGHZSPI_BASE)
 
+#if defined(CORE_CM0PLUS)
+#else
+/* Peripherals available on CPU1 external PPB bus */
 #define DBGMCU                  ((DBGMCU_TypeDef *) DBGMCU_BASE)
+#endif
+
 /**
   * @}
   */
@@ -3056,10 +3068,10 @@ typedef struct
 #define DMA_CCR_SECM           DMA_CCR_SECM_Msk                               /*!< Secure mode                          */
 #define DMA_CCR_SSEC_Pos       (18U)
 #define DMA_CCR_SSEC_Msk       (0x1UL << DMA_CCR_SSEC_Pos)                    /*!< 0x00040000 */
-#define DMA_CCR_SSEC           DMA_CCR_SSEC_Msk                               /*!< Security of the DMA transfer from the source    */
+#define DMA_CCR_SSEC           DMA_CCR_SSEC_Msk                               /*!< Security of the DMA transfer from the source, only accessible write, read by CM0PLUS    */
 #define DMA_CCR_DSEC_Pos       (19U)
 #define DMA_CCR_DSEC_Msk       (0x1UL << DMA_CCR_DSEC_Pos)                    /*!< 0x00080000 */
-#define DMA_CCR_DSEC           DMA_CCR_DSEC_Msk                               /*!< Security of the DMA transfer to the destination */
+#define DMA_CCR_DSEC           DMA_CCR_DSEC_Msk                               /*!< Security of the DMA transfer to the destination, only accessible write, read by CM0PLUS */
 #define DMA_CCR_PRIV_Pos       (20U)
 #define DMA_CCR_PRIV_Msk       (0x1UL << DMA_CCR_PRIV_Pos)                    /*!< 0x00100000 */
 #define DMA_CCR_PRIV           DMA_CCR_PRIV_Msk                               /*!< Privileged mode                      */
@@ -9972,9 +9984,7 @@ typedef struct
 
 /******************** Number of IPCC channels ******************************/
 #define IPCC_CHANNEL_NUMBER       6U
-/** @addtogroup Exported_macros
-  * @{
-  */
+
 
 /******************************************************************************/
 /*                                                                            */
@@ -10087,6 +10097,7 @@ typedef struct
 #define WWDG_SR_EWIF_Pos        (0U)
 #define WWDG_SR_EWIF_Msk        (0x1UL << WWDG_SR_EWIF_Pos)                    /*!< 0x00000001 */
 #define WWDG_SR_EWIF            WWDG_SR_EWIF_Msk                               /*!<Early Wakeup Interrupt Flag */
+
 
 #if defined(CORE_CM0PLUS)
 #else
@@ -10202,6 +10213,7 @@ typedef struct
 #define DBGMCU_C2APB2FZR_DBG_TIM17_STOP                   DBGMCU_C2APB2FZR_DBG_TIM17_STOP_Msk
 
 #endif
+
 /******************************************************************************/
 /*                                                                            */
 /*                                    TIM                                     */
@@ -11014,6 +11026,40 @@ typedef struct
 #define TIM1_AF2_BK2CMP2P_Pos     (11U)                                        
 #define TIM1_AF2_BK2CMP2P_Msk     (0x1UL << TIM1_AF2_BK2CMP2P_Pos)             /*!< 0x00000800 */
 #define TIM1_AF2_BK2CMP2P         TIM1_AF2_BK2CMP2P_Msk                        /*!<BRK2 COMP2 input polarity */
+
+
+/** @addtogroup Exported_macros
+  * @{
+  */
+
+/*!< Root Secure Service Library */
+/*!< HDP Area constant definition */
+#define RSSLIB_HDP_AREA_Pos       (0U)
+#define RSSLIB_HDP_AREA_Msk       (0x3UL << RSSLIB_HDP_AREA_Pos)
+#define RSSLIB_HDP_AREA1_Msk      (0x1UL << RSSLIB_HDP_AREA_Pos)
+#define RSSLIB_HDP_AREA1          RSSLIB_HDP_AREA1_Msk
+
+/**
+  * @brief  Prototype of RSSLIB Close and exit HDP Function
+  * @detail This function close the requested hdp area passed in input
+  *         parameter and jump to the reset handler present within the
+  *         Vector table. The function does not return on successful execution.
+  * @param  HdpArea notifies which hdp area to close.
+  * @param  pointer on the vector table containing the reset handler the function
+  *         jumps to.
+  * @retval No return value.
+  */
+typedef void (*RSSLIB_S_CloseExitHDP_t)(uint32_t hdp_area, uint32_t jump_addr);
+
+/**
+  * @brief RSSLib function pointer structure
+  */
+typedef struct
+{
+  RSSLIB_S_CloseExitHDP_t CloseExitHDP;
+}RSSLIB_pFunc_TypeDef;
+
+#define RSSLIB_PFUNC                  ((RSSLIB_pFunc_TypeDef *)RSSLIB_PFUNC_BASE)
 
 /******************************* ADC Instances ********************************/
 #define IS_ADC_ALL_INSTANCE(INSTANCE) ((INSTANCE) == ADC)

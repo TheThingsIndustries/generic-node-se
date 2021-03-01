@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "stm32wlxx_hal.h"
+#include "GNSE_bsp_error.h"
 
 extern SUBGHZ_HandleTypeDef hsubghz; // `hsubghz` is used by radio_driver.c (can't rename!)
 
@@ -84,7 +85,7 @@ RBI_SWITCH_RFO_HP = 3,
 #define RF_TCXO_VCC_CLK_ENABLE()                 __HAL_RCC_GPIOB_CLK_ENABLE()
 #define RF_TCXO_VCC_CLK_DISABLE()                __HAL_RCC_GPIOB_CLK_DISABLE()
 
-
+int32_t GNSE_BSP_SUBGHZ_Init(void);
 int32_t RBI_Init(void);
 int32_t RBI_DeInit(void);
 int32_t RBI_ConfigRFSwitch(RBI_Switch_TypeDef Config);

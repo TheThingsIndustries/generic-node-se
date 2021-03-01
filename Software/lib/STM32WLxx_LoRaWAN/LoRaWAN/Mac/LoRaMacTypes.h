@@ -39,9 +39,9 @@
 extern "C"
 {
 #endif
-#include <stdbool.h>
+
 #include <stdint.h>
-#include <stddef.h>
+#include <stdbool.h>
 #include "timer.h"
 
 /*!
@@ -54,20 +54,15 @@ extern "C"
  */
 #define LORAMAC_CRYPTO_MULTICAST_KEYS   127
 
-/*!
- * Version
+   /*!
+ * Indicates if LoRaWAN 1.1.x crypto scheme is enabled
  */
-typedef union Version_u
-{
-    struct Version_s
-    {
-        uint8_t Revision;
-        uint8_t Patch;
-        uint8_t Minor;
-        uint8_t Major;
-    }Fields;
-    uint32_t Value;
-}Version_t;
+#define USE_LRWAN_1_1_X_CRYPTO          0
+
+/*!
+ * Maximum number of multicast context
+ */
+#define   LORAMAC_MAX_MC_CTX            1
 
 /*!
  * LoRaWAN devices classes definition
@@ -158,6 +153,7 @@ typedef enum eFCntIdentifier
      * Multicast downlink counter for index 0
      */
     MC_FCNT_DOWN_0,
+#if ( LORAMAC_MAX_MC_CTX > 1 )
     /*!
      * Multicast downlink counter for index 1
      */
@@ -170,6 +166,7 @@ typedef enum eFCntIdentifier
      * Multicast downlink counter for index 3
      */
     MC_FCNT_DOWN_3,
+#endif /* LORAMAC_MAX_MC_CTX > 1 */
 }FCntIdentifier_t;
 
 /*!
@@ -182,14 +179,10 @@ typedef enum eKeyIdentifier
      */
     APP_KEY = 0,
     /*!
-     * Application root key
-     * Used to derive McRootKey for 1.0.x devices
-     */
-    GEN_APP_KEY,
-    /*!
      * Network root key
      */
     NWK_KEY,
+#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
     /*!
      * Join session integrity key
      */
@@ -210,6 +203,12 @@ typedef enum eKeyIdentifier
      * Network session encryption key
      */
     NWK_S_ENC_KEY,
+#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
+    /*!
+     * Network session key
+     */
+    NWK_S_KEY,    
+#endif /* USE_LRWAN_1_1_X_CRYPTO */
     /*!
      * Application session key
      */
@@ -234,6 +233,7 @@ typedef enum eKeyIdentifier
      * Multicast Network session key index 0
      */
     MC_NWK_S_KEY_0,
+#if ( LORAMAC_MAX_MC_CTX > 1 )
     /*!
      * Multicast root key index 1
      */
@@ -270,6 +270,7 @@ typedef enum eKeyIdentifier
      * Multicast Network session key index 3
      */
     MC_NWK_S_KEY_3,
+#endif /* LORAMAC_MAX_MC_CTX > 1 */
     /*!
      * Zero key for slot randomization in class B
      */
@@ -289,6 +290,12 @@ typedef enum eAddressIdentifier
      * Multicast Address for index 0
      */
     MULTICAST_0_ADDR = 0,
+#if ( LORAMAC_MAX_MC_CTX == 1 )
+    /*!
+     * Unicast End-device address
+     */
+    UNICAST_DEV_ADDR = 1,
+#else /* LORAMAC_MAX_MC_CTX > 1 */
     /*!
      * Multicast Address for index 1
      */
@@ -305,6 +312,7 @@ typedef enum eAddressIdentifier
      * Unicast End-device address
      */
     UNICAST_DEV_ADDR = 4,
+#endif /* LORAMAC_MAX_MC_CTX */
 }AddressIdentifier_t;
 
 /*
@@ -612,17 +620,24 @@ typedef struct sBand
      */
     int8_t TxMaxPower;
     /*!
-     * Time stamp of the last JoinReq Tx frame.
+     * The last time the band has been
+     * synchronized with the current time
      */
-    TimerTime_t LastJoinTxDoneTime;
+    TimerTime_t LastBandUpdateTime;
     /*!
-     * Time stamp of the last Tx frame
+     * Current time credits which are available. This
+     * is a value in ms
      */
-    TimerTime_t LastTxDoneTime;
+    TimerTime_t TimeCredits;
     /*!
-     * Holds the time where the device is off
+     * Maximum time credits which are available. This
+     * is a value in ms
      */
-    TimerTime_t TimeOff;
+    TimerTime_t MaxTimeCredits;
+    /*!
+     * Set to true when the band is ready for use.
+     */
+    bool ReadyForTransmission;
 }Band_t;
 
 /*!
@@ -691,4 +706,3 @@ typedef enum eLoRaMacBatteryLevel
 
 #endif // __LORAMAC_TYPES_H__
 
-/*! \} */

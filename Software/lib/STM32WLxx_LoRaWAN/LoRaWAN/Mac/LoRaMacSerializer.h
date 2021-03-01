@@ -41,7 +41,7 @@
 extern "C"
 {
 #endif
-
+#include <stdint.h>
 #include "LoRaMacMessageTypes.h"
 
 

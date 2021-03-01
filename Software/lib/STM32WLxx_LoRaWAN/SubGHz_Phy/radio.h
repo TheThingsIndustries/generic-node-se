@@ -27,17 +27,16 @@
   *
   * @file    radio.h
   * @author  MCD Application Team
-  * @brief   generic radio driver definition
+  * @brief   Radio driver API definition
   ******************************************************************************
  */
- 
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __RADIO_H__
 #define __RADIO_H__
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 
@@ -46,7 +45,6 @@ extern "C"
 #include "radio_ex.h"
 
 /* Private typedef -----------------------------------------------------------*/
-
 /*!
  * Radio driver supported modems
  */
@@ -131,9 +129,8 @@ struct Radio_s
      * \brief Initializes the radio
      *
      * \param [IN] events Structure containing the driver callback functions
-     * \param [OUT] returns radioWakeUpTime
      */
-    uint32_t    ( *Init )( RadioEvents_t *events );
+    void    ( *Init )( RadioEvents_t *events );
     /*!
      * Return current radio status
      *
@@ -155,14 +152,16 @@ struct Radio_s
     /*!
      * \brief Checks if the channel is free for the given time
      *
-     * \param [IN] modem      Radio modem to be used [0: FSK, 1: LoRa]
-     * \param [IN] freq       Channel RF frequency
-     * \param [IN] rssiThresh RSSI threshold
-     * \param [IN] maxCarrierSenseTime Max time while the RSSI is measured
+     * \remark The FSK modem is always used for this task as we can select the Rx bandwidth at will.
+     *
+     * \param [IN] freq                Channel RF frequency in Hertz
+     * \param [IN] rxBandwidth         Rx bandwidth in Hertz
+     * \param [IN] rssiThresh          RSSI threshold in dBm
+     * \param [IN] maxCarrierSenseTime Max time in milliseconds while the RSSI is measured
      *
      * \retval isFree         [true: Channel is free, false: Channel is not free]
      */
-    bool    ( *IsChannelFree )( RadioModems_t modem, uint32_t freq, int16_t rssiThresh, uint32_t maxCarrierSenseTime );
+    bool    ( *IsChannelFree )( uint32_t freq, uint32_t rxBandwidth, int16_t rssiThresh, uint32_t maxCarrierSenseTime );
     /*!
      * \brief Generates a 32 bits random value based on the RSSI readings
      *
@@ -182,7 +181,7 @@ struct Radio_s
      *                          FSK : >= 2600 and <= 250000 Hz
      *                          LoRa: [0: 125 kHz, 1: 250 kHz,
      *                                 2: 500 kHz, 3: Reserved]
-     * \param [IN] spreadingFactor  Sets the Spreading Factor
+     * \param [IN] datarate     Sets the Datarate
      *                          FSK : 600..300000 bits/s
      *                          LoRa: [6: 64, 7: 128, 8: 256, 9: 512,
      *                                10: 1024, 11: 2048, 12: 4096  chips]
@@ -214,7 +213,7 @@ struct Radio_s
      *                          [false: single mode, true: continuous mode]
      */
     void    ( *SetRxConfig )( RadioModems_t modem, uint32_t bandwidth,
-                              uint32_t spreadingFactor, uint8_t coderate,
+                              uint32_t datarate, uint8_t coderate,
                               uint32_t bandwidthAfc, uint16_t preambleLen,
                               uint16_t symbTimeout, bool fixLen,
                               uint8_t payloadLen,
@@ -232,7 +231,7 @@ struct Radio_s
      *                          FSK : 0
      *                          LoRa: [0: 125 kHz, 1: 250 kHz,
      *                                 2: 500 kHz, 3: Reserved]
-     * \param [IN] spreadingFactor  Sets the Spreading Factor
+     * \param [IN] datarate     Sets the Datarate
      *                          FSK : 600..300000 bits/s
      *                          LoRa: [6: 64, 7: 128, 8: 256, 9: 512,
      *                                10: 1024, 11: 2048, 12: 4096  chips]
@@ -256,7 +255,7 @@ struct Radio_s
      * \param [IN] timeout      Transmission timeout [ms]
      */
     void    ( *SetTxConfig )( RadioModems_t modem, int8_t power, uint32_t fdev,
-                              uint32_t bandwidth, uint32_t spreadingFactor,
+                              uint32_t bandwidth, uint32_t datarate,
                               uint8_t coderate, uint16_t preambleLen,
                               bool fixLen, bool crcOn, bool freqHopOn,
                               uint8_t hopPeriod, bool iqInverted, uint32_t timeout );
@@ -277,7 +276,7 @@ struct Radio_s
      *                          FSK : >= 2600 and <= 250000 Hz
      *                          LoRa: [0: 125 kHz, 1: 250 kHz,
      *                                 2: 500 kHz, 3: Reserved]
-     * \param [IN] spreadingFactor  Sets the Spreading Factor
+     * \param [IN] datarate     Sets the Datarate
      *                          FSK : 600..300000 bits/s
      *                          LoRa: [6: 64, 7: 128, 8: 256, 9: 512,
      *                                10: 1024, 11: 2048, 12: 4096  chips]
@@ -294,7 +293,7 @@ struct Radio_s
      * \retval airTime        Computed airTime (ms) for the given packet payload length
      */
     uint32_t  ( *TimeOnAir )( RadioModems_t modem, uint32_t bandwidth,
-                              uint32_t spreadingFactor, uint8_t coderate,
+                              uint32_t datarate, uint8_t coderate,
                               uint16_t preambleLen, bool fixLen, uint8_t payloadLen,
                               bool crcOn );
     /*!
@@ -396,10 +395,6 @@ struct Radio_s
      * \brief Set radio notification.
      */
     void ( *SetEventNotify )( void ( * notify ) ( void ) );
-
-    /*
-     * The next functions are available only on SX126x radios.
-     */
     /*!
      * \brief Sets the radio in reception mode with Max LNA gain for the given time
      *
@@ -425,9 +420,9 @@ struct Radio_s
      */
     void (*TxPrbs) ( void );
     /*!
-     * @brief Sets the Transmitter in continuous unmodulated Carrier mode
+     * @brief Sets the Transmitter in continuous unmodulated Carrier mode at power dBm
      */
-    void (*TxCw) ( void );
+    void (*TxCw) ( int8_t power );
     /*!
      * \brief Sets the reception parameters
      *
@@ -444,7 +439,7 @@ struct Radio_s
      */
     int32_t (*RadioSetRxGenericConfig)( GenericModems_t modem, RxConfigGeneric_t* config, uint32_t rxContinuous, uint32_t symbTimeout);
     /*!
-     * \brief Sets the transmission parameters 
+     * \brief Sets the transmission parameters
      *
      * \param [IN] modem        Radio modem to be used [GENERIC_FSK or GENERIC_FSK or GENERIC_BPSK]
      * \param [IN] config       configuration of receiver

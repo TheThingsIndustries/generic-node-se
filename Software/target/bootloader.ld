@@ -140,7 +140,7 @@ SECTIONS
   . = ALIGN(8);
   RAM1_region :
   {
-    _sRAM_region = .;         /* define a global symbol at section start */
+    _sRAM1_region = .;         /* define a global symbol at section start */
     *(.RAM1_region)
 
     . = ALIGN(8);

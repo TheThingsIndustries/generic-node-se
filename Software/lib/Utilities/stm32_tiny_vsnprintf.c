@@ -1,3 +1,30 @@
+/**
+ Copyright (C) 2002 Michael Ringgaard. All rights reserved.
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. Neither the name of the project nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+*/
 /******************************************************************************
  * @file    stm32_tiny_vsnprintf.c
  * @author  MCD Application Team
@@ -5,11 +32,11 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
+ * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
  * All rights reserved.</center></h2>
  *
  * This software component is licensed by ST under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the 
+ * the "License"; You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at:
  *                        opensource.org/licenses/BSD-3-Clause
  *
@@ -40,7 +67,7 @@
 #endif
 
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
-   
+
 /* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Global variables ----------------------------------------------------------*/
@@ -73,7 +100,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   if (type & LEFT) type &= ~ZEROPAD;
 #endif
   if (base < 2 || base > 36) return 0;
-  
+
   c = (type & ZEROPAD) ? '0' : ' ';
   sign = 0;
   if (type & SIGN)
@@ -109,7 +136,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
       size--;
   }
 #endif
-  
+
   i = 0;
 
   if (num == 0)
@@ -127,7 +154,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   size -= precision;
   if (!(type & (ZEROPAD /* TINY option   | LEFT */))) while (size-- > 0) ASSIGN_STR(' ');
   if (sign) ASSIGN_STR(sign);
-  
+
 #ifdef TINY_PRINTF
 #else
   if (type & HEX_PREP)
@@ -141,7 +168,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
     }
   }
 #endif
-  
+
 #ifdef TINY_PRINTF
   while (size-- > 0) ASSIGN_STR(c);
 #else
@@ -188,19 +215,19 @@ static char *iaddr(char *str, unsigned char *addr, int size, int precision, int 
   {
     if (i != 0) tmp[len++] = '.';
     n = addr[i];
-    
+
     if (n == 0)
       tmp[len++] = lower_digits[0];
     else
     {
-      if (n >= 100) 
+      if (n >= 100)
       {
         tmp[len++] = lower_digits[n / 100];
         n = n % 100;
         tmp[len++] = lower_digits[n / 10];
         n = n % 10;
       }
-      else if (n >= 10) 
+      else if (n >= 10)
       {
         tmp[len++] = lower_digits[n / 10];
         n = n % 10;
@@ -222,8 +249,8 @@ static char *iaddr(char *str, unsigned char *addr, int size, int precision, int 
 
 char *ecvtbuf(double arg, int ndigits, int *decpt, int *sign, char *buf);
 char *fcvtbuf(double arg, int ndigits, int *decpt, int *sign, char *buf);
-static void ee_bufcpy(char *d, char *s, int count); 
- 
+static void ee_bufcpy(char *d, char *s, int count);
+
 void ee_bufcpy(char *pd, char *ps, int count) {
   char *pe=ps+count;
   while (ps!=pe)
@@ -345,7 +372,7 @@ static void decimal_point(char *buffer)
   if (*buffer)
   {
     int n = strnlen(buffer,256);
-    while (n > 0) 
+    while (n > 0)
     {
       buffer[n + 1] = buffer[n];
       n--;
@@ -387,7 +414,7 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
 #else
   if (flags & LEFT) flags &= ~ZEROPAD;
 #endif
-  
+
   // Determine padding and sign char
   c = (flags & ZEROPAD) ? '0' : ' ';
   sign = 0;
@@ -453,7 +480,7 @@ int tiny_vsnprintf_like(char *buf, const int size, const char *fmt, va_list args
   int len;
   int i;
   char *s;
-  
+
   int flags;            // Flags to number()
 
   int field_width;      // Width of output field
@@ -464,17 +491,17 @@ int tiny_vsnprintf_like(char *buf, const int size, const char *fmt, va_list args
   {
     return 0;
   }
-  
+
   for (str = buf; *fmt || ((str - buf) >= size-1); fmt++)
   {
     CHECK_STR_SIZE(buf, str, size);
-    
+
     if (*fmt != '%')
     {
       *str++ = *fmt;
       continue;
     }
-                  
+
     // Process flags
     flags = 0;
 #ifdef TINY_PRINTF
@@ -496,7 +523,7 @@ repeat:
       case '0': flags |= ZEROPAD; goto repeat;
     }
 #endif
-    
+
     // Get field width
     field_width = -1;
     if (is_digit(*fmt))
@@ -515,15 +542,15 @@ repeat:
       }
     }
 #endif
-    
+
     // Get the precision
     precision = -1;
 #ifdef TINY_PRINTF
     /* Does not support %. */
-#else    
+#else
     if (*fmt == '.')
     {
-      ++fmt;    
+      ++fmt;
       if (is_digit(*fmt))
         precision = ee_skip_atoi(&fmt);
       else if (*fmt == '*')
@@ -534,7 +561,7 @@ repeat:
       if (precision < 0) precision = 0;
     }
 #endif
-    
+
     // Get the conversion qualifier
     qualifier = -1;
 #ifdef TINY_PRINTF
@@ -546,7 +573,7 @@ repeat:
       fmt++;
     }
 #endif
-    
+
     // Default base
     base = 10;
 
@@ -577,7 +604,7 @@ repeat:
           while (len < field_width--) *str++ = ' ';
         for (i = 0; i < len; ++i) *str++ = *s++;
 #ifdef TINY_PRINTF
-#else        
+#else
         while (len < field_width--) *str++ = ' ';
 #endif
         continue;
@@ -609,7 +636,7 @@ repeat:
         base = 8;
         break;
 #endif
-      
+
       case 'X':
         flags |= UPPERCASE;
 
