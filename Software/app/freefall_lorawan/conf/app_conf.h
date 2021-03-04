@@ -85,7 +85,7 @@ typedef enum
   */
 typedef enum
 {
-  CFG_SEQ_Task_LmHandlerPackageProcess,
+  CFG_SEQ_Task_LmHandlerProcess,
   CFG_SEQ_Task_NBR
 } CFG_SEQ_Task_Id_t;
 

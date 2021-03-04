@@ -52,8 +52,8 @@
 									<listOptionValue builtIn="false" value="../../"/>
 									<listOptionValue builtIn="false" value="../conf"/>
 									<listOptionValue builtIn="false" value="../lib_dependency"/>
-									<listOptionValue builtIn="false" value="../../../target/STM32WLxx_HAL_Driver/CMSIS/Core/Include"/>
-									<listOptionValue builtIn="false" value="../../../target/STM32WLxx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../target/CMSIS/Core/Include"/>
+									<listOptionValue builtIn="false" value="../../../target/stm32wlxx_hal_driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../../lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto"/>
 									<listOptionValue builtIn="false" value="../../../lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler"/>
 									<listOptionValue builtIn="false" value="../../../lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages"/>

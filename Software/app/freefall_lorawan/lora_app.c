@@ -25,6 +25,7 @@
 #include "stm32_seq.h"
 #include "stm32_lpm.h"
 #include "LmHandler.h"
+#include "lora_info.h"
 
 /**
   * @brief  join event callback function
@@ -54,35 +55,34 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
  */
 static void OnMacProcessNotify(void);
 
-/*!
- * User application buffer
- */
+/**
+  * @brief User application buffer
+  */
 static uint8_t AppDataBuffer[LORAWAN_APP_DATA_BUFFER_MAX_SIZE];
 
-/*!
- * User application data structure
- */
+/**
+  * @brief User application data structure
+  */
 static LmHandlerAppData_t AppData = {0, 0, AppDataBuffer};
 
 static ActivationType_t ActivationType = LORAWAN_DEFAULT_ACTIVATION_TYPE;
 
-/*!
- * LoRaWAN handler Callbacks
- */
+/**
+  * @brief LoRaWAN handler Callbacks
+  */
 static LmHandlerCallbacks_t LmHandlerCallbacks =
     {
         .GetBatteryLevel = GetBatteryLevel,
         .GetTemperature = GetTemperatureLevel,
-        .GetUniqueId = GetUniqueId,
-        .GetRandomSeed = GetRandomSeed,
+        .OnMacProcess = OnMacProcessNotify,
         .OnJoinRequest = OnJoinRequest,
         .OnTxData = OnTxData,
-        .OnRxData = OnRxData,
-        .OnMacProcess = OnMacProcessNotify};
+        .OnRxData = OnRxData
+        };
 
-/*!
- * LoRaWAN handler parameters
- */
+/**
+  * @brief LoRaWAN handler parameters
+  */
 static LmHandlerParams_t LmHandlerParams =
     {
         .ActiveRegion = ACTIVE_REGION,
@@ -95,10 +95,13 @@ void LoRaWAN_Init(void)
 {
   // User can add any indication here (LED manipulation or Buzzer)
 
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
+
+  /* Init Info table used by LmHandler*/
+  LoraInfo_Init();
+
   /* Init the Lora Stack*/
   LmHandlerInit(&LmHandlerCallbacks);
-
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerPackageProcess), UTIL_SEQ_RFU, LmHandlerPackagesProcess);
 
   LmHandlerConfigure(&LmHandlerParams);
 
@@ -182,7 +185,7 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
 
 static void OnMacProcessNotify(void)
 {
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LmHandlerPackageProcess), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LmHandlerProcess), CFG_SEQ_Prio_0);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

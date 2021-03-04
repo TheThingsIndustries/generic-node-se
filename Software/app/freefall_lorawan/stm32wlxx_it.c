@@ -19,8 +19,6 @@
 #include "GNSE_bsp.h"
 #include "stm32wlxx_it.h"
 
-#include "app.h"
-
 extern RTC_HandleTypeDef hrtc;
 extern SUBGHZ_HandleTypeDef hsubghz;
 
