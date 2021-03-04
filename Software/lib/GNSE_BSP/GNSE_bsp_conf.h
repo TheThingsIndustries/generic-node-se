@@ -38,6 +38,7 @@
 #define DEBUG_USART_DMA_IT_PRIORITY             7U
 #define GNSE_BSP_BUZZER_TIMER_IT_PRIORITY       8U
 #define GNSE_BSP_BUTTON_SWx_IT_PRIORITY         15U
+#define ACC_INT_PRIORITY                        15U
 
 #ifdef __cplusplus
 }

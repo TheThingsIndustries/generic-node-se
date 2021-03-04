@@ -169,6 +169,12 @@ typedef enum
 #define VBAT_ADC_FORCE_RESET()              __HAL_RCC_ADC_FORCE_RESET()
 #define VBAT_ADC_RELEASE_RESET()            __HAL_RCC_ADC_RELEASE_RESET()
 
+#define ACC_INT_PIN GPIO_PIN_8
+#define ACC_INT_PORT GPIOA
+#define ACC_INT_IRQ EXTI9_5_IRQn
+#define ACC_INT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
+#define ACC_INT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOA_CLK_DISABLE()
+
 /**
  * BSP GPIO APIs
  */
@@ -200,5 +206,8 @@ int32_t GNSE_BSP_BM_Disable();
 int32_t GNSE_BSP_BM_GetState();
 int32_t GNSE_BSP_BM_ConfChannel(uint32_t channel);
 uint32_t GNSE_BSP_BM_ReadChannel();
+
+int32_t GNSE_BSP_Acc_Int_Init(void);
+int32_t GNSE_BSP_Acc_Int_Deinit(void);
 
 #endif /* GNSE_BSP_GPIO_H */
