@@ -1,5 +1,5 @@
 /*!
- * \file      se-identity_template.h
+ * \file      se-identity.h
  *
  * \brief     Secure Element identity and keys
  *
@@ -41,6 +41,8 @@
 extern "C" {
 #endif
 
+#include "app_conf.h"
+
 /*!
  ******************************************************************************
  ********************************** WARNING ***********************************
@@ -79,17 +81,17 @@ extern "C" {
  * When set to 1 DevEui is LORAWAN_DEVICE_EUI
  * When set to 0 DevEui is automatically set with a value provided by MCU platform
  */
-#define STATIC_DEVICE_EUI                                  0
+#define STATIC_DEVICE_EUI                                  1
 
 /*!
  * end-device IEEE EUI (big endian)
  */
-#define LORAWAN_DEVICE_EUI                                 { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define LORAWAN_DEVICE_EUI                                 { DEVEUI }
 
 /*!
  * App/Join server IEEE EUI (big endian)
  */
-#define LORAWAN_JOIN_EUI                                   { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define LORAWAN_JOIN_EUI                                   { APPEUI }
 
 /*!
  * When set to 1 DevAddr is LORAWAN_DEVICE_ADDRESS
@@ -106,12 +108,12 @@ extern "C" {
 /*!
  * Application root key
  */
-#define LORAWAN_APP_KEY                                   { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 }
+#define LORAWAN_APP_KEY                                   { APPKEY}
 
 /*!
  * Network root key
  */
-#define LORAWAN_NWK_KEY                                   { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 }
+#define LORAWAN_NWK_KEY                                   { APPKEY }
 
 /*!
  * Forwarding Network session key
