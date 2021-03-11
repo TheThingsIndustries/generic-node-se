@@ -35,6 +35,11 @@
 /* LOW_POWER_DISABLE = 1 : LowPowerMode disabled : MCU enters sleep mode only */
 #define LOW_POWER_DISABLE 0
 
+/* LoRaWAN v1.0.2 software based OTAA activation information */
+#define APPEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define DEVEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define APPKEY                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
 /**
   * FF_THRESHOLD is defined as the value all axes are +/-0g, depending on the scale
   * @2g scale 1 LSb = 16 mg
@@ -42,7 +47,7 @@
   * @8g scale 1 LSb = 62 mg
   * @16g scale 1 LSb = 186 mg
   * FF_DURATION is defined as the time below the threshold times the Output Data Rate
-  * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold. 
+  * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold.
   */
 #define ACC_FF_THRESHOLD 0x16
 #define ACC_FF_DURATION 0x03
