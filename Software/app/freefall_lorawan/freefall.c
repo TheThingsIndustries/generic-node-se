@@ -27,7 +27,7 @@
 
 ACC_op_result_t ACC_FreeFall_Disable(void)
 {
-    if (GNSE_BSP_Acc_Int_Deinit() != GNSE_BSP_ERROR_NONE)
+    if (GNSE_BSP_Acc_Int_DeInit() != GNSE_BSP_ERROR_NONE)
     {
         return ACC_OP_FAIL;
     }

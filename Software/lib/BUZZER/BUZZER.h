@@ -48,6 +48,7 @@ extern "C"
     } BUZZER_state_t;
 
     BUZZER_op_result_t BUZZER_Init(void);
+    BUZZER_op_result_t BUZZER_DeInit(void);
     BUZZER_op_result_t BUZZER_SetState(BUZZER_state_t state);
     BUZZER_state_t BUZZER_GetState(void);
 

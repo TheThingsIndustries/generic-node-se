@@ -156,8 +156,11 @@ int32_t GNSE_BSP_USART_Init(void);
 int32_t GNSE_BSP_UART_DMA_Init(void);
 
 int32_t GNSE_BSP_Sensor_I2C1_Init(void);
+int32_t GNSE_BSP_Sensor_I2C1_DeInit(void);
 int32_t GNSE_BSP_Ext_Sensor_I2C2_Init(void);
+int32_t GNSE_BSP_Ext_Sensor_I2C2_DeInit(void);
 
 int32_t GNSE_BSP_Flash_SPI_Init(void);
+int32_t GNSE_BSP_Flash_SPI_DeInit(void);
 
 #endif /* GNSE_BSP_SERIAL_H */

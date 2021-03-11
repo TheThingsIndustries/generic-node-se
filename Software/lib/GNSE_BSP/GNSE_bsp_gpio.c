@@ -557,7 +557,7 @@ int32_t GNSE_BSP_Acc_Int_Init(void)
   * @note Acc DeInit does not disable the GPIO clock
   * @return GNSE_BSP status
   */
-int32_t GNSE_BSP_Acc_Int_Deinit(void)
+int32_t GNSE_BSP_Acc_Int_DeInit(void)
 {
     HAL_NVIC_DisableIRQ(ACC_INT_IRQ);
     HAL_GPIO_DeInit(ACC_INT_PORT, ACC_INT_PIN);

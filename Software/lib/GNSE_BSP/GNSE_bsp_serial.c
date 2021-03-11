@@ -128,6 +128,24 @@ int32_t GNSE_BSP_Sensor_I2C1_Init(void)
 }
 
 /**
+ * @brief Deinit the internal sensors I2C1 bus.
+ *
+ * @return GNSE_BSP status
+ */
+int32_t GNSE_BSP_Sensor_I2C1_DeInit(void)
+{
+
+  if (HAL_I2C_DeInit(&GNSE_BSP_sensor_i2c1) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+
+  HAL_I2CEx_DisableFastModePlus(SENSOR_I2C1_FASTMODEPLUS);
+
+  return GNSE_BSP_ERROR_NONE;
+}
+
+/**
  * @brief Init the external sensors (qwiic) I2C2 bus.
  *
  * @return GNSE_BSP status
@@ -166,6 +184,24 @@ int32_t GNSE_BSP_Ext_Sensor_I2C2_Init(void)
   return GNSE_BSP_ERROR_NONE;
 }
 
+/**
+ * @brief Deinit the external sensors I2C2 bus.
+ *
+ * @return GNSE_BSP status
+ */
+int32_t GNSE_BSP_Ext_Sensor_I2C2_DeInit(void)
+{
+
+  if (HAL_I2C_DeInit(&GNSE_BSP_ext_sensor_i2c2) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+
+  HAL_I2CEx_DisableFastModePlus(EXT_SENSOR_I2C2_FASTMODEPLUS);
+
+  return GNSE_BSP_ERROR_NONE;
+}
+
 int32_t GNSE_BSP_Flash_SPI_Init(void)
 {
   /* FLASH_SPI parameter configuration*/
@@ -184,6 +220,15 @@ int32_t GNSE_BSP_Flash_SPI_Init(void)
   GNSE_BSP_flash_spi.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
   GNSE_BSP_flash_spi.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
   if (HAL_SPI_Init(&GNSE_BSP_flash_spi) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+  return GNSE_BSP_ERROR_NONE;
+}
+
+int32_t GNSE_BSP_Flash_SPI_DeInit(void)
+{
+  if (HAL_SPI_DeInit(&GNSE_BSP_flash_spi) != HAL_OK)
   {
     return GNSE_BSP_ERROR_NO_INIT;
   }

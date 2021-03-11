@@ -29,6 +29,16 @@ extern "C" {
 
 #include "GNSE_bsp.h"
 
+/**
+ * Battery return types
+ */
+typedef enum
+{
+    BM_OP_SUCCESS = 0,
+    BM_OP_FAIL = 1,
+} BM_op_result_t;
+
+
 /*
  * Reference calibration value if we don't use VREFINT_CAL_ADDR production calibration value
  * Calibration value reference temperature is 30'c
@@ -43,6 +53,8 @@ extern "C" {
 
 uint16_t GNSE_BM_GetInternalRefVoltage();
 uint16_t GNSE_BM_GetBatteryVoltage();
+BM_op_result_t GNSE_BM_Init(void);
+BM_op_result_t GNSE_BM_DeInit(void);
 
 #ifdef __cplusplus
 }

@@ -51,7 +51,7 @@ ACC_op_result_t GNSE_ACC_Init(void);
   * @param  none
   * @return ACC_op_result_t
   */
-ACC_op_result_t GNSE_ACC_Deinit(void);
+ACC_op_result_t GNSE_ACC_DeInit(void);
 
 #ifdef __cplusplus
 }
