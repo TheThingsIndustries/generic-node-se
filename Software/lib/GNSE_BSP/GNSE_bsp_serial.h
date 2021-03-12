@@ -72,7 +72,13 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 #define DEBUG_USART_IRQn                      USART2_IRQn
 
 #define SENSOR_I2C1                  I2C1
-#define SENSOR_I2C1_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
+/* SENSOR_I2C1_TIMING is set at 300 kHz
+ * This setting is altered by both the clock speed and I2C setting
+ * Clock speed is set in SystemClock_Config, default is 48 MHz
+ * I2C setting is set in GNSE_BSP_Sensor_I2C1_Init, default is Fast mode plus
+ * Changing any of these variables without reconfiguring this define could break the I2C communication
+ */
+#define SENSOR_I2C1_TIMING           0x0020088DU
 #define SENSOR_I2C1_TIMOUT           100U //Read and write operations timeout in ms
 #define SENSOR_I2C1_PERIPH_CLK      RCC_PERIPHCLK_I2C1
 #define SENSOR_I2C1_SOURCE_CLK      RCC_I2C1CLKSOURCE_SYSCLK
@@ -93,30 +99,14 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 #define SENSOR_I2C1_SDA_GPIO_PORT              GPIOA
 #define SENSOR_I2C1_SCL_SDA_AF                 GPIO_AF4_I2C1
 
-#define SEC_ELM_I2C2                  I2C2
-#define SEC_ELM_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
-#define SEC_ELM_I2C2_TIMOUT           100U //Read and write operations timeout in ms
-#define SEC_ELM_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
-#define SEC_ELM_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
-#define SEC_ELM_I2C2_FASTMODEPLUS    I2C_FASTMODEPLUS_I2C2
-
-#define SEC_ELM_I2C2_CLK_ENABLE()    __HAL_RCC_I2C2_CLK_ENABLE()
-#define SEC_ELM_I2C2_CLK_DISABLE()   __HAL_RCC_I2C2_CLK_DISABLE()
-
-#define SEC_ELM_I2C2_SDA_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define SEC_ELM_I2C2_SCL_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-
-#define SEC_ELM_I2C2_FORCE_RESET()              __HAL_RCC_I2C2_FORCE_RESET()
-#define SEC_ELM_I2C2_RELEASE_RESET()            __HAL_RCC_I2C2_RELEASE_RESET()
-
-#define SEC_ELM_I2C2_SCL_PIN                    GPIO_PIN_12
-#define SEC_ELM_I2C2_SCL_GPIO_PORT              GPIOA
-#define SEC_ELM_I2C2_SDA_PIN                    GPIO_PIN_11
-#define SEC_ELM_I2C2_SDA_GPIO_PORT              GPIOA
-#define SEC_ELM_I2C2_SCL_SDA_AF                 GPIO_AF4_I2C2
-
 #define EXT_SENSOR_I2C2                  I2C2
-#define EXT_SENSOR_I2C2_TIMING           0x00707CBBU  //Evaluates to 10 KHz bus frequency
+/* EXT_SENSOR_I2C2_TIMING is set at 100 kHz
+ * This setting is altered by both the clock speed and I2C setting
+ * Clock speed is set in SystemClock_Config, default is 48 MHz
+ * I2C setting is set in GNSE_BSP_Sensor_I2C1_Init, default is Fast mode plus
+ * Changing any of these variables without reconfiguring this define could break the I2C communication
+ */
+#define EXT_SENSOR_I2C2_TIMING           0x20003D5EU
 #define EXT_SENSOR_I2C2_TIMOUT           100U //Read and write operations timeout in ms
 #define EXT_SENSOR_I2C2_PERIPH_CLK      RCC_PERIPHCLK_I2C2
 #define EXT_SENSOR_I2C2_SOURCE_CLK      RCC_I2C2CLKSOURCE_SYSCLK
@@ -138,7 +128,8 @@ extern DMA_HandleTypeDef GNSE_BSP_hdma_tx;
 #define EXT_SENSOR_I2C2_SCL_SDA_AF                 GPIO_AF4_I2C2
 
 #define FLASH_SPI SPI1
-#define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_256
+/* Speed of the SPI interface depends on both the system clock speed (48 MHz is default) and a prescaler */
+#define FLASH_SPI_BAUDRATE            SPI_BAUDRATEPRESCALER_16
 #define Flash_SPI_TIMOUT 100U        //Read and write operations timeout in ms
 
 #define FLASH_SPI_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
