@@ -30,6 +30,13 @@
 #include "stm32wlxx_hal_i2c.h"
 #include "GNSE_bsp.h"
 
+uint32_t ATECC608ASeHalGetRandomNumber( void )
+{
+    // Not Implemeted
+    //TODO: Add suppport for random generation, see https://github.com/TheThingsIndustries/generic-node-se/issues/137
+    return 0;
+}
+
 /** @brief This function delays for a number of microseconds.
  *
  * @param[in] delay number of 0.001 milliseconds to delay

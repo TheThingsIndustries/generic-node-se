@@ -57,6 +57,11 @@ extern "C"
 #define SE_EUI_SIZE             8
 
 /*!
+ * Secure-element pin size in bytes
+ */
+#define SE_PIN_SIZE             4
+
+/*!
  * Return values.
  */
 typedef enum eSecureElementStatus
@@ -112,7 +117,7 @@ typedef void ( *SecureElementNvmEvent )( void );
 SecureElementStatus_t SecureElementInit( SecureElementNvmEvent seNvmCtxChanged );
 
 /*!
- * Remove previously generated derived keys with "label" from memory 
+ * Remove previously generated derived keys with "label" from memory
  *
  * \param[IN]     kms_key_label       - string of char to be searched in the key label
  * \retval                            - Status of the operation
