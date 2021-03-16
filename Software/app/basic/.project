@@ -45,7 +45,7 @@
 		<link>
 			<name>lib/ATECC608A-TNGLORA</name>
 			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA</locationURI>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>lib/BUZZER</name>
@@ -126,6 +126,41 @@
 			<name>target/system_stm32wlxx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/system_stm32wlxx.c</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/atca_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atca_config.h</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.h</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/se-identity.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/se-identity.h</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/tnglora_read_helper.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/tnglora_read_helper.c</locationURI>
+		</link>
+		<link>
+			<name>lib/ATECC608A-TNGLORA/tnglora_read_helper.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/tnglora_read_helper.h</locationURI>
 		</link>
 		<link>
 			<name>lib/Utilities/.DS_Store</name>
