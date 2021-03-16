@@ -52,7 +52,7 @@
 #else
 #define APP_PPRINTF(...)
 #define APP_TPRINTF(...)
-#define APP_PPRINTF(...)
+#define APP_PRINTF(...)
 #endif
 
 
