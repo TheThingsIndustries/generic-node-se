@@ -17,6 +17,8 @@ The device enters stop mode in between transmissions to reduce power consumption
 
 [freertos_lorawan](./basic_freertos) contains a multi-thread FreeRTOS LoRaWAN Class A demo app that joins over OTAA and sends uplink data.
 
+[secure_element_lorawan](./secure_element_lorawan) contains a LoRaWAN application where a class A device joins via OTAA using a HW secure element (ATECC608A-TNGLORA) and sends dummy payloads triggered by a time interval.
+
 ## Applications configuration
 
 Each application contains a configuration folder that facilitates minor adjustments to the application behavior.
@@ -37,3 +39,5 @@ To quickly get started, navigate to your application `app_conf.h`, and adjust th
 [freefall_lorawan app configurations](./freefall_lorawan/conf/app_conf.h)
 
 [freertos_lorawan app configurations](./basic_freertos/conf/app_conf.h)
+
+[secure_element_lorawan app configurations](./secure_element_lorawan/conf/app_conf.h)
