@@ -28,7 +28,7 @@ extern "C" {
 #include "stm32_adv_trace.h"
 
 /**
-  * @brief initialises the system (dbg pins, trace, systiemr, LPM, ...)
+  * @brief initialises the system (dbg pins, trace, systimer, LPM, ...)
   * @param none
   * @return  none
   */

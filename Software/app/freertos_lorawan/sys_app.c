@@ -52,7 +52,7 @@ static void TimestampNow(uint8_t *buff, uint16_t *size);
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
 
 /**
-  * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
+  * @brief initialises the system (dbg pins, trace, mbmux, systimer, LPM, ...)
   * @param none
   * @return  none
   * TODO: Improve with system wide Init(), see https://github.com/TheThingsIndustries/generic-node-se/issues/57
