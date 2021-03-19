@@ -33,21 +33,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*!
- ******************************************************************************
- ********************************** WARNING ***********************************
- ******************************************************************************
 
- The LoRaWAN AES128 keys are stored and pre-provisioned on secure-elements.
-
- This project provides a software emulated secure-element.
- The LoRaWAN AES128 keys SHALL be updated under
- src/peripherals/<secure-element name>-se\se-identity.h file.
-
- ******************************************************************************
- ******************************************************************************
- ******************************************************************************
- */
 #include "se-identity.h"
 
 /*!

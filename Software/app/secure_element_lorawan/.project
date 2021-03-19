@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>basic</name>
+	<name>secure_element_lorawan</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -83,17 +83,17 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/SHTC3</locationURI>
 		</link>
 		<link>
+			<name>lib/STM32WLxx_LoRaWAN</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lib/Utilities</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>lib/cryptoauthlib</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/CMSIS</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -148,6 +148,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.h</locationURI>
 		</link>
 		<link>
+			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se.c</locationURI>
+		</link>
+		<link>
 			<name>lib/ATECC608A-TNGLORA/se-identity.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/se-identity.h</locationURI>
@@ -161,6 +166,26 @@
 			<name>lib/ATECC608A-TNGLORA/tnglora_read_helper.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/tnglora_read_helper.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/README.md</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>lib/Utilities/.DS_Store</name>
@@ -283,16 +308,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/host</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/.DS_Store</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/.DS_Store</locationURI>
-		</link>
-		<link>
-			<name>target/CMSIS/Core</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>target/stm32wlxx_hal_driver/.DS_Store</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/.DS_Store</locationURI>
@@ -343,6 +358,76 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LICENSE.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LICENSE.txt</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Utilities</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/readme.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/readme.md</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/st_readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/st_readme.txt</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/LICENSE.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/LICENSE.txt</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/Release_notes.html</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/Release_notes.html</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/_htmresc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/radio.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/radio.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/radio_ex.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/radio_ex.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lib/Utilities/baremetal/stm32_seq.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_seq.c</locationURI>
@@ -373,16 +458,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/baremetal/stm32_timer.h</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/.DS_Store</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/.DS_Store</locationURI>
-		</link>
-		<link>
-			<name>target/CMSIS/Core/Include</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>target/stm32wlxx_hal_driver/.github/ISSUE_TEMPLATE.md</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/.github/ISSUE_TEMPLATE.md</locationURI>
@@ -391,6 +466,11 @@
 			<name>target/stm32wlxx_hal_driver/.github/PULL_REQUEST_TEMPLATE.md</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/.github/PULL_REQUEST_TEMPLATE.md</locationURI>
+		</link>
+		<link>
+			<name>target/stm32wlxx_hal_driver/Inc/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/Inc/.DS_Store</locationURI>
 		</link>
 		<link>
 			<name>target/stm32wlxx_hal_driver/Inc/Legacy</name>
@@ -788,6 +868,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/Inc/stm32wlxx_ll_wwdg.h</locationURI>
 		</link>
 		<link>
+			<name>target/stm32wlxx_hal_driver/Src/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/Src/.DS_Store</locationURI>
+		</link>
+		<link>
 			<name>target/stm32wlxx_hal_driver/Src/stm32wlxx_hal.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/Src/stm32wlxx_hal.c</locationURI>
@@ -1148,39 +1233,329 @@
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/_htmresc/st_logo_2020.png</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/cmsis_compiler.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandler.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/cmsis_compiler.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandler.c</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/cmsis_gcc.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandler.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/cmsis_gcc.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandler.h</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/cmsis_version.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandlerTypes.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/cmsis_version.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandlerTypes.h</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/core_cm0plus.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/NvmCtxMgmt.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/core_cm0plus.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/NvmCtxMgmt.c</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/core_cm4.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/NvmCtxMgmt.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/core_cm4.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/NvmCtxMgmt.h</locationURI>
 		</link>
 		<link>
-			<name>target/CMSIS/Core/Include/mpu_armv7.h</name>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/lorawan_version.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/target/CMSIS/Core/Include/mpu_armv7.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/lorawan_version.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMac.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMac.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMac.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMac.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacAdr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacAdr.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacAdr.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacAdr.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassB.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassB.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassB.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassB.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassBConfig.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacClassBConfig.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCommands.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCommands.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCommands.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCommands.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacConfirmQueue.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacConfirmQueue.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacConfirmQueue.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacConfirmQueue.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCrypto.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCrypto.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCrypto.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacCrypto.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacHeaderTypes.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacHeaderTypes.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacMessageTypes.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacMessageTypes.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacParser.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacParser.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacParser.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacParser.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacSerializer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacSerializer.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacSerializer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacSerializer.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacTest.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacTest.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacTypes.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/LoRaMacTypes.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/secure-element.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/secure-element.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Utilities/utilities.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Utilities/utilities.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Utilities/utilities.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Utilities/utilities.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/_htmresc/mini-st.css</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/_htmresc/mini-st.css</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/_htmresc/st_logo.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/_htmresc/st_logo.png</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio_driver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio_driver.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio_driver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/radio_driver.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/subghz_phy_version.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/SubGHz_Phy/stm32_radio_driver/subghz_phy_version.h</locationURI>
 		</link>
 		<link>
 			<name>target/stm32wlxx_hal_driver/Inc/Legacy/stm32_hal_legacy.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/Inc/Legacy/stm32_hal_legacy.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpCompliance.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpCompliance.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpCompliance.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpCompliance.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/Region.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/Region.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/Region.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/Region.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAS923.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAS923.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAS923.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAS923.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAU915.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAU915.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAU915.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionAU915.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN470.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN470.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN470.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN470.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN779.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN779.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN779.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCN779.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCommon.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCommon.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCommon.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionCommon.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU433.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU433.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU433.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU433.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU868.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU868.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU868.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionEU868.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionIN865.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionIN865.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionIN865.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionIN865.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionKR920.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionKR920.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionKR920.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionKR920.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionRU864.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionRU864.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionRU864.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionRU864.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionUS915.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionUS915.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionUS915.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/RegionUS915.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

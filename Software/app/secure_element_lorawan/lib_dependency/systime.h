@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    sys_app.h
+  * @file    systime.h
   * @author  MCD Application Team
-  * @brief   Function prototypes for sys_app.c file
+  * @brief   Map middleware systime
   ******************************************************************************
   * @attention
   *
@@ -16,30 +16,21 @@
   *
   ******************************************************************************
   */
+/* Define to prevent recursive inclusion -------------------------------------*/
 
-#ifndef __SYS_APP_H__
-#define __SYS_APP_H__
+#ifndef __SYSTIME_H__
+#define __SYSTIME_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stdint.h"
-#include "stm32_adv_trace.h"
-
-/**
-  * @brief initialises the system (dbg pins, trace, systimer, LPM, ...)
-  * @param none
-  * @return  none
-  */
-void SystemApp_Init(void);
-
-
+#include "stm32_systime.h"
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SYS_APP_H__ */
+#endif /*__SYSTIME_H__*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

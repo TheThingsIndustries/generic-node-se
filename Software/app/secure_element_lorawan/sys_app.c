@@ -20,8 +20,10 @@
 #include <stdio.h>
 #include "app.h"
 #include "sys_app.h"
-#include "freertos_systime.h"
+#include "stm32_seq.h"
+#include "stm32_systime.h"
 #include "stm32_lpm.h"
+#include "GNSE_rtc.h"
 
 #define MAX_TS_SIZE (int)16
 
@@ -61,6 +63,8 @@ void SystemApp_Init(void)
 {
   /* Ensure that MSI is wake-up system clock */
   __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_MSI);
+  /*Initialises timer and RTC*/
+  UTIL_TIMER_Init();
 
   Gpio_PreInit();
 
@@ -74,19 +78,28 @@ void SystemApp_Init(void)
   /*Set verbose LEVEL*/
   UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_M);
 
-  /* Here user can init the board peripherals and sensors */
+  APP_PPRINTF("\r\n Powering and using HW secure element (ATECC608A-TNGLORA) \r\n");
+  GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
+  GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
+  HAL_Delay(100);
+  GNSE_BSP_Sensor_I2C1_Init();
 
   /*Init low power manager*/
   UTIL_LPM_Init();
   /* Disable Stand-by mode */
   UTIL_LPM_SetOffMode((1 << CFG_LPM_APPLI_Id), UTIL_LPM_DISABLE);
-
-#if defined(LOW_POWER_DISABLE) && (LOW_POWER_DISABLE == 1)
-  /* Disable Stop Mode */
+  /* Disable Stop Mode, TODO: Add support for low power mode, see https://github.com/TheThingsIndustries/generic-node-se/issues/142 */
   UTIL_LPM_SetStopMode((1 << CFG_LPM_APPLI_Id), UTIL_LPM_DISABLE);
-#elif !defined(LOW_POWER_DISABLE)
-#error LOW_POWER_DISABLE not defined
-#endif /* LOW_POWER_DISABLE */
+}
+
+/**
+  * @brief redefines __weak function in stm32_seq.c such to enter low power
+  * @param none
+  * @return  none
+  */
+void UTIL_SEQ_Idle(void)
+{
+  UTIL_LPM_EnterLowPower();
 }
 
 static void TimestampNow(uint8_t *buff, uint16_t *size)
@@ -179,12 +192,35 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 }
 
 /**
+  * @brief This function configures the source of the time base.
+  * @brief  don't enable systick
+  * @param TickPriority: Tick interrupt priority.
+  * @return HAL status
+  */
+HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+{
+  /*Initialize the RTC services */
+  return HAL_OK;
+}
+
+/**
+  * @brief Provide a tick value in millisecond measured using RTC
+  * @note This function overwrites the __weak one from HAL
+  * @return tick value
+  */
+uint32_t HAL_GetTick(void)
+{
+  return GNSE_RTC_GetTimerValue();
+}
+
+/**
   * @brief This function provides delay (in ms)
   * @param Delay: specifies the delay time length, in milliseconds.
   * @return None
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  vTaskDelay( pdMS_TO_TICKS( Delay )); /* FreeRTOS delay */
+  GNSE_RTC_DelayMs(Delay); /* based on RTC */
 }
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

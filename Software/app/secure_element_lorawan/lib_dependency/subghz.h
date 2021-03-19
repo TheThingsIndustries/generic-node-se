@@ -1,8 +1,7 @@
 /**
   ******************************************************************************
-  * @file    sys_app.h
-  * @author  MCD Application Team
-  * @brief   Function prototypes for sys_app.c file
+  * @file    subghz.h
+  * @brief   The file exists becuse of radio_driver.c header inclusion
   ******************************************************************************
   * @attention
   *
@@ -17,29 +16,19 @@
   ******************************************************************************
   */
 
-#ifndef __SYS_APP_H__
-#define __SYS_APP_H__
+#ifndef __SUBGHZ_H__
+#define __SUBGHZ_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stdint.h"
-#include "stm32_adv_trace.h"
-
-/**
-  * @brief initialises the system (dbg pins, trace, systimer, LPM, ...)
-  * @param none
-  * @return  none
-  */
-void SystemApp_Init(void);
-
-
+#include "GNSE_bsp.h" // subghz.h should be deleted if radio_driver.c doesnt depend on it
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SYS_APP_H__ */
+#endif /* __SUBGHZ_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

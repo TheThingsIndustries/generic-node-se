@@ -40,7 +40,8 @@ set (APP_LIST
 "basic_bootloader"
 "basic_freertos"
 "freefall_lorawan"
-"freertos_lorawan")
+"freertos_lorawan"
+"secure_element_lorawan")
 #-------------------
 # MCU Setup
 #-------------------
