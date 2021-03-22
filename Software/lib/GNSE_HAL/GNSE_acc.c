@@ -45,10 +45,10 @@ ACC_op_result_t GNSE_ACC_Init(void)
 }
 
 
-ACC_op_result_t GNSE_ACC_Deinit(void)
+ACC_op_result_t GNSE_ACC_DeInit(void)
 {
     /* Unset interrupt pin */
-    if (GNSE_BSP_Acc_Int_Deinit() != GNSE_BSP_ERROR_NONE)
+    if (GNSE_BSP_Acc_Int_DeInit() != GNSE_BSP_ERROR_NONE)
     {
         return ACC_OP_FAIL;
     }

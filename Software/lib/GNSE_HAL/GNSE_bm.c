@@ -23,6 +23,42 @@
 #include "GNSE_bm.h"
 
 /**
+  * @brief Initialises the hardware for reading the battery voltage level
+  * @param none
+  * @return BM_op_result_t
+  */
+BM_op_result_t GNSE_BM_Init(void)
+{
+    if (GNSE_BSP_BM_Init() != GNSE_BSP_ERROR_NONE)
+    {
+        return BM_OP_FAIL;
+    }
+    if (GNSE_BSP_BM_Enable() != GNSE_BSP_ERROR_NONE)
+    {
+        return BM_OP_FAIL;
+    }
+    return BM_OP_SUCCESS;
+}
+
+/**
+  * @brief Deinitialises the hardware for reading the battery voltage level
+  * @param none
+  * @return BM_op_result_t
+  */
+BM_op_result_t GNSE_BM_DeInit(void)
+{
+    if (GNSE_BSP_BM_Disable() != GNSE_BSP_ERROR_NONE)
+    {
+        return BM_OP_FAIL;
+    }
+    if (GNSE_BSP_BM_DeInit() != GNSE_BSP_ERROR_NONE)
+    {
+        return BM_OP_FAIL;
+    }
+    return BM_OP_SUCCESS;
+}
+
+/**
  * @brief Gets the MCU internal refernce voltage
  *
  * @return uint16_t of the calibrated reference voltage in millivolt (mv)

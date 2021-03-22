@@ -54,6 +54,15 @@ BUZZER_op_result_t BUZZER_Init(void)
   return BUZZER_OP_SUCCESS;
 }
 
+BUZZER_op_result_t BUZZER_DeInit(void)
+{
+  if (GNSE_BSP_BUZZER_TIM_DeInit(BUZZER_TIM_IRQHandler) != GNSE_BSP_ERROR_NONE)
+  {
+    return BUZZER_OP_FAIL;
+  }
+  return BUZZER_OP_SUCCESS;
+}
+
 static void BUZZER_Off(void)
 {
   BUZZER_Init();

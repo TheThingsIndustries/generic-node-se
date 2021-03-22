@@ -193,6 +193,7 @@ void GNSE_BSP_PB_Callback(Button_TypeDef Button);
 void GNSE_BSP_PB_IRQHandler(Button_TypeDef Button);
 
 int32_t GNSE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch);
+int32_t GNSE_BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch);
 int32_t GNSE_BSP_LS_SWITCH_DeInit(Load_Switch_TypeDef loadSwitch);
 int32_t GNSE_BSP_LS_On(Load_Switch_TypeDef loadSwitch);
 int32_t GNSE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch);
@@ -208,6 +209,6 @@ int32_t GNSE_BSP_BM_ConfChannel(uint32_t channel);
 uint32_t GNSE_BSP_BM_ReadChannel();
 
 int32_t GNSE_BSP_Acc_Int_Init(void);
-int32_t GNSE_BSP_Acc_Int_Deinit(void);
+int32_t GNSE_BSP_Acc_Int_DeInit(void);
 
 #endif /* GNSE_BSP_GPIO_H */
