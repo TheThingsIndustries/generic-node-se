@@ -60,9 +60,8 @@ int main(void)
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_SENSORS \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-  HAL_Delay(100);
+  HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
   GNSE_BSP_Sensor_I2C1_Init();
-  HAL_Delay(100);
   APP_PPRINTF("\r\n 2) Attempting to read secure element serial number \r\n");
   secure_element_read_info();
 
@@ -75,7 +74,7 @@ int main(void)
   APP_PPRINTF("\r\n 1) Enabling LOAD_SWITCH_FLASH \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_FLASH);
   GNSE_BSP_LS_On(LOAD_SWITCH_FLASH);
-  HAL_Delay(100);
+  HAL_Delay(LOAD_SWITCH_FLASH_DELAY_MS);
 
   APP_PPRINTF("\r\n 2) Attempting to read & write to external flash \r\n");
   flash_read_write();

@@ -30,8 +30,6 @@ extern "C" {
 #include <stdbool.h>
 #include "MX25R16.h"
 
-#define GNSE_HAL_INIT_DELAY 100U // TODO: Decrease value to settling time, see https://github.com/TheThingsIndustries/generic-node-se/issues/153
-
 extern MxChip GNSE_HAL_Flash;
 
 /**
