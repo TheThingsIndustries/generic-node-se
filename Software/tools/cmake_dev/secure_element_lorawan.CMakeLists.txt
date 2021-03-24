@@ -1,0 +1,147 @@
+###############################################################################
+################################### WARNING ###################################
+###############################################################################
+#
+# This CMakeLists.txt is for development purposes only.
+#
+###############################################################################
+###############################################################################
+###############################################################################
+#-------------------
+# LoRaWAN library
+#-------------------
+file(GLOB LORAWAN_SRC
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/LmHandler.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/NvmCtxMgmt.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages/LmhpCompliance.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacAdr.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMac.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacClassB.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacCommands.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacConfirmQueue.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacCrypto.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacParser.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/LoRaMacSerializer.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/Region.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/RegionCommon.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/RegionEU868.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/RegionUS915.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/tnglora_read_helper.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/atca_basic.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/atca_command.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/atca_debug.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/atca_device.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/atca_iface.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_aes.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_basic.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_command.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_execution.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_kdf.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/calib_read.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/atca_crypto_hw_aes_cmac.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/atca_crypto_hw_aes_cbc.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal/atca_hal.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_radio.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities/utilities.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/radio.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/radio_driver.c"
+    )
+add_library(lorawan STATIC
+    ${LORAWAN_SRC}
+    )
+target_include_directories(lorawan
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/${HAL_DIR}/Inc
+    ${PROJECT_SOURCE_DIR}/${MCU_DIR}/Include
+    ${PROJECT_SOURCE_DIR}/${CMSIS_DIR}/Core/Include
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal
+    # ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Crypto
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic
+    ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy
+    ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/conf
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    )
+target_compile_definitions(lorawan
+    PUBLIC
+    ${MCU}
+    )
+#-------------------
+# Main elf
+#-------------------
+file(GLOB MAIN_SRC
+        "${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_clk_timer.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_gpio.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_msp.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_serial.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/GNSE_lpm.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/GNSE_rtc.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_adv_trace.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_lpm.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_mem.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_tiny_vsnprintf.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/usart_if.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/stm32_timer.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/stm32_seq.c"
+        "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/stm32_systime.c"
+        )
+set(SOURCES
+    ${MAIN_SRC}
+    ${PROJECT_SOURCE_DIR}/${STARTUP_FILE}
+    ${PROJECT_SOURCE_DIR}/${SYSTEM_FILE}
+    )
+add_executable(${PROJECT_NAME}.elf
+    ${SOURCES}
+    )
+target_include_directories(${PROJECT_NAME}.elf
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/conf
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
+    ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
+    ${PROJECT_SOURCE_DIR}/lib/SHTC3
+    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    )
+target_link_libraries(${PROJECT_NAME}.elf
+    PUBLIC
+    hal
+    lorawan
+    )
+target_compile_definitions(${PROJECT_NAME}.elf
+    PUBLIC
+    ${MCU}
+    SEMIHOSTING=${SEMIHOSTING}
+    )
+    # Create output in hex and binary format
+    create_bin_output(${PROJECT_NAME})
+    create_hex_output(${PROJECT_NAME})
+    # Add additional files to the make clean
+    set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+    "${PROJECT_NAME}.map"
+    "${PROJECT_NAME}.bin"
+    "${PROJECT_NAME}.hex"
+)

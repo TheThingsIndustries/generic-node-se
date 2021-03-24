@@ -1,0 +1,63 @@
+###############################################################################
+################################### WARNING ###################################
+###############################################################################
+#
+# This CMakeLists.txt is for development purposes only.
+#
+###############################################################################
+###############################################################################
+###############################################################################
+#-------------------
+# Main elf
+#-------------------
+file(GLOB MAIN_SRC
+    "${PROJECT_SOURCE_DIR}/app/basic_bootloader/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_gpio.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_bsp_serial.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/GNSE_msp.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_adv_trace.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_mem.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/stm32_tiny_vsnprintf.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/usart_if.c"
+    "${PROJECT_SOURCE_DIR}/lib/MCU_FLASH/MCU_FLASH.c"
+    )
+set(SOURCES
+    ${MAIN_SRC}
+    ${PROJECT_SOURCE_DIR}/${STARTUP_FILE}
+    ${PROJECT_SOURCE_DIR}/${SYSTEM_FILE}
+    )
+add_executable(${PROJECT_NAME}.elf
+    ${SOURCES}
+    )
+target_include_directories(${PROJECT_NAME}.elf
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/app/basic_bootloader
+    ${PROJECT_SOURCE_DIR}/app/basic_bootloader/conf
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/SHTC3
+    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    )
+target_link_libraries(${PROJECT_NAME}.elf
+    PUBLIC
+    hal
+    )
+target_compile_definitions(${PROJECT_NAME}.elf
+    PUBLIC
+    ${MCU}
+    SEMIHOSTING=${SEMIHOSTING}
+    )
+    # Create output in hex and binary format
+    create_bin_output(${PROJECT_NAME})
+    create_hex_output(${PROJECT_NAME})
+    # Add additional files to the make clean
+    set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+    "${PROJECT_NAME}.map"
+    "${PROJECT_NAME}.bin"
+    "${PROJECT_NAME}.hex"
+    )
