@@ -30,7 +30,7 @@
  */
 #include <math.h>
 #include "RegionCommon.h"
-#include "mw_log_conf.h"
+#include "GNSE_tracer.h"
 
 #define BACKOFF_DC_1_HOUR                   100
 #define BACKOFF_DC_10_HOURS                 1000
@@ -463,8 +463,8 @@ void RegionCommonRxBeaconSetup( RegionCommonRxBeaconSetupParams_t* rxBeaconSetup
                        1, 0, 10, rxBeaconSetupParams->SymbolTimeout, true, rxBeaconSetupParams->BeaconSize, false, 0, 0, false, rxContinuous );
 
     Radio.Rx( rxBeaconSetupParams->RxTime );
-    
-    MW_LOG(TS_ON, VLEVEL_M, "RX_BC on freq %d Hz at DR %d\r\n", rxBeaconSetupParams->Frequency, rxBeaconSetupParams->BeaconDatarate );
+
+    LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M, "RX_BC on freq %d Hz at DR %d\r\n", rxBeaconSetupParams->Frequency, rxBeaconSetupParams->BeaconDatarate );
 }
 
 void RegionCommonCountNbOfEnabledChannels( RegionCommonCountNbOfEnabledChannelsParams_t* countNbOfEnabledChannelsParams,
@@ -560,15 +560,15 @@ void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot, uint32_t frequency, int8_
 
     if ( rxSlot < RX_SLOT_NONE )
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX_%s on freq %d Hz at DR %d\r\n", slotStrings[rxSlot], frequency, dr );
+        LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "RX_%s on freq %d Hz at DR %d\r\n", slotStrings[rxSlot], frequency, dr );
     }
     else
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX on freq %d Hz at DR %d\r\n", frequency, dr );
+        LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "RX on freq %d Hz at DR %d\r\n", frequency, dr );
     }
 }
 
 void RegionCommonTxConfigPrint(uint32_t frequency, int8_t dr)
 {
-    MW_LOG(TS_ON, VLEVEL_M,  "TX on freq %d Hz at DR %d\r\n", frequency, dr );
+    LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "TX on freq %d Hz at DR %d\r\n", frequency, dr );
 }

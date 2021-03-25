@@ -51,7 +51,7 @@
 #include "LoRaMacHeaderTypes.h"
 #include "secure-element.h"
 #include "se-identity.h"
-#include "mw_log_conf.h"
+#include "GNSE_tracer.h"
 
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
 #include "lorawan_aes.h"
@@ -104,7 +104,7 @@
 #define HEX16(X)  HEX8(X), X[8], X[9], X[10], X[11], X[12], X[13], X[14], X[15]
 
 #if defined (KEY_LOG_ENABLED) && (KEY_LOG_ENABLED == 1)
-#define KEY_LOG(TS,VL,...)   do{ {UTIL_ADV_TRACE_COND_FSend(VL, T_REG_OFF, TS, __VA_ARGS__);} }while(0);
+#define KEY_LOG(TS,VL,...)   LIB_LOG(TS,VL,__VA_ARGS__)
 #else  /* !KEY_LOG_ENABLED */
 #define KEY_LOG(TS,VL,...)
 #endif /* KEY_LOG_ENABLED */
@@ -402,26 +402,26 @@ SecureElementStatus_t SecureElementInit(SecureElementNvmEvent seNvmCtxChanged)
   memcpy1((uint8_t *)(SeNvmCtx.KeyList), (const uint8_t *)InitialKeyList, sizeof(Key_t)*NUM_OF_KEYS);
 
   retval = GetKeyByID(APP_KEY, &keyItem);
-  KEY_LOG(TS_OFF, VLEVEL_M, "###### OTAA ######\r\n");
+  KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### OTAA ######\r\n");
   if (retval == SECURE_ELEMENT_SUCCESS)
   {
-    KEY_LOG(TS_OFF, VLEVEL_M, "###### AppKey:  %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
+    KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### AppKey:  %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
   }
   retval = GetKeyByID(NWK_KEY, &keyItem);
   if (retval == SECURE_ELEMENT_SUCCESS)
   {
-    KEY_LOG(TS_OFF, VLEVEL_M, "###### NwkKey:  %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
+    KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### NwkKey:  %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
   }
-  KEY_LOG(TS_OFF, VLEVEL_M, "###### ABP  ######\r\n");
+  KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### ABP  ######\r\n");
   retval = GetKeyByID(APP_S_KEY, &keyItem);
   if (retval == SECURE_ELEMENT_SUCCESS)
   {
-    KEY_LOG(TS_OFF, VLEVEL_M, "###### AppSKey: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
+    KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### AppSKey: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
   }
   retval = GetKeyByID(NWK_S_KEY, &keyItem);
   if (retval == SECURE_ELEMENT_SUCCESS)
   {
-    KEY_LOG(TS_OFF, VLEVEL_M, "###### NwkSKey: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
+    KEY_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### NwkSKey: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\r\n", HEX16(keyItem->KeyValue));
   }
 #else /* LORAWAN_KMS == 1 */
   uint8_t itr = 0;

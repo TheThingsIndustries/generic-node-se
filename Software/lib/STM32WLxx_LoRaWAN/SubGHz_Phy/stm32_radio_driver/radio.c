@@ -36,7 +36,7 @@
 #include "radio.h"
 #include "radio_driver.h"
 #include "radio_conf.h"
-#include "mw_log_conf.h"
+#include "GNSE_tracer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
@@ -1915,17 +1915,17 @@ static void RadioIrqProcess( void )
     break;
 
   case IRQ_PREAMBLE_DETECTED:
-    MW_LOG( TS_ON, VLEVEL_M,  "PRE OK\r\n" );
+    LIB_LOG( ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "PRE OK\r\n" );
     break;
 
   case IRQ_SYNCWORD_VALID:
 
-    MW_LOG( TS_ON, VLEVEL_M,  "SYNC OK\r\n" );
+    LIB_LOG( ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "SYNC OK\r\n" );
     break;
 
   case IRQ_HEADER_VALID:
 
-    MW_LOG( TS_ON, VLEVEL_M,  "HDR OK\r\n" );
+    LIB_LOG( ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "HDR OK\r\n" );
     break;
 
   case IRQ_HEADER_ERROR:
@@ -1938,7 +1938,7 @@ static void RadioIrqProcess( void )
     if( ( RadioEvents != NULL ) && ( RadioEvents->RxTimeout != NULL ) )
     {
       RadioEvents->RxTimeout( );
-      MW_LOG( TS_ON, VLEVEL_M,  "HDR KO\r\n" );
+      LIB_LOG( ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M,  "HDR KO\r\n" );
     }
     break;
 

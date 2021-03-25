@@ -32,7 +32,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
-#include "mw_log_conf.h"   /* needed for MW_LOG */
+#include "GNSE_tracer.h"
 #include "FragDecoder.h"
 #include "sfu_fwimg_regions.h"
 
@@ -552,10 +552,10 @@ static void FragFindMissingFrags(uint16_t counter)
   {
     FragDecoder.Status.FragNbLastRx = FragDecoder.FragNb + 1;
   }
-  MW_LOG(TS_ON, VLEVEL_H, "RECEIVED    : %5d / %5d Fragments\r\n", FragDecoder.Status.FragNbRx, FragDecoder.FragNb);
-  MW_LOG(TS_ON, VLEVEL_H, "              %5d / %5d Bytes\r\n", FragDecoder.Status.FragNbRx * FragDecoder.FragSize,
+  LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_H, "RECEIVED    : %5d / %5d Fragments\r\n", FragDecoder.Status.FragNbRx, FragDecoder.FragNb);
+  LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_H, "              %5d / %5d Bytes\r\n", FragDecoder.Status.FragNbRx * FragDecoder.FragSize,
          FragDecoder.FragNb * FragDecoder.FragSize);
-  MW_LOG(TS_ON, VLEVEL_H, "LOST        :       %7d Fragments\r\n\r\n", FragDecoder.Status.FragNbLost);
+  LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_H, "LOST        :       %7d Fragments\r\n\r\n", FragDecoder.Status.FragNbLost);
 }
 
 static uint16_t FragFindMissingIndex(uint16_t x)

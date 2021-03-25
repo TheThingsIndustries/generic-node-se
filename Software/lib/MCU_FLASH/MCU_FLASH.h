@@ -24,7 +24,7 @@
 #define MCU_FLASH_H
 
 #include "stm32wlxx.h"
-#include "stm32_adv_trace.h"
+#include "GNSE_tracer.h"
 #include "GNSE_bsp.h"
 
 #ifdef __cplusplus
@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 #if (DEBUG_MCU_FLASH)
-#define MCU_FLASH_PPRINTF(...)  do{ } while( UTIL_ADV_TRACE_OK != UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_OFF, __VA_ARGS__) ) //Polling Mode
+#define MCU_FLASH_PPRINTF(...)  LIB_PRINTF(...)
 #else
 #define MCU_FLASH_PPRINTF(...)
 #endif

@@ -31,9 +31,9 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "radio_driver.h" 
+#include "radio_driver.h"
 #include "radio_conf.h"
-#include "mw_log_conf.h"
+#include "GNSE_tracer.h"
 #include "stm32_lpm.h"
 
 /* External variables ---------------------------------------------------------*/
@@ -522,7 +522,7 @@ void SUBGRF_SetRfFrequency( uint32_t frequency )
         ImageCalibrated = true;
     }
     /* ST_WORKAROUND_BEGIN: Simplified frequency calculation */
-    SX_FREQ_TO_CHANNEL(chan, frequency);   
+    SX_FREQ_TO_CHANNEL(chan, frequency);
     /* ST_WORKAROUND_END */
     buf[0] = ( uint8_t )( ( chan >> 24 ) & 0xFF );
     buf[1] = ( uint8_t )( ( chan >> 16 ) & 0xFF );
@@ -548,7 +548,7 @@ RadioPacketTypes_t SUBGRF_GetPacketType( void )
     return PacketType;
 }
 
-void SUBGRF_SetTxParams( uint8_t paSelect, int8_t power, RadioRampTimes_t rampTime ) 
+void SUBGRF_SetTxParams( uint8_t paSelect, int8_t power, RadioRampTimes_t rampTime )
 {
     uint8_t buf[2];
 
@@ -915,7 +915,7 @@ void SUBGRF_SetSwitch( uint8_t paSelect, RFState_t rxtx )
     RBI_ConfigRFSwitch(state);
 }
 
-uint8_t SUBGRF_SetRfTxPower( int8_t power ) 
+uint8_t SUBGRF_SetRfTxPower( int8_t power )
 {
     uint8_t paSelect= RFO_LP;
 
@@ -959,7 +959,7 @@ uint32_t SUBGRF_GetRadioWakeUpTime( void )
     return ( uint32_t ) RBI_GetWakeUpTime();
 }
 
-/* HAL_SUBGHz Callbacks definitions */ 
+/* HAL_SUBGHz Callbacks definitions */
 void HAL_SUBGHZ_TxCpltCallback(SUBGHZ_HandleTypeDef *hsubghz)
 {
     RadioOnDioIrqCb( IRQ_TX_DONE );
