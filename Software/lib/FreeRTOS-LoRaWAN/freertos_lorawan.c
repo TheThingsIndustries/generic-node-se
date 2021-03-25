@@ -608,10 +608,7 @@ LoRaMacStatus_t LoRaWAN_Join( void )
 
                 if( status == LORAMAC_STATUS_DUTYCYCLE_RESTRICTED )
                 {
-                    //TODO: Remove line below after mac update to ST V1.0, see  https://github.com/TheThingsIndustries/generic-node-se/issues/88
-                    ulDutyCycleTimeMS = 1000;
-                    //TODO: Uncomment line below after mac update to ST V1.0, see  https://github.com/TheThingsIndustries/generic-node-se/issues/88
-                    // ulDutyCycleTimeMS = mlmeReq.ReqReturn.DutyCycleWaitTime;
+                    ulDutyCycleTimeMS = mlmeReq.ReqReturn.DutyCycleWaitTime;
                     configPRINTF( ( "\r\n Duty cycle restriction. Next Join in : ~%lu second(s)\r\n", ( ulDutyCycleTimeMS / 1000 ) ) );
                     vTaskDelay( pdMS_TO_TICKS( ulDutyCycleTimeMS ) );
                 }
@@ -805,10 +802,7 @@ LoRaMacStatus_t LoRaWAN_Send( LoRaWANMessage_t * pMessage,
         do
         {
             status = LoRaMacMcpsRequest( &mcpsReq, false );
-            //TODO: Remove line below after mac update to ST V1.0, see  https://github.com/TheThingsIndustries/generic-node-se/issues/88
-            ulDutyCycleTimeMS = 1000;
-            //TODO: Uncomment line below after mac update to ST V1.0, see  https://github.com/TheThingsIndustries/generic-node-se/issues/88
-            // ulDutyCycleTimeMS = mcpsReq.ReqReturn.DutyCycleWaitTime; //TODO: fix
+            ulDutyCycleTimeMS = mcpsReq.ReqReturn.DutyCycleWaitTime;
 
             if( status == LORAMAC_STATUS_DUTYCYCLE_RESTRICTED )
             {
