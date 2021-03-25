@@ -38,18 +38,6 @@ static void Gpio_PreInit(void);
   * @return None
   */
 static void DBG_Init(void);
-/**
-
-  * @brief Returns sec and msec based on the systime in use
-  * @param none
-  * @return  none
-  */
-static void TimestampNow(uint8_t *buff, uint16_t *size);
-
-/**
-  * @brief  it calls UTIL_ADV_TRACE_VSNPRINTF
-  */
-static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
 
 /**
   * @brief initialises the system (dbg pins, trace, mbmux, systimer, LPM, ...)
@@ -67,12 +55,7 @@ void SystemApp_Init(void)
   /* Configure the debug mode*/
   DBG_Init();
 
-  /*Initialize the terminal */
-  UTIL_ADV_TRACE_Init();
-  UTIL_ADV_TRACE_RegisterTimeStampFunction(TimestampNow);
-
-  /*Set verbose LEVEL*/
-  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_M);
+  GNSE_TRACER_INIT();
 
   /* Here user can init the board peripherals and sensors */
 
@@ -87,13 +70,6 @@ void SystemApp_Init(void)
 #elif !defined(LOW_POWER_DISABLE)
 #error LOW_POWER_DISABLE not defined
 #endif /* LOW_POWER_DISABLE */
-}
-
-static void TimestampNow(uint8_t *buff, uint16_t *size)
-{
-  SysTime_t curtime = SysTimeGet();
-  tiny_snprintf_like((char *)buff, MAX_TS_SIZE, "%ds%03d:", curtime.Seconds, curtime.SubSeconds);
-  *size = strlen((char *)buff);
 }
 
 static void Gpio_PreInit(void)
@@ -156,26 +132,6 @@ static void DBG_Init()
 #else
 #error "DEBUGGER_ON not defined or out of range <0,1>"
 #endif
-}
-
-/* Disable StopMode when traces need to be printed */
-void UTIL_ADV_TRACE_PreSendHook(void)
-{
-  UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_DISABLE);
-}
-
-/* Re-enable StopMode when traces have been printed */
-void UTIL_ADV_TRACE_PostSendHook(void)
-{
-  UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_ENABLE);
-}
-
-static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...)
-{
-  va_list vaArgs;
-  va_start(vaArgs, strFormat);
-  UTIL_ADV_TRACE_VSNPRINTF(buf, maxsize, strFormat, vaArgs);
-  va_end(vaArgs);
 }
 
 /**

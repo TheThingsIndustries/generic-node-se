@@ -52,7 +52,7 @@
   #include <stdint.h>
   extern uint32_t SystemCoreClock;
 #endif
-#include "stm32_adv_trace.h"
+#include "tiny_printf.h"
 #define configENABLE_FPU                         1
 #define configENABLE_MPU                         0
 
@@ -146,16 +146,13 @@ header file. */
 /* USER CODE END 1 */
 
 /* Logging task definitions. */
-extern UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_COND_FSend(uint32_t VerboseLevel, uint32_t Region, uint32_t TimeStampState, const char *strFormat, ...);
-
-void vLoggingPrintf( const char * pcFormat,
-                     ... );
+void vLoggingPrintf( const char * pcFormat, ... );
 
 /* Map the FreeRTOS printf() to the logging task printf. */
 #define configPRINTF( x )          vLoggingPrintf x
 
 /* Map the logging task's printf to the board specific output function. */
-#define configPRINT_STRING( x )    UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_OFF, x);
+#define configPRINT_STRING( x )    tiny_printf( x )
 
 /* Sets the length of the buffers into which logging messages are written - so
  * also defines the maximum length of each log message. */

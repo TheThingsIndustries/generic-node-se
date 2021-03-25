@@ -24,7 +24,7 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define APP_LOG_ENABLED 1
+#define GNSE_TINY_TRACER_ENABLE 1
 
 #define mainLOGGING_TASK_PRIORITY 24
 #define mainLOGGING_TASK_STACK_SIZE (512)
