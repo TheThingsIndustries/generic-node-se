@@ -32,6 +32,7 @@ int main(void)
   HAL_Init();
   SystemClock_Config();
 
+  /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
 
   APP_PPRINTF("\r\n -------------- Starting GNSE basic bootloader -------------- \r\n");

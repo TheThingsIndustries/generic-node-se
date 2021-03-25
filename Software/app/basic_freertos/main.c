@@ -124,6 +124,7 @@ int main(void)
   osKernelInitialize();
 
 #if (GNSE_TINY_TRACER_ENABLE)
+  /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
 
   xLoggingTaskInitialize(mainLOGGING_TASK_STACK_SIZE,

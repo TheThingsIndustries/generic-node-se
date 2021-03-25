@@ -25,7 +25,7 @@
 #define APP_H
 
 /**
- * Standered libraries
+ * Standard libraries
  */
 #include <stdio.h>
 #include <stdint.h>

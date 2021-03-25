@@ -44,6 +44,7 @@ int main(void)
   HAL_Init();
   SystemClock_Config();
 
+  /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
   GNSE_TRACER_START_RX(uart_rxcallback);
 

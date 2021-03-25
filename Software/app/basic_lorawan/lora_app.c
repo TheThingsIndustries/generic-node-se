@@ -223,10 +223,10 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
       }
       break;
     case LORAWAN_APP_PORT:
-      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Recieved %d bytes on LORAWAN_APP_PORT: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
+      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received %d bytes on LORAWAN_APP_PORT: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
       break;
     default:
-      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Recieved %d bytes on undefined port: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
+      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received %d bytes on undefined port: %d \r\n", appData->BufferSize, LORAWAN_APP_PORT);
       break;
     }
   }

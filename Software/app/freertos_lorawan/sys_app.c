@@ -55,6 +55,7 @@ void SystemApp_Init(void)
   /* Configure the debug mode*/
   DBG_Init();
 
+  /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
 
   /* Here user can init the board peripherals and sensors */

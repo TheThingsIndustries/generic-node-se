@@ -136,7 +136,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 {
   if ((appData != NULL) && (params != NULL))
   {
-    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Recieved Unhandled Downlink on F_PORT:%d \r\n", appData->Port);
+    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Unhandled Downlink on F_PORT:%d \r\n", appData->Port);
   }
 }
 

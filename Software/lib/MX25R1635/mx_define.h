@@ -33,7 +33,7 @@
 #define Mx_printf LIB_PRINTF
 #define MxTime uint32_t
 #define MxGetTime(TimeVal) do{ {TimeVal = HAL_GetTick();}} while(0);
-#define COUNTS_PER_SECOND 1000 //Beacuse HAL_GetTick() returns ms vlaues and the driver uses uS
+#define COUNTS_PER_SECOND 1000U //Because HAL_GetTick() returns ms values and the driver uses us
 #else
 #error "Unsupported/Undefined platform!"
 #endif

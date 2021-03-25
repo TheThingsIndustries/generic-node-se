@@ -71,7 +71,7 @@ void SystemApp_Init(void)
   /* Configure the debug mode*/
   DBG_Init();
 
-  /*Initialize the terminal */
+  /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
 
