@@ -49,7 +49,7 @@ static void DBG_Init(void);
 static void TimestampNow(uint8_t *buff, uint16_t *size);
 
 /**
-  * @brief  it calls UTIL_ADV_TRACE_VSNPRINTF
+  * @brief  it calls ADV_TRACER_VSNPRINTF
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
 
@@ -71,12 +71,8 @@ void SystemApp_Init(void)
   /* Configure the debug mode*/
   DBG_Init();
 
-  /*Initialize the terminal */
-  UTIL_ADV_TRACE_Init();
-  UTIL_ADV_TRACE_RegisterTimeStampFunction(TimestampNow);
-
-  /*Set verbose LEVEL*/
-  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_M);
+  GNSE_TRACER_INIT();
+  GNSE_TRACER_TIMESTAMP(TimestampNow);
 
   /* Here user can init the board peripherals and sensors */
 
@@ -173,13 +169,13 @@ static void DBG_Init()
 }
 
 /* Disable StopMode when traces need to be printed */
-void UTIL_ADV_TRACE_PreSendHook(void)
+void ADV_TRACER_PreSendHook(void)
 {
   UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_DISABLE);
 }
 
 /* Re-enable StopMode when traces have been printed */
-void UTIL_ADV_TRACE_PostSendHook(void)
+void ADV_TRACER_PostSendHook(void)
 {
   UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_ENABLE);
 }
@@ -188,7 +184,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 {
   va_list vaArgs;
   va_start(vaArgs, strFormat);
-  UTIL_ADV_TRACE_VSNPRINTF(buf, maxsize, strFormat, vaArgs);
+  ADV_TRACER_VSNPRINTF(buf, maxsize, strFormat, vaArgs);
   va_end(vaArgs);
 }
 
