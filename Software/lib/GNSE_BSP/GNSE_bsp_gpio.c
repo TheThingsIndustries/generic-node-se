@@ -270,7 +270,6 @@ static void BUTTON_SW1_EXTI_Callback(void)
   *         This parameter can be one of the following values:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
@@ -298,7 +297,6 @@ int32_t GNSE_BSP_LS_Init(Load_Switch_TypeDef loadSwitch)
   *         This parameter can be one of the following values:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
   * @note Load Switch DeInit does not disable the GPIO clock nor disable the Mfx
   * @return GNSE_BSP status
   */
@@ -319,7 +317,8 @@ int32_t GNSE_BSP_LS_DeInit(Load_Switch_TypeDef loadSwitch)
   *         This parameter can be one of the following values:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
+  * @note   Turning on the load switch and powering the peripherals takes some time
+            See SENSORS_LOAD_SWITCH_DELAY_MS and FLASH_LOAD_SWITCH_DELAY_MS
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LS_On(Load_Switch_TypeDef loadSwitch)
@@ -335,7 +334,8 @@ int32_t GNSE_BSP_LS_On(Load_Switch_TypeDef loadSwitch)
   *         This parameter can be one of the following values:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
+  * @note   The power off time of the load switch is 22 us
+  *         (and peripherals have an additional power on time)
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
@@ -351,7 +351,6 @@ int32_t GNSE_BSP_LS_Off(Load_Switch_TypeDef loadSwitch)
   *         This parameter can be one of the following values:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
@@ -367,7 +366,6 @@ int32_t GNSE_BSP_LS_Toggle(Load_Switch_TypeDef loadSwitch)
   *         This parameter can be one of following parameters:
   *            @arg LOAD_SWITCH1
   *            @arg LOAD_SWITCH2
-  *            @arg LOAD_SWITCH3
   * @return Load Switch status
   */
 int32_t GNSE_BSP_LS_GetState(Load_Switch_TypeDef loadSwitch)

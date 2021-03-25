@@ -81,7 +81,7 @@ void SystemApp_Init(void)
   APP_PPRINTF("\r\n Powering and using HW secure element (ATECC608A-TNGLORA) \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-  HAL_Delay(100);
+  HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
   GNSE_BSP_Sensor_I2C1_Init();
 
   /*Init low power manager*/

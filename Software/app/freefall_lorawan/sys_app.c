@@ -83,11 +83,10 @@ void SystemApp_Init(void)
   /* Set load switch */
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-  HAL_Delay(100);
+  HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
 
   /* Set I2C interface */
   GNSE_BSP_Sensor_I2C1_Init();
-  HAL_Delay(100);
 
   /* Set accelerometer */
   if (GNSE_ACC_Init() != ACC_OP_SUCCESS)

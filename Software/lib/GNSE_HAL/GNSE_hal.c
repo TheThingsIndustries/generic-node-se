@@ -38,8 +38,7 @@ void GNSE_HAL_Internal_Sensors_Init(void)
 {
     GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
     GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
-    /* Delay required to let the sensors start up */
-    HAL_Delay(GNSE_HAL_INIT_DELAY);
+    HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
 
     GNSE_ACC_Init();
     SHTC3_probe();
@@ -67,7 +66,7 @@ void GNSE_HAL_Flash_Init(void)
 {
     GNSE_BSP_LS_Init(LOAD_SWITCH_FLASH);
     GNSE_BSP_LS_On(LOAD_SWITCH_FLASH);
-    HAL_Delay(GNSE_HAL_INIT_DELAY);
+    HAL_Delay(LOAD_SWITCH_FLASH_DELAY_MS);
     MX25R16_Init(&GNSE_HAL_Flash);
 }
 
