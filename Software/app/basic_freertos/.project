@@ -43,11 +43,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>lib/ATECC608A-TNGLORA</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA</locationURI>
-		</link>
-		<link>
 			<name>lib/BUZZER</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/BUZZER</locationURI>
@@ -61,6 +56,11 @@
 			<name>lib/GNSE_BSP</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_BSP</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>lib/LIS2DH12</name>
@@ -208,6 +208,26 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/FreeRTOS-Kernel/timers.c</locationURI>
 		</link>
 		<link>
+			<name>lib/GNSE_TRACER/.DS_Store</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/GNSE_tracer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/GNSE_tracer.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/tiny_printf</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lib/Utilities/.DS_Store</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/.DS_Store</locationURI>
@@ -216,16 +236,6 @@
 			<name>lib/Utilities/freertos</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/stm32_adv_trace.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_adv_trace.c</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/stm32_adv_trace.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_adv_trace.h</locationURI>
 		</link>
 		<link>
 			<name>lib/Utilities/stm32_lpm.c</name>
@@ -246,26 +256,6 @@
 			<name>lib/Utilities/stm32_mem.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_mem.h</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/stm32_tiny_vsnprintf.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_tiny_vsnprintf.c</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/stm32_tiny_vsnprintf.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_tiny_vsnprintf.h</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/usart_if.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/usart_if.c</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/usart_if.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/usart_if.h</locationURI>
 		</link>
 		<link>
 			<name>lib/Utilities/utilities_conf.h</name>
@@ -526,6 +516,56 @@
 			<name>lib/FreeRTOS-Kernel/portable/readme.txt</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/FreeRTOS-Kernel/portable/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer.c</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer_conf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_adv_tracer_conf.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_adv_usart.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_adv_usart.c</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_adv_usart.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_adv_usart.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_tiny_vsnprintf.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_tiny_vsnprintf.c</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/adv_tracer/stm32_tiny_vsnprintf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/adv_tracer/stm32_tiny_vsnprintf.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/tiny_printf/tiny_printf.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/tiny_printf/tiny_printf.c</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/tiny_printf/tiny_printf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/tiny_printf/tiny_printf.h</locationURI>
+		</link>
+		<link>
+			<name>lib/GNSE_TRACER/tiny_printf/tiny_printf_conf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/GNSE_TRACER/tiny_printf/tiny_printf_conf.h</locationURI>
 		</link>
 		<link>
 			<name>lib/Utilities/freertos/.DS_Store</name>

@@ -26,28 +26,20 @@
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 
-void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
-{
-  APP_PPRINTF("\r\n Data received via UART \r\n");
-}
-
 int main(void)
 {
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   SystemClock_Config();
 
-#if (APP_LOG_ENABLED)
-  UTIL_ADV_TRACE_Init();
-  UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
-  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
-#endif
+  /* Initialize Tracer/Logger */
+  GNSE_TRACER_INIT();
 
   APP_PPRINTF("\r\n -------------- Starting GNSE basic bootloader -------------- \r\n");
   Bootloader_Init();
   Bootloader_HandleInput();
 
-#if (APP_LOG_ENABLED)
+#if (GNSE_TINY_TRACER_ENABLE)
   Bootloader_state_t state = Bootloader_GetState();
   switch (state)
   {
@@ -64,8 +56,8 @@ int main(void)
   HAL_Delay(APP_PRINT_DELAY);
 #endif
 
-#if (APP_LOG_ENABLED)
-  UTIL_ADV_TRACE_DeInit();
+#if (GNSE_TINY_TRACER_ENABLE)
+  GNSE_TRACER_DEINIT();
 #endif
 
   Bootloader_DeInit();

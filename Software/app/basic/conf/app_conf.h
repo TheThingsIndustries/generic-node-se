@@ -24,9 +24,9 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define APP_LOG_ENABLED 1
+#define GNSE_ADVANCED_TRACER_ENABLE 1
 
-/* if ON (=1) it enables the debbugger plus 4 dgb pins */
+/* if ON (=1) it enables the debugger plus 4 dbg pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
 #define DEBUGGER_ON       0
 

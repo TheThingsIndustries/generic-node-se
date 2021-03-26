@@ -37,7 +37,7 @@
 
 #include "LmHandler.h"
 #include "Region.h"
-#include "mw_log_conf.h"  /* needed for MW_LOG */
+#include "GNSE_tracer.h"
 #include "lorawan_version.h"
 #include "Commissioning.h"
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
@@ -345,7 +345,7 @@ LmHandlerErrorStatus_t LmHandlerConfigure(LmHandlerParams_t *handlerParams)
   }
   else
   {
-    MW_LOG(TS_ON, VLEVEL_ALWAYS, "error: Region is not defined in the MW: set lorawan_conf.h accordingly\r\n");
+    LIB_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_ALWAYS, "error: Region is not defined in the MW: set lorawan_conf.h accordingly\r\n");
     while (1) {}  /* error: Region is not defined in the MW */
   }
 
@@ -374,12 +374,12 @@ LmHandlerErrorStatus_t LmHandlerConfigure(LmHandlerParams_t *handlerParams)
     LoRaMacMibGetRequestConfirm(&mibReq);
     memcpy1(CommissioningParams.JoinEui, mibReq.Param.JoinEui, 8);
   }
-  MW_LOG(TS_OFF, VLEVEL_M, "###### DevEui:  %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X\r\n",
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### DevEui:  %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X\r\n",
          HEX8(CommissioningParams.DevEui));
-  MW_LOG(TS_OFF, VLEVEL_M, "###### AppEui:  %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X\r\n",
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### AppEui:  %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X\r\n",
          HEX8(CommissioningParams.JoinEui));
 #if (defined (LORAWAN_KMS) && (LORAWAN_KMS == 1))
-  MW_LOG(TS_OFF, VLEVEL_L, "###### KMS ENABLED \r\n");
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_L, "###### KMS ENABLED \r\n");
 #endif /* LORAWAN_KMS == 1 */
 
   mibReq.Type = MIB_PUBLIC_NETWORK;
@@ -485,14 +485,14 @@ void LmHandlerJoin(ActivationType_t mode)
 #if (OVER_THE_AIR_ACTIVATION == 0)
   if (mode == ACTIVATION_TYPE_OTAA)
   {
-    MW_LOG(TS_OFF, VLEVEL_M, "ERROR: OTAA mode not implemented\r\n");
+    LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "ERROR: OTAA mode not implemented\r\n");
     while (1);
   }
 #endif /* OVER_THE_AIR_ACTIVATION */
 #if (ACTIVATION_BY_PERSONALISATION == 0)
   if (mode == ACTIVATION_TYPE_ABP)
   {
-    MW_LOG(TS_OFF, VLEVEL_M, "ERROR: ABP mode not implemented\r\n");
+    LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "ERROR: ABP mode not implemented\r\n");
     while (1);
   }
 #endif /* ACTIVATION_BY_PERSONALISATION */
@@ -535,7 +535,7 @@ void LmHandlerJoin(ActivationType_t mode)
       mibReq.Type = MIB_DEV_ADDR;
       mibReq.Param.DevAddr = CommissioningParams.DevAddr;
       LoRaMacMibSetRequestConfirm(&mibReq);
-      MW_LOG(TS_OFF, VLEVEL_M, "###### DevAddr:   %08X\r\n", CommissioningParams.DevAddr);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "###### DevAddr:   %08X\r\n", CommissioningParams.DevAddr);
 
 #if (defined (LORAWAN_KMS) && (LORAWAN_KMS == 1))
 #if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
@@ -664,7 +664,7 @@ LmHandlerErrorStatus_t LmHandlerSend(LmHandlerAppData_t *appData, LmHandlerMsgTy
     lmhStatus = LORAMAC_HANDLER_ERROR;
     break;
   }
-      
+
   return lmhStatus;
 }
 
@@ -1620,7 +1620,7 @@ static void LmHandlerPackagesNotify(PackageNotifyTypes_t notifyType, void *param
 
 static void DisplayClassUpdate(DeviceClass_t deviceClass)
 {
-  MW_LOG(TS_OFF, VLEVEL_M, "Switch to Class %c done\r\n", "ABC"[deviceClass]);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "Switch to Class %c done\r\n", "ABC"[deviceClass]);
 }
 
 #if ( LORAMAC_CLASSB_ENABLED == 1 )
@@ -1628,15 +1628,15 @@ static void DisplayBeaconUpdate(LmHandlerBeaconParams_t *params)
 {
   static const char *EventBeaconStateStrings[] = { "BC_ACQUIRING", "BC_LOST", "BC_RECEIVED", "BC_NOT_RECEIVED" };
 
-  MW_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== %s\r\n", EventBeaconStateStrings[params->State]);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### ========== %s\r\n", EventBeaconStateStrings[params->State]);
   if (params->State == LORAMAC_HANDLER_BEACON_RX)
   {
-    MW_LOG(TS_OFF, VLEVEL_H, "###### BTIME:%010d | GW DESC:%d | GW INFO:%02X %02X %02X %02X %02X %02X\r\n",
+    LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "###### BTIME:%010d | GW DESC:%d | GW INFO:%02X %02X %02X %02X %02X %02X\r\n",
            params->Info.Time.Seconds, params->Info.GwSpecific.InfoDesc,
            params->Info.GwSpecific.Info[0], params->Info.GwSpecific.Info[1],
            params->Info.GwSpecific.Info[2], params->Info.GwSpecific.Info[3],
            params->Info.GwSpecific.Info[4], params->Info.GwSpecific.Info[5]);
-    MW_LOG(TS_OFF, VLEVEL_H, "###### FREQ:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
+    LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "###### FREQ:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
            params->Info.Frequency, params->Info.Datarate,
            params->Info.Rssi, params->Info.Snr);
   }

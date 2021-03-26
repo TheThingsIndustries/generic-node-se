@@ -9,6 +9,8 @@ file(GLOB LORAWAN_SRC
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
     "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities/*.c"
@@ -30,6 +32,9 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic
     ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf
     ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy
@@ -53,6 +58,8 @@ file(GLOB MAIN_SRC
         "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
         "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
         "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
         "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
         "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
         "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
@@ -77,6 +84,9 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf
     ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
     ${PROJECT_SOURCE_DIR}/lib/SHTC3
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635

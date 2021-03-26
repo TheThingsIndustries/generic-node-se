@@ -145,7 +145,7 @@ LoraInfo_t *LoraInfo_GetPtr(void)
 uint8_t GetBatteryLevel(void)
 {
   uint8_t batteryLevel = 3; // Dummy value to use in the basic app, user can add desired implementation depending on the board.
-  APP_LOG(TS_ON, VLEVEL_M, "VDDA= %d (Dummy value)\n\r", batteryLevel);
+  APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_M, "VDDA= %d (Dummy value)\n\r", batteryLevel);
 
   return batteryLevel;
 }

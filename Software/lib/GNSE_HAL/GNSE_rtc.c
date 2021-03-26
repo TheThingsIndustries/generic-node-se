@@ -50,11 +50,11 @@
 /* #define RTIF_DEBUG */
 
 #ifdef RTIF_DEBUG
-#include "stm32_adv_trace.h" /*for app_log*/
+#include "GNSE_tracer.h"
 /**
   * @brief Post the RTC log string format to the circular queue for printing in using the polling mode
   */
-#define GNSE_RTC_DBG_PRINTF(...) do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ALWAYS, T_REG_OFF, TS_OFF, __VA_ARGS__);} }while(0);
+#define GNSE_RTC_DBG_PRINTF(...) LIB_PRINTF(...)
 #else
 /**
   * @brief not used

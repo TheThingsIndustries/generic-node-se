@@ -26,9 +26,9 @@
 
 #include "lorawan_conf.h"
 
-#define APP_LOG_ENABLED 1
+#define GNSE_TINY_TRACER_ENABLE 1
 
-/* if ON (=1) it enables the debugger plus 4 dgb pins */
+/* if ON (=1) it enables the debugger plus 4 dbg pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
 #define DEBUGGER_ON       1
 

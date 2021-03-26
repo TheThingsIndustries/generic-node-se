@@ -26,15 +26,14 @@
 #define PLATFORM_GNSE 1
 
 #if PLATFORM_GNSE
-#include "stm32_adv_trace.h"
+#include "GNSE_tracer.h"
 #include "GNSE_bsp.h"
 
 #define GetChar()
-#define Mx_printf FLASH_PPRINTF
-#define FLASH_PPRINTF(...)  do{ } while( UTIL_ADV_TRACE_OK != UTIL_ADV_TRACE_COND_FSend(VLEVEL_OFF, T_REG_OFF, TS_OFF, __VA_ARGS__) ) //Polling Mode
+#define Mx_printf LIB_PRINTF
 #define MxTime uint32_t
 #define MxGetTime(TimeVal) do{ {TimeVal = HAL_GetTick();}} while(0);
-#define COUNTS_PER_SECOND 1000 //Beacuse HAL_GetTick() returns ms vlaues and the driver uses uS
+#define COUNTS_PER_SECOND 1000U //Because HAL_GetTick() returns ms values and the driver uses us
 #else
 #error "Unsupported/Undefined platform!"
 #endif

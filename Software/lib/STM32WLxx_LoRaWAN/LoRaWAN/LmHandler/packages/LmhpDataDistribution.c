@@ -24,7 +24,7 @@
 #include "LmhpFragmentation.h"
 #include "LmhpFirmwareManagement.h"
 #include "LmHandler.h"
-#include "mw_log_conf.h"
+#include "GNSE_tracer.h"
 #include "utilities.h"
 
 #include "flash_if.h"
@@ -34,7 +34,7 @@
 #include "sfu_fwimg_regions.h"
 
 /* Private typedef -----------------------------------------------------------*/
-/*! 
+/*!
  * Structure containing values related to the management of multi-images in Flash
  */
 typedef struct
@@ -310,10 +310,10 @@ static void OnFragProgress(uint16_t fragCounter, uint16_t fragNb, uint8_t fragSi
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_SET);
 #endif /* INTEROP_TEST_MODE == 1 */
 
-  MW_LOG(TS_OFF, VLEVEL_M, "\r\n....... FRAG_DECODER in Progress .......\r\n");
-  MW_LOG(TS_OFF, VLEVEL_M, "RECEIVED    : %5d / %5d Fragments\r\n", fragCounter, fragNb);
-  MW_LOG(TS_OFF, VLEVEL_M, "              %5d / %5d Bytes\r\n", fragCounter * fragSize, fragNb * fragSize);
-  MW_LOG(TS_OFF, VLEVEL_M, "LOST        :       %7d Fragments\r\n\r\n", fragNbLost);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n....... FRAG_DECODER in Progress .......\r\n");
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "RECEIVED    : %5d / %5d Fragments\r\n", fragCounter, fragNb);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "              %5d / %5d Bytes\r\n", fragCounter * fragSize, fragNb * fragSize);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "LOST        :       %7d Fragments\r\n\r\n", fragNbLost);
 }
 
 static void OnFragDone(int32_t status, uint32_t size)
@@ -326,8 +326,8 @@ static void OnFragDone(int32_t status, uint32_t size)
   /* BSP_LED_Off(LED_BLUE); */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET);
 #endif /* INTEROP_TEST_MODE == 1 */
-  MW_LOG(TS_OFF, VLEVEL_M, "\r\n....... FRAG_DECODER Finished .......\r\n");
-  MW_LOG(TS_OFF, VLEVEL_M, "STATUS      : %d\r\n", status);
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n....... FRAG_DECODER Finished .......\r\n");
+  LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "STATUS      : %d\r\n", status);
 }
 
 #if (INTEROP_TEST_MODE == 0)
@@ -351,7 +351,7 @@ static void FwUpdateAgentRun(void)
   }
   if (ret != HAL_OK)
   {
-    MW_LOG(TS_OFF, VLEVEL_M, "  --  Operation Failed  \r\n");
+    LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "  --  Operation Failed  \r\n");
   }
 }
 

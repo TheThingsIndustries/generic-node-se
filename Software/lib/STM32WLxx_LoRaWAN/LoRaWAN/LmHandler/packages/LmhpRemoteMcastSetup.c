@@ -32,7 +32,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "LmHandler.h"
 #include "LmhpRemoteMcastSetup.h"
-#include "mw_log_conf.h"  /* needed for MW_LOG */
+#include "GNSE_tracer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef enum LmhpRemoteMcastSetupSessionStates_e
@@ -439,7 +439,7 @@ static void LmhpRemoteMcastSetupOnMcpsIndication(McpsIndication_t *mcpsIndicatio
             TimerSetValue(&SessionStartTimer, timeToSessionStart * 1000);
             TimerStart(&SessionStartTimer);
 
-            MW_LOG(TS_OFF, VLEVEL_M, "Time2SessionStart: %d ms\r\n", timeToSessionStart * 1000);
+            LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "Time2SessionStart: %d ms\r\n", timeToSessionStart * 1000);
           }
           else
           {
@@ -487,20 +487,20 @@ static void LmhpRemoteMcastSetupOnMcpsIndication(McpsIndication_t *mcpsIndicatio
 
     if (id != 0xFF && id < LORAMAC_MAX_MC_CTX)
     {
-      MW_LOG(TS_OFF, VLEVEL_M, "ID          : %d\r\n", McSessionData[id].McGroupData.IdHeader.Fields.McGroupId);
-      MW_LOG(TS_OFF, VLEVEL_M, "McAddr      : %08X\r\n", McSessionData[id].McGroupData.McAddr);
-      MW_LOG(TS_OFF, VLEVEL_M, "McKey       : %02X", McSessionData[id].McGroupData.McKeyEncrypted[0]);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "ID          : %d\r\n", McSessionData[id].McGroupData.IdHeader.Fields.McGroupId);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "McAddr      : %08X\r\n", McSessionData[id].McGroupData.McAddr);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "McKey       : %02X", McSessionData[id].McGroupData.McKeyEncrypted[0]);
       for (int i = 1; i < 16; i++)
       {
-        MW_LOG(TS_OFF, VLEVEL_M, "-%02X",  McSessionData[id].McGroupData.McKeyEncrypted[i]);
+        LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "-%02X",  McSessionData[id].McGroupData.McKeyEncrypted[i]);
       }
-      MW_LOG(TS_OFF, VLEVEL_M, "\r\n");
-      MW_LOG(TS_OFF, VLEVEL_M, "McFCountMin : %u\r\n",  McSessionData[id].McGroupData.McFCountMin);
-      MW_LOG(TS_OFF, VLEVEL_M, "McFCountMax : %u\r\n",  McSessionData[id].McGroupData.McFCountMax);
-      MW_LOG(TS_OFF, VLEVEL_M, "SessionTime : %u\r\n",  McSessionData[id].SessionTime);
-      MW_LOG(TS_OFF, VLEVEL_M, "SessionTimeT: %d s\r\n", (1 << McSessionData[id].SessionTimeout));
-      MW_LOG(TS_OFF, VLEVEL_M, "Rx Freq     : %u\r\n", McSessionData[id].RxParams.ClassC.Frequency);
-      MW_LOG(TS_OFF, VLEVEL_M, "Rx DR       : DR_%d\r\n", McSessionData[id].RxParams.ClassC.Datarate);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n");
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "McFCountMin : %u\r\n",  McSessionData[id].McGroupData.McFCountMin);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "McFCountMax : %u\r\n",  McSessionData[id].McGroupData.McFCountMax);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "SessionTime : %u\r\n",  McSessionData[id].SessionTime);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "SessionTimeT: %d s\r\n", (1 << McSessionData[id].SessionTimeout));
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "Rx Freq     : %u\r\n", McSessionData[id].RxParams.ClassC.Frequency);
+      LIB_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "Rx DR       : DR_%d\r\n", McSessionData[id].RxParams.ClassC.Datarate);
     }
   }
 }

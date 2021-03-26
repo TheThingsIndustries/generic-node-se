@@ -49,16 +49,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_tiny_vsnprintf.h"
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private defines -----------------------------------------------------------*/
-// #define TINY_PRINTF //Uncomment to get smaller printf code size
-#define HAS_FLOAT //Comment this to get smaller code size and sacrifice float printing like %f, %4.2f
+#include "stm32_adv_tracer_conf.h"
 
 #define ZEROPAD    (1<<0)  /* Pad with zero */
 #define SIGN      (1<<1)  /* Unsigned/signed long */
 #define UPPERCASE   (1<<6)  /* 'ABCDEF' */
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
 #define PLUS      (1<<2)  /* Show plus */
 #define HEX_PREP   (1<<5)  /* 0x */
@@ -95,7 +91,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   int i;
 
   if (type & UPPERCASE)  dig = upper_digits;
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
   if (type & LEFT) type &= ~ZEROPAD;
 #endif
@@ -111,7 +107,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
       num = -num;
       size--;
     }
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
     else if (type & PLUS)
     {
@@ -126,7 +122,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
 #endif
   }
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
   if (type & HEX_PREP)
   {
@@ -155,7 +151,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   if (!(type & (ZEROPAD /* TINY option   | LEFT */))) while (size-- > 0) ASSIGN_STR(' ');
   if (sign) ASSIGN_STR(sign);
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
   if (type & HEX_PREP)
   {
@@ -169,7 +165,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   }
 #endif
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
   while (size-- > 0) ASSIGN_STR(c);
 #else
   if (!(type & LEFT)) while (size-- > 0) ASSIGN_STR(c);
@@ -181,7 +177,7 @@ static char *ee_number(char *str, int max_size, long num, int base, int size, in
   return str;
 }
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
 static char *eaddr(char *str, unsigned char *addr, int size, int precision, int type)
 {
@@ -245,7 +241,7 @@ static char *iaddr(char *str, unsigned char *addr, int size, int precision, int 
 }
 #endif
 
-#ifdef HAS_FLOAT
+#ifdef ADV_TRACER_SUPPORT_FLOAT
 
 char *ecvtbuf(double arg, int ndigits, int *decpt, int *sign, char *buf);
 char *fcvtbuf(double arg, int ndigits, int *decpt, int *sign, char *buf);
@@ -410,7 +406,7 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
   int n, i;
 
   // Left align means no zero padding
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
   if (flags & LEFT) flags &= ~ZEROPAD;
 #endif
@@ -426,7 +422,7 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
       num = -num;
       size--;
     }
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
     else if (flags & PLUS)
     {
@@ -448,7 +444,7 @@ static char *flt(char *str, double num, int size, int precision, char fmt, int f
   // Convert floating point number to text
   parse_float(num, tmp, fmt, precision);
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
   if ((flags & HEX_PREP) && precision == 0) decimal_point(tmp);
 #endif
@@ -504,7 +500,7 @@ int tiny_vsnprintf_like(char *buf, const int size, const char *fmt, va_list args
 
     // Process flags
     flags = 0;
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
     /* Support %0, but not %-, %+, %space and %# */
     fmt++;
     if (*fmt == '0')
@@ -528,7 +524,7 @@ repeat:
     field_width = -1;
     if (is_digit(*fmt))
       field_width = ee_skip_atoi(&fmt);
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
     /* Does not support %* */
 #else
     else if (*fmt == '*')
@@ -545,7 +541,7 @@ repeat:
 
     // Get the precision
     precision = -1;
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
     /* Does not support %. */
 #else
     if (*fmt == '.')
@@ -564,7 +560,7 @@ repeat:
 
     // Get the conversion qualifier
     qualifier = -1;
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
       /* Does not support %l and %L */
 #else
     if (*fmt == 'l' || *fmt == 'L')
@@ -580,13 +576,13 @@ repeat:
     switch (*fmt)
     {
       case 'c':
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
         if (!(flags & LEFT))
 #endif
           while (--field_width > 0) *str++ = ' ';
         *str++ = (unsigned char) va_arg(args, int);
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
         while (--field_width > 0) *str++ = ' ';
 #endif
@@ -595,7 +591,7 @@ repeat:
       case 's':
         s = va_arg(args, char *);
         if (!s) s = "<NULL>";
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
         len = strlen(s);
 #else
         len = strnlen(s, precision);
@@ -603,13 +599,13 @@ repeat:
 #endif
           while (len < field_width--) *str++ = ' ';
         for (i = 0; i < len; ++i) *str++ = *s++;
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
 #else
         while (len < field_width--) *str++ = ' ';
 #endif
         continue;
 
-#ifdef TINY_PRINTF
+#ifdef ADV_TRACER_SUPPORT_TINY_PRINTF
       /* Does not support %p, %A, %a, %o */
 #else
       case 'p':
@@ -651,7 +647,7 @@ repeat:
       case 'u':
         break;
 
-#ifdef HAS_FLOAT
+#ifdef ADV_TRACER_SUPPORT_FLOAT
 
       case 'f':
         str = flt(str, va_arg(args, double), field_width, precision, *fmt, flags | SIGN);

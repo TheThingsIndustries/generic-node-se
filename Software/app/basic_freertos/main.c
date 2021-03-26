@@ -63,7 +63,7 @@ void QueueSendThread(void *argument)
 {
   for (;;)
   {
-#if (APP_LOG_ENABLED)
+#if (GNSE_TINY_TRACER_ENABLE)
     configPRINTF(("\r\n Send a Tx msg \r\n"));
 #endif
     /* Place this thread into the blocked state until it is time to run again.
@@ -93,7 +93,7 @@ void QueueReceiveThread(void *argument)
 
     if (status == osOK)
     {
-#if (APP_LOG_ENABLED)
+#if (GNSE_TINY_TRACER_ENABLE)
       configPRINTF(("\r\n Received Rx msg \r\n"));
 #endif
       if (osQueueMsg == Queue_value)
@@ -105,17 +105,6 @@ void QueueReceiveThread(void *argument)
     }
   }
 }
-
-#if (APP_LOG_ENABLED)
-void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
-{
-  /*
-  Left empty
-  This is a UART Rx interrupt call back.
-  Can be used to triger specific events based on the user input.
-  */
-}
-#endif
 
 int main(void)
 {
@@ -134,10 +123,9 @@ int main(void)
   /* Init scheduler */
   osKernelInitialize();
 
-#if (APP_LOG_ENABLED)
-  UTIL_ADV_TRACE_Init();
-  UTIL_ADV_TRACE_StartRxProcess(uart_rxcallback);
-  UTIL_ADV_TRACE_SetVerboseLevel(VLEVEL_H);
+#if (GNSE_TINY_TRACER_ENABLE)
+  /* Initialize Tracer/Logger */
+  GNSE_TRACER_INIT();
 
   xLoggingTaskInitialize(mainLOGGING_TASK_STACK_SIZE,
                          mainLOGGING_TASK_PRIORITY,

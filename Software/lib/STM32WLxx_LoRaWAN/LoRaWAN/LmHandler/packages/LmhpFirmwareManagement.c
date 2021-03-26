@@ -19,7 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "LmHandler.h"
 #include "LmhpFirmwareManagement.h"
-#include "mw_log_conf.h"  /* needed for MW_LOG */
+#include "GNSE_tracer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /*!

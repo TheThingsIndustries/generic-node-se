@@ -28,7 +28,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
 #include "stm32_mem.h"
-#include "mw_log_conf.h"     /* mw trace conf */
+#include "GNSE_tracer.h"
 #include "radio_board_if.h"  /* low layer api (bsp) */
 #include "utilities_def.h"  /* low layer api (bsp) */
 #include "sys_debug.h"
