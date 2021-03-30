@@ -23,6 +23,7 @@
 
 TIM_HandleTypeDef GNSE_BSP_buzzer_timer;
 RTC_HandleTypeDef GNSE_BSP_rtc;
+IWDG_HandleTypeDef GNSE_BSP_iwdg;
 
 int32_t GNSE_BSP_RTC_Init(void)
 {
@@ -57,6 +58,37 @@ int32_t GNSE_BSP_RTC_Init(void)
     return GNSE_BSP_ERROR_NO_INIT;
   }
   return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Configures independent watchdog timer
+  * @note   The GNSE_BSP_IWDG_Refresh should be called every time before the timer expires
+  * @arg    iwdg_reload: Timeout (in ticks of the IWDG timer) for the IWDG (max is 0xFFF)
+  * @return GNSE_BSP status
+  */
+int32_t GNSE_BSP_IWDG_Init(uint32_t iwdg_reload)
+{
+  /* Set IWDG settings to maximum reload value */
+  GNSE_BSP_iwdg.Instance = IWDG;
+  GNSE_BSP_iwdg.Init.Prescaler = IWDG_PRESCALER_256;
+  GNSE_BSP_iwdg.Init.Window = IWDG_WINR_WIN;
+  GNSE_BSP_iwdg.Init.Reload = iwdg_reload;
+
+  if (HAL_IWDG_Init(&GNSE_BSP_iwdg) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+
+  return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+  * @brief  Refreshes the watchdog timer counter
+  * @return None
+  */
+void GNSE_BSP_IWDG_Refresh(void)
+{
+  HAL_IWDG_Refresh(&GNSE_BSP_iwdg);
 }
 
 int32_t GNSE_BSP_BUZZER_TIM_DeInit(pTIM_CallbackTypeDef cb)

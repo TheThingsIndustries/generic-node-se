@@ -30,6 +30,9 @@
 /* if OFF (=0) the debugger is OFF (lower consumption) */
 #define DEBUGGER_ON       0
 
+/* if ON (=1) the independent watchdog timer is used (reset MCU after inactivity) */
+/* if OFF (=0) the independent watchdog timer is not used */
+#define IWDG_TIMER_ON     0
 
 /* LOW_POWER_DISABLE = 0 : LowPowerMode enabled : MCU enters stop2 mode*/
 /* LOW_POWER_DISABLE = 1 : LowPowerMode disabled : MCU enters sleep mode only */

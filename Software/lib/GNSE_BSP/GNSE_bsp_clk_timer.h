@@ -29,10 +29,13 @@
 
 extern TIM_HandleTypeDef GNSE_BSP_buzzer_timer;
 extern RTC_HandleTypeDef GNSE_BSP_rtc;
+extern IWDG_HandleTypeDef GNSE_BSP_iwdg;
 
 #define RTC_N_PREDIV_S 10
 #define RTC_PREDIV_S ((1 << RTC_N_PREDIV_S) - 1)
 #define RTC_PREDIV_A ((1 << (15 - RTC_N_PREDIV_S)) - 1)
+
+#define IWDG_MAX_RELOAD 0xFFFU
 
 #define BUZZER_TIMER TIM2
 #define BUZZER_TIMER_CHANNEL TIM_CHANNEL_1
@@ -68,5 +71,8 @@ int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
 int32_t GNSE_BSP_BUZZER_TIM_DeInit(pTIM_CallbackTypeDef cb);
 
 int32_t GNSE_BSP_RTC_Init(void);
+
+int32_t GNSE_BSP_IWDG_Init(uint32_t iwdg_reload);
+void GNSE_BSP_IWDG_Refresh(void);
 
 #endif /* GNSE_BSP_CLK_TIMER_H */

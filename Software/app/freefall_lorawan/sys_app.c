@@ -29,6 +29,19 @@
 
 #define MAX_TS_SIZE (int)16
 
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+/**
+  * @brief Timer to handle refreshing of the IWDG
+  */
+static UTIL_TIMER_Object_t iwdg_refresh_timer;
+
+/**
+ * @brief Handler for periodically refreshing the IWDG
+ */
+static void GNSE_On_IWDG_Event(void *context);
+#endif /* IWDG_TIMER_ON */
+
+
 /**
   * @brief  Set all pins such to minimized consumption (necessary for some STM32 families)
   * @param none
@@ -111,7 +124,32 @@ void SystemApp_Init(void)
 #elif !defined(LOW_POWER_DISABLE)
 #error LOW_POWER_DISABLE not defined
 #endif /* LOW_POWER_DISABLE */
+
+  /* Set independent watchdog timer */
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+  uint32_t iwdg_reload_value = IWDG_MAX_RELOAD;
+  /* 256 signifies the default prescaler set in GNSE_BSP_IWDG_Init, change if necessary */
+  uint32_t iwdg_seq_timeout_ms = (iwdg_reload_value / (LSI_VALUE / 256U) * 1000U);
+
+  GNSE_BSP_IWDG_Init(iwdg_reload_value);
+  /* Create timer to refresh the IWDG timer before it triggers */
+  UTIL_TIMER_Create(&iwdg_refresh_timer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, GNSE_On_IWDG_Event, NULL);
+  UTIL_TIMER_SetPeriod(&iwdg_refresh_timer, iwdg_seq_timeout_ms);
+  UTIL_TIMER_Start(&iwdg_refresh_timer);
+#endif /* IWDG_TIMER_ON */
 }
+
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+/**
+  * @brief  On refreshing timer event, refreshes watchdog and reinitialised the timer for next refresh
+  * @return None
+  */
+static void GNSE_On_IWDG_Event(void *context)
+{
+  GNSE_BSP_IWDG_Refresh();
+  UTIL_TIMER_Start(&iwdg_refresh_timer);
+}
+#endif /* IWDG_TIMER_ON */
 
 /**
   * @brief redefines __weak function in stm32_seq.c such to enter low power
