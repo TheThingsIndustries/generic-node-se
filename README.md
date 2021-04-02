@@ -34,7 +34,12 @@ Software libraries and sample applications can be found in [Software](./Software
 
 The [Generic Node documentation website](https://thethingsindustries.github.io/generic-node-docs/) provides information about the node hardware and software features.
 
+## Contribution
+
+Our [contribution guideline](./CONTRIBUTING.md) provides more information on how to assist us with the development of GNSE.
+
 ## Legal
+
 Copyright © 2021 The Things Industries B.V.
 
 [Contact The Things Industries](https://thethingsindustries.com/contact/) for licensing.
