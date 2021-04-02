@@ -29,8 +29,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _PRINTF_H_
-#define _PRINTF_H_
+#ifndef _TINY_PRINTF_H_
+#define _TINY_PRINTF_H_
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -99,4 +99,4 @@ int tiny_fctprintf(void (*out)(char character, void* arg), void* arg, const char
 #endif
 
 
-#endif  // _PRINTF_H_
+#endif  // _TINY_PRINTF_H_
