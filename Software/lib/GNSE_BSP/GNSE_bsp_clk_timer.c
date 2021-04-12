@@ -91,19 +91,6 @@ void GNSE_BSP_IWDG_Refresh(void)
   HAL_IWDG_Refresh(&GNSE_BSP_iwdg);
 }
 
-int32_t GNSE_BSP_BUZZER_TIM_DeInit(pTIM_CallbackTypeDef cb)
-{
-  if (HAL_TIM_PWM_DeInit(&GNSE_BSP_buzzer_timer) != HAL_OK)
-  {
-    return GNSE_BSP_ERROR_NO_INIT;
-  }
-  if (HAL_TIM_PWM_Stop_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
-  {
-    return GNSE_BSP_ERROR_NO_INIT;
-  }
-  return GNSE_BSP_ERROR_NONE;
-}
-
 int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
 {
   TIM_MasterConfigTypeDef sMasterConfig = {0};
@@ -159,6 +146,19 @@ int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb)
   }
   HAL_TIM_RegisterCallback(&GNSE_BSP_buzzer_timer, HAL_TIM_PERIOD_ELAPSED_CB_ID, cb);
   if (HAL_TIM_PWM_Start_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+  return GNSE_BSP_ERROR_NONE;
+}
+
+int32_t GNSE_BSP_BUZZER_TIM_DeInit()
+{
+  if (HAL_TIM_PWM_DeInit(&GNSE_BSP_buzzer_timer) != HAL_OK)
+  {
+    return GNSE_BSP_ERROR_NO_INIT;
+  }
+  if (HAL_TIM_PWM_Stop_IT(&GNSE_BSP_buzzer_timer, BUZZER_TIMER_CHANNEL) != HAL_OK)
   {
     return GNSE_BSP_ERROR_NO_INIT;
   }

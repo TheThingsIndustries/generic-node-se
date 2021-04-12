@@ -26,6 +26,7 @@
 #include "stm32_lpm.h"
 #include "LmHandler.h"
 #include "lora_info.h"
+#include "freefall.h"
 
 /**
   * @brief  join event callback function
@@ -158,6 +159,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
     static const char *slotStrings[] = {"1", "2", "C", "C Multicast", "B Ping-Slot", "B Multicast Ping-Slot"};
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n ###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
         params->DownlinkCounter, slotStrings[params->RxSlot], appData->Port, params->Datarate, params->Rssi, params->Snr);
+    ACC_FreeFall_Downlink_Handler(appData);
 }
 
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)

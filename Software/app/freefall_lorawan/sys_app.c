@@ -108,8 +108,11 @@ void SystemApp_Init(void)
     APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_H, "\r\nAccelerometer initialized \r\n");
   }
 
+  /* Set push button interrupt */
+  GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
   /* Set free fall events */
   ACC_FreeFall_Enable();
+  BUZZER_SetState(BUZZER_STATE_OFF);
 
   /* Here user can init the board peripherals and sensors */
 
@@ -292,6 +295,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if (GPIO_Pin == ACC_INT_PIN)
   {
     ACC_FreeFall_IT_Handler();
+  }
+  if (GPIO_Pin == BUTTON_SW1_PIN)
+  {
+    ACC_Disable_FreeFall_Notification();
   }
 }
 

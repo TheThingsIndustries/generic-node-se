@@ -174,7 +174,7 @@ void LoRaWAN_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == BUTTON_SW1)
+  if (GPIO_Pin == BUTTON_SW1_PIN)
   {
     /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
     UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);

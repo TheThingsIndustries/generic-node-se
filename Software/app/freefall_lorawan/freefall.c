@@ -24,6 +24,13 @@
 #include "LIS2DH12.h"
 #include "app_conf.h"
 #include "lora_app.h"
+#include "stm32_seq.h"
+#include "stm32_lpm.h"
+#include "BUZZER.h"
+
+static void ACC_Downlink_Callback(void *context);
+
+static UTIL_TIMER_Object_t DownlinkTimer;
 
 ACC_op_result_t ACC_FreeFall_Disable(void)
 {
@@ -94,10 +101,58 @@ ACC_op_result_t ACC_FreeFall_Enable(void)
     return ACC_OP_SUCCESS;
 }
 
-
 void ACC_FreeFall_IT_Handler(void)
 {
     static uint8_t freefall_log_amount;
     LoRaWAN_Send_Payload(&freefall_log_amount, sizeof(freefall_log_amount));
     freefall_log_amount++;
+}
+
+void ACC_FreeFall_Downlink_Handler(LmHandlerAppData_t *rx_data)
+{
+/**
+ * User can replace this function with their own implementation
+ * Default will start a timer for a buzzer if any data is send over ACC_FF_DOWNLINK_PORT
+*/
+    if (rx_data->Port == ACC_FF_DOWNLINK_PORT)
+    {
+        UTIL_TIMER_Create(&DownlinkTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, ACC_Downlink_Callback, NULL);
+        UTIL_TIMER_SetPeriod(&DownlinkTimer, ACC_FF_DOWNLINK_TIME_MS);
+        UTIL_TIMER_Start(&DownlinkTimer);
+        BUZZER_SetState(BUZZER_STATE_OFF);
+    }
+}
+
+static void ACC_Downlink_Callback(void *context)
+{
+    /*
+     * User can change this function with any indication
+     * Default is a buzzer beeping
+     * Frequency of this callback can be set in ACC_FF_DOWNLINK_TIME_MS
+     */
+    static bool buzzer_state = true;
+    if (buzzer_state)
+    {
+        /* Buzzer requires the LPM to be switched off */
+        UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_DISABLE);
+        BUZZER_SetState(BUZZER_STATE_DANGER);
+    }
+    else
+    {
+        BUZZER_SetState(BUZZER_STATE_OFF);
+        BUZZER_DeInit();
+        UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_ENABLE);
+    }
+    buzzer_state = !buzzer_state;
+
+    /* Set next timer event */
+    UTIL_TIMER_Start(&DownlinkTimer);
+}
+
+void ACC_Disable_FreeFall_Notification(void)
+{
+    BUZZER_SetState(BUZZER_STATE_OFF);
+    BUZZER_DeInit();
+    UTIL_TIMER_Stop(&DownlinkTimer);
+    UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_ENABLE);
 }
