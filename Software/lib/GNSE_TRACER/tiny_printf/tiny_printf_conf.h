@@ -30,6 +30,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _TINY_PRINTF_CONF_H_
+#define _TINY_PRINTF_CONF_H_
+
 // support for the floating point type (%f)
 // default: activated
 #define TINY_PRINTF_SUPPORT_FLOAT
@@ -64,3 +67,5 @@
 // define the largest float suitable to print with %f
 // default: 1e9
 #define TINY_PRINTF_MAX_FLOAT  1e9
+
+#endif  // _TINY_PRINTF_CONF_H_
