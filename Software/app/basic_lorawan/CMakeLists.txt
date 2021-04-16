@@ -57,6 +57,7 @@ file(GLOB MAIN_SRC
         "${PROJECT_SOURCE_DIR}/target/*.c"
         "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
         "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
+        "${PROJECT_SOURCE_DIR}/lib/SPIFFS/*.c"
         "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
         "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
         "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
@@ -83,6 +84,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/basic_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
+    ${PROJECT_SOURCE_DIR}/lib/SPIFFS
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER
     ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer
