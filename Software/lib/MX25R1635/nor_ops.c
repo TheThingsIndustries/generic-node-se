@@ -88,7 +88,7 @@ typedef struct {
 static MxFlashInfo SpiFlashParamsTable[] = {
         {"mx25r1635f", INFO(
                                0xC22815, 0x15,                           /* ID */
-                               16 * 1024, 32,                           /*block size / block count */
+                               64 * 1024, 32,                           /*block size / block count */
                                MODE_SPI|MODE_FS_READ|MODE_DUAL_READ|MODE_DUAL_IO_READ|MODE_QUAD_READ|MODE_QUAD_IO_READ, /*support mode*/
                                SUPPORT_WRSR_CR,                          /*special flag*/
 
@@ -202,7 +202,6 @@ static int MxIdMatch(MxChip *Mxic, u8 *Id)
             Mxic->tBE = FlashInfo->tBE;
             Mxic->tCE = FlashInfo->tCE;
             Mxic->WriteBuffStart = FALSE;
-            Mxic->BankStatus = ALL_BANK_READY;
             for(m=0; m<PASSWORD_LEN; m=m+1)
                 Mxic->Pwd[m] = PASSWORD_INIT_VALUE;
 
