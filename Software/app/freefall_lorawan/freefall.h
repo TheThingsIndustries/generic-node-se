@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "GNSE_acc.h"
+#include "LmHandler.h"
 
 /**
   * @brief  Sets the accelerometer registers to detect free fall events
@@ -50,6 +51,20 @@ ACC_op_result_t ACC_FreeFall_Disable(void);
   * @return none
   */
 void ACC_FreeFall_IT_Handler(void);
+
+/**
+  * @brief  Handle free fall downlink events
+  * @param  rx_data: Data pointer
+  * @return none
+  */
+void ACC_FreeFall_Downlink_Handler(LmHandlerAppData_t *rx_data);
+
+
+/**
+  * @brief  Function run after pressing the button, turns off all peripherals set after downlink
+  * @return none
+  */
+void ACC_Disable_FreeFall_Notification(void);
 
 #ifdef __cplusplus
 }

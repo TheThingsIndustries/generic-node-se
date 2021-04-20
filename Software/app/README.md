@@ -13,12 +13,12 @@ The device enters stop mode in between transmissions to reduce power consumption
 
 [basic_freertos](./basic_freertos) contains a basic FreeRTOS low power application that creates two threads and passes messages via a queue triggering a blinking LED with each passed message.
 
-[freefall_lorawan](./freefall_lorawan) contains a simple application to join via OTAA and waits to send a message until the device is free-falling
+[freefall_lorawan](./freefall_lorawan) contains a simple application to join via OTAA and waits to send a message until the device is free-falling. A downlink on port 1 will cause the buzzer to beep, which can be turned off with a button press.
 
 [freertos_lorawan](./basic_freertos) contains a multi-thread FreeRTOS LoRaWAN Class A demo app that joins over OTAA and sends uplink data.
 
 [secure_element_lorawan](./secure_element_lorawan) contains a LoRaWAN application where a class A device joins via OTAA (LoRaWAN v1.0.2) using a HW secure element (ATECC608A-TNGLORA) and sends dummy payloads triggered by a time interval.
-This app doesn't require LoRaWAN keys/EUI configurations. Follow this [tuturial](https://www.thethingsindustries.com/docs/devices/claim-atecc608a/) to claim your device, and your device will join via OTAA automatically.
+This app doesn't require LoRaWAN keys/EUI configurations. Follow this [tutorial](https://www.thethingsindustries.com/docs/devices/claim-atecc608a/) to claim your device, and your device will join via OTAA automatically.
 
 ## Applications configuration
 

@@ -34,9 +34,10 @@ static void BUZZER_Warning(void);
 static void BUZZER_Danger(void);
 static void BUZZER_TIM_IRQHandler(TIM_HandleTypeDef *htim);
 
+static bool init_flag = false;
+
 BUZZER_op_result_t BUZZER_Init(void)
 {
-  static bool init_flag = false;
 
   if (init_flag == false)
   {
@@ -56,10 +57,11 @@ BUZZER_op_result_t BUZZER_Init(void)
 
 BUZZER_op_result_t BUZZER_DeInit(void)
 {
-  if (GNSE_BSP_BUZZER_TIM_DeInit(BUZZER_TIM_IRQHandler) != GNSE_BSP_ERROR_NONE)
+  if (GNSE_BSP_BUZZER_TIM_DeInit() != GNSE_BSP_ERROR_NONE)
   {
     return BUZZER_OP_FAIL;
   }
+  init_flag = false;
   return BUZZER_OP_SUCCESS;
 }
 
@@ -191,7 +193,7 @@ BUZZER_state_t BUZZER_GetState(void)
   return buzzer_state;
 }
 
-void BUZZER_TIM_IRQHandler(TIM_HandleTypeDef *htim)
+static void BUZZER_TIM_IRQHandler(TIM_HandleTypeDef *htim)
 {
   if (__HAL_TIM_GET_IT_SOURCE(htim, BUZZER_TIMER_IT) != RESET)
   {

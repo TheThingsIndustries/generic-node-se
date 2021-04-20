@@ -68,7 +68,7 @@ extern IWDG_HandleTypeDef GNSE_BSP_iwdg;
 #define BUZZER_TIMER_IT TIM_IT_UPDATE
 
 int32_t GNSE_BSP_BUZZER_TIM_Init(pTIM_CallbackTypeDef cb);
-int32_t GNSE_BSP_BUZZER_TIM_DeInit(pTIM_CallbackTypeDef cb);
+int32_t GNSE_BSP_BUZZER_TIM_DeInit();
 
 int32_t GNSE_BSP_RTC_Init(void);
 
