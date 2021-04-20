@@ -11,7 +11,7 @@ There are many ways to contribute to this project.
 
 ### :mega: Discussions
 
-We love to discuss design decisions, device features and possible use cases with the community, so please use the [forum](https://www.thethingsnetwork.org/forum/). We have a special [category for The Generic Node](https://www.thethingsnetwork.org/forum/c/nodes/generic-node/88).
+We love to discuss design decisions, device features and possible use cases with the community, so please use the [forum](https://www.thethingsnetwork.org/forum/). 
 
 ### :question: Questions
 

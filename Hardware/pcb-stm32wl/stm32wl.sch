@@ -3842,11 +3842,11 @@ L node-lib-v1:STM32WLxx_QFN48 U5
 U 1 1 5EA76256
 P 1650 4175
 F 0 "U5" H 1750 4250 60  0000 C CNB
-F 1 "STM32WLE5CC" H 2450 4250 79  0000 C CNB
+F 1 "STM32WL55CCU6" H 2450 4250 79  0000 C CNB
 F 2 "Package_DFN_QFN:QFN-48-1EP_7x7mm_P0.5mm_EP5.45x5.45mm" H 2450 1775 60  0001 C CNN
-F 3 "https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf" H 1350 3475 60  0001 C CNN
+F 3 "https://www.st.com/resource/en/datasheet/stm32wl55cc.pdf" H 1350 3475 60  0001 C CNN
 F 4 "STM32WLE5CCU6" H 1650 4175 50  0001 C CNN "MPN"
-F 5 "https://www.st.com/content/st_com/en/products/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus/stm32-wireless-mcus/stm32wl-series/stm32wlex/stm32wle5cc.html#sample-buy" H 1650 4175 50  0001 C CNN "URL"
+F 5 "https://www.st.com/en/microcontrollers-microprocessors/stm32wl55cc.html" H 1650 4175 50  0001 C CNN "URL"
 	1    1650 4175
 	1    0    0    -1  
 $EndComp
