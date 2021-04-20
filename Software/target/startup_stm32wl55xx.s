@@ -31,6 +31,7 @@
 .thumb
 
 .global g_pfnVectors
+.global _vectors
 .global Default_Handler
 
 /* start address for the initialization values of the .data section.
@@ -131,6 +132,7 @@ Infinite_Loop:
   .size g_pfnVectors, .-g_pfnVectors
 
 g_pfnVectors:
+_vectors:
   .word _estack
   .word Reset_Handler
   .word NMI_Handler
