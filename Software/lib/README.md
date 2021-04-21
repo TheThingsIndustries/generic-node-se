@@ -24,3 +24,5 @@ This folder contains the libraries developed to support the application layer.
 [FreeRTOS-LoRaWAN](./FreeRTOS-LoRaWAN) contains the FreeRTOS LoRaWAN abstraction layer.
 
 [SPIFFS] contains SPI flash file system library that can be used to abstract external SPI flash operation.
+
+[threadx](./threadx) contains threadx (AzureRTOS) kernel.
