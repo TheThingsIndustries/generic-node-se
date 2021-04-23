@@ -13,12 +13,14 @@ This folder contains the libraries developed to support the application layer.
 
 [STM32WLxx_LoRaWAN](./STM32WLxx_LoRaWAN) contains the Sub GHz physical layer driver (SX1262 transceiver) and the LoRaWAN stack.
 
-[ATECC608A-TNGLORA](./ATECC608A-TNGLORA) contains the [ATECC608A-TNGLORA](https://www.microchip.com/wwwproducts/en/ATECC608A-TNGLORA) secure element hal and support funciotns.
+[ATECC608A-TNGLORA](./ATECC608A-TNGLORA) contains the [ATECC608A-TNGLORA](https://www.microchip.com/wwwproducts/en/ATECC608A-TNGLORA) secure element HAL and support functions.
 
 [cryptoauthlib](./cryptoauthlib) contains Microchip support library for ATECC608A-TNGLORA.
 
-[MCU_FLASH](./MCU_FLASH) contains hal APIs for controlling the SOC internal flash memory.
+[MCU_FLASH](./MCU_FLASH) contains HAL APIs for controlling the SOC internal flash memory.
 
 [FreeRTOS-Kernel](./FreeRTOS-Kernel) contains the FreeRTOS kernel.
 
-[FreeRTOS-LoRaWAN](./FreeRTOS-LoRaWAN) contains the FreeRTOS LoRaWAN abtraction layer.
+[FreeRTOS-LoRaWAN](./FreeRTOS-LoRaWAN) contains the FreeRTOS LoRaWAN abstraction layer.
+
+[SPIFFS] contains SPI flash file system library that can be used to abstract external SPI flash operation.

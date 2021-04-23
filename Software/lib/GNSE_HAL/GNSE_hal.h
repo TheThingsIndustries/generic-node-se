@@ -28,17 +28,14 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "MX25R16.h"
-
-extern MxChip GNSE_HAL_Flash;
 
 /**
  * HW aliases for the initialisation function
  */
 typedef struct GNSE_HAL_Ctx_s
 {
-    bool external_sensors_init;
     bool internal_sensors_init;
+    bool external_sensors_init;
     bool flash_init;
     bool leds_init;
     bool bm_init;
@@ -49,8 +46,6 @@ void GNSE_HAL_Init(GNSE_HAL_Ctx_t gnse_inits);
 void GNSE_HAL_DeInit(GNSE_HAL_Ctx_t gnse_deinits);
 void GNSE_HAL_Internal_Sensors_Init(void);
 void GNSE_HAL_Internal_Sensors_DeInit(void);
-void GNSE_HAL_Flash_Init(void);
-void GNSE_HAL_Flash_DeInit(void);
 
 #ifdef __cplusplus
 }

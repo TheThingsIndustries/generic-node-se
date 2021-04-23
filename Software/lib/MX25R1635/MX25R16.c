@@ -30,6 +30,7 @@
  */
 int MX25R16_Init(MxChip *Mxic)
 {
+// TODO: Fix issue of system hanging with this function is called more than once, https://github.com/TheThingsIndustries/generic-node-se/issues/173
     int Status;
 
     Mx_printf("\n\tStart initializing the device and controller\r\n");
@@ -88,25 +89,18 @@ int MX25R16_SetMode(MxChip *Mxic, u32 SetMode,u32 SetAddrMode)
  *                MXST_FAILURE.
  * Description:   This function issues the Read commands to SPI Flash and reads data from the array.
  *                Data size is specified by ByteCount.
- *                It is called by different Read commands functions like MX25R16_Read, Mx8READ and etc.
+ *                This function invokes MxREAD() when used with Mx25R16 external flash
  */
 int MX25R16_Read(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
 {
-    if(Mxic->ChipSpclFlag | SUPPORT_RWW)
+    if ((MxIsFlashBusy(Mxic) == MXST_DEVICE_READY) && (Mxic->WriteBuffStart == FALSE))
     {
-        if((MxIsFlashBusy(Mxic) == MXST_DEVICE_READY) && (Mxic->WriteBuffStart == FALSE))
-        {
-            Mxic->BankStatus = ALL_BANK_READY;
-        }
-        else if(((Mxic->BankStatus == BANK0_BUSY) && (Addr <= 0x0FFFFFF)) ||
-                ((Mxic->BankStatus == BANK1_BUSY) && (Addr > 0x0FFFFFF) && (Addr <= 0x1FFFFFF)) ||
-                ((Mxic->BankStatus == BANK2_BUSY) && (Addr > 0x1FFFFFF) && (Addr <= 0x2FFFFFF)) ||
-                ((Mxic->BankStatus == BANK3_BUSY) && (Addr > 0x3FFFFFF))  )
-        {
-            return MXST_DEVICE_BUSY;
-        }
+        return Mxic->AppGrp._Read(Mxic, Addr, ByteCount, Buf);
     }
-    return Mxic->AppGrp._Read(Mxic, Addr, ByteCount, Buf);
+    else
+    {
+        return MXST_DEVICE_BUSY;
+    }
 }
 
 /*
@@ -119,7 +113,7 @@ int MX25R16_Read(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
  *                MXST_FAILURE.
  *                MXST_TIMEOUT.
  * Description:   This function programs location to the specified data.
- *                It is called by different Read commands functions like MxPP, MxPP4B and etc.
+ *                This function invokes MxPP() when used with Mx25R16 external flash
  */
 int MX25R16_Write(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
 {
@@ -127,85 +121,20 @@ int MX25R16_Write(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
 }
 
 /*
- * Function:      MXR2516_BufferRead
- * Arguments:      Mxic:      pointer to an mxchip structure of nor flash device.
- *                Addr:      device address to read.
- *                ByteCount: number of bytes to read.
- *                Buf:       pointer to a data buffer where the read data will be stored.
- * Return Value:  MXST_SUCCESS.
- *                MXST_FAILURE.
- * Description:   This function is for read the page buffer.
- */
-int MXR2516_BufferRead(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
-{
-    return MxRDBUF(Mxic, Addr, ByteCount, Buf);
-}
-
-/*
- * Function:      MXR2516_BufferWrite
- * Arguments:      Mxic:      pointer to an mxchip structure of nor flash device.
- *                Addr:      device address to write.
- *                ByteCount: number of bytes to write.
- *                Buf:       pointer to a data buffer where the write data will be stored.
- * Return Value:  MXST_SUCCESS.
- *                MXST_FAILURE.
- * Description:   This function is for write the page buffer to implement RWW function.
- */
-int MXR2516_BufferWrite(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf)
-{
-    int Status;
-    Status = MxIsFlashBusy(Mxic);
-    if (Status == MXST_DEVICE_BUSY)
-        return Status;
-
-    if(Addr <= 0x0FFFFFF)
-        Mxic->BankStatus = BANK0_BUSY;
-    else if(Addr <= 0x1FFFFFF)
-        Mxic->BankStatus = BANK1_BUSY;
-    else if(Addr <= 0x2FFFFFF)
-        Mxic->BankStatus = BANK2_BUSY;
-    else
-        Mxic->BankStatus = BANK3_BUSY;
-
-    if(Mxic->WriteBuffStart == FALSE)
-    {
-        Mxic->WriteBuffStart = TRUE;
-        Status = MxWRBI(Mxic, Addr, ByteCount, Buf);
-        if (Status != MXST_SUCCESS)
-            return Status;
-    }
-    else if(ByteCount > 0)
-    {
-        Status = MxWRCT(Mxic, Addr, ByteCount, Buf);
-        if (Status != MXST_SUCCESS)
-            return Status;
-    }
-
-    if(ByteCount == 0)
-    {
-        Status = MxWRCF(Mxic);
-        if (Status != MXST_SUCCESS)
-            return Status;
-        Mxic->WriteBuffStart = FALSE;
-    }
-    return MXST_SUCCESS;
-}
-
-/*
  * Function:      MX25R16_Erase
  * Arguments:      Mxic:           pointer to an mxchip structure of nor flash device.
  *                Addr:           device address to erase.
- *                EraseSizeCount: number of block or sector to erase.
+ *                EraseSizeCount: number of blocks to erase.
  * Return Value:  MXST_SUCCESS.
  *                MXST_FAILURE.
  *                MXST_TIMEOUT.
  * Description:   This function erases the data in the specified Block or Sector.
- *                 Function issues all required commands and polls for completion.
- *                 It is called by different Read commands functions like MxSE, MxSE4B and etc.
+ *                Function issues all required commands and polls for completion.
+ *                This function invokes MxBE() and erases blocks of 64k-byte.
  */
 int MX25R16_Erase(MxChip *Mxic, u32 Addr, u32 EraseSizeCount)
 {
-    return Mxic->AppGrp._Erase(Mxic, Addr, EraseSizeCount );
+    return Mxic->AppGrp._Erase(Mxic, Addr, EraseSizeCount);
 }
 
 #endif

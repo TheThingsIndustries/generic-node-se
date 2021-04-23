@@ -83,6 +83,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/SHTC3</locationURI>
 		</link>
 		<link>
+			<name>lib/SPIFFS</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lib/STM32WLxx_LoRaWAN</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -141,6 +146,46 @@
 			<name>lib/GNSE_TRACER/tiny_printf</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs.h</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_cache.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_cache.c</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_check.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_check.c</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_config.h</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_gc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_gc.c</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_hydrogen.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_hydrogen.c</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_nucleus.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_nucleus.c</locationURI>
+		</link>
+		<link>
+			<name>lib/SPIFFS/spiffs_nucleus.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/SPIFFS/spiffs_nucleus.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/.DS_Store</name>

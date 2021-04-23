@@ -101,6 +101,8 @@
                                     									
                                     <listOptionValue builtIn="false" value="../../../lib/GNSE_HAL"/>
                                     									
+                                    <listOptionValue builtIn="false" value="../../../lib/SPIFFS"/>
+                                    									
                                     <listOptionValue builtIn="false" value="../../../lib/Utilities"/>
                                     									
                                     <listOptionValue builtIn="false" value="../../../lib/GNSE_TRACER"/>

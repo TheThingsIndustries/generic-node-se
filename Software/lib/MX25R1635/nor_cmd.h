@@ -53,7 +53,6 @@ typedef struct _MxChip{
     u32 CurFreq;
 
     u8 WriteBuffStart;
-    u8 BankStatus;
 } MxChip;
 
 #define ALL_BANK_READY        0

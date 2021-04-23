@@ -28,9 +28,9 @@
 
 int MX25R16_Init(MxChip *Mxic);
 int MX25R16_SetMode(MxChip *Mxic, u32 SetMode,u32 SetAddrMode);
-int MX25R16_Read(MxChip *Mxic, u32 Addr, u32 SectCnt, u8 *Buf);
-int MX25R16_Write(MxChip *Mxic, u32 Addr, u32 SectCnt, u8 *Buf);
-int MX25R16_Erase(MxChip *Mxic, u32 Addr, u32 SecCnt);
+int MX25R16_Read(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf);
+int MX25R16_Write(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf);
+int MX25R16_Erase(MxChip *Mxic, u32 Addr, u32 BlockCount);
 int MX25R16_LockFlash(MxChip *Mxic, u32 Addr, u64 Len);
 int MX25R16_UnlockFlash(MxChip *Mxic, u32 Addr, u64 Len);
 int MX25R16_IsFlashLocked(MxChip *Mxic, u32 Addr, u64 Len);
@@ -44,9 +44,6 @@ int MXR2516_RealseDeepPowerDown(MxChip *Mxic);
 int MXR2516_Suspend(MxChip *Mxic);
 int MXR2516_Resume(MxChip *Mxic);
 
-int MXR2516_BufferRead(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf);
-int MXR2516_BufferWrite(MxChip *Mxic, u32 Addr, u32 ByteCount, u8 *Buf);
-
 int MxCalibration(MxChip *Mxic);
 
-#endif /* APP_H_ */
+#endif /* MX25R16_H_ */

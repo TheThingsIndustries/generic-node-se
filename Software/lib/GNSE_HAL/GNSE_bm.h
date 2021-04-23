@@ -30,7 +30,7 @@ extern "C" {
 #include "GNSE_bsp.h"
 
 /**
- * Battery return types
+ * Battery Monitor return types
  */
 typedef enum
 {
