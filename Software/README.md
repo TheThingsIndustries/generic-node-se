@@ -5,7 +5,7 @@ The software provides a boilerplate of applications and libraries that can be us
 
 - [target](./target/README.md) folder contains STM32WL low level target files
 - [lib](./lib/README.md) folder contains SW libraries used by the various applications
-- [app](./app/README.md) folder contains SW applicattions
+- [app](./app/README.md) folder contains SW applications
 
 ## Documentation
 
