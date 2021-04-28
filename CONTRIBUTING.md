@@ -11,7 +11,7 @@ There are many ways to contribute to this project.
 
 ### :mega: Discussions
 
-We love to discuss design decisions, device features and possible use cases with the community, so please use the [forum](https://www.thethingsnetwork.org/forum/). 
+We love to discuss design decisions, device features and possible use cases with the community, so please use the [forum](https://www.thethingsnetwork.org/forum/).
 
 ### :question: Questions
 
@@ -32,13 +32,13 @@ If you see an [open issue](https://github.com/TheThingsIndustries/generic-node-s
 
 ### :books: Documentation
 
-If you see that our documentation is lacking or incorrect, it would be great if you could help us improve it. This will help users and fellow contributors understand how to better develop and use the device. Generic Node documentation [repository](https://github.com/TheThingsIndustries/generic-node-docs) can be viewed at [documentation website](https://thethingsindustries.github.io/generic-node-docs) and you can contribute by following the [documentation contribution guideline](https://github.com/TheThingsIndustries/generic-node-docs/blob/master/CONTRIBUTING.md).
+If you see that our documentation is lacking or incorrect, it would be great if you could help us improve it. This will help users and fellow contributors understand how to better develop and use the device. Generic Node documentation [repository](https://github.com/TheThingsIndustries/generic-node-docs) can be viewed at [documentation website](https://www.genericnode.com/docs/) and you can contribute by following the [documentation contribution guideline](https://github.com/TheThingsIndustries/generic-node-docs/blob/master/CONTRIBUTING.md).
 
 ## Steps to contribute
 
 - [Fork the repository](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository)
 
-- Follow our [getting started](https://thethingsindustries.github.io/generic-node-docs/getting-started/) guides to setup your environment
+- Follow our [getting started](https://www.genericnode.com/docs/getting-started/) guides to setup your environment
 
 - Create a branch following our [branching guideline](#branching-guideline)
 
