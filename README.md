@@ -32,7 +32,7 @@ Software libraries and sample applications can be found in [Software](./Software
 
 ## Documentation
 
-The [Generic Node documentation website](https://thethingsindustries.github.io/generic-node-docs/) provides information about the node hardware and software features.
+The [Generic Node documentation website](https://www.genericnode.com/docs/) provides information about the node hardware and software features.
 
 ## Contribution
 

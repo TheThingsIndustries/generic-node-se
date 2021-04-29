@@ -13,7 +13,7 @@ The reference design hardware provides the needed resources for device productio
 
 ## Documentation
 
-The [Generic Node documentation website](https://thethingsindustries.github.io/generic-node-docs/) provides information about the hardware features and how to [get started with the hardware development](https://thethingsindustries.github.io/generic-node-docs/getting-started/se-hw/).
+The [Generic Node documentation website](https://www.genericnode.com/docs/) provides information about the hardware features and how to [get started with the hardware development](https://www.genericnode.com/docs/getting-started/se-hw/).
 
 ## Legal
 Copyright © 2021 The Things Industries B.V.
