@@ -40,7 +40,6 @@
 #include "secure-element.h"
 #include "se-identity.h"
 #include "atecc608a-tnglora-se-hal.h"
-#include "radio.h"         /* needed for Random */
 
 /*!
  * Number of supported crypto keys
@@ -593,8 +592,8 @@ SecureElementStatus_t SecureElementRandomNumber( uint32_t* randomNum )
     {
         return SECURE_ELEMENT_ERROR_NPE;
     }
-    // *randomNum = ATECC608ASeHalGetRandomNumber( ); // TODO: Add SE support, see https://github.com/TheThingsIndustries/generic-node-se/issues/137
-    *randomNum = Radio.Random( );
+
+    *randomNum = ATECC608ASeHalGetRandomNumber();
     return SECURE_ELEMENT_SUCCESS;
 }
 
