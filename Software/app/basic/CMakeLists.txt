@@ -17,6 +17,8 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/lib/BUZZER/*.c"
     "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c"
     "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/tnglora_read_helper.c"
+    "${PROJECT_SOURCE_DIR}/lib/VL53L1X/core/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/VL53L1X/platform/*.c"
     "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/*.c"
     "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/*.c"
     "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/*.c"
@@ -50,6 +52,8 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/lib/MX25R1635
     ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
     ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/VL53L1X/core
+    ${PROJECT_SOURCE_DIR}/lib/VL53L1X/platform
     ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
     ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib
     ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib

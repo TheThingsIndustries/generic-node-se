@@ -32,6 +32,7 @@ void temperature_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay);
 void flash_read_write(void);
 void battery_report(void);
+void tof_sensor_test(void);
 
 void uart_rxcallback(uint8_t *rxChar, uint16_t size, uint8_t error)
 {
@@ -49,6 +50,10 @@ int main(void)
   GNSE_TRACER_START_RX(uart_rxcallback);
 
   APP_PPRINTF("\r\n -------------- Starting GNSE basic app -------------- \r\n");
+  BUZZER_Init();
+  APP_PPRINTF("\r\n Testing TOF sensor on external I2C bus \r\n");
+  GNSE_BSP_Ext_Sensor_I2C2_Init();
+  tof_sensor_test();
 
   APP_PPRINTF("\r\n Testing battery monitoring functionality \r\n");
   battery_report();

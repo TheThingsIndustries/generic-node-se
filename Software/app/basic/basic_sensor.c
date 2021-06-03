@@ -21,6 +21,7 @@
  */
 
 #include "app.h"
+#include "vl53l1_api.h"
 
 typedef union
 {
@@ -33,6 +34,11 @@ typedef union
     int16_t i16bit;
     uint8_t u8bit[2];
 } axis1bit16_t;
+
+VL53L1_Dev_t tof_sensor = {
+    .I2cDevAddr = 0x52,
+    .new_data_ready_poll_duration_ms = 1000,
+};
 
 void temperature_sensor_read_data_polling(uint8_t n_reads, uint32_t read_delay)
 {
@@ -132,5 +138,77 @@ void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay)
                         temperature_degC);
         }
         HAL_Delay(read_delay);
+    }
+}
+
+void setupSensor(VL53L1_DEV dev)
+{
+    uint16_t wordData;
+    uint8_t byteData;
+    int status = 0;
+
+    /* Those basic I2C read functions can be used to check your own I2C functions */
+    status += VL53L1_RdByte(dev, 0x010F, &byteData);
+    APP_PPRINTF("\r\n VL53L1X Model_ID: %X \r\n", byteData);
+    status += VL53L1_RdByte(dev, 0x0110, &byteData);
+    APP_PPRINTF("\r\n VL53L1X Module_Type: %X \r\n", byteData);
+    status += VL53L1_RdWord(dev, 0x010F, &wordData);
+    APP_PPRINTF("\r\n VL53L1X: %X \r\n", wordData);
+    status += VL53L1_WaitDeviceBooted(dev);
+    APP_PPRINTF("\r\n Chip booted \r\n");
+
+    /* This function must to be called to initialize the sensor with the default setting  */
+    status += VL53L1_DataInit(dev);
+    status += VL53L1_StaticInit(dev);
+    /* Optional functions to be used to change the main ranging parameters according the application requirements to get the best ranging performances */
+    status += VL53L1_SetPresetMode(dev, VL53L1_PRESETMODE_LITE_RANGING);
+    status += VL53L1_SetDistanceMode(dev, VL53L1_DISTANCEMODE_SHORT);
+    status += VL53L1_SetMeasurementTimingBudgetMicroSeconds(dev, 50000);
+    status += VL53L1_SetInterMeasurementPeriodMilliSeconds(dev, 0);
+
+    //  status = VL53L1X_SetOffset(dev,20); /* offset compensation in mm */
+    //  status = VL53L1X_SetROI(dev, 16, 16); /* minimum ROI 4,4 */
+    //	status = VL53L1X_CalibrateOffset(dev, 140, &offset); /* may take few second to perform the offset cal*/
+    //	status = VL53L1X_CalibrateXtalk(dev, 1000, &xtalk); /* may take few second to perform the xtalk cal */
+    status += VL53L1_StartMeasurement(dev); /* This function has to be called to enable the ranging */
+
+    if (status)
+    {
+        APP_PPRINTF("\r\n The senor was not initalized \r\n");
+    }
+}
+
+void tof_sensor_test(void)
+{
+    setupSensor(&tof_sensor);
+    int status = 0;
+
+    while (1)
+    {
+        VL53L1_RangingMeasurementData_t data;
+        status += VL53L1_WaitMeasurementDataReady(&tof_sensor);
+        status += VL53L1_GetRangingMeasurementData(&tof_sensor, &data);
+        VL53L1_ClearInterruptAndStartMeasurement(&tof_sensor);
+        if (data.RangeStatus == 0)
+        {
+            if (data.RangeMilliMeter < 100)
+            {
+                BUZZER_SetState(BUZZER_STATE_DANGER);
+            }
+            else if (data.RangeMilliMeter > 100 && data.RangeMilliMeter < 200)
+            {
+                BUZZER_SetState(BUZZER_STATE_WARNING);
+            }
+            else if (data.RangeMilliMeter > 200 && data.RangeMilliMeter < 300)
+            {
+                BUZZER_SetState(BUZZER_STATE_RING);
+            }
+            else
+            {
+                BUZZER_SetState(BUZZER_STATE_OFF);
+            }
+            APP_PPRINTF("\r\n TOF range in Millimeter: %d \r\n", data.RangeMilliMeter);
+        }
+        HAL_Delay(400);
     }
 }
