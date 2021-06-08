@@ -23,6 +23,11 @@
 #ifndef MX25R16_H_
 #define MX25R16_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "nor_ops.h"
 #include "mx_test.h"
 
@@ -45,5 +50,9 @@ int MXR2516_Suspend(MxChip *Mxic);
 int MXR2516_Resume(MxChip *Mxic);
 
 int MxCalibration(MxChip *Mxic);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* MX25R16_H_ */

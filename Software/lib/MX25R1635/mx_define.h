@@ -23,6 +23,11 @@
 #ifndef MX_DEFINE_H
 #define MX_DEFINE_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define PLATFORM_GNSE 1
 
 #if PLATFORM_GNSE
@@ -164,4 +169,8 @@ typedef struct
  *     hardware_test.h
  */
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* MX_DEFINE_H */

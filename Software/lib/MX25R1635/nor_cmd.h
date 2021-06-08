@@ -11,6 +11,11 @@
 #ifndef NOR_CMD_H_
 #define NOR_CMD_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "spi.h"
 
 struct _MxChip;
@@ -541,5 +546,9 @@ int MxNOP(MxChip *Mxic);
 
 int MxWaitForFlashReady(MxChip *Mxic,u32 ExpectTime);
 int MxIsFlashBusy(MxChip *Mxic);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* NOR_CMD_H_ */
