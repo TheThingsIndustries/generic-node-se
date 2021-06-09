@@ -10,6 +10,11 @@
 #ifndef MX_TEST_H_
 #define MX_TEST_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /**************Request*******************/
 #define PAGE     0
 #define SECTOR   1
@@ -51,4 +56,9 @@
 int MxSimpleTest(MxChip *Mxic);
 int MxComplicatedTest(MxChip *Mxic);
 u32 MxRequestAddress(u8 request_size);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* MX_TEST_H_ */

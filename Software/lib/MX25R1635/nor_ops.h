@@ -11,6 +11,11 @@
 #ifndef NOR_OPS_H_
 #define NOR_OPS_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "nor_cmd.h"
 
 /*
@@ -80,4 +85,9 @@ int MxPwdAuth(MxChip *Mxic, u8 *Password);
 int MxDpbLock(MxChip *Mxic, u32 Addr, u64 Len);
 int MxDpbUnlock(MxChip *Mxic, u32 Addr, u64 Len);
 int MxDpbIsLocked(MxChip *Mxic, u32 Addr, u64 Len);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* NOR_OPS_H_ */

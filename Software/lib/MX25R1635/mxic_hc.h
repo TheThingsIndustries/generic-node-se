@@ -23,6 +23,11 @@
 #ifndef MXIC_HC_H_
 #define MXIC_HC_H_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "mx_define.h"
 /*
  * define TransFlag
@@ -106,5 +111,9 @@ enum HardwareMode
 
 int MxHardwareInit(MxSpi *Spi);
 int MxPolledTransfer(MxSpi *Spi, u8 *WrBuf, u8 *RdBuf, u32 ByteCount);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* MXIC_HC_H_ */

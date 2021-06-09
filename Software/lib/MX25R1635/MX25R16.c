@@ -30,7 +30,6 @@
  */
 int MX25R16_Init(MxChip *Mxic)
 {
-// TODO: Fix issue of system hanging with this function is called more than once, https://github.com/TheThingsIndustries/generic-node-se/issues/173
     int Status;
 
     Mx_printf("\n\tStart initializing the device and controller\r\n");
@@ -53,13 +52,10 @@ int MX25R16_Init(MxChip *Mxic)
     if (Status != MXST_SUCCESS)
         return Status;
 
-    Status = MxSoftwareInit(Mxic, BASEADDRESS);
-    if (Status != MXST_SUCCESS)
-        return Status;
-
-    Status = MxChangeMode(Mxic, MODE_SPI,SELECT_3B);
-    if (Status != MXST_SUCCESS)
-        return Status;
+    MxSpi *Spi = Mxic->Priv;
+    Mxic->AppGrp._Read = (Spi->CurAddrMode==SELECT_3B) ? MxREAD : ((Mxic->SPICmdList[MX_RD_CMDS] & MX_4B_RD) ? MxREAD4B : MxREAD);
+    Mxic->AppGrp._Write = (Spi->CurAddrMode==SELECT_3B) ? MxPP : ((Mxic->SPICmdList[MX_RD_CMDS] & MX_4B_RD) ? MxPP4B : MxPP);
+    Mxic->AppGrp._Erase = (Spi->CurAddrMode==SELECT_3B) ? MxBE : ((Mxic->SPICmdList[MX_RD_CMDS] & MX_4B_RD) ? MxBE4B : MxBE);
 
     return MXST_SUCCESS;
 }
