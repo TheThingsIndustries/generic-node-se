@@ -22,6 +22,8 @@ This app doesn't require LoRaWAN keys/EUI configurations. Follow this [tutorial]
 
 [basic_azurertos](./basic_azurertos) contains a simple AzureRTOS (ThreadX) application. It includes examples of two threads that pass a message via a queue triggering a blinking LED with each passed message.
 
+[sensors_lorawan](./sensors_lorawan) contains an application that sends sensors data such as battery voltage, temperature and humidity over LoRaWAN.
+
 ## Applications configuration
 
 Each application contains a configuration folder that facilitates minor adjustments to the application behavior.
@@ -46,3 +48,5 @@ To quickly get started, navigate to your application `app_conf.h`, and adjust th
 [secure_element_lorawan app configurations](./secure_element_lorawan/conf/app_conf.h)
 
 [basic_azurertos app configurations](./basic_azurertos/conf/app_conf.h)
+
+[sensors_lorawan app configurations](./sensors_lorawan/conf/app_conf.h)

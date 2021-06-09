@@ -42,7 +42,8 @@ set (APP_LIST
 "freefall_lorawan"
 "freertos_lorawan"
 "secure_element_lorawan"
-"basic_azurertos")
+"basic_azurertos"
+"sensors_lorawan")
 #-------------------
 # MCU Setup
 #-------------------
