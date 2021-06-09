@@ -14,7 +14,7 @@
  */
 
 /**
- * @file hal_LoraMacNode.c
+ * @file atecc608a-tnglora-se-hal.c
  *
  * @copyright Copyright (c) 2021 The Things Industries B.V.
  *
@@ -25,16 +25,22 @@
 
 #include "atca_hal.h"
 #include "atca_device.h"
+#include "atca_basic.h"
 #include "atca_status.h"
 #include "stm32wlxx_hal_dma.h"
 #include "stm32wlxx_hal_i2c.h"
 #include "GNSE_bsp.h"
 
-uint32_t ATECC608ASeHalGetRandomNumber( void )
+uint32_t ATECC608ASeHalGetRandomNumber(void)
 {
-    // Not Implemeted
-    //TODO: Add suppport for random generation, see https://github.com/TheThingsIndustries/generic-node-se/issues/137
-    return 0;
+    uint8_t rand_out[RANDOM_NUM_SIZE];
+    uint32_t rand_ret;
+    if (atcab_random(rand_out) != ATCA_SUCCESS)
+    {
+        return 0;
+    }
+    rand_ret = (rand_out[0] << 24) | (rand_out[1] << 16) | (rand_out[2] << 8) | rand_out[3];
+    return rand_ret;
 }
 
 /** @brief This function delays for a number of microseconds.

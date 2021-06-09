@@ -87,3 +87,6 @@ dkms.conf
 
 # STM32CubeIDE (eclipse)
 *.launch
+
+# Ctags
+tags
