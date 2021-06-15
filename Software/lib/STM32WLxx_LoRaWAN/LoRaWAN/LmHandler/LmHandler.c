@@ -700,6 +700,11 @@ LmHandlerErrorStatus_t LmHandlerRequestClass(DeviceClass_t newClass)
           {
             /* Switch is instantaneous */
             DisplayClassUpdate(CLASS_A);
+            if (LmHandlerCallbacks.OnClassChange != NULL)
+            {
+              /* callback used in data transfer use case (fuota) */
+              LmHandlerCallbacks.OnClassChange( CLASS_A );
+            }
           }
           else
           {
@@ -739,6 +744,11 @@ LmHandlerErrorStatus_t LmHandlerRequestClass(DeviceClass_t newClass)
           if (LoRaMacMibSetRequestConfirm(&mibReq) == LORAMAC_STATUS_OK)
           {
             DisplayClassUpdate(CLASS_C);
+            if (LmHandlerCallbacks.OnClassChange != NULL)
+            {
+              /* callback used in data transfer use case (fuota) */
+              LmHandlerCallbacks.OnClassChange( CLASS_C );
+            }
           }
           else
           {
@@ -1402,6 +1412,15 @@ static void McpsIndication(McpsIndication_t *mcpsIndication)
     LmHandlerCallbacks.OnRxData(&appData, &RxParams);
   }
 
+    if( mcpsIndication->DeviceTimeAnsReceived == true )
+    {
+      if( LmHandlerCallbacks.OnSysTimeUpdate != NULL)
+      {
+        /* callback used in Class C data transfer use case (fuota) */
+        LmHandlerCallbacks.OnSysTimeUpdate( );
+      }
+    }
+
   /* Call packages RxProcess function */
   LmHandlerPackagesNotify(PACKAGE_MCPS_INDICATION, mcpsIndication);
   LmHandlerGetCurrentClass(&deviceClass);
@@ -1499,7 +1518,12 @@ static void MlmeConfirm(MlmeConfirm_t *mlmeConfirm)
         LoRaMacMibSetRequestConfirm(&mibReq);
 
         DisplayClassUpdate(CLASS_B);
-
+        /*Notify upper layer*/
+        if (LmHandlerCallbacks.OnClassChange != NULL)
+        {
+          /* callback used in data transfer use case (fuota) */
+          LmHandlerCallbacks.OnClassChange( CLASS_B );
+        }
         IsClassBSwitchPending = false;
       }
       else
@@ -1536,6 +1560,11 @@ static void MlmeIndication(MlmeIndication_t *mlmeIndication)
       UTIL_MEM_set_8(BeaconParams.Info.GwSpecific.Info, 0, 6);
 
       DisplayClassUpdate(CLASS_A);
+      if (LmHandlerCallbacks.OnClassChange != NULL)
+      {
+        /* callback used to inform upper layer in data transfert use case (fuota) */
+        LmHandlerCallbacks.OnClassChange( CLASS_A );
+      }
       DisplayBeaconUpdate(&BeaconParams);
 
       LmHandlerDeviceTimeReq();

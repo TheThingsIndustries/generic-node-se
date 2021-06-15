@@ -172,6 +172,16 @@ typedef struct LmHandlerCallbacks_s
    * \param [in] params notification parameters
    */
   void (*OnRxData)(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
+  /*!
+   * Confirms the LoRaWAN device class change
+   *
+   * \param [IN] deviceClass New end-device class
+   */
+  void (*OnClassChange)(DeviceClass_t deviceClass);
+  /*!
+   * Notifies the upper layer that the system time has been updated.
+   */
+  void (*OnSysTimeUpdate)(void);  
 } LmHandlerCallbacks_t;
 
 /* External variables --------------------------------------------------------*/
