@@ -10,7 +10,7 @@ file(GLOB LORAWAN_SRC
     "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal/atca_hal.c"
     "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/host/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/*.c"
-    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages/LmhpCompliance.c"
+    "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/LmHandler/packages/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Mac/region/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Patterns/Basic/*.c"
