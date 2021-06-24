@@ -447,16 +447,19 @@ static void LmhpFragmentationOnMcpsIndication(McpsIndication_t *mcpsIndication)
         }
         if (mcpsIndication->Multicast == 1)
         {
+          /* This check for McGroupBitMask is not functional in the original LMN stack
+           * see https://github.com/Lora-net/LoRaMac-node/blob/57806121493588220ab9d06e87201a02a611e99e/src/apps/LoRaMac/common/LmHandler/packages/LmhpFragmentation.c#L446
+           */
           /* Message received on a multicast address */
           /* Check McGroupBitMask */
-          uint8_t groupId = LoRaMacMcChannelGetGroupId(mcpsIndication->DevAddress);
-          if ((groupId == 0xFF) ||
-              ((FragSessionData[fragIndex].FragGroupData.FragSession.Fields.McGroupBitMask & (1 << groupId)) == 0))
-          {
-            /* Ignore message */
-            cmdIndex = mcpsIndication->BufferSize;
-            break;
-          }
+          // uint8_t groupId = LoRaMacMcChannelGetGroupId(mcpsIndication->DevAddress);
+          // if ((groupId == 0xFF) ||
+          //     ((FragSessionData[fragIndex].FragGroupData.FragSession.Fields.McGroupBitMask & (1 << groupId)) == 0))
+          // {
+          //   /* Ignore message */
+          //   cmdIndex = mcpsIndication->BufferSize;
+          //   break;
+          // }
         }
 
         if (FragSessionData[fragIndex].FragDecoderProcessStatus == FRAG_SESSION_ONGOING)
