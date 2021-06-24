@@ -49,11 +49,11 @@
 #include "NvmCtxMgmt.h"
 #include "lora_info.h"
 #include "LmhpCompliance.h"
+#include "LmhpClockSync.h"
+#include "LmhpRemoteMcastSetup.h"
+#include "LmhpFragmentation.h"
+#include "LmhpFirmwareManagement.h"
 #include "LoRaMacTest.h"
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /* LORAWAN_DATA_DISTRIB_MGT == 1 */
-#include "LmhpDataDistribution.h"
-#endif /* LORAWAN_DATA_DISTRIB_MGT */
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
@@ -313,13 +313,6 @@ LmHandlerErrorStatus_t LmHandlerInit(LmHandlerCallbacks_t *handlerCallbacks)
   {
     return LORAMAC_HANDLER_ERROR;
   }
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /*LORAWAN_DATA_DISTRIB_MGT == 1*/
-  if (LmhpDataDistributionInit() != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-#endif /*LORAWAN_DATA_DISTRIB_MGT*/
   return LORAMAC_HANDLER_SUCCESS;
 }
 
@@ -774,12 +767,26 @@ LmHandlerErrorStatus_t LmHandlerPackageRegister(uint8_t id, void *params)
       package = LmphCompliancePackageFactory();
       break;
     }
-    default:
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /*LORAWAN_DATA_DISTRIB_MGT == 1*/
-      LmhpDataDistributionPackageRegister(id, &package);
-#endif /*LORAWAN_DATA_DISTRIB_MGT*/
+    case PACKAGE_ID_CLOCK_SYNC:
+    {
+      package = LmphClockSyncPackageFactory( );
       break;
+    }
+    case PACKAGE_ID_REMOTE_MCAST_SETUP:
+    {
+      package = LmhpRemoteMcastSetupPackageFactory( );
+      break;
+    }
+    case PACKAGE_ID_FRAGMENTATION:
+    {
+      package = LmhpFragmentationPackageFactory( );
+      break;
+    }
+    case PACKAGE_ID_FIRMWARE_MANAGEMENT:
+    {
+      package = LmhpFirmwareManagementPackageFactory();
+      break;
+    }
   }
 
   if (package != NULL)
