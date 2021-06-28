@@ -1445,27 +1445,27 @@
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/FragDecoder.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/FragDecoder.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/FragDecoder.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/FragDecoder.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/FragDecoder.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/FragDecoder.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhPackage.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhPackage.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhPackage.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpClockSync.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpClockSync.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpClockSync.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpClockSync.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpClockSync.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpClockSync.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpCompliance.c</name>
@@ -1480,32 +1480,32 @@
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFirmwareManagement.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpFirmwareManagement.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFirmwareManagement.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFirmwareManagement.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpFirmwareManagement.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFirmwareManagement.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFragmentation.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpFragmentation.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFragmentation.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFragmentation.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpFragmentation.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpFragmentation.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpRemoteMcastSetup.c</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpRemoteMcastSetup.c</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpRemoteMcastSetup.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpRemoteMcastSetup.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/Packages/LmhpRemoteMcastSetup.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/packages/LmhpRemoteMcastSetup.h</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Mac/region/Region.c</name>
