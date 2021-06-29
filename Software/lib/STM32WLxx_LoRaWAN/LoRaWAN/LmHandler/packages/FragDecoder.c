@@ -34,7 +34,6 @@
 #include <stdbool.h>
 #include "GNSE_tracer.h"
 #include "FragDecoder.h"
-#include "sfu_fwimg_regions.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef struct
@@ -201,9 +200,6 @@ static FragDecoder_t FragDecoder;
 /* Exported functions ---------------------------------------------------------*/
 void FragDecoderInit(uint16_t fragNb, uint8_t fragSize, FragDecoderCallbacks_t *callbacks)
 {
-#if (INTEROP_TEST_MODE == 1)
-  uint8_t init_buffer[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-#endif /* INTEROP_TEST_MODE == 1 */
   FragDecoder.Callbacks = callbacks;
   FragDecoder.FragNb = fragNb;                                /* FragNb = FRAG_MAX_SIZE */
   FragDecoder.FragSize = fragSize;                            /* number of byte on a row */
@@ -229,12 +225,8 @@ void FragDecoderInit(uint16_t fragNb, uint8_t fragSize, FragDecoderCallbacks_t *
     FragDecoder.MatrixM2B[i] = 0xFF;
   }
 
-  /* Initialize final uncoded data buffer ( FRAG_MAX_NB * FRAG_MAX_SIZE ) */
-#if (INTEROP_TEST_MODE == 1)
+  /* Initialize data buffer ( FRAG_MAX_NB * FRAG_MAX_SIZE ) */
   FragDecoder.Callbacks->FragDecoderErase(0, fragNb * fragSize);
-#else /* INTEROP_TEST_MODE == 0 */
-  FragDecoder.Callbacks->FragDecoderErase(0, SlotEndAdd[SLOT_DWL_1] - SlotStartAdd[SLOT_DWL_1] + 1U);
-#endif /* INTEROP_TEST_MODE */
 
   FragDecoder.Status.FragNbLost = 0;
   FragDecoder.Status.FragNbLastRx = 0;

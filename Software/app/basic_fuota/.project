@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>secure_element_lorawan</name>
+	<name>basic_fuota</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -39,11 +39,6 @@
 		</link>
 		<link>
 			<name>target</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -103,11 +98,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>lib/cryptoauthlib</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>target/startup_stm32wl55xx.s</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/startup_stm32wl55xx.s</locationURI>
@@ -136,46 +126,6 @@
 			<name>target/system_stm32wlxx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/system_stm32wlxx.c</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/.DS_Store</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/.DS_Store</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/atca_config.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atca_config.h</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.h</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/atecc608a-tnglora-se.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se.c</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/se-identity.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/se-identity.h</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/tnglora_read_helper.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/tnglora_read_helper.c</locationURI>
-		</link>
-		<link>
-			<name>lib/ATECC608A-TNGLORA/tnglora_read_helper.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/ATECC608A-TNGLORA/tnglora_read_helper.h</locationURI>
 		</link>
 		<link>
 			<name>lib/GNSE_TRACER/.DS_Store</name>
@@ -293,61 +243,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/utilities_conf.h</locationURI>
 		</link>
 		<link>
-			<name>lib/cryptoauthlib/atca_basic.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_basic.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_cfgs.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_cfgs.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_command.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_command.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_debug.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_debug.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_device.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_device.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_hal.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/hal/atca_hal.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_helpers.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_helpers.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/atca_iface.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/atca_iface.c</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/calib</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/calib</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/crypto</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/crypto</locationURI>
-		</link>
-		<link>
-			<name>lib/cryptoauthlib/host</name>
-			<type>2</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/cryptoauthlib/lib/host</locationURI>
-		</link>
-		<link>
 			<name>target/stm32wlxx_hal_driver/.DS_Store</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/.DS_Store</locationURI>
@@ -451,6 +346,11 @@
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/.DS_Store</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/.DS_Store</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LICENSE.txt</name>
@@ -1321,6 +1221,31 @@
 			<name>target/stm32wlxx_hal_driver/_htmresc/st_logo_2020.png</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/target/stm32wlxx_hal_driver/_htmresc/st_logo_2020.png</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/cmac.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/cmac.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/cmac.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/cmac.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/lorawan_aes.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/lorawan_aes.c</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/lorawan_aes.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/lorawan_aes.h</locationURI>
+		</link>
+		<link>
+			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/soft-se.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/lib/STM32WLxx_LoRaWAN/LoRaWAN/Crypto/soft-se.c</locationURI>
 		</link>
 		<link>
 			<name>lib/STM32WLxx_LoRaWAN/LoRaWAN/LmHandler/LmHandler.c</name>

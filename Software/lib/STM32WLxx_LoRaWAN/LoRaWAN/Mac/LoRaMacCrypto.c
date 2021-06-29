@@ -1566,7 +1566,7 @@ LoRaMacCryptoStatus_t LoRaMacCryptoUnsecureMessage( AddressIdentifier_t addrID, 
             {
                 return retval;
             }
-        } 
+        }
     }
 #endif
 
@@ -1584,10 +1584,13 @@ LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcRootKey( KeyIdentifier_t keyID )
     }
     uint8_t compBase[16] = { 0 };
 
+#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
     if( CryptoCtx.NvmCtx->LrWanVersion.Fields.Minor == 1 )
     {
         compBase[0] = 0x20;
     }
+#endif
+
     if( SecureElementDeriveAndStoreKey( CryptoCtx.NvmCtx->LrWanVersion, compBase, keyID, MC_ROOT_KEY ) != SECURE_ELEMENT_SUCCESS )
     {
         return LORAMAC_CRYPTO_ERROR_SECURE_ELEMENT_FUNC;

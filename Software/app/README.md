@@ -24,6 +24,9 @@ This app doesn't require LoRaWAN keys/EUI configurations. Follow this [tutorial]
 
 [sensors_lorawan](./sensors_lorawan) contains an application that sends sensors data such as battery voltage, temperature and humidity over LoRaWAN.
 
+[basic_fuota](./basic_fuota) contains an application that attempts to do an interoperability test of firmware updates over the air.
+The app synchronizes the clock with the application server via `AppTimeReq & Ans` commands and then creates a multicast group and a fragmentation session to receive firmware packets over LoRaWAN.
+
 ## Applications configuration
 
 Each application contains a configuration folder that facilitates minor adjustments to the application behavior.
@@ -50,3 +53,5 @@ To quickly get started, navigate to your application `app_conf.h`, and adjust th
 [basic_azurertos app configurations](./basic_azurertos/conf/app_conf.h)
 
 [sensors_lorawan app configurations](./sensors_lorawan/conf/app_conf.h)
+
+[basic_fuota app configurations](./basic_fuota/conf/app_conf.h)

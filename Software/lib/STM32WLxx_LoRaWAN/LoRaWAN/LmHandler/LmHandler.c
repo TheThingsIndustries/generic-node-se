@@ -49,11 +49,11 @@
 #include "NvmCtxMgmt.h"
 #include "lora_info.h"
 #include "LmhpCompliance.h"
+#include "LmhpClockSync.h"
+#include "LmhpRemoteMcastSetup.h"
+#include "LmhpFragmentation.h"
+#include "LmhpFirmwareManagement.h"
 #include "LoRaMacTest.h"
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /* LORAWAN_DATA_DISTRIB_MGT == 1 */
-#include "LmhpDataDistribution.h"
-#endif /* LORAWAN_DATA_DISTRIB_MGT */
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
@@ -313,13 +313,6 @@ LmHandlerErrorStatus_t LmHandlerInit(LmHandlerCallbacks_t *handlerCallbacks)
   {
     return LORAMAC_HANDLER_ERROR;
   }
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /*LORAWAN_DATA_DISTRIB_MGT == 1*/
-  if (LmhpDataDistributionInit() != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-#endif /*LORAWAN_DATA_DISTRIB_MGT*/
   return LORAMAC_HANDLER_SUCCESS;
 }
 
@@ -700,6 +693,11 @@ LmHandlerErrorStatus_t LmHandlerRequestClass(DeviceClass_t newClass)
           {
             /* Switch is instantaneous */
             DisplayClassUpdate(CLASS_A);
+            if (LmHandlerCallbacks.OnClassChange != NULL)
+            {
+              /* callback used in data transfer use case (fuota) */
+              LmHandlerCallbacks.OnClassChange( CLASS_A );
+            }
           }
           else
           {
@@ -739,6 +737,11 @@ LmHandlerErrorStatus_t LmHandlerRequestClass(DeviceClass_t newClass)
           if (LoRaMacMibSetRequestConfirm(&mibReq) == LORAMAC_STATUS_OK)
           {
             DisplayClassUpdate(CLASS_C);
+            if (LmHandlerCallbacks.OnClassChange != NULL)
+            {
+              /* callback used in data transfer use case (fuota) */
+              LmHandlerCallbacks.OnClassChange( CLASS_C );
+            }
           }
           else
           {
@@ -764,12 +767,26 @@ LmHandlerErrorStatus_t LmHandlerPackageRegister(uint8_t id, void *params)
       package = LmphCompliancePackageFactory();
       break;
     }
-    default:
-#if (!defined (LORAWAN_DATA_DISTRIB_MGT) || (LORAWAN_DATA_DISTRIB_MGT == 0))
-#else /*LORAWAN_DATA_DISTRIB_MGT == 1*/
-      LmhpDataDistributionPackageRegister(id, &package);
-#endif /*LORAWAN_DATA_DISTRIB_MGT*/
+    case PACKAGE_ID_CLOCK_SYNC:
+    {
+      package = LmphClockSyncPackageFactory( );
       break;
+    }
+    case PACKAGE_ID_REMOTE_MCAST_SETUP:
+    {
+      package = LmhpRemoteMcastSetupPackageFactory( );
+      break;
+    }
+    case PACKAGE_ID_FRAGMENTATION:
+    {
+      package = LmhpFragmentationPackageFactory( );
+      break;
+    }
+    case PACKAGE_ID_FIRMWARE_MANAGEMENT:
+    {
+      package = LmhpFirmwareManagementPackageFactory();
+      break;
+    }
   }
 
   if (package != NULL)
@@ -1402,6 +1419,15 @@ static void McpsIndication(McpsIndication_t *mcpsIndication)
     LmHandlerCallbacks.OnRxData(&appData, &RxParams);
   }
 
+    if( mcpsIndication->DeviceTimeAnsReceived == true )
+    {
+      if( LmHandlerCallbacks.OnSysTimeUpdate != NULL)
+      {
+        /* callback used in Class C data transfer use case (fuota) */
+        LmHandlerCallbacks.OnSysTimeUpdate( );
+      }
+    }
+
   /* Call packages RxProcess function */
   LmHandlerPackagesNotify(PACKAGE_MCPS_INDICATION, mcpsIndication);
   LmHandlerGetCurrentClass(&deviceClass);
@@ -1499,7 +1525,12 @@ static void MlmeConfirm(MlmeConfirm_t *mlmeConfirm)
         LoRaMacMibSetRequestConfirm(&mibReq);
 
         DisplayClassUpdate(CLASS_B);
-
+        /*Notify upper layer*/
+        if (LmHandlerCallbacks.OnClassChange != NULL)
+        {
+          /* callback used in data transfer use case (fuota) */
+          LmHandlerCallbacks.OnClassChange( CLASS_B );
+        }
         IsClassBSwitchPending = false;
       }
       else
@@ -1536,6 +1567,11 @@ static void MlmeIndication(MlmeIndication_t *mlmeIndication)
       UTIL_MEM_set_8(BeaconParams.Info.GwSpecific.Info, 0, 6);
 
       DisplayClassUpdate(CLASS_A);
+      if (LmHandlerCallbacks.OnClassChange != NULL)
+      {
+        /* callback used to inform upper layer in data transfert use case (fuota) */
+        LmHandlerCallbacks.OnClassChange( CLASS_A );
+      }
       DisplayBeaconUpdate(&BeaconParams);
 
       LmHandlerDeviceTimeReq();
