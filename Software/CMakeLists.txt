@@ -35,6 +35,7 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 enable_language(C ASM)
 project(main)
 set (APP_LIST
+"app_template"
 "basic"
 "basic_lorawan"
 "basic_bootloader"

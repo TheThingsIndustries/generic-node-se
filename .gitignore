@@ -80,6 +80,8 @@ dkms.conf
 .vscode/
 
 # STM32CubeIDE (eclipse) build path
+/Software/app/app_template/Debug/
+/Software/app/app_template/.settings/
 /Software/app/basic*/Debug/
 /Software/app/basic*/.settings/
 /Software/app/*_lorawan/Debug/
