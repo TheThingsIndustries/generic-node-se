@@ -82,7 +82,7 @@ extern "C" {
 /**
  * @brief Interval between retry attempts for OTAA join.
  * It waits for a retry interval +- random jitter ( to avoid dos ) before attempting to
- * join again with LoRaWAN network.
+ * join again with a LoRaWAN network.
  */
 #define lorawanConfigJOIN_RETRY_INTERVAL_MS    ( 2000 )
 
@@ -98,9 +98,9 @@ extern "C" {
  * @brief Default config to enable or disable adaptive data rate.
  *
  * Enabling adaptive data rate allows the network to set optimized data rates for end devices
- * thereby optimizing on air time and power consumption. Its recommended to enable adaptive
+ * thereby optimizing on air time and power consumption. It is recommended to enable adaptive
  * data rate for static devices and devices with stable RF conditions.
- * Adaptive data rate can be toggled runtime using API.
+ * Adaptive data rate can be toggled at runtime using the API.
  *
  */
 #define lorawanConfigADR_ON    ( 1 )
@@ -114,7 +114,7 @@ extern "C" {
 /**
  * @brief Overall timing error threshold for the system.
  */
-#define lorawanConfigRX_MAX_TIMING_ERROR    ( 50 )
+#define lorawanConfigRX_MAX_TIMING_ERROR    ( 200 )
 
 /**
  * @brief Maximum payload length defined by LoRaWAN spec

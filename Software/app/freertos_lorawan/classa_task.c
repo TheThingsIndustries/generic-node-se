@@ -116,13 +116,6 @@ void vLorawanClassATask( void * params )
     }
     else
     {
-        /*
-         * Adaptive data rate is set to ON by default but this can be changed runtime if needed
-         * for mobile devices with no fixed locations.
-         */
-
-        LoRaWAN_SetAdaptiveDataRate( true );
-
         /**
          * Successfully joined a LoRaWAN network. Now the  task runs in an infinite loop,
          * sends periodic uplink message of 1 byte by obeying fair access policy for the LoRaWAN network.
