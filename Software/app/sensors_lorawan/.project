@@ -218,16 +218,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>lib/Utilities/stm32_lpm.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_lpm.c</locationURI>
-		</link>
-		<link>
-			<name>lib/Utilities/stm32_lpm.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_lpm.h</locationURI>
-		</link>
-		<link>
 			<name>lib/Utilities/stm32_mem.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/lib/Utilities/stm32_mem.c</locationURI>
