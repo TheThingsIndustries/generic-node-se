@@ -191,6 +191,12 @@ typedef enum
 #define ACC_INT_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
 #define ACC_INT_GPIO_CLK_DISABLE() __HAL_RCC_GPIOA_CLK_DISABLE()
 
+#define DBG_SWD_PIN GPIO_PIN_13
+#define DBG_SWCLK_PIN GPIO_PIN_14
+#define DBG_PORT GPIOA
+#define DBG_GPIO_CLK_ENABLE()  __HAL_RCC_GPIOA_CLK_ENABLE()
+#define DBG_GPIO_CLK_DISABLE() __HAL_RCC_GPIOA_CLK_DISABLE()
+
 /**
  * BSP GPIO APIs
  */
@@ -226,5 +232,8 @@ uint32_t GNSE_BSP_BM_ReadChannel();
 
 int32_t GNSE_BSP_Acc_Int_Init(void);
 int32_t GNSE_BSP_Acc_Int_DeInit(void);
+
+int32_t GNSE_BSP_LP_GPIO_ConfigAnalog(void);
+int32_t GNSE_BSP_LP_DBGIO_ConfigAnalog(void);
 
 #endif /* GNSE_BSP_GPIO_H */

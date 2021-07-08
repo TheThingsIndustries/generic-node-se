@@ -527,6 +527,9 @@ uint32_t GNSE_BSP_BM_ReadChannel(void)
     return raw_adc_read;
 }
 
+/**
+ * Interrupt (Int) configuration APIs
+ */
 
 /**
   * @brief Configures accelerometer interrupt GPIO.
@@ -538,7 +541,7 @@ int32_t GNSE_BSP_Acc_Int_Init(void)
 
     /* GPIO Ports Clock Enable */
     ACC_INT_GPIO_CLK_ENABLE();
-    
+
     GPIO_InitStruct.Pin = ACC_INT_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
@@ -561,4 +564,63 @@ int32_t GNSE_BSP_Acc_Int_DeInit(void)
     HAL_GPIO_DeInit(ACC_INT_PORT, ACC_INT_PIN);
 
     return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+ * Low Power (LP) APIs
+ */
+
+/**
+ * @brief Configure all GPIO as analog to reduce current consumption on non used IOs
+ * All GPIO Pins are configured to analog except for PA13 and PA14 (SWCLK and SWD) debug pins
+ * @note This API should be used with care in the initialization of the system as it will override ALL GPIO config
+ * @return GNSE_BSP status
+ */
+int32_t GNSE_BSP_LP_GPIO_ConfigAnalog(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* Enable GPIOs clock */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  /* All GPIOs except debug pins (SWD and SWCLK) */
+  GPIO_InitStruct.Pin = GPIO_PIN_All & (~(GPIO_PIN_13 | GPIO_PIN_14));
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* All GPIOs */
+  GPIO_InitStruct.Pin = GPIO_PIN_All;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+  /* Disable GPIOs clock */
+  __HAL_RCC_GPIOA_CLK_DISABLE();
+  __HAL_RCC_GPIOB_CLK_DISABLE();
+  __HAL_RCC_GPIOC_CLK_DISABLE();
+  __HAL_RCC_GPIOH_CLK_DISABLE();
+
+  return GNSE_BSP_ERROR_NONE;
+}
+
+/**
+ * @brief Configure the debugger pins as analog to reduce current consumption
+ *
+ * @return GNSE_BSP status
+ */
+int32_t GNSE_BSP_LP_DBGIO_ConfigAnalog(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  DBG_GPIO_CLK_ENABLE();
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pin = (DBG_SWD_PIN | DBG_SWCLK_PIN);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  return GNSE_BSP_ERROR_NONE;
 }
