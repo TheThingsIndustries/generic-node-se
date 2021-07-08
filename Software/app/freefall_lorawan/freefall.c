@@ -25,7 +25,7 @@
 #include "app_conf.h"
 #include "lora_app.h"
 #include "stm32_seq.h"
-#include "stm32_lpm.h"
+#include "GNSE_lpm.h"
 #include "BUZZER.h"
 
 static void ACC_Downlink_Callback(void *context);
@@ -134,14 +134,14 @@ static void ACC_Downlink_Callback(void *context)
     if (buzzer_state)
     {
         /* Buzzer requires the LPM to be switched off */
-        UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_DISABLE);
+        GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_DISABLE);
         BUZZER_SetState(BUZZER_STATE_DANGER);
     }
     else
     {
         BUZZER_SetState(BUZZER_STATE_OFF);
         BUZZER_DeInit();
-        UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_ENABLE);
+        GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_ENABLE);
     }
     buzzer_state = !buzzer_state;
 
@@ -154,5 +154,5 @@ void ACC_Disable_FreeFall_Notification(void)
     BUZZER_SetState(BUZZER_STATE_OFF);
     BUZZER_DeInit();
     UTIL_TIMER_Stop(&DownlinkTimer);
-    UTIL_LPM_SetStopMode((1 << CFG_LPM_FF_ACC_Id), UTIL_LPM_ENABLE);
+    GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_ENABLE);
 }

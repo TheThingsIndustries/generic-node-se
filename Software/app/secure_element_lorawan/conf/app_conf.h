@@ -24,22 +24,17 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
+/**
+ * if ON (=1) it enables the Tracer and Logging functionality
+ * if OFF (=0) the Tracer is OFF (lower current consumption)
+ */
 #define GNSE_ADVANCED_TRACER_ENABLE 1
 
-/* if ON (=1) it enables the debugger plus 4 dbg pins */
-/* if OFF (=0) the debugger is OFF (lower consumption) */
-#define DEBUGGER_ON       1
-
 /**
-  * Supported requester to the MCU Low Power Manager - can be increased up  to 32
-  * It lists a bit mapping of all user of the Low Power Manager
-  */
-typedef enum
-{
-  CFG_LPM_APPLI_Id,
-  CFG_LPM_UART_TX_Id,
-  CFG_LPM_TCXO_WA_Id,
-} CFG_LPM_Id_t;
+ * if ON (=1) it enables the debugger use in low power mode
+ * if OFF (=0) the debugger is OFF (lower current consumption)
+ */
+#define DEBUGGER_ON       1
 
 /**
   * sequencer definitions

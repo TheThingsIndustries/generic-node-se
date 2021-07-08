@@ -34,7 +34,6 @@
 #include "radio_driver.h"
 #include "radio_conf.h"
 #include "GNSE_tracer.h"
-#include "stm32_lpm.h"
 
 /* External variables ---------------------------------------------------------*/
 /*!

@@ -126,7 +126,7 @@ void GNSE_LPM_SensorBus_Off(void)
 
 /**
  * @brief This function will be called before entering Sleep Mode
- * @note This API can be used to do an application task before enetering Sleep Mode
+ * @note This API can be used to do an application task before entering Sleep Mode
  */
 __WEAK void GNSE_LPM_PreSleepModeHook(void)
 {
@@ -144,7 +144,7 @@ __WEAK void GNSE_LPM_PostSleepModeHook(void)
 
 /**
  * @brief This function will be called before entering Stop Mode
- * @note This API can be used to do an application task before enetering Stop Mode
+ * @note This API can be used to do an application task before entering Stop Mode
  */
 __WEAK void GNSE_LPM_PreStopModeHook(void)
 {
