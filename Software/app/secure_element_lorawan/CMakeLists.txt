@@ -19,6 +19,12 @@ file(GLOB LORAWAN_SRC
     "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
     "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/SPIFFS/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/LIS2DH12/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/BUZZER/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/LoRaWAN/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver/*.c"
 
@@ -56,6 +62,12 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
+    ${PROJECT_SOURCE_DIR}/lib/SPIFFS
+    ${PROJECT_SOURCE_DIR}/lib/SHTC3
+    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
     )
 target_compile_definitions(lorawan
     PUBLIC
