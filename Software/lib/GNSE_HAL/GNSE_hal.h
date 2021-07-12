@@ -42,10 +42,21 @@ typedef struct GNSE_HAL_Ctx_s
     bool buzzer_init;
 } GNSE_HAL_Ctx_t;
 
+/**
+ * GNSE HAL return types
+ */
+typedef enum
+{
+    GNSE_HAL_OP_SUCCESS = 0,
+    GNSE_HAL_OP_FAIL = 1,
+} GNSE_HAL_op_result_t;
+
 void GNSE_HAL_Init(GNSE_HAL_Ctx_t gnse_inits);
 void GNSE_HAL_DeInit(GNSE_HAL_Ctx_t gnse_deinits);
 void GNSE_HAL_Internal_Sensors_Init(void);
 void GNSE_HAL_Internal_Sensors_DeInit(void);
+GNSE_HAL_op_result_t GNSE_HAL_SysClk_Init(void);
+void GNSE_HAL_Error_Handler(void);
 
 #ifdef __cplusplus
 }
