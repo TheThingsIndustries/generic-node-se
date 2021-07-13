@@ -14,12 +14,12 @@
 
 ### Low power
 
-1. Make sure that `LOW_POWER_DISABLE` is kept at `0` in [`conf/app_conf.h`](./conf/app_conf.h).
-2. Set `GNSE_ADVANCED_TRACER_ENALBE` to `0` in [`conf/app_conf.h`](./conf/app_conf.h). This will make the device consume less power, but also disables UART.
+1. Set `GNSE_ADVANCED_TRACER_ENALBE` to `0` in [`conf/app_conf.h`](./conf/app_conf.h). This will make the device consume less power, but also disables UART.
+2. Set `DEBUGGER_ON` to `0` in [`conf/app_conf.h`](./conf/app_conf.h).
 
 Additionally, try to remember that:
 
-- Setting the debugger will consume more power. The debugger is set in the macro `DEBUGGER_ON` in [`conf/app_conf.h`](./conf/app_conf.h).
+- Setting `DEBUGGER_ON` to `1` will consume more power. The debugger is ON by default using the macro `DEBUGGER_ON` in [`conf/app_conf.h`](./conf/app_conf.h).
 - Keeping peripherals (such as the sensors) off by controlling the load switches will significantly reduce the power consumption.
 - The less transmissions over time, the lower the power consumption will be. This is set by `APP_TX_DUTYCYCLE` in [`lora_app.h`](./lora_app.h).
 

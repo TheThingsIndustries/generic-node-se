@@ -54,6 +54,7 @@ file(GLOB MAIN_SRC
     "${PROJECT_SOURCE_DIR}/target/*.c"
     "${PROJECT_SOURCE_DIR}/target/FreeRTOS_CMSIS/*.c"
     "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/GNSE_lpm.c"
     "${PROJECT_SOURCE_DIR}/lib/MCU_FLASH/*.c"
     "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
     "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
@@ -84,6 +85,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH
     ${PROJECT_SOURCE_DIR}/lib/Utilities
     ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER

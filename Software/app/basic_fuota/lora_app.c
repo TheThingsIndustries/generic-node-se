@@ -26,7 +26,6 @@
 #include "sys_app.h"
 #include "lora_app.h"
 #include "stm32_seq.h"
-#include "stm32_lpm.h"
 #include "LmHandler.h"
 #include "lora_info.h"
 

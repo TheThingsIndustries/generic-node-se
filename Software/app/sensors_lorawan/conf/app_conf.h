@@ -47,17 +47,6 @@
 #define APPKEY                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 /**
-  * Supported requester to the MCU Low Power Manager - can be increased up  to 32
-  * It lists a bit mapping of all user of the Low Power Manager
-  */
-typedef enum
-{
-  CFG_LPM_APPLI_Id,
-  CFG_LPM_UART_TX_Id,
-  CFG_LPM_TCXO_WA_Id,
-} CFG_LPM_Id_t;
-
-/**
   * sequencer definitions
   */
 

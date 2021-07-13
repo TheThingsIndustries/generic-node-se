@@ -19,13 +19,13 @@ This application is used to detect free fall events and also serves as a templat
 
 ### Low power
 
-1. Make sure that `LOW_POWER_DISABLE` is kept at `0` in [`conf/app_conf.h`](./conf/app_conf.h).
-2. Set `GNSE_ADVANCED_TRACER_ENALBE` to `0` in [`conf/app_conf.h`](./conf/app_conf.h). This will make the device consume less power, but also disables UART.
+1. Set `GNSE_ADVANCED_TRACER_ENALBE` to `0` in [`conf/app_conf.h`](./conf/app_conf.h). This will make the device consume less power, but also disables UART.
+2. Set `DEBUGGER_ON` to `0` in [`conf/app_conf.h`](./conf/app_conf.h).
 3. Set `ACC_FF_ODR` in [`app/conf.h`](./conf/app_conf.h) to a lower value if the decreased performance of the free fall detection does not matter for your setup. [`LIS2DH12.h`](../../lib/LIS2DH12/LIS2DH12.h) in the [`LIS2DH12`](../../lib/LIS2DH12/) library lists all the options for this.
 
 Additionally, try to remember that:
 
-- Setting the debugger will consume more power. The debugger is set in the macro `DEBUGGER_ON` in [`conf/app_conf.h`](./conf/app_conf.h).
+- Setting `DEBUGGER_ON` to `1` will consume more power. The debugger is ON by default using the macro `DEBUGGER_ON` in [`conf/app_conf.h`](./conf/app_conf.h).
 - Keeping peripherals (such as the sensors) off by controlling the load switches will significantly reduce the power consumption. But, of course, you can not turn the load switch connected to the accelerometer off without disabling the free fall detection as well.
 
 ### LoRa extra's

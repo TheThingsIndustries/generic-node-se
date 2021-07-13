@@ -22,27 +22,13 @@
 #include "sys_app.h"
 #include "stm32_seq.h"
 #include "stm32_systime.h"
-#include "stm32_lpm.h"
+#include "GNSE_lpm.h"
 #include "GNSE_rtc.h"
 #include "sensors.h"
 
 #define MAX_TS_SIZE (int)16
 
 /**
-  * @brief  Set all pins such to minimized consumption (necessary for some STM32 families)
-  * @param none
-  * @return None
-  */
-static void Gpio_PreInit(void);
-
-/**
-  * @brief  Initialises the system for debugging or low power mode depending on DEBUGGER_ON
-  * @param none
-  * @return None
-  */
-static void DBG_Init(void);
-/**
-
   * @brief Returns sec and msec based on the systime in use
   * @param none
   * @return  none
@@ -67,10 +53,12 @@ void SystemApp_Init(void)
   /*Initialises timer and RTC*/
   UTIL_TIMER_Init();
 
-  Gpio_PreInit();
-
-  /* Configure the debug mode*/
-  DBG_Init();
+  /* Initialize the Low Power Manager and Debugger */
+#if defined(DEBUGGER_ON) && (DEBUGGER_ON == 1)
+  GNSE_LPM_Init(GNSE_LPM_SLEEP_STOP_DEBUG_MODE);
+#elif defined(DEBUGGER_ON) && (DEBUGGER_ON == 0)
+  GNSE_LPM_Init(GNSE_LPM_SLEEP_STOP_MODE);
+#endif
 
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
@@ -79,18 +67,21 @@ void SystemApp_Init(void)
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
   HAL_Delay(100);
-  APP_PPRINTF("\r\n Initializing on-board sensors I2C1 and I2C2 buses \r\n");
+  APP_PPRINTF("\r\n Initializing on-board sensors bus I2C1 \r\n");
   GNSE_BSP_Sensor_I2C1_Init();
-  GNSE_BSP_Ext_Sensor_I2C2_Init();
   APP_PPRINTF("\r\n Initializing on-board sensors \r\n");
   sensors_init();
+}
 
-/*Init low power manager*/
-  UTIL_LPM_Init();
-  /* Disable Stand-by mode */
-  UTIL_LPM_SetOffMode((1 << CFG_LPM_APPLI_Id), UTIL_LPM_DISABLE);
-  /* Disable Stop Mode, TODO: Add support for low power mode using LPM, see https://github.com/TheThingsIndustries/generic-node-se/issues/171 */
-  UTIL_LPM_SetStopMode((1 << CFG_LPM_APPLI_Id), UTIL_LPM_DISABLE);
+void GNSE_LPM_PreStopModeHook(void)
+{
+  GNSE_LPM_SensorBus_Off();
+}
+
+void GNSE_LPM_PostStopModeHook(void)
+{
+  GNSE_TRACER_RESUME();
+  GNSE_LPM_SensorBus_Resume();
 }
 
 /**
@@ -100,7 +91,7 @@ void SystemApp_Init(void)
   */
 void UTIL_SEQ_Idle(void)
 {
-  UTIL_LPM_EnterLowPower();
+  GNSE_LPM_EnterLowPower();
 }
 
 static void TimestampNow(uint8_t *buff, uint16_t *size)
@@ -110,78 +101,16 @@ static void TimestampNow(uint8_t *buff, uint16_t *size)
   *size = strlen((char *)buff);
 }
 
-static void Gpio_PreInit(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Configure all IOs in analog input              */
-  /* Except PA143 and PA14 (SWCLK and SWD) for debug*/
-  /* PA13 and PA14 are configured in debug_init     */
-  /* Configure all GPIO as analog to reduce current consumption on non used IOs */
-  /* Enable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  /* All GPIOs except debug pins (SWCLK and SWD) */
-  GPIO_InitStruct.Pin = GPIO_PIN_All & (~(GPIO_PIN_13 | GPIO_PIN_14));
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* All GPIOs */
-  GPIO_InitStruct.Pin = GPIO_PIN_All;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /* Disable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_DISABLE();
-  __HAL_RCC_GPIOB_CLK_DISABLE();
-  __HAL_RCC_GPIOC_CLK_DISABLE();
-  __HAL_RCC_GPIOH_CLK_DISABLE();
-}
-
-static void DBG_Init()
-{
-#if defined(DEBUGGER_ON) && (DEBUGGER_ON == 1)
-  /*Debug power up request wakeup CBDGPWRUPREQ*/
-  LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_46);
-
-  /* lowpower DBGmode: just needed for CORE_CM4 */
-  HAL_DBGMCU_EnableDBGSleepMode();
-  HAL_DBGMCU_EnableDBGStopMode();
-  HAL_DBGMCU_EnableDBGStandbyMode();
-#elif defined(DEBUGGER_ON) && (DEBUGGER_ON == 0) /* DEBUGGER_OFF */
-  /* Put the debugger pin PA13 and P14 in analog for LowPower*/
-  /* The 4 debug lines above are simply not set in this case */
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Pin = (GPIO_PIN_13 | GPIO_PIN_14);
-  /* make sure clock is enabled before setting the pins with HAL_GPIO_Init() */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  HAL_DBGMCU_DisableDBGSleepMode();
-  HAL_DBGMCU_DisableDBGStopMode();
-  HAL_DBGMCU_DisableDBGStandbyMode();
-#else
-#error "DEBUGGER_ON not defined or out of range <0,1>"
-#endif
-}
-
 /* Disable StopMode when traces need to be printed */
 void ADV_TRACER_PreSendHook(void)
 {
-  UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_DISABLE);
+  GNSE_LPM_SetStopMode((1 << GNSE_LPM_UART_TRACER), GNSE_LPM_DISABLE);
 }
 
 /* Re-enable StopMode when traces have been printed */
 void ADV_TRACER_PostSendHook(void)
 {
-  UTIL_LPM_SetStopMode((1 << CFG_LPM_UART_TX_Id), UTIL_LPM_ENABLE);
+  GNSE_LPM_SetStopMode((1 << GNSE_LPM_UART_TRACER), GNSE_LPM_ENABLE);
 }
 
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...)

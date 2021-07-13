@@ -107,7 +107,7 @@ void Error_Handler(void)
   */
   GNSE_BSP_LED_Init(LED_RED);
   GNSE_BSP_LED_On(LED_RED);
-  GNSE_LPM_EnterStopMode();
+  GNSE_LPM_EnterLowPower();
   while (1)
   {
   }
