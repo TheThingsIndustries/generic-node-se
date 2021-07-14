@@ -19,12 +19,12 @@ We love to discuss design decisions, device features and possible use cases with
 
 ### :bulb: New features
 
- If you have a great idea or think some functionality is missing, we want to know! The only thing you have to do for that is to [create a Feature request issue](https://github.com/TheThingsIndustries/generic-node-se/issues) if it doesn't exist yet. Please use the issue template and fill out all sections.
+ If you have a great idea or think some functionality is missing, we want to know! The only thing you have to do for that is to [create a Feature request issue](https://github.com/TheThingsIndustries/generic-node-se/issues) if it does not exist yet. Please use the issue template and fill out all sections.
 
 
 ### :beetle: Issues
 
-If you notice that one of the applications is not functioning properly or there may be a bug in the implementation, please [create a Bug report issue](https://github.com/TheThingsIndustries/generic-node-se/issues) if it doesn't exist yet. Please use the issue template and fill out all sections.
+If you notice that one of the applications is not functioning properly or there may be a bug in the implementation, please [create a Bug report issue](https://github.com/TheThingsIndustries/generic-node-se/issues) if it does not exist yet. Please use the issue template and fill out all sections.
 
 ### :hammer_and_wrench: Pull requests
 

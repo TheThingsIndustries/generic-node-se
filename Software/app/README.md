@@ -18,7 +18,7 @@ The device enters stop mode in between transmissions to reduce power consumption
 [freertos_lorawan](./basic_freertos) contains a multi-thread FreeRTOS LoRaWAN Class A demo app that joins over OTAA and sends uplink data.
 
 [secure_element_lorawan](./secure_element_lorawan) contains a LoRaWAN application where a class A device joins via OTAA (LoRaWAN v1.0.2) using a HW secure element (ATECC608A-TNGLORA) and sends dummy payloads triggered by a time interval.
-This app doesn't require LoRaWAN keys/EUI configurations. Follow this [tutorial](https://www.thethingsindustries.com/docs/devices/claim-atecc608a/) to claim your device, and your device will join via OTAA automatically.
+This app does not require LoRaWAN keys/EUI configurations. Follow this [tutorial](https://www.thethingsindustries.com/docs/devices/claim-atecc608a/) to claim your device, and your device will join via OTAA automatically.
 
 [basic_azurertos](./basic_azurertos) contains a simple AzureRTOS (ThreadX) application. It includes examples of two threads that pass a message via a queue triggering a blinking LED with each passed message.
 
