@@ -67,24 +67,26 @@ void SystemApp_Init(void)
   UTIL_TIMER_Init();
 
   /* Initialize the Low Power Manager and Debugger */
-  // TODO: Add support for stop mode, see https://github.com/TheThingsIndustries/generic-node-se/issues/180
 #if defined(DEBUGGER_ON) && (DEBUGGER_ON == 1)
-  GNSE_LPM_Init(GNSE_LPM_SLEEP_DEBUG_MODE);
+  GNSE_LPM_Init(GNSE_LPM_SLEEP_STOP_DEBUG_MODE);
 #elif defined(DEBUGGER_ON) && (DEBUGGER_ON == 0)
-  GNSE_LPM_Init(GNSE_LPM_SLEEP_ONLY_MODE);
+  GNSE_LPM_Init(GNSE_LPM_SLEEP_STOP_MODE);
 #endif
 
   /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
 
+  /* Set I2C interface */
+  GNSE_BSP_Sensor_I2C1_Init();
+
   /* Set load switch */
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
   HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
 
-  /* Set I2C interface */
-  GNSE_BSP_Sensor_I2C1_Init();
+  /* Set the (unused) SHTC3 in sleep mode */
+  SHTC3_sleep();
 
   /* Set accelerometer */
   if (GNSE_ACC_Init() != ACC_OP_SUCCESS)
