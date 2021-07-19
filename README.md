@@ -6,7 +6,7 @@ LoRaWAN promised you roaming, secure and low-cost sensors that last on a battery
 
 This repository contains all the necessary hardware and software files for the GNSE LoRaWAN node. The core of the system is based off the STM32WL55xx dual-core LoRaWAN SOC.
 
-![Generic Node Main PCB (front)](Docs/PinoutDiagram/GNSE_v1.1_pinout.png)
+![Generic Node Main PCB (front)](Docs/img_hw/GNSE_v1.1_pinout.png)
 
 ## Specification
 - [STM32WL55CCU6](https://www.st.com/en/microcontrollers-microprocessors/stm32wl-series.html) dual-core Arm Cortex®-M4/M0+ @48 MHz
@@ -22,7 +22,7 @@ This repository contains all the necessary hardware and software files for the G
 - [MX25R1635](https://www.macronix.com/en-us/products/NOR-Flash/Serial-NOR-Flash/Pages/default.aspx) 16Mb SPI NOR Flash for FUOTA and data-logging
 - A user button, an RGB LED, a buzzer and a user-friendly expansion and programming options.
 
-![Generic Node](Docs/Images/generic_node_se_stacked.png)
+![Generic Node](Docs/img_hw/generic_node_se_stacked.png)
 
 ## Development
 

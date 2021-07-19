@@ -31,7 +31,7 @@
 #define DEBUGGER_ON       1
 
 /*!
- * LoRaWAN application port where sensors information can be rterivied by the application server
+ * LoRaWAN application port where sensors information can be retrieved by the application server
  * @note do not use 224. It is reserved for certification
  */
 #define SENSORS_PAYLOAD_APP_PORT        2
