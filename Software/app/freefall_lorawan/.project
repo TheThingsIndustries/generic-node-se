@@ -38,6 +38,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>app/conf</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/app/conf</locationURI>
+		</link>
+		<link>
 			<name>target</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>

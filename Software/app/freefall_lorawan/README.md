@@ -8,7 +8,7 @@ This application is used to detect free fall events and also serves as a templat
 
 ### Default
 1. Follow [this](https://www.thethingsindustries.com/docs/devices/adding-devices/) guide to add your device to The Things Stack.
-2. Change the `APPEUI`, `DEVEUI` and `APPKEY` in [`conf/app_conf.h`](./conf/app_conf.h) to the values specific to your device, which are used on The Things Stack.
+2. Create the file `lorawan_keys.h` in the general `Software/app/conf` folder (optionally using [`lorawan_keys.def.h`](../conf/lorawan_keys.def.h) as template) and change the `APPEUI`, `DEVEUI` and `APPKEY` to the values specific to your device, which are used on The Things Stack.
 3. Uncomment the `REGION` parameters in [`conf/lorawan_conf.h`](./conf/lorawan_conf.h) and set `ACTIVE_REGION` in [`lora_app.h`](./lora_app.h). These should correspond to the location that you use these devices at.
 
 ### Free fall detection

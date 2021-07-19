@@ -87,6 +87,9 @@ dkms.conf
 /Software/app/*_lorawan/Debug/
 /Software/app/*_lorawan/.settings/
 
+# Configuration specific key file
+/Software/app/conf/*lorawan_keys.h
+
 # STM32CubeIDE (eclipse)
 *.launch
 

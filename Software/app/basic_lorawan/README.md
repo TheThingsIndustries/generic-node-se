@@ -9,7 +9,7 @@
 ### Default
 
 1. Follow [this](https://www.thethingsindustries.com/docs/devices/adding-devices/) guide to add your device to The Things Stack.
-2. Change the `APPEUI`, `DEVEUI` and `APPKEY` in [`conf/app_conf.h`](./conf/app_conf.h) to the values specific to your device, which are used on The Things Stack.
+2. Create the file `lorawan_keys.h` in the general `Software/app/conf` folder (optionally using [`lorawan_keys.def.h`](../conf/lorawan_keys.def.h) as template) and change the `APPEUI`, `DEVEUI` and `APPKEY` to the values specific to your device, which are used on The Things Stack.
 3. Uncomment the `REGION` parameters in [`conf/lorawan_conf.h`](./conf/lorawan_conf.h) and set `ACTIVE_REGION` in [`lora_app.h`](./lora_app.h). These should correspond to the location that you use these devices at.
 
 ### Low power
@@ -17,7 +17,7 @@
 1. Set `GNSE_ADVANCED_TRACER_ENALBE` to `0` in [`conf/app_conf.h`](./conf/app_conf.h). This will make the device consume less power, but also disables UART.
 2. Set `DEBUGGER_ON` to `0` in [`conf/app_conf.h`](./conf/app_conf.h).
 
-Additionally, try to remember that:
+Additionally, keep in mind that:
 
 - Setting `DEBUGGER_ON` to `1` will consume more power. The debugger is ON by default using the macro `DEBUGGER_ON` in [`conf/app_conf.h`](./conf/app_conf.h).
 - Keeping peripherals (such as the sensors) off by controlling the load switches will significantly reduce the power consumption.

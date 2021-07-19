@@ -38,6 +38,7 @@ target_include_directories(lorawan
     ${PROJECT_SOURCE_DIR}/${LORAWAN_DIR}/SubGHz_Phy/stm32_radio_driver
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app/conf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
@@ -81,6 +82,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/target/FreeRTOS_CMSIS
     ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/app/conf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency

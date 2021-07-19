@@ -28,6 +28,8 @@ The application behavior can be adjusted by modifying [`conf/app_conf.h`](./conf
 #define GNSE_TINY_TRACER_ENABLE 1
 ```
 
+Generalized configurations are kept in `Software/app/conf`, such as the keys in `lorawan_keys.h` (which has to be created by the user):
+
 - `APPEUI`, `DEVEUI` and `APPKEY` allow the device to join the LoRaWAN network via OTAA.
 
 ```c
@@ -37,6 +39,8 @@ The application behavior can be adjusted by modifying [`conf/app_conf.h`](./conf
 
 #define APPKEY                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ```
+
+[`lorawan_keys.def.h`](../conf/lorawan_keys.def.h) can be used as a template.
 
 > **Note:** The default `0x00` is a place holder and you are required to change these values in order to achieve a successful activation. For testing purposes, these values can be random.
 

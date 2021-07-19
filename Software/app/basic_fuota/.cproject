@@ -83,6 +83,8 @@
 
                                     <listOptionValue builtIn="false" value="../../../target"/>
 
+                                    <listOptionValue builtIn="false" value="../../../app/conf"/>
+
                                     <listOptionValue builtIn="false" value="../../../lib/GNSE_BSP"/>
 
                                     <listOptionValue builtIn="false" value="../../../lib/GNSE_HAL"/>
