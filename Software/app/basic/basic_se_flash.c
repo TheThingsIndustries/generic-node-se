@@ -35,7 +35,7 @@ static void print_buffer(const char *message, uint8_t *buffer, size_t buffer_siz
 
 void secure_element_read_info(void)
 {
-    // Initialize the on boarad secure element and read serial number
+    // Initialize the on board secure element and read serial number
     ATCAIfaceCfg atecc608_i2c_config;
     uint8_t secure_element_serialnum[ATCA_SERIAL_NUM_SIZE];
     uint8_t secure_element_devEUI[DEV_EUI_SIZE_BYTE];
@@ -51,7 +51,7 @@ void secure_element_read_info(void)
     atecc608_i2c_config.wake_delay = ATCA_HAL_ATECC608A_I2C_WAKEUP_DELAY;
     if (atcab_init(&atecc608_i2c_config) != ATCA_SUCCESS)
     {
-        APP_PPRINTF("\r\n Failed to initialize ATECC608A-TNGLORA secure elelment \r\n");
+        APP_PPRINTF("\r\n Failed to initialize ATECC608A-TNGLORA secure element \r\n");
         return;
     }
 

@@ -53,7 +53,6 @@ ACC_op_result_t ACC_FreeFall_Enable(void)
     /* Set full scale */
     acc_check += (int8_t)lis2dh12_full_scale_set(&dev_ctx, ACC_FF_SCALE);
 
-
     /* Map interrupt 1 on INT2 pin */
     lis2dh12_ctrl_reg6_t ctrl6_set = {
         .not_used_01 = 0,
@@ -85,6 +84,9 @@ ACC_op_result_t ACC_FreeFall_Enable(void)
         .aoi = 1
     };
     acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg);
+
+    /* Set low power, 8 bit data output mode */
+    acc_check += (int8_t)lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_LP_8bit);
 
     /* See if all checks were passed */
     if (acc_check != 0)
