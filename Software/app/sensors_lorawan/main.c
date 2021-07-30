@@ -20,14 +20,10 @@
  *
  */
 
-#include "GNSE_bsp.h"
-#include "GNSE_lpm.h"
+#include "GNSE_hal.h"
 #include "stm32_seq.h"
 #include "sys_app.h"
 #include "lora_app.h"
-
-static void SystemClock_Config(void);
-static void Error_Handler(void);
 
 void MX_LoRaWAN_Init(void)
 {
@@ -43,72 +39,13 @@ void MX_LoRaWAN_Process(void)
 int main(void)
 {
   HAL_Init();
-  SystemClock_Config();
+  if (GNSE_HAL_SysClk_Init() != GNSE_HAL_OP_SUCCESS)
+  {
+    GNSE_HAL_Error_Handler();
+  }
   MX_LoRaWAN_Init();
   while (1)
   {
     MX_LoRaWAN_Process();
-  }
-}
-
-/**
-  * @brief System Clock Configuration
-  * @return None
-  */
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  /** Configure LSE Drive Capability
-  */
-  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the CPU, AHB and APB busses clocks
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
-  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
-  RCC_OscInitStruct.MSIState = RCC_MSI_ON;
-  RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_11;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
-                              |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
-                              |RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.AHBCLK3Divider = RCC_SYSCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @return None
-  */
-void Error_Handler(void)
-{
-  /* User can add his own implementation to report the HAL error return state
-  * A basic Implementation below
-  * TODO: Improve with system wide error handler, see https://github.com/TheThingsIndustries/generic-node-se/issues/57
-  */
-  GNSE_BSP_LED_Init(LED_RED);
-  GNSE_BSP_LED_On(LED_RED);
-  GNSE_LPM_EnterLowPower();
-  while (1)
-  {
   }
 }

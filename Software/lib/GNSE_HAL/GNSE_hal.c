@@ -23,9 +23,68 @@
 #include "GNSE_hal.h"
 #include "GNSE_acc.h"
 #include "GNSE_bm.h"
+#include "GNSE_lpm.h"
 #include "GNSE_flash.h"
 #include "SHTC3.h"
 #include "BUZZER.h"
+
+/**
+  * @brief  Initialises the clock peripherals
+  * @param  none
+  * @return GNSE_HAL_op_result_t
+  */
+GNSE_HAL_op_result_t GNSE_HAL_SysClk_Init(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+    // Configure LSE Drive Capability
+    __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+    // Configure the main internal regulator output voltage
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+    // Initializes the CPU, AHB and APB busses clocks
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
+    RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+    RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+    RCC_OscInitStruct.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_11;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+       return GNSE_HAL_OP_FAIL;
+    }
+    // Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
+                                |RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1
+                                |RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_MSI;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    RCC_ClkInitStruct.AHBCLK3Divider = RCC_SYSCLK_DIV1;
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+    {
+       return GNSE_HAL_OP_FAIL;
+    }
+    return GNSE_HAL_OP_SUCCESS;
+}
+
+/**
+  * @brief  Generic error handler
+  * @note   Weak implementation that can be overridden by the application layer
+  * @param  none
+  * @return none
+  */
+__weak void GNSE_HAL_Error_Handler(void)
+{
+    GNSE_BSP_LED_Init(LED_RED);
+    GNSE_BSP_LED_On(LED_RED);
+    GNSE_LPM_EnterLowPower();
+    while (1)
+    {
+    }
+}
 
 /**
   * @brief Initialises the internal sensors for GNSE, the accelerometer and humidity/temperature sensor
