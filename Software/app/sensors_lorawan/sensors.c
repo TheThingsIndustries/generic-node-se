@@ -54,3 +54,25 @@ sensors_op_result_t sensors_sample(sensors_t *sensor_data)
     APP_PPRINTF("\r\n Successfully sampled sensors \r\n");
     return SENSORS_OP_SUCCESS;
 }
+
+uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData)
+{
+    uint32_t rxbuffer = 0;
+    if (appData->Port == SENSORS_DOWNLINK_CONF_PORT)
+    {
+      if (appData->BufferSize <= sizeof(rxbuffer))
+      {
+        for (int i = appData->BufferSize - 1; i >= 0; i--)
+        {
+            rxbuffer += appData->Buffer[i] << (8 * (appData->BufferSize - 1 - i));
+        }
+        if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_S && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_S)
+        {
+          APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld seconds \r\n", rxbuffer);
+          rxbuffer *= 1000; /* Time data has to be converted from s to ms */
+          return rxbuffer;
+        }
+      }
+    }
+    return 0;
+}

@@ -23,6 +23,8 @@
 #ifndef __SENSORS_H__
 #define __SENSORS_H__
 
+#include "LmHandler.h"
+
 typedef enum
 {
     SENSORS_OP_SUCCESS = 0,
@@ -50,5 +52,12 @@ sensors_op_result_t sensors_init(void);
  * @return sensors_op_result_t
  */
 sensors_op_result_t sensors_sample(sensors_t *sensor_data);
+
+/**
+  * @brief This function checks the downlink data and tests if the data can be used to change the transmission intervals
+  * @param appData: received downlink data
+  * @return New transmission times in ms, or 0 on fail
+  */
+uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData);
 
 #endif /* __SENSORS_H__ */

@@ -125,6 +125,15 @@ void GNSE_LPM_SensorBus_Off(void)
 }
 
 /**
+ * @brief Resume battery ADC functionalities after stop mode
+ */
+void GNSE_LPM_BatteryADC_Resume(void)
+{
+  HAL_ADC_Init(&GNSE_BSP_voltage_adc);
+  HAL_ADCEx_Calibration_Start(&GNSE_BSP_voltage_adc);
+}
+
+/**
  * @brief This function will be called before entering Sleep Mode
  * @note This API can be used to do an application task before entering Sleep Mode
  */
