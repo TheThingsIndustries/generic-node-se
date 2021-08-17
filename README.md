@@ -40,6 +40,8 @@ Our [contribution guideline](./CONTRIBUTING.md) provides more information on how
 
 ## Legal
 
-Copyright © 2021 The Things Industries B.V.
+[Generic Node license terms and conditions](./LICENSE.md) apply.
 
 [Contact The Things Industries](https://thethingsindustries.com/contact/) for licensing.
+
+Copyright © 2021 The Things Industries B.V.
