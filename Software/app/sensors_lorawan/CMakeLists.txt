@@ -42,7 +42,7 @@ target_include_directories(lorawan
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app/sensors_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/sensors_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/sensors_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     )
 target_compile_definitions(lorawan
@@ -81,7 +81,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/sensors_lorawan
     ${PROJECT_SOURCE_DIR}/app/sensors_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/sensors_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/sensors_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/SPIFFS
