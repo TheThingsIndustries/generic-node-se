@@ -94,6 +94,8 @@ void GNSE_LPM_Debugger_Disable(void);
 void GNSE_LPM_SensorBus_Resume(void);
 void GNSE_LPM_SensorBus_Off(void);
 
+void GNSE_LPM_BatteryADC_Resume(void);
+
 void GNSE_LPM_PreStopModeHook(void);
 void GNSE_LPM_PostStopModeHook(void);
 void GNSE_LPM_PreSleepModeHook(void);

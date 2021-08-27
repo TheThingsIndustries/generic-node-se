@@ -44,6 +44,7 @@ static void BUTTON_SW1_EXTI_Callback(void);
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LED_Init(Led_TypeDef Led)
@@ -71,6 +72,7 @@ int32_t GNSE_BSP_LED_Init(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @note Led DeInit does not disable the GPIO clock nor disable the Mfx
   * @return GNSE_BSP status
   */
@@ -91,6 +93,7 @@ int32_t GNSE_BSP_LED_DeInit(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LED_On(Led_TypeDef Led)
@@ -106,6 +109,7 @@ int32_t GNSE_BSP_LED_On(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LED_Off(Led_TypeDef Led)
@@ -121,6 +125,7 @@ int32_t GNSE_BSP_LED_Off(Led_TypeDef Led)
   *         This parameter can be one of the following values:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @return GNSE_BSP status
   */
 int32_t GNSE_BSP_LED_Toggle(Led_TypeDef Led)
@@ -136,11 +141,35 @@ int32_t GNSE_BSP_LED_Toggle(Led_TypeDef Led)
   *         This parameter can be one of following parameters:
   *            @arg LED1
   *            @arg LED2
+  *            @arg LED3
   * @return LED status
   */
 int32_t GNSE_BSP_LED_GetState(Led_TypeDef Led)
 {
     return (int32_t)HAL_GPIO_ReadPin(LED_PORT[Led], LED_PIN[Led]);
+}
+
+/**
+  * @brief  Set LED to analog mode for lower power consumption (deinits the LEDs)
+  * @param  Led: LED to be de-init.
+  *         This parameter can be one of the following values:
+  *            @arg LED1
+  *            @arg LED2
+  *            @arg LED3
+  * @return GNSE_BSP status
+  */
+int32_t GNSE_BSP_LED_Analog(Led_TypeDef Led)
+{
+    GPIO_InitTypeDef gpio_init_structure = {0};
+
+    /* Configure the GPIO_LED pin */
+    gpio_init_structure.Pin = LED_PIN[Led];
+    gpio_init_structure.Mode = GPIO_MODE_ANALOG;
+    gpio_init_structure.Pull = GPIO_NOPULL;
+
+    HAL_GPIO_Init(LED_PORT[Led], &gpio_init_structure);
+
+    return GNSE_BSP_ERROR_NONE;
 }
 
 /**

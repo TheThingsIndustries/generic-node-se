@@ -63,6 +63,7 @@
 
 /**
  * This variable sets the LoRaWAN transmission port of free fall events
+ * @note do not use 224. It is reserved for certification
  */
 #define ACC_FF_LORA_PORT 2
 

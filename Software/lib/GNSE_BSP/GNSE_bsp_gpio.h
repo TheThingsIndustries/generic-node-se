@@ -27,6 +27,8 @@
 #include "GNSE_bsp_error.h"
 #include "GNSE_bsp_conf.h"
 
+extern ADC_HandleTypeDef GNSE_BSP_voltage_adc;
+
 /**
  * HW aliases for the board components
  */
@@ -207,6 +209,7 @@ int32_t GNSE_BSP_LED_On(Led_TypeDef Led);
 int32_t GNSE_BSP_LED_Off(Led_TypeDef Led);
 int32_t GNSE_BSP_LED_Toggle(Led_TypeDef Led);
 int32_t GNSE_BSP_LED_GetState(Led_TypeDef Led);
+int32_t GNSE_BSP_LED_Analog(Led_TypeDef Led);
 
 int32_t GNSE_BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
 int32_t GNSE_BSP_PB_DeInit(Button_TypeDef Button);

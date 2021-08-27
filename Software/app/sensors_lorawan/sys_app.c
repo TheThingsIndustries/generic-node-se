@@ -24,6 +24,7 @@
 #include "stm32_systime.h"
 #include "GNSE_lpm.h"
 #include "GNSE_rtc.h"
+#include "GNSE_bm.h"
 #include "sensors.h"
 
 #define MAX_TS_SIZE (int)16
@@ -82,6 +83,7 @@ void GNSE_LPM_PostStopModeHook(void)
 {
   GNSE_TRACER_RESUME();
   GNSE_LPM_SensorBus_Resume();
+  GNSE_LPM_BatteryADC_Resume();
 }
 
 /**
