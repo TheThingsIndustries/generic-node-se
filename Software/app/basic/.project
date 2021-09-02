@@ -33,6 +33,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>app_common</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lib</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -41,6 +46,16 @@
 			<name>target</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>app_common/GNSE_app_helper.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app_common/GNSE_app_helper.c</locationURI>
+		</link>
+		<link>
+			<name>app_common/GNSE_app_helper.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app_common/GNSE_app_helper.h</locationURI>
 		</link>
 		<link>
 			<name>lib/ATECC608A-TNGLORA</name>

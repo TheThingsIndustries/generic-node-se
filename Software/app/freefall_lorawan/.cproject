@@ -70,7 +70,9 @@
                                 <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.2083657450" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level" useByScannerDiscovery="false"/>
 
                                 <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.1758247658" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
-
+                                    									
+                                    <listOptionValue builtIn="false" value="GNSE_APP_NAME=&quot;freefall_lorawan&quot;"/>
+                                    									
                                     <listOptionValue builtIn="false" value="STM32WL55xx"/>
 
                                     <listOptionValue builtIn="false" value="CORE_CM4"/>
@@ -108,7 +110,9 @@
                                     <listOptionValue builtIn="false" value="../../../lib/BUZZER"/>
 
                                     <listOptionValue builtIn="false" value="../../"/>
-
+                                    									
+                                    <listOptionValue builtIn="false" value="../../app_common"/>
+                                    									
                                     <listOptionValue builtIn="false" value="../conf"/>
 
                                     <listOptionValue builtIn="false" value="../"/>
