@@ -14,36 +14,23 @@
 */
 
 /**
- * @file app.h
- * @brief Common file for GNSE applications
+ * @file GNSE_app_helper.h
+ * @brief application helper for GNSE applications
  *
  * @copyright Copyright (c) 2021 The Things Industries B.V.
  *
  */
 
-#ifndef APP_H
-#define APP_H
+#ifndef GNSE_APP_HELPER_H
+#define GNSE_APP_HELPER_H
 
-/**
- * Standard libraries
- */
-#include <stdio.h>
-#include <stdint.h>
-
-/**
- * GNSE libraries
- */
-#include "GNSE_bsp.h"
-#include "SHTC3.h"
-#include "MX25R16.h"
-#include "LIS2DH12.h"
-#include "BUZZER.h"
-
-/**
- * Application helpers
- */
-#include "app_conf.h"
 #include "GNSE_tracer.h"
-#include "GNSE_app_helper.h"
 
-#endif /* APP_H */
+/**
+ * @brief This function prints the application name and compilation time.
+ * Typically invoked at the start of applications.
+ *
+ */
+void GNSE_app_printAppInfo(void);
+
+#endif
