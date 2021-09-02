@@ -36,7 +36,7 @@ int main(void)
   /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
 
-  APP_PPRINTF("\r\n -------------- Starting GNSE basic bootloader -------------- \r\n");
+  GNSE_app_printAppInfo();
   Bootloader_Init();
   Bootloader_HandleInput();
 

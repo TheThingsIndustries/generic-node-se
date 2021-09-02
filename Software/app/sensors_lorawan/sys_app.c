@@ -63,6 +63,7 @@ void SystemApp_Init(void)
 
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
+  GNSE_app_printAppInfo();
 
   APP_PPRINTF("\r\n Powering onboard sensors \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);

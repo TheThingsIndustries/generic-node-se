@@ -49,7 +49,9 @@ int main(void)
   GNSE_TRACER_INIT();
   GNSE_TRACER_START_RX(uart_rxcallback);
 
-  APP_PPRINTF("\r\n -------------- Starting GNSE basic app -------------- \r\n");
+  GNSE_app_printAppInfo();
+
+  APP_PPRINTF("\r\n Testing on-board peripherals \r\n");
 
   APP_PPRINTF("\r\n Testing battery monitoring functionality \r\n");
   battery_report();
@@ -83,7 +85,7 @@ int main(void)
   APP_PPRINTF("\r\n Testing Buzzer functionality \r\n");
   buzzer_play(NUMBER_BUZZER_PLAY, BUZZER_PLAY_INTERVAL);
 
-  APP_PPRINTF("\r\n -------------- Finished GNSE basic app -------------- \r\n");
+  APP_PPRINTF("\r\n Finished on-board testing, blinking LEDs forever \r\n");
   while (1)
   {
     GNSE_BSP_LED_Toggle(LED_BLUE);

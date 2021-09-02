@@ -44,6 +44,7 @@ void SystemApp_Init(void)
 #endif
   /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
+  GNSE_app_printAppInfo();
 
   /* Here user can init the board peripherals and sensors */
 }
