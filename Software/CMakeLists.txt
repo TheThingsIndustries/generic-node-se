@@ -12,7 +12,7 @@
 #-------------------
 # Cmake Setup
 #-------------------
-cmake_minimum_required(VERSION 3.11.1)
+cmake_minimum_required(VERSION 3.16.1)
 
 if(NOT CMAKE_TOOLCHAIN_FILE)
     message(FATAL_ERROR "[ERRR] CMAKE_TOOLCHAIN_FILE not specified")
@@ -33,7 +33,8 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 # Project Setup
 #-------------------
 enable_language(C ASM)
-project(main)
+project(${TARGET_APP})
+set (APP_BUILD_DIR app/${TARGET_APP})
 set (APP_LIST
 "app_template"
 "basic"
@@ -115,105 +116,90 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-flto " CACHE INTERNAL "Linker options for r
 #------------------
 # Cross Compilation Flags
 #-----------------
-if(CMAKE_CROSSCOMPILING STREQUAL "1")
-    message(STATUS "[INFO] Cross compiling for ${MCU}")
-    message(STATUS "[INFO] Startup file used is ${STARTUP_FILE}")
-    # Control ARM Semihosting support
-    if(NOT SEMIHOSTING)
-        set(SEMIHOSTING 0)
-        message(WARNING "[WARN] Semihosting support not specified: Enabling by default")
-    endif()
-    #-------------------
-    # General Flags for cross
-    #-------------------
-    string(APPEND OBJECT_GEN_FLAGS " \
-    -mcpu=${MCU_SPEC} \
-    -mthumb \
-    -mthumb-interwork \
-    -mabi=aapcs \
-    ${FLOAT_SPEC} \
-    ")
-    #-------------------
-    # CFLAGS for cross
-    #-------------------
-    string(APPEND CMAKE_C_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
-    #-------------------
-    # ASMFLAGS for cross
-    #-------------------
-    string(APPEND CMAKE_ASM_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
-    #-------------------
-    # LFLAGS for cross
-    #-------------------
-    string(APPEND CMAKE_EXE_LINKER_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
-    find_file(LINKER_SCRIPT_PATH
-        NAMES "${LINKER_SCRIPT}"
-        PATHS
-        ${CMAKE_CURRENT_LIST_DIR}
-        )
-    if(DEFINED LINKER_SCRIPT_PATH)
-        message(STATUS "[INFO] Using linker file at ${LINKER_SCRIPT_PATH}")
-        string(APPEND CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT_PATH} ")
-    else()
-        message(FATAL_ERROR "[ERRR] Could not find linker script ${LINKER_SCRIPT}")
-    endif()
-
-    find_file(LINKER_SCRIPT_MEM_PATH
-        NAMES "${LINKER_SCRIPT_MEM}"
-        PATHS
-        ${CMAKE_CURRENT_LIST_DIR}
-        )
-    if(DEFINED LINKER_SCRIPT_MEM_PATH)
-        message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
-        string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
-    endif()
-
-    if("${SEMIHOSTING}" STREQUAL "1")
-        string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
-    else()
-        string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
-    endif()
-#------------------
-# Native Compilation Flags
-#-----------------
+message(STATUS "[INFO] Cross compiling for ${MCU}")
+message(STATUS "[INFO] Startup file used is ${STARTUP_FILE}")
+# Control ARM Semihosting support
+if(NOT SEMIHOSTING)
+set(SEMIHOSTING 0)
+message(WARNING "[WARN] Semihosting support not specified: Disabling by default")
+endif()
+#-------------------
+# General Flags for cross
+#-------------------
+string(APPEND OBJECT_GEN_FLAGS " \
+-mcpu=${MCU_SPEC} \
+-mthumb \
+-mthumb-interwork \
+-mabi=aapcs \
+${FLOAT_SPEC} \
+")
+#-------------------
+# CFLAGS for cross
+#-------------------
+string(APPEND CMAKE_C_FLAGS " \
+${OBJECT_GEN_FLAGS} \
+")
+#-------------------
+# ASMFLAGS for cross
+#-------------------
+string(APPEND CMAKE_ASM_FLAGS " \
+${OBJECT_GEN_FLAGS} \
+")
+#-------------------
+# LFLAGS for cross
+#-------------------
+string(APPEND CMAKE_EXE_LINKER_FLAGS " \
+${OBJECT_GEN_FLAGS} \
+")
+find_file(LINKER_SCRIPT_PATH
+NAMES "${LINKER_SCRIPT}"
+PATHS
+${CMAKE_CURRENT_LIST_DIR}
+)
+if(DEFINED LINKER_SCRIPT_PATH)
+message(STATUS "[INFO] Using linker file at ${LINKER_SCRIPT_PATH}")
+string(APPEND CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT_PATH} ")
 else()
-    # Flags and options to set while compiling natively
-    message(STATUS "[INFO] Compiling natively")
-    #-------------------
-    # General Flags for native
-    #-------------------
-    string(APPEND OBJECT_GEN_FLAGS " \
-    --coverage \
-    ")
-    #-------------------
-    # CFLAGS for native
-    #-------------------
-    string(APPEND CMAKE_C_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
-    #-------------------
-    # ASMFLAGS for native
-    #-------------------
-    string(APPEND CMAKE_ASM_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
-    #-------------------
-    # LFLAGS for native
-    #-------------------
-    string(APPEND CMAKE_EXE_LINKER_FLAGS " \
-    ${OBJECT_GEN_FLAGS} \
-    ")
+message(FATAL_ERROR "[ERRR] Could not find linker script ${LINKER_SCRIPT}")
 endif()
 
-# Buidling Specified Application
+find_file(LINKER_SCRIPT_MEM_PATH
+NAMES "${LINKER_SCRIPT_MEM}"
+PATHS
+${CMAKE_CURRENT_LIST_DIR}
+)
+if(DEFINED LINKER_SCRIPT_MEM_PATH)
+message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
+string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
+endif()
+
+if("${SEMIHOSTING}" STREQUAL "1")
+string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
+else()
+string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
+endif()
+
+#-------------------
+# Build target application
+#-------------------
 if(TARGET_APP IN_LIST APP_LIST)
     add_subdirectory(target)
-    add_subdirectory(app/${TARGET_APP})
+    add_subdirectory(${APP_BUILD_DIR})
+    target_compile_definitions(${PROJECT_NAME}.elf
+    PUBLIC
+    ${MCU}
+    SEMIHOSTING=${SEMIHOSTING}
+    -DGNSE_APP_NAME="${TARGET_APP}"
+    )
+    # Create output in hex and binary format
+    create_hex_output(${PROJECT_NAME} ${APP_BUILD_DIR})
+    create_bin_output(${PROJECT_NAME} ${APP_BUILD_DIR})
+    # Add additional files to the make clean
+    set_property(DIRECTORY PROPERTY ADDITIONAL_CLEAN_FILES
+    "${APP_BUILD_DIR}/${PROJECT_NAME}.map"
+    "${APP_BUILD_DIR}/${PROJECT_NAME}.bin"
+    "${APP_BUILD_DIR}/${PROJECT_NAME}.hex"
+    )
 else()
     message(FATAL_ERROR "Given TARGET_APP unknown")
 endif()
@@ -223,3 +209,4 @@ unset(SEMIHOSTING)
 unset(CMAKE_TOOLCHAIN_FILE)
 unset(CMAKE_BUILD_TYPE)
 unset(TARGET_APP)
+unset(APP_BUILD_DIR)
