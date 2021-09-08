@@ -48,7 +48,8 @@ int main(void)
 
 #if (GNSE_TINY_TRACER_ENABLE)
     /* Initialize Tracer/Logger */
-    GNSE_TRACER_INIT()
+    GNSE_TRACER_INIT();
+    GNSE_app_printAppInfo();
 #endif
 
     /* Initialize LED */

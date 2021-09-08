@@ -28,7 +28,6 @@ set(TOOLCHAIN_INC_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/include)
 set(TOOLCHAIN_LIB_DIR ${TOOLCHAIN_PREFIX}/${TOOLCHAIN}/lib)
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR arm)
-set(CMAKE_CROSSCOMPILING 1)
 set(SEMIHOSTING 0)
 
 if (WIN32)
@@ -47,13 +46,13 @@ SET(CMAKE_RANLIB ${TOOLCHAIN_BIN_DIR}/${CROSS_TOOLCHAIN}gcc-ranlib${TOOLCHAIN_EX
 #---------------------------------------------------------------------------------------
 # Creates output in hex format
 #---------------------------------------------------------------------------------------
-function(create_hex_output TARGET)
-    add_custom_target(${TARGET}.hex ALL DEPENDS ${TARGET}.elf COMMAND ${CMAKE_OBJCOPY} -Oihex ${TARGET}.elf ${TARGET}.hex)
+function(create_hex_output TARGET TARGET_PATH)
+    add_custom_target(${TARGET}.hex ALL DEPENDS ${TARGET}.elf COMMAND ${CMAKE_OBJCOPY} -Oihex ${TARGET_PATH}/${TARGET}.elf ${TARGET_PATH}/${TARGET}.hex)
 endfunction()
 
 #---------------------------------------------------------------------------------------
 # Creates output in binary format
 #---------------------------------------------------------------------------------------
-function(create_bin_output TARGET)
-    add_custom_target(${TARGET}.bin ALL DEPENDS ${TARGET}.elf COMMAND ${CMAKE_OBJCOPY} -Obinary ${TARGET}.elf ${TARGET}.bin)
+function(create_bin_output TARGET TARGET_PATH)
+    add_custom_target(${TARGET}.bin ALL DEPENDS ${TARGET}.elf COMMAND ${CMAKE_OBJCOPY} -Obinary ${TARGET_PATH}/${TARGET}.elf ${TARGET_PATH}/${TARGET}.bin)
 endfunction()

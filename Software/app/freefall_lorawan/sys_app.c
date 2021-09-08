@@ -76,6 +76,7 @@ void SystemApp_Init(void)
   /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
+  GNSE_app_printAppInfo();
 
   /* Set I2C interface */
   GNSE_BSP_Sensor_I2C1_Init();

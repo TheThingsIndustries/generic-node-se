@@ -62,6 +62,7 @@ void SystemApp_Init(void)
   /* Initialize Tracer/Logger */
   GNSE_TRACER_INIT();
   GNSE_TRACER_TIMESTAMP(TimestampNow);
+  GNSE_app_printAppInfo();
 
   APP_PPRINTF("\r\n Powering and using HW secure element (ATECC608A-TNGLORA) \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
