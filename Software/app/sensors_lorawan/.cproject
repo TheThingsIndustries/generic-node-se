@@ -111,7 +111,7 @@
 
                                     <listOptionValue builtIn="false" value="../conf"/>
 
-                                    <listOptionValue builtIn="false" value="../lib_dependency"/>
+                                    <listOptionValue builtIn="false" value="../"/>
 
                                     <listOptionValue builtIn="false" value="../../../target/CMSIS/Core/Include"/>
 

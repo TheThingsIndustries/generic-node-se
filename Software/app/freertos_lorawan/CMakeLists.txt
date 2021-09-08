@@ -39,7 +39,7 @@ target_include_directories(lorawan
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     )
 target_compile_definitions(lorawan
@@ -83,7 +83,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan
     ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/freertos_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/MCU_FLASH

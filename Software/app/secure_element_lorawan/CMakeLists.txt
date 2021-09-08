@@ -60,7 +60,7 @@ target_include_directories(lorawan
     PRIVATE
     ${PROJECT_SOURCE_DIR}/target
     ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/SPIFFS
@@ -112,7 +112,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/app
     ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan
     ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/conf
-    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan/lib_dependency
+    ${PROJECT_SOURCE_DIR}/app/secure_element_lorawan
     ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
     ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
     ${PROJECT_SOURCE_DIR}/lib/SPIFFS
