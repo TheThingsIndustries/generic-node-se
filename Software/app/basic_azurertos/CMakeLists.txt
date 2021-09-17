@@ -45,3 +45,7 @@ target_include_directories(${PROJECT_NAME}.elf
     ${PROJECT_SOURCE_DIR}/lib/threadx/common/inc
     ${PROJECT_SOURCE_DIR}/lib/threadx/ports/cortex_m4/gnu/inc
     )
+target_link_libraries(${PROJECT_NAME}.elf
+    PUBLIC
+    hal
+    )
