@@ -1,6 +1,8 @@
 # GNSE Software
 The software provides a boilerplate of applications and libraries that can be used as it is or customized to serve a specific use case.
 
+![GNSE Software Architecture](../Docs/img_sw/sw_arch.png)
+
 ## Structure
 
 - [target](./target/README.md) folder contains STM32WL low level target files
