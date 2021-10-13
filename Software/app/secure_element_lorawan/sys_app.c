@@ -24,6 +24,8 @@
 #include "stm32_systime.h"
 #include "GNSE_lpm.h"
 #include "GNSE_rtc.h"
+#include "GNSE_bm.h"
+#include "sensors.h"
 
 #define MAX_TS_SIZE (int)16
 
@@ -68,7 +70,10 @@ void SystemApp_Init(void)
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
   HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
+  APP_PPRINTF("\r\n Initializing on-board sensors bus I2C1 \r\n");
   GNSE_BSP_Sensor_I2C1_Init();
+  APP_PPRINTF("\r\n Initializing on-board sensors \r\n");
+  sensors_init();
 }
 
 void GNSE_LPM_PreStopModeHook(void)

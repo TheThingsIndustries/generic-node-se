@@ -19,9 +19,6 @@
 #include "GNSE_bsp.h"
 #include "stm32wlxx_it.h"
 
-extern RTC_HandleTypeDef hrtc;
-extern SUBGHZ_HandleTypeDef hsubghz;
-
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
 /******************************************************************************/
@@ -124,6 +121,15 @@ void EXTI1_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
 }
+
+/**
+  * @brief This function handles EXTI Line 3 Interrupt.
+  */
+void EXTI3_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+}
+
 
 void USART2_IRQHandler(void)
 {

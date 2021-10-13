@@ -27,25 +27,6 @@ extern "C" {
 #define ACTIVE_REGION        LORAMAC_REGION_EU868
 
 /*!
- * Defines the application data transmission duty cycle. 10s, value in [ms].
- */
-#define APP_TX_DUTYCYCLE                            10000
-
-/*!
- * LoRaWAN application port
- * @note do not use 224. It is reserved for certification
- */
-#define LORAWAN_APP_PORT                            2
-
-/**
- * Used for testing and switching the device between Classes A & B & C
- */
-#define LRAWAN_APP_SWITCH_CLASS_PORT                3
-#define LRAWAN_APP_SWITCH_CLASS_A                   0
-#define LRAWAN_APP_SWITCH_CLASS_B                   1
-#define LRAWAN_APP_SWITCH_CLASS_C                   2
-
-/*!
  * LoRaWAN default endNode class port
  */
 #define LORAWAN_DEFAULT_CLASS                       CLASS_A
@@ -70,7 +51,7 @@ extern "C" {
  * LoRaWAN Default data Rate Data Rate
  * @note Please note that LORAWAN_DEFAULT_DATA_RATE is used only when LORAWAN_ADR_STATE is disabled
  */
-#define LORAWAN_DEFAULT_DATA_RATE                   DR_0
+#define LORAWAN_DEFAULT_DATA_RATE                   DR_3
 
 /*!
  * User application data buffer size

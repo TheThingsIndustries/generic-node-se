@@ -25,6 +25,24 @@
 #include "stm32_seq.h"
 #include "LmHandler.h"
 #include "lora_info.h"
+#include "sensors.h"
+
+static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
+
+/**
+  * @brief LoRa State Machine states
+  */
+typedef enum TxEventType_e
+{
+  /**
+    * @brief Application data transmission issue based on timer every TxDutyCycleTime
+    */
+  TX_ON_TIMER,
+  /**
+    * @brief AppdataTransmition external event plugged on OnSendEvent( )
+    */
+  TX_ON_EVENT
+} TxEventType_t;
 
 /**
   * @brief  LoRa endNode send request
@@ -39,6 +57,13 @@ static void SendTxData(void);
   * @return none
   */
 static void OnTxTimerEvent(void *context);
+
+/**
+  * @brief  RX LED timer callback function
+  * @param  LED context
+  * @return none
+  */
+static void OnRxTimerLedEvent(void *context);
 
 /**
   * @brief  join event callback function
@@ -102,18 +127,29 @@ static LmHandlerParams_t LmHandlerParams =
         .DefaultClass = LORAWAN_DEFAULT_CLASS,
         .AdrEnable = LORAWAN_ADR_STATE,
         .TxDatarate = LORAWAN_DEFAULT_DATA_RATE,
-        .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY
-        };
+        .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
+
+/**
+  * @brief Type of Event to generate application Tx
+  */
+static TxEventType_t EventType = TX_ON_EVENT;
 
 /**
   * @brief Timer to handle the application Tx
   */
 static UTIL_TIMER_Object_t TxTimer;
 
+/**
+  * @brief Timer to handle rx led events
+  */
+static UTIL_TIMER_Object_t RxLedTimer;
+
 void LoRaWAN_Init(void)
 {
+  // User can add any indication here (LED manipulation or Buzzer)
+
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), UTIL_SEQ_RFU, SendTxData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
@@ -125,29 +161,64 @@ void LoRaWAN_Init(void)
 
   LmHandlerJoin(ActivationType);
 
-  /* send every time timer elapses */
-  UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerEvent, NULL);
-  UTIL_TIMER_SetPeriod(&TxTimer, APP_TX_DUTYCYCLE);
-  UTIL_TIMER_Start(&TxTimer);
+  if (EventType == TX_ON_TIMER)
+  {
+    /* send every time timer elapses */
+    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerEvent, NULL);
+    UTIL_TIMER_SetPeriod(&TxTimer, sensors_tx_dutycycle);
+    UTIL_TIMER_Start(&TxTimer);
+  }
+  else
+  {
+    GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
+  }
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if (GPIO_Pin == BUTTON_SW1_PIN)
+  {
+    /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
+    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  }
 }
 
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 {
+  uint32_t rxbuffer = 0;
   if ((appData != NULL) && (params != NULL))
   {
-    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Unhandled Downlink on F_PORT:%d \r\n", appData->Port);
+    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
+    rxbuffer = sensors_downlink_conf_check(appData);
+    if (rxbuffer)
+    {
+        UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnRxTimerLedEvent, NULL);
+        UTIL_TIMER_SetPeriod(&RxLedTimer, SENSORS_LED_RX_PERIOD_MS);
+        UTIL_TIMER_Start(&RxLedTimer);
+        UTIL_TIMER_SetPeriod(&TxTimer, rxbuffer);
+    }
+    else /* Function returns 0 on fail */
+    {
+        UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnRxTimerLedEvent, NULL);
+        UTIL_TIMER_SetPeriod(&RxLedTimer, SENSORS_LED_UNHANDLED_RX_PERIOD_MS);
+        UTIL_TIMER_Start(&RxLedTimer);
+    }
   }
 }
 
 static void SendTxData(void)
 {
+  sensors_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
-  AppData.Port = LORAWAN_APP_PORT;
-  AppData.BufferSize = 3;
-  AppData.Buffer[0] = 0xAA;
-  AppData.Buffer[1] = 0xBB;
-  AppData.Buffer[2] = 0xCC;
+  sensors_sample(&sensor_data);
+  AppData.Port = SENSORS_PAYLOAD_APP_PORT;
+  AppData.BufferSize = 5;
+  AppData.Buffer[0] = (uint8_t)(sensor_data.battery_voltage / 100);
+  AppData.Buffer[1] = (uint8_t)((sensor_data.temperature / 100) >> 8);
+  AppData.Buffer[2] = (uint8_t)((sensor_data.temperature / 100) & 0xFF);
+  AppData.Buffer[3] = (uint8_t)((sensor_data.humidity / 100) >> 8);
+  AppData.Buffer[4] = (uint8_t)((sensor_data.humidity / 100) & 0xFF);
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
@@ -161,10 +232,32 @@ static void SendTxData(void)
 
 static void OnTxTimerEvent(void *context)
 {
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
 
   /*Wait for next tx slot*/
   UTIL_TIMER_Start(&TxTimer);
+}
+
+static void OnRxTimerLedEvent(void *context)
+{
+  static uint8_t led_counter = 0;
+
+  if (led_counter == 0)
+  {
+    GNSE_BSP_LED_Init(LED_GREEN);
+  }
+  if (led_counter < SENSORS_LED_RX_TOGGLES)
+  {
+    GNSE_BSP_LED_Toggle(LED_GREEN);
+    led_counter++;
+  }
+  else
+  {
+    led_counter = 0;
+    GNSE_BSP_LED_Analog(LED_GREEN);
+    UTIL_TIMER_Stop(&RxLedTimer);
+
+  }
 }
 
 static void OnTxData(LmHandlerTxParams_t *params)
@@ -206,6 +299,12 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
     else
     {
       APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOIN FAILED\r\n");
+      // MlmeReq_t mlmeReq;
+
+      // /* Starts the OTAA join procedure */
+      // mlmeReq.Type = MLME_JOIN;
+      // mlmeReq.Req.Join.Datarate = DR_1;
+      // LoRaMacMlmeRequest(&mlmeReq);
     }
   }
 }

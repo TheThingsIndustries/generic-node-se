@@ -36,6 +36,29 @@
  */
 #define DEBUGGER_ON       1
 
+/*!
+ * LoRaWAN application port where sensors information can be retrieved by the application server
+ * @note do not use 224. It is reserved for certification
+ */
+#define SENSORS_PAYLOAD_APP_PORT        2
+
+/*! LoRaWAN application port where sensors transmission/uplink interval can be changed (via a downlink)
+ *  @note Payload signifies the amount of seconds
+ * */
+#define SENSORS_DOWNLINK_CONF_PORT        1
+
+/* Default, max, and min time interval of the TX dutycycle window in seconds */
+#define SENSORS_TX_DUTYCYCLE_DEFAULT_S 10
+#define SENSORS_DUTYCYCLE_CONF_MAX_S 8640
+#define SENSORS_DUTYCYCLE_CONF_MIN_S 5
+
+/**
+  * RX LED definitions
+  */
+#define SENSORS_LED_RX_PERIOD_MS 200
+#define SENSORS_LED_UNHANDLED_RX_PERIOD_MS 20
+#define SENSORS_LED_RX_TOGGLES 5
+
 /**
   * sequencer definitions
   */
@@ -57,7 +80,7 @@ typedef enum
 typedef enum
 {
   CFG_SEQ_Task_LmHandlerProcess,
-  CFG_SEQ_Task_LoRaSendOnTxTimer,
+  CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent,
   CFG_SEQ_Task_NBR
 } CFG_SEQ_Task_Id_t;
 
