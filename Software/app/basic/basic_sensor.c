@@ -96,6 +96,8 @@ void accelerometer_read_data_polling(uint8_t n_reads, uint32_t read_delay)
     /* Set device in continuous mode with 12 bit resol. */
     lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_HR_12bit);
 
+    HAL_Delay(read_delay);
+
     /* Read samples in polling mode (no int) */
     for (read_counter = 0; read_counter < n_reads; read_counter++)
     {
