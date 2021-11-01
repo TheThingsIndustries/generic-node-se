@@ -501,9 +501,13 @@ void LmHandlerJoin(ActivationType_t mode)
 
     /* Starts the OTAA join procedure */
     mlmeReq.Type = MLME_JOIN;
-    mlmeReq.Req.Join.Datarate = LmHandlerParams.TxDatarate;
+    mlmeReq.Req.Join.Datarate = LmHandlerParams.JoinDatarate;
+    LmHandlerParams.JoinDatarate--;
+    if(LmHandlerParams.JoinDatarate < DR_0)
+    {
+      LmHandlerParams.JoinDatarate = DR_5; // This is designed to be functional in EU868
+    }
     LoRaMacMlmeRequest(&mlmeReq);
-
   }
   else
   {
