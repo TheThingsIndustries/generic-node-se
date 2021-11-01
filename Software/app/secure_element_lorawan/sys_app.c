@@ -54,7 +54,7 @@ void SystemApp_Init(void)
   /*Initialises timer and RTC*/
   UTIL_TIMER_Init();
 
- /* Initialize the Low Power Manager and Debugger */
+  /* Initialize the Low Power Manager and Debugger */
 #if defined(DEBUGGER_ON) && (DEBUGGER_ON == 1)
   GNSE_LPM_Init(GNSE_LPM_SLEEP_STOP_DEBUG_MODE);
 #elif defined(DEBUGGER_ON) && (DEBUGGER_ON == 0)
@@ -72,8 +72,20 @@ void SystemApp_Init(void)
   HAL_Delay(LOAD_SWITCH_SENSORS_DELAY_MS);
   APP_PPRINTF("\r\n Initializing on-board sensors bus I2C1 \r\n");
   GNSE_BSP_Sensor_I2C1_Init();
-  APP_PPRINTF("\r\n Initializing on-board sensors \r\n");
+  APP_PPRINTF("\r\n Initializing on-board sensors and LEDs \r\n");
   sensors_init();
+  GNSE_BSP_LED_Init(LED_BLUE);
+  GNSE_BSP_LED_Init(LED_RED);
+  GNSE_BSP_LED_Init(LED_GREEN);
+  for (size_t counter = 0; counter < LED_STARTUP_TOGGEL; counter++)
+  {
+    GNSE_BSP_LED_Toggle(LED_BLUE);
+    HAL_Delay(LED_STARTUP_DELAY);
+    GNSE_BSP_LED_Toggle(LED_RED);
+    HAL_Delay(LED_STARTUP_DELAY);
+    GNSE_BSP_LED_Toggle(LED_GREEN);
+    HAL_Delay(LED_STARTUP_DELAY);
+  }
 }
 
 void GNSE_LPM_PreStopModeHook(void)

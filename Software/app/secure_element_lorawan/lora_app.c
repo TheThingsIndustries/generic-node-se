@@ -59,11 +59,23 @@ static void SendTxData(void);
 static void OnTxTimerEvent(void *context);
 
 /**
+  * @brief  LED Tx timer callback function
+  * @param  context ptr of LED context
+  */
+static void OnTxTimerLedEvent(void *context);
+
+/**
   * @brief  RX LED timer callback function
   * @param  LED context
   * @return none
   */
 static void OnRxTimerLedEvent(void *context);
+
+/**
+  * @brief  LED Join timer callback function
+  * @param  context ptr of LED context
+  */
+static void OnJoinTimerLedEvent(void *context);
 
 /**
   * @brief  join event callback function
@@ -115,8 +127,7 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
         .OnMacProcess = OnMacProcessNotify,
         .OnJoinRequest = OnJoinRequest,
         .OnTxData = OnTxData,
-        .OnRxData = OnRxData
-        };
+        .OnRxData = OnRxData};
 
 /**
   * @brief LoRaWAN handler parameters
@@ -127,6 +138,7 @@ static LmHandlerParams_t LmHandlerParams =
         .DefaultClass = LORAWAN_DEFAULT_CLASS,
         .AdrEnable = LORAWAN_ADR_STATE,
         .TxDatarate = LORAWAN_DEFAULT_DATA_RATE,
+        .JoinDatarate = LORAWAN_DEFAULT_JOIN_DATA_RATE,
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
 /**
@@ -140,13 +152,28 @@ static TxEventType_t EventType = TX_ON_EVENT;
 static UTIL_TIMER_Object_t TxTimer;
 
 /**
+  * @brief Timer to handle the application Tx Led to toggle
+  */
+static UTIL_TIMER_Object_t TxLedTimer;
+
+/**
   * @brief Timer to handle rx led events
   */
 static UTIL_TIMER_Object_t RxLedTimer;
 
+/**
+  * @brief Timer to handle the application Join Led to toggle
+  */
+static UTIL_TIMER_Object_t JoinLedTimer;
+
 void LoRaWAN_Init(void)
 {
-  // User can add any indication here (LED manipulation or Buzzer)
+  UTIL_TIMER_Create(&TxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
+  UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
+  UTIL_TIMER_Create(&JoinLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
+  UTIL_TIMER_SetPeriod(&TxLedTimer, 500);
+  UTIL_TIMER_SetPeriod(&RxLedTimer, 500);
+  UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
@@ -159,6 +186,7 @@ void LoRaWAN_Init(void)
 
   LmHandlerConfigure(&LmHandlerParams);
 
+  UTIL_TIMER_Start(&JoinLedTimer);
   LmHandlerJoin(ActivationType);
 
   if (EventType == TX_ON_TIMER)
@@ -188,20 +216,17 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   uint32_t rxbuffer = 0;
   if ((appData != NULL) && (params != NULL))
   {
+    GNSE_BSP_LED_Off(LED_GREEN);
+    GNSE_BSP_LED_On(LED_BLUE);
+    UTIL_TIMER_Start(&RxLedTimer);
+
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
     rxbuffer = sensors_downlink_conf_check(appData);
     if (rxbuffer)
     {
-        UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnRxTimerLedEvent, NULL);
-        UTIL_TIMER_SetPeriod(&RxLedTimer, SENSORS_LED_RX_PERIOD_MS);
-        UTIL_TIMER_Start(&RxLedTimer);
-        UTIL_TIMER_SetPeriod(&TxTimer, rxbuffer);
     }
     else /* Function returns 0 on fail */
     {
-        UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnRxTimerLedEvent, NULL);
-        UTIL_TIMER_SetPeriod(&RxLedTimer, SENSORS_LED_UNHANDLED_RX_PERIOD_MS);
-        UTIL_TIMER_Start(&RxLedTimer);
     }
   }
 }
@@ -238,32 +263,28 @@ static void OnTxTimerEvent(void *context)
   UTIL_TIMER_Start(&TxTimer);
 }
 
+static void OnTxTimerLedEvent(void *context)
+{
+  GNSE_BSP_LED_Off(LED_GREEN);
+}
+
 static void OnRxTimerLedEvent(void *context)
 {
-  static uint8_t led_counter = 0;
+  GNSE_BSP_LED_Off(LED_BLUE);
+}
 
-  if (led_counter == 0)
-  {
-    GNSE_BSP_LED_Init(LED_GREEN);
-  }
-  if (led_counter < SENSORS_LED_RX_TOGGLES)
-  {
-    GNSE_BSP_LED_Toggle(LED_GREEN);
-    led_counter++;
-  }
-  else
-  {
-    led_counter = 0;
-    GNSE_BSP_LED_Analog(LED_GREEN);
-    UTIL_TIMER_Stop(&RxLedTimer);
-
-  }
+static void OnJoinTimerLedEvent(void *context)
+{
+  GNSE_BSP_LED_Toggle(LED_RED);
 }
 
 static void OnTxData(LmHandlerTxParams_t *params)
 {
   if ((params != NULL) && (params->IsMcpsConfirm != 0))
   {
+    GNSE_BSP_LED_On(LED_GREEN);
+    UTIL_TIMER_Start(&TxLedTimer);
+
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### ========== MCPS-Confirm =============\r\n");
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
             params->AppData.Port, params->Datarate, params->TxPower);
@@ -286,6 +307,8 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
   {
     if (joinParams->Status == LORAMAC_HANDLER_SUCCESS)
     {
+      UTIL_TIMER_Stop(&JoinLedTimer);
+      GNSE_BSP_LED_Off(LED_RED);
       APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOINED = ");
       if (joinParams->Mode == ACTIVATION_TYPE_ABP)
       {

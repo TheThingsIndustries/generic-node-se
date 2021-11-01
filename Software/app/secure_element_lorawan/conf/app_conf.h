@@ -52,12 +52,8 @@
 #define SENSORS_DUTYCYCLE_CONF_MAX_S 8640
 #define SENSORS_DUTYCYCLE_CONF_MIN_S 5
 
-/**
-  * RX LED definitions
-  */
-#define SENSORS_LED_RX_PERIOD_MS 200
-#define SENSORS_LED_UNHANDLED_RX_PERIOD_MS 20
-#define SENSORS_LED_RX_TOGGLES 5
+#define LED_STARTUP_TOGGEL 6
+#define LED_STARTUP_DELAY 100
 
 /**
   * sequencer definitions
