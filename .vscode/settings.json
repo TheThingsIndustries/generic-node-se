@@ -1,0 +1,16 @@
+{
+    // "cmake.generator" can be "Ninja" or "MinGW Makefiles" depending on your environment.
+    "cmake.generator":"Unix Makefiles",
+    "cmake.configureSettings": {
+        // "TARGET_APP" can be any application that exists inside `/Software/app` folder.
+        "TARGET_APP":"basic",
+        "CMAKE_BUILD_TYPE":"Debug",
+        "CMAKE_TOOLCHAIN_FILE":"${workspaceFolder}/Software/cross.cmake"
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}/Software",
+    "cmake.buildDirectory":"${workspaceFolder}/Software/build/debug",
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "C_Cpp.clang_format_style": "Visual Studio",
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+}

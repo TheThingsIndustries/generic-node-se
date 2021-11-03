@@ -76,9 +76,6 @@ dkms.conf
 # CMAKE build path
 /Software/build/*
 
-# Visual Studio Code IDE files
-.vscode/
-
 # STM32CubeIDE (eclipse) build path
 /Software/app/app_template/Debug/
 /Software/app/app_template/.settings/
