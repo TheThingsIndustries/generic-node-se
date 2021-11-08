@@ -40,6 +40,20 @@
  * LoRaWAN application port where sensors information can be retrieved by the application server
  * @note do not use 224. It is reserved for certification
  */
+#define GNSE_HEARTBEAT_APP_PORT        1
+
+#define GNSE_HEARTBEAT_APP_BUFFER_SIZE      7
+
+#define GNSE_HW_VERSION_MAIN   (0x01U)
+#define GNSE_HW_VERSION_SUB1   (0x01U)
+
+#define GNSE_FW_VERSION_MAIN   (0x01U)
+#define GNSE_FW_VERSION_SUB1   (0x00U)
+
+/*!
+ * LoRaWAN application port where sensors information can be retrieved by the application server
+ * @note do not use 224. It is reserved for certification
+ */
 #define SENSORS_PAYLOAD_APP_PORT        2
 
 /*! LoRaWAN application port where sensors transmission/uplink interval can be changed (via a downlink)

@@ -44,12 +44,8 @@ typedef enum TxEventType_e
   TX_ON_EVENT
 } TxEventType_t;
 
-/**
-  * @brief  LoRa endNode send request
-  * @param  none
-  * @return none
-  */
-static void SendTxData(void);
+static void SendSensorData(void);
+static void SendHearBeat(void);
 
 /**
   * @brief  TX timer callback function
@@ -144,7 +140,7 @@ static LmHandlerParams_t LmHandlerParams =
 /**
   * @brief Type of Event to generate application Tx
   */
-static TxEventType_t EventType = TX_ON_EVENT;
+static TxEventType_t EventType = TX_ON_TIMER;
 
 /**
   * @brief Timer to handle the application Tx
@@ -176,7 +172,7 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendHearBeat);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
@@ -221,17 +217,24 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
     UTIL_TIMER_Start(&RxLedTimer);
 
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
-    rxbuffer = sensors_downlink_conf_check(appData);
-    if (rxbuffer)
+    switch (appData->Port)
     {
-    }
-    else /* Function returns 0 on fail */
-    {
+    case SENSORS_DOWNLINK_CONF_PORT:
+      UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendSensorData);
+    default:
+      break;
     }
   }
 }
+// rxbuffer = sensors_downlink_conf_check(appData);
+// if (rxbuffer)
+// {
+// }
+// else /* Function returns 0 on fail */
+// {
+// }
 
-static void SendTxData(void)
+static void SendSensorData(void)
 {
   sensors_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
@@ -244,6 +247,29 @@ static void SendTxData(void)
   AppData.Buffer[2] = (uint8_t)((sensor_data.temperature / 100) & 0xFF);
   AppData.Buffer[3] = (uint8_t)((sensor_data.humidity / 100) >> 8);
   AppData.Buffer[4] = (uint8_t)((sensor_data.humidity / 100) & 0xFF);
+
+  if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
+  {
+    APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_L, "SEND REQUEST\r\n");
+  }
+  else if (nextTxIn > 0)
+  {
+    APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
+  }
+}
+
+static void SendHearBeat(void)
+{
+  UTIL_TIMER_Time_t nextTxIn = 0;
+  uint16_t battery_voltage = GNSE_BM_GetBatteryVoltage();
+
+  AppData.Port = GNSE_HEARTBEAT_APP_PORT;
+  AppData.BufferSize = GNSE_HEARTBEAT_APP_BUFFER_SIZE;
+  AppData.Buffer[0] = (uint8_t)(battery_voltage / 100);
+  AppData.Buffer[1] = (uint8_t)(GNSE_FW_VERSION_MAIN);
+  AppData.Buffer[2] = (uint8_t)(GNSE_FW_VERSION_SUB1);
+  AppData.Buffer[3] = (uint8_t)(GNSE_HW_VERSION_MAIN);
+  AppData.Buffer[4] = (uint8_t)(GNSE_HW_VERSION_SUB1);
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
@@ -322,12 +348,6 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
     else
     {
       APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOIN FAILED\r\n");
-      // MlmeReq_t mlmeReq;
-
-      // /* Starts the OTAA join procedure */
-      // mlmeReq.Type = MLME_JOIN;
-      // mlmeReq.Req.Join.Datarate = DR_1;
-      // LoRaMacMlmeRequest(&mlmeReq);
     }
   }
 }
