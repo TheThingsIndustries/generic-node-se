@@ -1,24 +1,5 @@
-/**
-  ******************************************************************************
-  * @file    lora_app.c
-  * @author  MCD Application Team
-  * @brief   Application of the LRWAN Middleware
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
-  *
-  ******************************************************************************
-  */
-
 #include "app.h"
-#include "Region.h" /* Needed for LORAWAN_DEFAULT_DATA_RATE */
+#include "Region.h"
 #include "stm32_timer.h"
 #include "sys_app.h"
 #include "lora_app.h"
@@ -27,97 +8,40 @@
 #include "lora_info.h"
 #include "sensors.h"
 #include "GNSE_bm.h"
+#include "GNSE_lpm.h"
 
-static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
+static uint32_t heartbeat_tx_dutycycle = HEARTBEAT_TX_DUTYCYCLE_DEFAULT_S * 1000;
+static uint32_t temperature_tx_dutycycle = TEMPERATURE_TX_DUTYCYCLE_DEFAULT_S * 1000;
 
-/**
-  * @brief LoRa State Machine states
-  */
-typedef enum TxEventType_e
-{
-  /**
-    * @brief Application data transmission issue based on timer every TxDutyCycleTime
-    */
-  TX_ON_TIMER,
-  /**
-    * @brief AppdataTransmition external event plugged on OnSendEvent( )
-    */
-  TX_ON_EVENT
-} TxEventType_t;
+static void SendHeartBeatData(void);
+static void SendTemperatureData(void);
+static void SendAccelerometerData(void);
 
-static void SendSensorData(void);
-static void SendHeartBeat(void);
-static void SendAccelerometerEvent(void);
+static void heartbeat_rx_handle(LmHandlerAppData_t *appData);
+static void HeartBeatTimerEvent(void *context);
+static void TemperatureTimerEvent(void *context);
+static void AccelerometerShakeEvent(void *context);
+static void AccelerometerFreeallEvent(void *context);
+static void BuzzerTimerEvent(void *context);
 
-/**
-  * @brief  TX timer callback function
-  * @param  timer context
-  * @return none
-  */
-static void OnTxTimerEvent(void *context);
-
-/**
-  * @brief  LED Tx timer callback function
-  * @param  context ptr of LED context
-  */
 static void OnTxTimerLedEvent(void *context);
-
-/**
-  * @brief  RX LED timer callback function
-  * @param  LED context
-  * @return none
-  */
 static void OnRxTimerLedEvent(void *context);
-
-/**
-  * @brief  LED Join timer callback function
-  * @param  context ptr of LED context
-  */
 static void OnJoinTimerLedEvent(void *context);
-
-/**
-  * @brief  join event callback function
-  * @param  params
-  * @return none
-  */
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams);
-
-/**
-  * @brief  tx event callback function
-  * @param  params
-  * @return none
-  */
 static void OnTxData(LmHandlerTxParams_t *params);
-
-/**
-  * @brief callback when LoRa endNode has received a frame
-  * @param appData
-  * @param params
-  * @return None
-  */
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
 
-/*!
- * Will be called each time a Radio IRQ is handled by the MAC layer
- *
- */
+static void heartbeat_rx_handle(LmHandlerAppData_t *appData);
+static void temperature_sensor_rx_handle(LmHandlerAppData_t *appData);
+static void accelerometer_sensor_rx_handle(LmHandlerAppData_t *appData);
+static void button_rx_handle(LmHandlerAppData_t *appData);
+static void buzzer_rx_handle(LmHandlerAppData_t *appData);
+static void led_rx_handle(LmHandlerAppData_t *appData);
+
 static void OnMacProcessNotify(void);
-
-/**
-  * @brief User application buffer
-  */
 static uint8_t AppDataBuffer[LORAWAN_APP_DATA_BUFFER_MAX_SIZE];
-
-/**
-  * @brief User application data structure
-  */
 static LmHandlerAppData_t AppData = {0, 0, AppDataBuffer};
-
 static ActivationType_t ActivationType = LORAWAN_DEFAULT_ACTIVATION_TYPE;
-
-/**
-  * @brief LoRaWAN handler Callbacks
-  */
 static LmHandlerCallbacks_t LmHandlerCallbacks =
     {
         .GetBatteryLevel = GetBatteryLevel,
@@ -127,9 +51,6 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
         .OnTxData = OnTxData,
         .OnRxData = OnRxData};
 
-/**
-  * @brief LoRaWAN handler parameters
-  */
 static LmHandlerParams_t LmHandlerParams =
     {
         .ActiveRegion = ACTIVE_REGION,
@@ -139,29 +60,12 @@ static LmHandlerParams_t LmHandlerParams =
         .JoinDatarate = LORAWAN_DEFAULT_JOIN_DATA_RATE,
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
-/**
-  * @brief Type of Event to generate application Tx
-  */
-static TxEventType_t EventType = TX_ON_EVENT;
+static UTIL_TIMER_Object_t HearBeatTxTimer;
+static UTIL_TIMER_Object_t TemperatureTxTimer;
+static UTIL_TIMER_Object_t BuzzerTimer;
 
-/**
-  * @brief Timer to handle the application Tx
-  */
-static UTIL_TIMER_Object_t TxTimer;
-
-/**
-  * @brief Timer to handle the application Tx Led to toggle
-  */
 static UTIL_TIMER_Object_t TxLedTimer;
-
-/**
-  * @brief Timer to handle rx led events
-  */
 static UTIL_TIMER_Object_t RxLedTimer;
-
-/**
-  * @brief Timer to handle the application Join Led to toggle
-  */
 static UTIL_TIMER_Object_t JoinLedTimer;
 
 void LoRaWAN_Init(void)
@@ -174,9 +78,10 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), UTIL_SEQ_RFU, SendSensorData);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), UTIL_SEQ_RFU, SendHeartBeat);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), UTIL_SEQ_RFU, SendAccelerometerEvent);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer), UTIL_SEQ_RFU, SendHeartBeatData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendTemperatureOnTxTimer), UTIL_SEQ_RFU, SendTemperatureData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), UTIL_SEQ_RFU, SendAccelerometerData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), UTIL_SEQ_RFU, SendTemperatureData);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
@@ -189,17 +94,17 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_Start(&JoinLedTimer);
   LmHandlerJoin(ActivationType);
 
-  if (EventType == TX_ON_TIMER)
-  {
-    /* send every time timer elapses */
-    UTIL_TIMER_Create(&TxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerEvent, NULL);
-    UTIL_TIMER_SetPeriod(&TxTimer, sensors_tx_dutycycle);
-    UTIL_TIMER_Start(&TxTimer);
-  }
-  else
-  {
-    GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
-  }
+  UTIL_TIMER_Create(&HearBeatTxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, HeartBeatTimerEvent, NULL);
+  UTIL_TIMER_SetPeriod(&HearBeatTxTimer, heartbeat_tx_dutycycle);
+  UTIL_TIMER_Start(&HearBeatTxTimer);
+
+  UTIL_TIMER_Create(&TemperatureTxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, TemperatureTimerEvent, NULL);
+  UTIL_TIMER_SetPeriod(&TemperatureTxTimer, temperature_tx_dutycycle);
+
+  UTIL_TIMER_Create(&BuzzerTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, BuzzerTimerEvent, NULL);
+  UTIL_TIMER_SetPeriod(&BuzzerTimer, 1000);
+
+  GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -215,19 +120,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
 }
 
-static void SendSensorData(void)
+static void SendTemperatureData(void)
 {
   sensors_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
-  sensors_sample(&sensor_data);
-  AppData.Port = SENSORS_PAYLOAD_APP_PORT;
-  AppData.BufferSize = 5;
-  AppData.Buffer[0] = (uint8_t)(sensor_data.battery_voltage / 100);
-  AppData.Buffer[1] = (uint8_t)((sensor_data.temperature / 100) >> 8);
-  AppData.Buffer[2] = (uint8_t)((sensor_data.temperature / 100) & 0xFF);
-  AppData.Buffer[3] = (uint8_t)((sensor_data.humidity / 100) >> 8);
-  AppData.Buffer[4] = (uint8_t)((sensor_data.humidity / 100) & 0xFF);
+  temperature_sample(&sensor_data);
+  AppData.Port = TX_TEMPERATURE_SENSOR_PORT;
+  AppData.BufferSize = TX_TEMPERATURE_SENSOR_BUFFER_SIZE;
+  AppData.Buffer[0] = (uint8_t)((sensor_data.temperature / 100) >> 8);
+  AppData.Buffer[1] = (uint8_t)((sensor_data.temperature / 100) & 0xFF);
+  AppData.Buffer[2] = (uint8_t)((sensor_data.humidity / 100) >> 8);
+  AppData.Buffer[3] = (uint8_t)((sensor_data.humidity / 100) & 0xFF);
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
@@ -239,13 +143,13 @@ static void SendSensorData(void)
   }
 }
 
-static void SendHeartBeat(void)
+static void SendHeartBeatData(void)
 {
   UTIL_TIMER_Time_t nextTxIn = 0;
   uint16_t battery_voltage = GNSE_BM_GetBatteryVoltage();
 
-  AppData.Port = GNSE_HEARTBEAT_APP_PORT;
-  AppData.BufferSize = GNSE_HEARTBEAT_APP_BUFFER_SIZE;
+  AppData.Port = TX_HEARTBEAT_PORT;
+  AppData.BufferSize = TX_HEARTBEAT_BUFFER_SIZE;
   AppData.Buffer[0] = (uint8_t)(battery_voltage / 100);
   AppData.Buffer[1] = (uint8_t)(GNSE_FW_VERSION_MAIN);
   AppData.Buffer[2] = (uint8_t)(GNSE_FW_VERSION_SUB1);
@@ -262,17 +166,28 @@ static void SendHeartBeat(void)
   }
 }
 
-void SendAccelerometerEvent(void)
+void SendAccelerometerData(void)
 {
   ACC_IT_Handler();
 }
 
-static void OnTxTimerEvent(void *context)
+static void HeartBeatTimerEvent(void *context)
 {
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer), CFG_SEQ_Prio_0);
+  UTIL_TIMER_Start(&HearBeatTxTimer);
+}
 
-  /*Wait for next tx slot*/
-  UTIL_TIMER_Start(&TxTimer);
+static void TemperatureTimerEvent(void *context)
+{
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendTemperatureOnTxTimer), CFG_SEQ_Prio_0);
+  UTIL_TIMER_Start(&TemperatureTxTimer);
+}
+
+static void BuzzerTimerEvent(void *context)
+{
+  BUZZER_SetState(BUZZER_STATE_OFF);
+  BUZZER_DeInit();
+  GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_ENABLE);
 }
 
 static void OnTxTimerLedEvent(void *context)
@@ -315,15 +230,29 @@ static void OnTxData(LmHandlerTxParams_t *params)
 
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 {
-  uint32_t rxbuffer = 0;
   if ((appData != NULL) && (params != NULL))
   {
-
     APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
     switch (appData->Port)
     {
-    case SENSORS_DOWNLINK_CONF_PORT:
-      UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), UTIL_SEQ_RFU, SendSensorData);
+    case RX_HEARTBEAT_PORT:
+      heartbeat_rx_handle(appData);
+      break;
+    case RX_TEMPERATURE_SENSOR_PORT:
+      temperature_sensor_rx_handle(appData);
+      break;
+    case RX_ACCELEROMETER_SENSOR_PORT:
+      accelerometer_sensor_rx_handle(appData);
+      break;
+    case RX_BUTTON_PORT:
+      button_rx_handle(appData);
+      break;
+    case RX_BUZZER_PORT:
+      buzzer_rx_handle(appData);
+      break;
+    case RX_LED_PORT:
+      led_rx_handle(appData);
+      break;
     default:
       break;
     }
@@ -339,17 +268,10 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
   {
     if (joinParams->Status == LORAMAC_HANDLER_SUCCESS)
     {
+      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOINED OTAA = ");
       UTIL_TIMER_Stop(&JoinLedTimer);
       GNSE_BSP_LED_Off(LED_RED);
-      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOINED = ");
-      if (joinParams->Mode == ACTIVATION_TYPE_ABP)
-      {
-        APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "ABP ======================\r\n");
-      }
-      else
-      {
-        APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "OTAA =====================\r\n");
-      }
+      UTIL_TIMER_Start(&TemperatureTxTimer);
     }
     else
     {
@@ -363,4 +285,110 @@ static void OnMacProcessNotify(void)
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LmHandlerProcess), CFG_SEQ_Prio_0);
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+static void heartbeat_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_HEARTBEAT_BUFFER_SIZE)
+  {
+    if (appData->Buffer[0] == 0)
+    {
+      UTIL_TIMER_Stop(&HearBeatTxTimer);
+    }
+    else if (appData->Buffer[0] >= HEARTBEAT_DUTYCYCLE_MIN_MINUTES && appData->Buffer[0] <= HEARTBEAT_DUTYCYCLE_MAX_MINUTES)
+    {
+      heartbeat_tx_dutycycle = ((appData->Buffer[0]) * MINUTES_TO_MS);
+      UTIL_TIMER_SetPeriod(&HearBeatTxTimer, heartbeat_tx_dutycycle);
+      UTIL_TIMER_Start(&HearBeatTxTimer);
+    }
+  }
+}
+
+static void temperature_sensor_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_TEMPERATURE_SENSOR_BUFFER_SIZE)
+  {
+    if (appData->Buffer[0] == 0)
+    {
+      UTIL_TIMER_Stop(&TemperatureTxTimer);
+    }
+    else if (appData->Buffer[0] >= TEMPERATURE_DUTYCYCLE_MIN_MINUTES && appData->Buffer[0] <= TEMPERATURE_DUTYCYCLE_MAX_MINUTES)
+    {
+      temperature_tx_dutycycle = ((appData->Buffer[0]) * MINUTES_TO_MS);
+      UTIL_TIMER_SetPeriod(&TemperatureTxTimer, temperature_tx_dutycycle);
+      UTIL_TIMER_Start(&TemperatureTxTimer);
+    }
+  }
+}
+
+static void accelerometer_sensor_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_ACCELEROMETER_SENSOR_BUFFER_SIZE)
+  {
+    if (appData->Buffer[0] == 0)
+    {
+      //TODO: Disable interrupts and allow the system to kill accelerometer
+      GNSE_BSP_Acc_Int_DeInit();
+    }
+    else if (appData->Buffer[0] == 0x01)
+    {
+      //TODO: Prevent the system from killing the accelerometer
+      ACC_Shake_Enable();
+    }
+    else if (appData->Buffer[0] == 0x02)
+    {
+      //TODO: Prevent the system from killing the accelerometer
+      ACC_FreeFall_Enable();
+    }
+  }
+}
+
+static void button_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_BUTTON_PORT)
+  {
+    if (appData->Buffer[0] == 0)
+    {
+      //TODO: Allow the system to fully sleep?
+      GNSE_BSP_PB_DeInit(BUTTON_SW1);
+    }
+    else
+    {
+      GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
+    }
+  }
+}
+
+static void buzzer_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_BUZZER_BUFFER_SIZE)
+  {
+    if (appData->Buffer[0] == 0x01)
+    {
+      BUZZER_SetState(BUZZER_STATE_OFF);
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_DISABLE);
+      UTIL_TIMER_Start(&BuzzerTimer);
+      BUZZER_SetState(BUZZER_STATE_WARNING);
+    }
+    else if (appData->Buffer[0] == 0x02)
+    {
+      BUZZER_SetState(BUZZER_STATE_OFF);
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_DISABLE);
+      UTIL_TIMER_Start(&BuzzerTimer);
+      BUZZER_SetState(BUZZER_STATE_DANGER);
+    }
+  }
+}
+
+static void led_rx_handle(LmHandlerAppData_t *appData)
+{
+  if (appData->BufferSize == RX_LED_BUFFER_SIZE)
+  {
+    if (appData->Buffer[0] == 0)
+    {
+      GNSE_BSP_LED_Off(LED_BLUE);
+    }
+    else
+    {
+      GNSE_BSP_LED_On(LED_BLUE);
+    }
+  }
+}

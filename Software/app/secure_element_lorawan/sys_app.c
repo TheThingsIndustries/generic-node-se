@@ -90,7 +90,6 @@ void SystemApp_Init(void)
   GNSE_BSP_Sensor_I2C1_Init();
   APP_PPRINTF("\r\n Initializing on-board sensors and LEDs \r\n");
   sensors_init();
-  ACC_Shake_Enable();
 
 #if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
   uint32_t iwdg_reload_value = IWDG_MAX_RELOAD;

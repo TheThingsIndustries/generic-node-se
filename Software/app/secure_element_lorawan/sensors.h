@@ -52,14 +52,7 @@ sensors_op_result_t sensors_init(void);
  * @param sensor_data passed reference sensor data
  * @return sensors_op_result_t
  */
-sensors_op_result_t sensors_sample(sensors_t *sensor_data);
-
-/**
-  * @brief This function checks the downlink data and tests if the data can be used to change the transmission intervals
-  * @param appData: received downlink data
-  * @return New transmission times in ms, or 0 on fail
-  */
-uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData);
+sensors_op_result_t temperature_sample(sensors_t *sensor_data);
 
 /**
   * @brief  Sets the accelerometer registers to detect free fall events
@@ -67,14 +60,6 @@ uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData);
   * @return ACC_op_result_t
   */
 ACC_op_result_t ACC_FreeFall_Enable(void);
-
-/**
-  * @brief  Resets free fall event detection
-  * @note   This function only turns off interrupt detection, the accelerometer will still generate interrupts
-  * @param  none
-  * @return ACC_op_result_t
-  */
-ACC_op_result_t ACC_FreeFall_Disable(void);
 
 /**
   * @brief  Handle free fall interrupts

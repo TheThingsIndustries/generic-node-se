@@ -34,43 +34,49 @@
  * if ON (=1) it enables the debugger use in low power mode
  * if OFF (=0) the debugger is OFF (lower current consumption)
  */
-#define DEBUGGER_ON       1
+#define DEBUGGER_ON 1
 
 /*
  * if ON (=1) the independent watchdog timer is used (reset MCU after inactivity)
  * if OFF (=0) the independent watchdog timer is not used
  */
-#define IWDG_TIMER_ON     0
+#define IWDG_TIMER_ON 0
 
-/*!
- * LoRaWAN application port where sensors information can be retrieved by the application server
- * @note do not use 224. It is reserved for certification
- */
-#define GNSE_HEARTBEAT_APP_PORT        1
+#define GNSE_HW_VERSION_MAIN (0x01U)
+#define GNSE_HW_VERSION_SUB1 (0x01U)
 
-#define GNSE_HEARTBEAT_APP_BUFFER_SIZE      7
+#define GNSE_FW_VERSION_MAIN (0x01U)
+#define GNSE_FW_VERSION_SUB1 (0x00U)
 
-#define GNSE_HW_VERSION_MAIN   (0x01U)
-#define GNSE_HW_VERSION_SUB1   (0x01U)
+#define TX_HEARTBEAT_PORT (0x01U)
+#define TX_HEARTBEAT_BUFFER_SIZE (0x05U)
+#define TX_TEMPERATURE_SENSOR_PORT (0x02U)
+#define TX_TEMPERATURE_SENSOR_BUFFER_SIZE (0x04U)
+#define TX_ACCELEROMETER_SENSOR_PORT (0x03U)
+#define TX_ACCELEROMETER_SENSOR_BUFFER_SIZE (0x01U)
 
-#define GNSE_FW_VERSION_MAIN   (0x01U)
-#define GNSE_FW_VERSION_SUB1   (0x00U)
+#define RX_HEARTBEAT_PORT (0x01U)
+#define RX_HEARTBEAT_BUFFER_SIZE (0x01U)
+#define RX_TEMPERATURE_SENSOR_PORT (0x02U)
+#define RX_TEMPERATURE_SENSOR_BUFFER_SIZE (0x01U)
+#define RX_ACCELEROMETER_SENSOR_PORT (0x03U)
+#define RX_ACCELEROMETER_SENSOR_BUFFER_SIZE (0x01U)
+#define RX_BUTTON_PORT (0x04U)
+#define RX_BUTTON_BUFFER_SIZE (0x07U)
+#define RX_BUZZER_PORT (0x05U)
+#define RX_BUZZER_BUFFER_SIZE (0x01U)
+#define RX_LED_PORT (0x06U)
+#define RX_LED_BUFFER_SIZE (0x01U)
 
-/*!
- * LoRaWAN application port where sensors information can be retrieved by the application server
- * @note do not use 224. It is reserved for certification
- */
-#define SENSORS_PAYLOAD_APP_PORT        2
+#define HEARTBEAT_TX_DUTYCYCLE_DEFAULT_S (10U)
+#define HEARTBEAT_DUTYCYCLE_MAX_MINUTES (200U)
+#define HEARTBEAT_DUTYCYCLE_MIN_MINUTES (1U)
 
-/*! LoRaWAN application port where sensors transmission/uplink interval can be changed (via a downlink)
- *  @note Payload signifies the amount of seconds
- * */
-#define SENSORS_DOWNLINK_CONF_PORT        1
+#define TEMPERATURE_TX_DUTYCYCLE_DEFAULT_S (20U)
+#define TEMPERATURE_DUTYCYCLE_MAX_MINUTES (200U)
+#define TEMPERATURE_DUTYCYCLE_MIN_MINUTES (1U)
 
-/* Default, max, and min time interval of the TX dutycycle window in seconds */
-#define SENSORS_TX_DUTYCYCLE_DEFAULT_S 10
-#define SENSORS_DUTYCYCLE_CONF_MAX_S 8640
-#define SENSORS_DUTYCYCLE_CONF_MIN_S 5
+#define MINUTES_TO_MS (60000U)
 
 #define LED_STARTUP_TOGGEL 6
 #define LED_STARTUP_DELAY 100
@@ -138,7 +144,8 @@ typedef enum
 typedef enum
 {
   CFG_SEQ_Task_LmHandlerProcess,
-  CFG_SEQ_Task_LoRaSendOnTxTimer,
+  CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer,
+  CFG_SEQ_Task_LoRaSendTemperatureOnTxTimer,
   CFG_SEQ_Task_LoRaSendOnButtonEvent,
   CFG_SEQ_Task_LoRaSendOnAccelerometerEvent,
   CFG_SEQ_Task_NBR

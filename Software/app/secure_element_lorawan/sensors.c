@@ -50,10 +50,9 @@ sensors_op_result_t sensors_init(void)
     return SENSORS_OP_SUCCESS;
 }
 
-sensors_op_result_t sensors_sample(sensors_t *sensor_data)
+sensors_op_result_t temperature_sample(sensors_t *sensor_data)
 {
     int16_t status = 0;
-    sensor_data->battery_voltage = GNSE_BM_GetBatteryVoltage();
     status = SHTC3_measure_blocking_read(&sensor_data->temperature, &sensor_data->humidity);
     if (status != SHTC3_STATUS_OK)
     {
@@ -62,37 +61,6 @@ sensors_op_result_t sensors_sample(sensors_t *sensor_data)
     }
     APP_PPRINTF("\r\n Successfully sampled sensors \r\n");
     return SENSORS_OP_SUCCESS;
-}
-
-uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData)
-{
-    uint32_t rxbuffer = 0;
-    if (appData->Port == SENSORS_DOWNLINK_CONF_PORT)
-    {
-        if (appData->BufferSize <= sizeof(rxbuffer))
-        {
-            for (int i = appData->BufferSize - 1; i >= 0; i--)
-            {
-                rxbuffer += appData->Buffer[i] << (8 * (appData->BufferSize - 1 - i));
-            }
-            if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_S && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_S)
-            {
-                APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld seconds \r\n", rxbuffer);
-                rxbuffer *= 1000; /* Time data has to be converted from s to ms */
-                return rxbuffer;
-            }
-        }
-    }
-    return 0;
-}
-
-ACC_op_result_t ACC_FreeFall_Disable(void)
-{
-    if (GNSE_BSP_Acc_Int_DeInit() != GNSE_BSP_ERROR_NONE)
-    {
-        return ACC_OP_FAIL;
-    }
-    return ACC_OP_SUCCESS;
 }
 
 ACC_op_result_t ACC_FreeFall_Enable(void)
