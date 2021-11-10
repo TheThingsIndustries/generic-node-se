@@ -74,6 +74,7 @@ void SystemApp_Init(void)
   GNSE_BSP_Sensor_I2C1_Init();
   APP_PPRINTF("\r\n Initializing on-board sensors and LEDs \r\n");
   sensors_init();
+  ACC_FreeFall_Enable();
   GNSE_BSP_LED_Init(LED_BLUE);
   GNSE_BSP_LED_Init(LED_RED);
   GNSE_BSP_LED_Init(LED_GREEN);
@@ -90,13 +91,13 @@ void SystemApp_Init(void)
 
 void GNSE_LPM_PreStopModeHook(void)
 {
-  GNSE_LPM_SensorBus_Off();
+  // GNSE_LPM_SensorBus_Off();
 }
 
 void GNSE_LPM_PostStopModeHook(void)
 {
   GNSE_TRACER_RESUME();
-  GNSE_LPM_SensorBus_Resume();
+  // GNSE_LPM_SensorBus_Resume();
 }
 
 /**

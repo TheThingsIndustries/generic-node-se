@@ -23,6 +23,7 @@
 #ifndef __SENSORS_H__
 #define __SENSORS_H__
 
+#include "GNSE_acc.h"
 #include "LmHandler.h"
 
 typedef enum
@@ -59,5 +60,27 @@ sensors_op_result_t sensors_sample(sensors_t *sensor_data);
   * @return New transmission times in ms, or 0 on fail
   */
 uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData);
+
+/**
+  * @brief  Sets the accelerometer registers to detect free fall events
+  * @param  none
+  * @return ACC_op_result_t
+  */
+ACC_op_result_t ACC_FreeFall_Enable(void);
+
+/**
+  * @brief  Resets free fall event detection
+  * @note   This function only turns off interrupt detection, the accelerometer will still generate interrupts
+  * @param  none
+  * @return ACC_op_result_t
+  */
+ACC_op_result_t ACC_FreeFall_Disable(void);
+
+/**
+  * @brief  Handle free fall interrupts
+  * @param  none
+  * @return none
+  */
+void ACC_FreeFall_IT_Handler(void);
 
 #endif /* __SENSORS_H__ */

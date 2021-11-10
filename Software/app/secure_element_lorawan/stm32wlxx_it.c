@@ -130,6 +130,17 @@ void EXTI3_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
 }
 
+/**
+  * @brief This function handles EXTI Line 9-5 Interrupt.
+  */
+void EXTI9_5_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_7);
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
+}
 
 void USART2_IRQHandler(void)
 {
@@ -155,6 +166,11 @@ void RTC_Alarm_IRQHandler(void)
 void SUBGHZ_Radio_IRQHandler(void)
 {
   HAL_SUBGHZ_IRQHandler(&hsubghz);
+}
+
+void TIM2_IRQHandler(void)
+{
+  HAL_TIM_IRQHandler(&GNSE_BSP_buzzer_timer);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

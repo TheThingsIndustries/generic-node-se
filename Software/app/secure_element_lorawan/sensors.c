@@ -22,7 +22,11 @@
 
 #include "app.h"
 #include "GNSE_bm.h"
+#include "LIS2DH12.h"
 #include "sensors.h"
+
+static lis2dh12_int1_src_t acc_int_src;
+static stmdev_ctx_t dev_ctx;
 
 sensors_op_result_t sensors_init(void)
 {
@@ -37,7 +41,12 @@ sensors_op_result_t sensors_init(void)
         APP_PPRINTF("\r\n Failed to initialize SHTC3 sensor \r\n");
         return SENSORS_OP_FAIL;
     }
+    if (GNSE_ACC_Init() != ACC_OP_SUCCESS)
+    {
+        APP_PPRINTF("\r\n Accelerometer failed to initialize properly \r\n");
+    }
     APP_PPRINTF("\r\n Successfully intialized all sensors \r\n");
+
     return SENSORS_OP_SUCCESS;
 }
 
@@ -60,19 +69,97 @@ uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData)
     uint32_t rxbuffer = 0;
     if (appData->Port == SENSORS_DOWNLINK_CONF_PORT)
     {
-      if (appData->BufferSize <= sizeof(rxbuffer))
-      {
-        for (int i = appData->BufferSize - 1; i >= 0; i--)
+        if (appData->BufferSize <= sizeof(rxbuffer))
         {
-            rxbuffer += appData->Buffer[i] << (8 * (appData->BufferSize - 1 - i));
+            for (int i = appData->BufferSize - 1; i >= 0; i--)
+            {
+                rxbuffer += appData->Buffer[i] << (8 * (appData->BufferSize - 1 - i));
+            }
+            if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_S && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_S)
+            {
+                APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld seconds \r\n", rxbuffer);
+                rxbuffer *= 1000; /* Time data has to be converted from s to ms */
+                return rxbuffer;
+            }
         }
-        if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_S && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_S)
-        {
-          APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld seconds \r\n", rxbuffer);
-          rxbuffer *= 1000; /* Time data has to be converted from s to ms */
-          return rxbuffer;
-        }
-      }
     }
     return 0;
+}
+
+ACC_op_result_t ACC_FreeFall_Disable(void)
+{
+    if (GNSE_BSP_Acc_Int_DeInit() != GNSE_BSP_ERROR_NONE)
+    {
+        return ACC_OP_FAIL;
+    }
+    return ACC_OP_SUCCESS;
+}
+
+ACC_op_result_t ACC_FreeFall_Enable(void)
+{
+    int8_t acc_check;
+
+    acc_check = LIS2DH12_init(&dev_ctx);
+    /* Set Output Data rate */
+    acc_check += (int8_t)lis2dh12_data_rate_set(&dev_ctx, ACC_FF_ODR);
+
+    /* Set full scale */
+    acc_check += (int8_t)lis2dh12_full_scale_set(&dev_ctx, ACC_FF_SCALE);
+
+    /* Map interrupt 1 on INT2 pin */
+    lis2dh12_ctrl_reg6_t ctrl6_set = {
+        .not_used_01 = 0,
+        .int_polarity = 0,
+        .not_used_02 = 0,
+        .i2_act = 0,
+        .i2_boot = 0,
+        .i2_ia2 = 0,
+        .i2_ia1 = 1,
+        .i2_click = 0
+    };
+    acc_check += (int8_t)lis2dh12_pin_int2_config_set(&dev_ctx, &ctrl6_set);
+
+    /* Set interrupt threshold */
+    acc_check += (int8_t)lis2dh12_int1_gen_threshold_set(&dev_ctx, ACC_FF_THRESHOLD);
+
+    /* Set interrupt threshold duration */
+    acc_check += (int8_t)lis2dh12_int1_gen_duration_set(&dev_ctx, ACC_FF_DURATION);
+
+    /* Set all axes with low event detection and AND operator */
+    lis2dh12_int1_cfg_t accel_cfg = {
+        .xlie = 1,
+        .xhie = 0,
+        .ylie = 1,
+        .yhie = 0,
+        .zlie = 1,
+        .zhie = 0,
+        ._6d = 0,
+        .aoi = 1
+    };
+    acc_check += (int8_t)lis2dh12_int1_gen_conf_set(&dev_ctx, &accel_cfg);
+
+    /* Set low power, 8 bit data output mode */
+    acc_check += (int8_t)lis2dh12_operating_mode_set(&dev_ctx, LIS2DH12_LP_8bit);
+
+    /* See if all checks were passed */
+    if (acc_check != 0)
+    {
+        return ACC_OP_FAIL;
+    }
+
+    /* Set interrupt pin */
+    if (GNSE_BSP_Acc_Int_Init() != GNSE_BSP_ERROR_NONE)
+    {
+        return ACC_OP_FAIL;
+    }
+
+    return ACC_OP_SUCCESS;
+}
+
+void ACC_FreeFall_IT_Handler(void)
+{
+    static uint8_t freefall_log_amount;
+    // Should read INT1_SRC to clear the interrupt request
+    lis2dh12_int1_gen_source_get(&dev_ctx, &acc_int_src);
+    freefall_log_amount++;
 }

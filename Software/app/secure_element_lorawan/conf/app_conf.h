@@ -70,6 +70,34 @@
 #define LED_STARTUP_DELAY 100
 
 /**
+  * FF_THRESHOLD is defined as the value all axes are +/-0g, depending on the scale
+  * @2g scale 1 LSb = 16 mg
+  * @4g scale 1 LSb = 32 mg
+  * @8g scale 1 LSb = 62 mg
+  * @16g scale 1 LSb = 186 mg
+  * FF_DURATION is defined as the time below the threshold times the Output Data Rate
+  * @100Hz ODR a value for FREEFALL_DURATION = 3 means a duration of 30 ms below the threshold.
+  */
+#define ACC_FF_THRESHOLD 0x16
+#define ACC_FF_DURATION 0x03
+#define ACC_FF_SCALE LIS2DH12_2g
+#define ACC_FF_ODR LIS2DH12_ODR_100Hz
+
+/**
+ * This variable sets the LoRaWAN transmission port of free fall events
+ * @note do not use 224. It is reserved for certification
+ */
+#define ACC_FF_LORA_PORT 2
+
+/**
+ * Downlink defs
+ */
+/* This variable sets the LoRaWAN downlink port for locally indicating free fall events */
+#define ACC_FF_DOWNLINK_PORT 1
+/* Time in milliseconds the downlink callback (controlling the buzzer) will be initiated */
+#define ACC_FF_DOWNLINK_TIME_MS 2000
+
+/**
   * sequencer definitions
   */
 

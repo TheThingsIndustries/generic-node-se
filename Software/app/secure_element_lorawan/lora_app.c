@@ -26,6 +26,7 @@
 #include "LmHandler.h"
 #include "lora_info.h"
 #include "sensors.h"
+#include "GNSE_bm.h"
 
 static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
 
@@ -140,7 +141,7 @@ static LmHandlerParams_t LmHandlerParams =
 /**
   * @brief Type of Event to generate application Tx
   */
-static TxEventType_t EventType = TX_ON_TIMER;
+static TxEventType_t EventType = TX_ON_EVENT;
 
 /**
   * @brief Timer to handle the application Tx
@@ -200,6 +201,12 @@ void LoRaWAN_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+  if (GPIO_Pin == ACC_INT_PIN)
+  {
+    GNSE_BSP_LED_On(LED_BLUE);
+    ACC_FreeFall_IT_Handler();
+    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  }
   if (GPIO_Pin == BUTTON_SW1_PIN)
   {
     /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
@@ -226,13 +233,6 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
     }
   }
 }
-// rxbuffer = sensors_downlink_conf_check(appData);
-// if (rxbuffer)
-// {
-// }
-// else /* Function returns 0 on fail */
-// {
-// }
 
 static void SendSensorData(void)
 {
