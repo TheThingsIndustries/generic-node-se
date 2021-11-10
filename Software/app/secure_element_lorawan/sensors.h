@@ -81,6 +81,8 @@ ACC_op_result_t ACC_FreeFall_Disable(void);
   * @param  none
   * @return none
   */
-void ACC_FreeFall_IT_Handler(void);
+void ACC_IT_Handler(void);
+
+ACC_op_result_t ACC_Shake_Enable(void);
 
 #endif /* __SENSORS_H__ */

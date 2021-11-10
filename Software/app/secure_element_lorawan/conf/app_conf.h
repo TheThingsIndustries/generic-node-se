@@ -36,6 +36,12 @@
  */
 #define DEBUGGER_ON       1
 
+/*
+ * if ON (=1) the independent watchdog timer is used (reset MCU after inactivity)
+ * if OFF (=0) the independent watchdog timer is not used
+ */
+#define IWDG_TIMER_ON     0
+
 /*!
  * LoRaWAN application port where sensors information can be retrieved by the application server
  * @note do not use 224. It is reserved for certification
@@ -84,6 +90,20 @@
 #define ACC_FF_ODR LIS2DH12_ODR_100Hz
 
 /**
+  * SHAKE_THRESHOLD is defined as the value all axes are +/-0g, depending on the scale
+  * @2g scale 1 LSb = 16 mg
+  * @4g scale 1 LSb = 32 mg
+  * @8g scale 1 LSb = 62 mg
+  * @16g scale 1 LSb = 186 mg
+  * FF_DURATION is defined as the time below the threshold times the Output Data Rate
+  * @100Hz ODR a value for SHAKE_DURATION = 3 means a duration of 30 ms below the threshold.
+  */
+#define ACC_SHAKE_THRESHOLD 0x7f
+#define ACC_SHAKE_DURATION 0x00
+#define ACC_SHAKE_SCALE LIS2DH12_4g
+#define ACC_SHAKE_ODR LIS2DH12_ODR_100Hz
+
+/**
  * This variable sets the LoRaWAN transmission port of free fall events
  * @note do not use 224. It is reserved for certification
  */
@@ -118,7 +138,9 @@ typedef enum
 typedef enum
 {
   CFG_SEQ_Task_LmHandlerProcess,
-  CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent,
+  CFG_SEQ_Task_LoRaSendOnTxTimer,
+  CFG_SEQ_Task_LoRaSendOnButtonEvent,
+  CFG_SEQ_Task_LoRaSendOnAccelerometerEvent,
   CFG_SEQ_Task_NBR
 } CFG_SEQ_Task_Id_t;
 

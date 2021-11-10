@@ -29,6 +29,18 @@
 
 #define MAX_TS_SIZE (int)16
 
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+/**
+  * @brief Timer to handle refreshing of the IWDG
+  */
+static UTIL_TIMER_Object_t iwdg_refresh_timer;
+
+/**
+ * @brief Handler for periodically refreshing the IWDG
+ */
+static void GNSE_On_IWDG_Event(void *context);
+#endif /* IWDG_TIMER_ON */
+
 /**
   * @brief Returns sec and msec based on the systime in use
   * @param none
@@ -66,6 +78,10 @@ void SystemApp_Init(void)
   GNSE_TRACER_TIMESTAMP(TimestampNow);
   GNSE_app_printAppInfo();
 
+  GNSE_BSP_LED_Init(LED_BLUE);
+  GNSE_BSP_LED_Init(LED_RED);
+  GNSE_BSP_LED_Init(LED_GREEN);
+
   APP_PPRINTF("\r\n Powering and using HW secure element (ATECC608A-TNGLORA) \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
@@ -74,10 +90,21 @@ void SystemApp_Init(void)
   GNSE_BSP_Sensor_I2C1_Init();
   APP_PPRINTF("\r\n Initializing on-board sensors and LEDs \r\n");
   sensors_init();
-  ACC_FreeFall_Enable();
-  GNSE_BSP_LED_Init(LED_BLUE);
-  GNSE_BSP_LED_Init(LED_RED);
-  GNSE_BSP_LED_Init(LED_GREEN);
+  ACC_Shake_Enable();
+
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+  uint32_t iwdg_reload_value = IWDG_MAX_RELOAD;
+  /* 256 signifies the default prescaler set in GNSE_BSP_IWDG_Init, change if necessary */
+  uint32_t iwdg_seq_timeout_ms = (iwdg_reload_value / (LSI_VALUE / 256U) * 1000U); //Every 32 Seconds
+
+  GNSE_BSP_IWDG_Init(iwdg_reload_value);
+
+  /* Create timer to refresh the IWDG timer before it triggers */
+  UTIL_TIMER_Create(&iwdg_refresh_timer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, GNSE_On_IWDG_Event, NULL);
+  UTIL_TIMER_SetPeriod(&iwdg_refresh_timer, iwdg_seq_timeout_ms);
+  UTIL_TIMER_Start(&iwdg_refresh_timer);
+#endif /* IWDG_TIMER_ON */
+
   for (size_t counter = 0; counter < LED_STARTUP_TOGGEL; counter++)
   {
     GNSE_BSP_LED_Toggle(LED_BLUE);
@@ -88,6 +115,19 @@ void SystemApp_Init(void)
     HAL_Delay(LED_STARTUP_DELAY);
   }
 }
+
+#if defined(IWDG_TIMER_ON) && (IWDG_TIMER_ON == 1)
+/**
+  * @brief  On refreshing timer event, refreshes watchdog and reinitialized the timer for next refresh
+  * @return None
+  */
+static void GNSE_On_IWDG_Event(void *context)
+{
+  GNSE_BSP_IWDG_Refresh();
+  GNSE_BSP_LED_Toggle(LED_GREEN);
+  UTIL_TIMER_Start(&iwdg_refresh_timer);
+}
+#endif /* IWDG_TIMER_ON */
 
 void GNSE_LPM_PreStopModeHook(void)
 {

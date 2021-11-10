@@ -46,7 +46,8 @@ typedef enum TxEventType_e
 } TxEventType_t;
 
 static void SendSensorData(void);
-static void SendHearBeat(void);
+static void SendHeartBeat(void);
+static void SendAccelerometerEvent(void);
 
 /**
   * @brief  TX timer callback function
@@ -173,7 +174,9 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendHearBeat);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), UTIL_SEQ_RFU, SendSensorData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), UTIL_SEQ_RFU, SendHeartBeat);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), UTIL_SEQ_RFU, SendAccelerometerEvent);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
@@ -203,34 +206,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if (GPIO_Pin == ACC_INT_PIN)
   {
-    GNSE_BSP_LED_On(LED_BLUE);
-    ACC_FreeFall_IT_Handler();
-    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), CFG_SEQ_Prio_0);
   }
   if (GPIO_Pin == BUTTON_SW1_PIN)
   {
     /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
-    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
-  }
-}
-
-static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
-{
-  uint32_t rxbuffer = 0;
-  if ((appData != NULL) && (params != NULL))
-  {
-    GNSE_BSP_LED_Off(LED_GREEN);
-    GNSE_BSP_LED_On(LED_BLUE);
-    UTIL_TIMER_Start(&RxLedTimer);
-
-    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
-    switch (appData->Port)
-    {
-    case SENSORS_DOWNLINK_CONF_PORT:
-      UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendSensorData);
-    default:
-      break;
-    }
+    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), CFG_SEQ_Prio_0);
   }
 }
 
@@ -258,7 +239,7 @@ static void SendSensorData(void)
   }
 }
 
-static void SendHearBeat(void)
+static void SendHeartBeat(void)
 {
   UTIL_TIMER_Time_t nextTxIn = 0;
   uint16_t battery_voltage = GNSE_BM_GetBatteryVoltage();
@@ -281,9 +262,14 @@ static void SendHearBeat(void)
   }
 }
 
+void SendAccelerometerEvent(void)
+{
+  ACC_IT_Handler();
+}
+
 static void OnTxTimerEvent(void *context)
 {
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), CFG_SEQ_Prio_0);
 
   /*Wait for next tx slot*/
   UTIL_TIMER_Start(&TxTimer);
@@ -296,7 +282,7 @@ static void OnTxTimerLedEvent(void *context)
 
 static void OnRxTimerLedEvent(void *context)
 {
-  GNSE_BSP_LED_Off(LED_BLUE);
+  GNSE_BSP_LED_Off(LED_RED);
 }
 
 static void OnJoinTimerLedEvent(void *context)
@@ -325,6 +311,26 @@ static void OnTxData(LmHandlerTxParams_t *params)
       APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "UNCONFIRMED\r\n");
     }
   }
+}
+
+static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
+{
+  uint32_t rxbuffer = 0;
+  if ((appData != NULL) && (params != NULL))
+  {
+
+    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n Received Downlink on F_PORT:%d \r\n", appData->Port);
+    switch (appData->Port)
+    {
+    case SENSORS_DOWNLINK_CONF_PORT:
+      UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimer), UTIL_SEQ_RFU, SendSensorData);
+    default:
+      break;
+    }
+  }
+  GNSE_BSP_LED_Off(LED_GREEN);
+  GNSE_BSP_LED_On(LED_RED);
+  UTIL_TIMER_Start(&RxLedTimer);
 }
 
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
