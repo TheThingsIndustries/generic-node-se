@@ -10,6 +10,7 @@
 #include "GNSE_bm.h"
 #include "GNSE_lpm.h"
 
+static uint32_t join_tx_dutycycle = JOIN_TX_DUTYCYCLE_DEFAULT_S  * 1000;
 static uint32_t heartbeat_tx_dutycycle = HEARTBEAT_TX_DUTYCYCLE_DEFAULT_S * 1000;
 static uint32_t temperature_tx_dutycycle = TEMPERATURE_TX_DUTYCYCLE_DEFAULT_S * 1000;
 
@@ -17,7 +18,7 @@ static void SendHeartBeatData(void);
 static void SendTemperatureData(void);
 static void SendAccelerometerData(void);
 
-static void heartbeat_rx_handle(LmHandlerAppData_t *appData);
+static void JoinTimerEvent(void *context);
 static void HeartBeatTimerEvent(void *context);
 static void TemperatureTimerEvent(void *context);
 static void AccelerometerShakeEvent(void *context);
@@ -60,6 +61,7 @@ static LmHandlerParams_t LmHandlerParams =
         .JoinDatarate = LORAWAN_DEFAULT_JOIN_DATA_RATE,
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
+static UTIL_TIMER_Object_t JoinTxTimer;
 static UTIL_TIMER_Object_t HearBeatTxTimer;
 static UTIL_TIMER_Object_t TemperatureTxTimer;
 static UTIL_TIMER_Object_t BuzzerTimer;
@@ -70,6 +72,8 @@ static UTIL_TIMER_Object_t JoinLedTimer;
 
 void LoRaWAN_Init(void)
 {
+  GNSE_BSP_LED_On(LED_RED);
+
   UTIL_TIMER_Create(&TxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&JoinLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
@@ -80,8 +84,8 @@ void LoRaWAN_Init(void)
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer), UTIL_SEQ_RFU, SendHeartBeatData);
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendTemperatureOnTxTimer), UTIL_SEQ_RFU, SendTemperatureData);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), UTIL_SEQ_RFU, SendAccelerometerData);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), UTIL_SEQ_RFU, SendTemperatureData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnAccelerometerEvent), UTIL_SEQ_RFU, SendTemperatureData);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnButtonEvent), UTIL_SEQ_RFU, SendHeartBeatData);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
@@ -91,14 +95,19 @@ void LoRaWAN_Init(void)
 
   LmHandlerConfigure(&LmHandlerParams);
 
+  GNSE_BSP_LED_Off(LED_RED);
+
   UTIL_TIMER_Start(&JoinLedTimer);
   LmHandlerJoin(ActivationType);
 
-  UTIL_TIMER_Create(&HearBeatTxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, HeartBeatTimerEvent, NULL);
-  UTIL_TIMER_SetPeriod(&HearBeatTxTimer, heartbeat_tx_dutycycle);
-  UTIL_TIMER_Start(&HearBeatTxTimer);
+  UTIL_TIMER_Create(&JoinTxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, JoinTimerEvent, NULL);
+  UTIL_TIMER_SetPeriod(&JoinTxTimer, join_tx_dutycycle);
+  UTIL_TIMER_Start(&JoinTxTimer);
 
-  UTIL_TIMER_Create(&TemperatureTxTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, TemperatureTimerEvent, NULL);
+  UTIL_TIMER_Create(&HearBeatTxTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, HeartBeatTimerEvent, NULL);
+  UTIL_TIMER_SetPeriod(&HearBeatTxTimer, heartbeat_tx_dutycycle);
+
+  UTIL_TIMER_Create(&TemperatureTxTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, TemperatureTimerEvent, NULL);
   UTIL_TIMER_SetPeriod(&TemperatureTxTimer, temperature_tx_dutycycle);
 
   UTIL_TIMER_Create(&BuzzerTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, BuzzerTimerEvent, NULL);
@@ -153,8 +162,6 @@ static void SendHeartBeatData(void)
   AppData.Buffer[0] = (uint8_t)(battery_voltage / 100);
   AppData.Buffer[1] = (uint8_t)(GNSE_FW_VERSION_MAIN);
   AppData.Buffer[2] = (uint8_t)(GNSE_FW_VERSION_SUB1);
-  AppData.Buffer[3] = (uint8_t)(GNSE_HW_VERSION_MAIN);
-  AppData.Buffer[4] = (uint8_t)(GNSE_HW_VERSION_SUB1);
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
@@ -171,16 +178,20 @@ void SendAccelerometerData(void)
   ACC_IT_Handler();
 }
 
+static void JoinTimerEvent(void *context)
+{
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer), CFG_SEQ_Prio_0);
+  UTIL_TIMER_Start(&JoinTxTimer);
+}
+
 static void HeartBeatTimerEvent(void *context)
 {
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendHeartBeatOnTxTimer), CFG_SEQ_Prio_0);
-  UTIL_TIMER_Start(&HearBeatTxTimer);
 }
 
 static void TemperatureTimerEvent(void *context)
 {
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendTemperatureOnTxTimer), CFG_SEQ_Prio_0);
-  UTIL_TIMER_Start(&TemperatureTxTimer);
 }
 
 static void BuzzerTimerEvent(void *context)
@@ -268,9 +279,15 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
   {
     if (joinParams->Status == LORAMAC_HANDLER_SUCCESS)
     {
-      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOINED OTAA = ");
+      APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n###### = JOINED OTAA\r\n ");
+      UTIL_TIMER_Stop(&JoinTxTimer);
       UTIL_TIMER_Stop(&JoinLedTimer);
       GNSE_BSP_LED_Off(LED_RED);
+      BUZZER_SetState(BUZZER_STATE_OFF);
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_TIM_BUZZER), GNSE_LPM_DISABLE);
+      UTIL_TIMER_Start(&BuzzerTimer);
+      BUZZER_SetState(BUZZER_STATE_RING);
+      UTIL_TIMER_Start(&HearBeatTxTimer);
       UTIL_TIMER_Start(&TemperatureTxTimer);
     }
     else
@@ -295,6 +312,7 @@ static void heartbeat_rx_handle(LmHandlerAppData_t *appData)
     }
     else if (appData->Buffer[0] >= HEARTBEAT_DUTYCYCLE_MIN_MINUTES && appData->Buffer[0] <= HEARTBEAT_DUTYCYCLE_MAX_MINUTES)
     {
+      UTIL_TIMER_Stop(&HearBeatTxTimer);
       heartbeat_tx_dutycycle = ((appData->Buffer[0]) * MINUTES_TO_MS);
       UTIL_TIMER_SetPeriod(&HearBeatTxTimer, heartbeat_tx_dutycycle);
       UTIL_TIMER_Start(&HearBeatTxTimer);
@@ -312,6 +330,7 @@ static void temperature_sensor_rx_handle(LmHandlerAppData_t *appData)
     }
     else if (appData->Buffer[0] >= TEMPERATURE_DUTYCYCLE_MIN_MINUTES && appData->Buffer[0] <= TEMPERATURE_DUTYCYCLE_MAX_MINUTES)
     {
+      UTIL_TIMER_Stop(&TemperatureTxTimer);
       temperature_tx_dutycycle = ((appData->Buffer[0]) * MINUTES_TO_MS);
       UTIL_TIMER_SetPeriod(&TemperatureTxTimer, temperature_tx_dutycycle);
       UTIL_TIMER_Start(&TemperatureTxTimer);
@@ -326,16 +345,19 @@ static void accelerometer_sensor_rx_handle(LmHandlerAppData_t *appData)
     if (appData->Buffer[0] == 0)
     {
       //TODO: Disable interrupts and allow the system to kill accelerometer
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_I2C_SENSORS), GNSE_LPM_ENABLE);
       GNSE_BSP_Acc_Int_DeInit();
     }
     else if (appData->Buffer[0] == 0x01)
     {
       //TODO: Prevent the system from killing the accelerometer
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_I2C_SENSORS), GNSE_LPM_DISABLE);
       ACC_Shake_Enable();
     }
     else if (appData->Buffer[0] == 0x02)
     {
       //TODO: Prevent the system from killing the accelerometer
+      GNSE_LPM_SetStopMode((1 << GNSE_LPM_I2C_SENSORS), GNSE_LPM_DISABLE);
       ACC_FreeFall_Enable();
     }
   }

@@ -182,10 +182,3 @@ ACC_op_result_t ACC_Shake_Enable(void)
 
     return ACC_OP_SUCCESS;
 }
-
-void ACC_IT_Handler(void)
-{
-    static uint8_t acc_event_log;
-    lis2dh12_int1_gen_source_get(&dev_ctx, &acc_int_src);
-    acc_event_log++;
-}

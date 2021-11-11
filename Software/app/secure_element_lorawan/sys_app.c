@@ -82,6 +82,8 @@ void SystemApp_Init(void)
   GNSE_BSP_LED_Init(LED_RED);
   GNSE_BSP_LED_Init(LED_GREEN);
 
+  GNSE_BSP_LED_On(LED_RED); // To indicated if something went wrong
+
   APP_PPRINTF("\r\n Powering and using HW secure element (ATECC608A-TNGLORA) \r\n");
   GNSE_BSP_LS_Init(LOAD_SWITCH_SENSORS);
   GNSE_BSP_LS_On(LOAD_SWITCH_SENSORS);
@@ -104,6 +106,8 @@ void SystemApp_Init(void)
   UTIL_TIMER_Start(&iwdg_refresh_timer);
 #endif /* IWDG_TIMER_ON */
 
+  GNSE_BSP_LED_Off(LED_RED);
+
   for (size_t counter = 0; counter < LED_STARTUP_TOGGEL; counter++)
   {
     GNSE_BSP_LED_Toggle(LED_BLUE);
@@ -123,20 +127,20 @@ void SystemApp_Init(void)
 static void GNSE_On_IWDG_Event(void *context)
 {
   GNSE_BSP_IWDG_Refresh();
-  GNSE_BSP_LED_Toggle(LED_GREEN);
   UTIL_TIMER_Start(&iwdg_refresh_timer);
 }
 #endif /* IWDG_TIMER_ON */
 
 void GNSE_LPM_PreStopModeHook(void)
 {
-  // GNSE_LPM_SensorBus_Off();
+  GNSE_LPM_SensorBus_Off();
 }
 
 void GNSE_LPM_PostStopModeHook(void)
 {
   GNSE_TRACER_RESUME();
-  // GNSE_LPM_SensorBus_Resume();
+  GNSE_LPM_SensorBus_Resume();
+  GNSE_LPM_BatteryADC_Resume();
 }
 
 /**

@@ -39,35 +39,9 @@ typedef struct
     int32_t humidity;
 } sensors_t;
 
-/**
- * @brief Initializes the sensors that will be sampled
- *
- * @return sensors_op_result_t
- */
 sensors_op_result_t sensors_init(void);
-
-/**
- * @brief Retrieve and sample sensor data
- *
- * @param sensor_data passed reference sensor data
- * @return sensors_op_result_t
- */
 sensors_op_result_t temperature_sample(sensors_t *sensor_data);
-
-/**
-  * @brief  Sets the accelerometer registers to detect free fall events
-  * @param  none
-  * @return ACC_op_result_t
-  */
 ACC_op_result_t ACC_FreeFall_Enable(void);
-
-/**
-  * @brief  Handle free fall interrupts
-  * @param  none
-  * @return none
-  */
-void ACC_IT_Handler(void);
-
 ACC_op_result_t ACC_Shake_Enable(void);
 
 #endif /* __SENSORS_H__ */
