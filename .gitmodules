@@ -7,3 +7,6 @@
 [submodule "Software/lib/threadx"]
 	path = Software/lib/threadx
 	url = https://github.com/azure-rtos/threadx
+[submodule "Software/mais"]
+	path = Software/mais
+	url = git@gitlab.com:lab-initiatives/mais.git
