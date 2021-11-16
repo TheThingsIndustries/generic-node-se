@@ -55,7 +55,9 @@ typedef enum
 
 /* Exported macros -----------------------------------------------------------*/
 
+#ifndef UNUSED
 #define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */
+#endif
 
 #define HAL_MAX_DELAY      0xFFFFFFFFU
 
