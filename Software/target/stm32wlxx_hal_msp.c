@@ -47,7 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+void HAL_MspInit(void);
 /* USER CODE END PFP */
 
 /* External functions --------------------------------------------------------*/
