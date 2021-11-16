@@ -29,15 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "stm32wlxx_hal.h"
+#include "HAL.h"
 #include "sensirion_i2c.h"
-#include "GNSE_bsp.h"
 
 /**
  * Initialize all hard- and software components that are needed for the I2C
  * communication.
  */
-void sensirion_i2c_init(void)
+void sensirion_i2c_init(sensirion_i2c_t *s)
 {
 // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
@@ -45,7 +44,7 @@ void sensirion_i2c_init(void)
 /**
  * Release all resources initialized by sensirion_i2c_init().
  */
-void sensirion_i2c_release(void)
+void sensirion_i2c_release(sensirion_i2c_t *s)
 {
 // This fuction is a place filler for now, TODO: add an improved init, see https://github.com/TheThingsIndustries/generic-node-se/issues/33
 }
@@ -60,10 +59,13 @@ void sensirion_i2c_release(void)
  * @param count   number of bytes to read from I2C and store in the buffer
  * @returns 0 on success, error code otherwise
  */
-int8_t sensirion_i2c_read(uint8_t address, uint8_t *data, uint16_t count)
+#include "UAIR_tracer.h"
+int8_t sensirion_i2c_read(sensirion_i2c_t *s, uint8_t *data, uint16_t count)
 {
-    return (int8_t)HAL_I2C_Master_Receive(&GNSE_BSP_sensor_i2c1, (uint16_t)(address << 1),
-                                          data, count, SENSOR_I2C1_TIMOUT);
+    int8_t r = HAL_I2C_Master_Receive(s->bus, (uint16_t)(s->address << 1),
+                                      data, count, s->timeout);
+
+    return r;
 }
 
 /**
@@ -77,11 +79,15 @@ int8_t sensirion_i2c_read(uint8_t address, uint8_t *data, uint16_t count)
  * @param count   number of bytes to read from the buffer and send over I2C
  * @returns 0 on success, error code otherwise
  */
-int8_t sensirion_i2c_write(uint8_t address, const uint8_t *data,
+int8_t sensirion_i2c_write(sensirion_i2c_t *s, const uint8_t *data,
                            uint16_t count)
 {
-    return (int8_t)HAL_I2C_Master_Transmit(&GNSE_BSP_sensor_i2c1, (uint16_t)(address << 1),
-                                           (uint8_t *)data, count, SENSOR_I2C1_TIMOUT);
+    int8_t r =HAL_I2C_Master_Transmit(s->bus, (uint16_t)(s->address << 1),
+                                      (uint8_t *)data, count, s->timeout);
+    if (r!=0) {
+        APP_PRINTF("HAL error %d\r\n",r );
+    }
+    return r;
 }
 
 /**

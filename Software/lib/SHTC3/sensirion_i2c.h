@@ -33,33 +33,22 @@
 #define SENSIRION_I2C_H
 
 #include "sensirion_common.h"
+#include "HAL.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
 /**
- * Select the current i2c bus by index.
- * All following i2c operations will be directed at that bus.
- *
- * THE IMPLEMENTATION IS OPTIONAL ON SINGLE-BUS SETUPS (all sensors on the same
- * bus)
- *
- * @param bus_idx   Bus index to select
- * @returns         0 on success, an error code otherwise
- */
-int16_t sensirion_i2c_select_bus(uint8_t bus_idx);
-
-/**
  * Initialize all hard- and software components that are needed for the I2C
  * communication.
  */
-void sensirion_i2c_init(void);
+void sensirion_i2c_init(sensirion_i2c_t *s);
 
 /**
  * Release all resources initialized by sensirion_i2c_init().
  */
-void sensirion_i2c_release(void);
+void sensirion_i2c_release(sensirion_i2c_t *s);
 
 /**
  * Execute one read transaction on the I2C bus, reading a given number of bytes.
@@ -71,7 +60,7 @@ void sensirion_i2c_release(void);
  * @param count   number of bytes to read from I2C and store in the buffer
  * @returns 0 on success, error code otherwise
  */
-int8_t sensirion_i2c_read(uint8_t address, uint8_t* data, uint16_t count);
+int8_t sensirion_i2c_read(sensirion_i2c_t *s, uint8_t* data, uint16_t count);
 
 /**
  * Execute one write transaction on the I2C bus, sending a given number of
@@ -84,7 +73,7 @@ int8_t sensirion_i2c_read(uint8_t address, uint8_t* data, uint16_t count);
  * @param count   number of bytes to read from the buffer and send over I2C
  * @returns 0 on success, error code otherwise
  */
-int8_t sensirion_i2c_write(uint8_t address, const uint8_t* data,
+int8_t sensirion_i2c_write(sensirion_i2c_t *s, const uint8_t* data,
                            uint16_t count);
 
 /**

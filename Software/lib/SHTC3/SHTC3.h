@@ -53,6 +53,19 @@ extern "C" {
 #define SHTC3_STATUS_UNKNOWN_DEVICE (-3)
 #define SHTC3_MEASUREMENT_DURATION_USEC 14400
 
+typedef struct {
+    sensirion_i2c_t s_i2c;
+    uint16_t SHTC3_cmd_measure;
+    uint32_t serial;
+} SHTC3_t;
+
+/**
+ * Initialise SHTC3
+ *
+ * @return 0 if successful
+ */
+int SHTC3_init(SHTC3_t *shtc, HAL_I2C_bus_t bus, unsigned i2c_timeout);
+
 /**
  * Detects if a sensor is connected by reading out the ID register.
  * If the sensor does not answer or if the answer is not the expected value,
@@ -60,7 +73,7 @@ extern "C" {
  *
  * @return 0 if a sensor was detected
  */
-int16_t SHTC3_probe(void);
+int16_t SHTC3_probe(SHTC3_t *shtc);
 
 /**
  * Starts a measurement and then reads out the results. This function blocks
@@ -75,7 +88,7 @@ int16_t SHTC3_probe(void);
  * measurement
  * @return              0 if the command was successful, else an error code.
  */
-int16_t SHTC3_measure_blocking_read(int32_t *temperature, int32_t *humidity);
+int16_t SHTC3_measure_blocking_read(SHTC3_t *shtc, int32_t *temperature, int32_t *humidity);
 
 /**
  * Starts a measurement in high precision mode. Use SHTC3_read() to read out the
@@ -84,7 +97,7 @@ int16_t SHTC3_measure_blocking_read(int32_t *temperature, int32_t *humidity);
  *
  * @return     0 if the command was successful, else an error code.
  */
-int16_t SHTC3_measure(void);
+int16_t SHTC3_measure(SHTC3_t *shtc);
 
 /**
  * Reads out the results of a measurement that was previously started by
@@ -99,7 +112,7 @@ int16_t SHTC3_measure(void);
  * measurement
  * @return              0 if the command was successful, else an error code.
  */
-int16_t SHTC3_read(int32_t *temperature, int32_t *humidity);
+int16_t SHTC3_read(SHTC3_t *shtc, int32_t *temperature, int32_t *humidity);
 
 /**
  * Send the sensor to sleep, if supported.
@@ -126,7 +139,7 @@ int16_t SHTC3_read(int32_t *temperature, int32_t *humidity);
  *
  * @return  0 if the command was successful, else an error code.
  */
-int16_t SHTC3_sleep(void);
+int16_t SHTC3_sleep(SHTC3_t *shtc);
 
 /**
  * Wake the sensor from sleep
@@ -153,14 +166,14 @@ int16_t SHTC3_sleep(void);
  *
  * @return  0 if the command was successful, else an error code.
  */
-int16_t SHTC3_wake_up(void);
+int16_t SHTC3_wake_up(SHTC3_t *shtc);
 
 /**
  * Enable or disable the SHT's low power mode
  *
  * @param enable_low_power_mode 1 to enable low power mode, 0 to disable
  */
-void SHTC3_enable_low_power_mode(uint8_t enable_low_power_mode);
+void SHTC3_enable_low_power_mode(SHTC3_t *shtc, uint8_t enable_low_power_mode);
 
 /**
  * Read out the serial number
@@ -168,21 +181,23 @@ void SHTC3_enable_low_power_mode(uint8_t enable_low_power_mode);
  * @param serial    the address for the result of the serial number
  * @return          0 if the command was successful, else an error code.
  */
-int16_t SHTC3_read_serial(uint32_t *serial);
+int16_t SHTC3_read_serial(SHTC3_t *shtc, uint32_t *serial);
 
 /**
  * Return the driver version
  *
  * @return Driver version string
  */
-const char *SHTC3_get_driver_version(void);
+const char *SHTC3_get_driver_version(SHTC3_t *shtc);
 
 /**
  * Returns the configured SHT address.
  *
  * @return The configured i2c address
  */
-uint8_t SHTC3_get_configured_address(void);
+uint8_t SHTC3_get_configured_address(SHTC3_t *shtc);
+
+uint32_t SHTC3_get_probed_serial(SHTC3_t *shtc);
 
 #ifdef __cplusplus
 }
