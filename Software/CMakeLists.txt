@@ -34,19 +34,26 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 #-------------------
 enable_language(C ASM)
 project(${TARGET_APP})
-set (APP_BUILD_DIR app/${TARGET_APP})
-set (APP_LIST
-"app_template"
-"basic"
-"basic_lorawan"
-"basic_bootloader"
-"basic_freertos"
-"freefall_lorawan"
-"freertos_lorawan"
-"secure_element_lorawan"
-"basic_azurertos"
-"sensors_lorawan"
-"basic_fuota")
+
+if (NOT APP_BUILD_DIR)
+    set (APP_BUILD_DIR app/${TARGET_APP})
+else()
+    message(WARNING "[WARN] Using custom target app ${APP_BUILD_DIR}")
+endif()
+if (NOT APP_LIST)
+    set (APP_LIST
+    "app_template"
+    "basic"
+    "basic_lorawan"
+    "basic_bootloader"
+    "basic_freertos"
+    "freefall_lorawan"
+    "freertos_lorawan"
+    "secure_element_lorawan"
+    "basic_azurertos"
+    "sensors_lorawan"
+    "basic_fuota")
+endif()
 #-------------------
 # MCU Setup
 #-------------------
