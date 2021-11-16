@@ -190,8 +190,9 @@ extern "C"
 
 /*!
  * Second reception window channel datarate definition.
+ * This has been modified for TTN. To be confirmed.
  */
-#define EU868_RX_WND_2_DR                           DR_0
+#define EU868_RX_WND_2_DR                           DR_0 /* TBD! */
 
 /*
  * CLASS B

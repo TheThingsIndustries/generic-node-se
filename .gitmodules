@@ -10,3 +10,4 @@
 [submodule "Software/mais"]
 	path = Software/mais
 	url = git@gitlab.com:lab-initiatives/mais.git
+        branch = master
