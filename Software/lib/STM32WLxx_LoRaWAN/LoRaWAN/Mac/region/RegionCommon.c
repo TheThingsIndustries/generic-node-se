@@ -556,7 +556,8 @@ LoRaMacStatus_t RegionCommonIdentifyChannels( RegionCommonIdentifyChannelsParam_
 
 void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot, uint32_t frequency, int8_t dr)
 {
-    const char *slotStrings[] = { "1", "2", "C", "Multi_C", "P", "Multi_P" };
+    /* This can be unused if there is no logging */
+    const char *slotStrings[] __attribute__((unused)) = { "1", "2", "C", "Multi_C", "P", "Multi_P" };
 
     if ( rxSlot < RX_SLOT_NONE )
     {
