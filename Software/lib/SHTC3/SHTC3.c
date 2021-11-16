@@ -79,7 +79,9 @@ int16_t SHTC3_sleep(SHTC3_t *shtc) {
 }
 
 int16_t SHTC3_wake_up(SHTC3_t *shtc) {
-    return sensirion_i2c_write_cmd(&shtc->s_i2c, SHTC3_CMD_WAKEUP);
+    int16_t r = sensirion_i2c_write_cmd(&shtc->s_i2c, SHTC3_CMD_WAKEUP);
+    sensirion_sleep_usec(120);
+    return r;
 }
 
 int16_t SHTC3_measure_blocking_read(SHTC3_t *shtc, int32_t *temperature, int32_t *humidity) {
