@@ -220,6 +220,7 @@ _vectors:
 *
 *******************************************************************************/
 
+#ifndef HAVE_LTO
 	.weak	NMI_Handler
 	.thumb_set NMI_Handler,Default_Handler
 
@@ -434,5 +435,6 @@ _vectors:
 	.thumb_set DMAMUX1_OVR_IRQHandler,Default_Handler
 
 	.weak	SystemInit
+#endif
 
 /************************ (C) COPYRIGHT STMicroelectonics *****END OF FILE****/
