@@ -98,10 +98,5 @@ int8_t sensirion_i2c_write(sensirion_i2c_t *s, const uint8_t *data,
  */
 void sensirion_sleep_usec(uint32_t useconds)
 {
-    uint32_t msec = useconds / 1000;
-    if (useconds % 1000 > 0)
-    {
-        msec++;
-    }
-    HAL_Delay(msec);
+    HAL_delay_us(useconds);
 }
