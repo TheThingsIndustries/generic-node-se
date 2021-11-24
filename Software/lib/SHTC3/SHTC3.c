@@ -52,6 +52,7 @@
 #define SHTC3_CMD_MEASURE_LPM 0x609C
 #endif /* USE_SENSIRION_CLOCK_STRETCHING */
 static const uint16_t SHTC3_CMD_DURATION_USEC = 1000;
+static const unsigned SHTC3_WAKEUP_TIME_USEC = 120;
 
 static const uint16_t SHTC3_CMD_SLEEP = 0xB098;
 static const uint16_t SHTC3_CMD_WAKEUP = 0x3517;
@@ -80,7 +81,7 @@ int16_t SHTC3_sleep(SHTC3_t *shtc) {
 
 int16_t SHTC3_wake_up(SHTC3_t *shtc) {
     int16_t r = sensirion_i2c_write_cmd(&shtc->s_i2c, SHTC3_CMD_WAKEUP);
-    sensirion_sleep_usec(120);
+    sensirion_sleep_usec(SHTC3_WAKEUP_TIME_USEC);
     return r;
 }
 
