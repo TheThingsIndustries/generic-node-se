@@ -1,0 +1,125 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ANT_M620720
+D Antennas Ceramic Chip ANTENNA ISM Freq: 868 915MHz
+F http://www.mouser.com/datasheet/2/40/AVX-E_M620720-1480138.pdf
+$ENDCMP
+#
+$CMP ANT_METAL_1002427
+D 868, 915 MHz Antenna
+K Antenna
+F http://datasheets.avx.com/ethertronics/AVX-E_1002427.pdf
+$ENDCMP
+#
+$CMP Battery_Cell+
+D Single-cell battery
+K battery cell
+F ~
+$ENDCMP
+#
+$CMP Battery_Cell-
+D Single-cell battery
+K battery cell
+F ~
+$ENDCMP
+#
+$CMP FM-B2020RGBA
+D RGB LED, red/green/blue/anode
+K LED RGB diode
+F ~
+$ENDCMP
+#
+$CMP LD39130SPUR
+D LDO Voltage Regulators Linear Voltage Regulators & Vref
+F https://componentsearchengine.com/Datasheets/1/LD39130SPUR.pdf
+$ENDCMP
+#
+$CMP LED_RGB
+D RGB LED, 6 pin package
+K LED RGB diode
+F ~
+$ENDCMP
+#
+$CMP LIS2DH12
+D 3-Axis Accelerometer, 2/4/8/16g range, I2C/SPI interface
+K 3-axis accelerometer spi mems
+F https://www.st.com/resource/en/datasheet/lis2dh12.pdf
+$ENDCMP
+#
+$CMP MX25R1635
+D SOP8 150/200mil
+K Flash,Serial
+$ENDCMP
+#
+$CMP MX25R8035
+D SOP8 150/200mil
+K Flash,Serial
+$ENDCMP
+#
+$CMP RF_Shield_One_Piece_No_Pad
+D One-piece EMI RF shielding cabinet
+K RF EMI shielding can
+F ~
+$ENDCMP
+#
+$CMP RP605Zx
+D Ultra-low power DC/DC converter with a Battery Monitor (BM) 300mA
+K buck-boost
+F Texas Instruments
+$ENDCMP
+#
+$CMP STM32WL55JCI7
+D Ultra-low-power, Dual-Core Arm® Cortex®-M4 and M0+ @48 MHz with 256 Kbytes of Flash memory, 64 Kbytes of SRAM. LoRa®, (G)FSK, (G)MSK, BPSK modulations. AES 256-bit
+K LoRa, LoRaWAN, STM32
+F https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf
+$ENDCMP
+#
+$CMP STM32WLE5JC
+D Ultra-low-power Arm® Cortex®-M4 @48 MHz with 256 Kbytes of Flash memory, 64 Kbytes of SRAM. LoRa®, (G)FSK, (G)MSK, BPSK modulations. AES 256-bit
+K LoRa, LoRaWAN, STM32
+F https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf
+$ENDCMP
+#
+$CMP STM32WLxx_QFN48
+D Ultra-low-power, Dual-Core Arm® Cortex®-M4 and M0+ @48 MHz with 256 Kbytes of Flash memory, 64 Kbytes of SRAM. LoRa®, (G)FSK, (G)MSK, BPSK modulations. AES 256-bit
+K LoRa, LoRaWAN, STM32
+F https://www.st.com/resource/en/datasheet/stm32wle5jc.pdf
+$ENDCMP
+#
+$CMP TCXO-xxxMHz
+D 3.3V CMOS SMD Crystal Clock Oscillator, Abracon
+K 3.3V CMOS SMD Crystal Clock Oscillator
+F http://www.abracon.com/Oscillators/ASV.pdf
+$ENDCMP
+#
+$CMP TPS62840
+D 750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
+K step-down dc-dc buck regulator ultra-low operating quiescent
+F https://www.ti.com/lit/gpn/TPS62840
+$ENDCMP
+#
+$CMP TPS62840DLC
+D 1.8 V to 3.3 V in 100-mV steps - 750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
+K step-down dc-dc buck regulator ultra-low operating quiescent
+F https://www.ti.com/lit/gpn/TPS62840
+$ENDCMP
+#
+$CMP TPS62841DLC
+D 0.8 V to 1.55 V in 50mV steps -  750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
+K step-down dc-dc buck regulator
+F https://www.ti.com/lit/gpn/TPS62840
+$ENDCMP
+#
+$CMP TPS62849DLC
+D 3.4-V fixed output voltage - 750mA Step-Down Converter with DCS-Control, adjustable output, 60 nA ultra-low operating quiescent 1.8-6.5V input voltage, SON-8
+K step-down dc-dc buck regulator
+F https://www.ti.com/lit/gpn/TPS62840
+$ENDCMP
+#
+$CMP TS3A5223RSWR
+D Dual SPDT 0.45Ω Bidirectional Analog Switch, 10-UQFN
+K switch analog SPDT
+F https://www.ti.com/lit/ds/symlink/ts3a5223.pdf
+$ENDCMP
+#
+#End Doc Library

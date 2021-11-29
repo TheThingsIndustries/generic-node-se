@@ -1,0 +1,9 @@
+[submodule "Software/lib/cryptoauthlib"]
+	path = Software/lib/cryptoauthlib
+	url = https://github.com/MicrochipTech/cryptoauthlib.git
+[submodule "Software/lib/FreeRTOS-Kernel"]
+	path = Software/lib/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "Software/lib/threadx"]
+	path = Software/lib/threadx
+	url = https://github.com/azure-rtos/threadx

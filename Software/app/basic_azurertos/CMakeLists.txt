@@ -1,0 +1,51 @@
+#-------------------
+# Main elf
+#-------------------
+file(GLOB MAIN_SRC
+    "${PROJECT_SOURCE_DIR}/app/app_common/*.c"
+    "${PROJECT_SOURCE_DIR}/app/basic_azurertos/*.c"
+    "${PROJECT_SOURCE_DIR}/target/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/threadx/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/threadx/*.S"
+    "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/threadx/common/src/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/threadx/ports/cortex_m4/gnu/src/*.S"
+    )
+set(SOURCES
+    ${MAIN_SRC}
+    ${PROJECT_SOURCE_DIR}/${STARTUP_FILE}
+    ${PROJECT_SOURCE_DIR}/${SYSTEM_FILE}
+    )
+add_executable(${PROJECT_NAME}.elf
+    ${SOURCES}
+    )
+target_include_directories(${PROJECT_NAME}.elf
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/app/app_common
+    ${PROJECT_SOURCE_DIR}/app/basic_azurertos
+    ${PROJECT_SOURCE_DIR}/app/basic_azurertos/conf
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/threadx
+    ${PROJECT_SOURCE_DIR}/lib/SHTC3
+    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
+    ${PROJECT_SOURCE_DIR}/lib/threadx/common/inc
+    ${PROJECT_SOURCE_DIR}/lib/threadx/ports/cortex_m4/gnu/inc
+    )
+target_link_libraries(${PROJECT_NAME}.elf
+    PUBLIC
+    hal
+    )

@@ -1,0 +1,66 @@
+#-------------------
+# Main elf
+#-------------------
+file(GLOB MAIN_SRC
+    "${PROJECT_SOURCE_DIR}/app/app_common/*.c"
+    "${PROJECT_SOURCE_DIR}/app/basic/*.c"
+    "${PROJECT_SOURCE_DIR}/target/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_BSP/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_HAL/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/SPIFFS/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/SHTC3/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/MX25R1635/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/LIS2DH12/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/BUZZER/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/atecc608a-tnglora-se-hal.c"
+    "${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA/tnglora_read_helper.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/hashes/*.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal/atca_hal.c"
+    "${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/host/*.c"
+    )
+set(SOURCES
+    ${MAIN_SRC}
+    ${PROJECT_SOURCE_DIR}/${STARTUP_FILE}
+    ${PROJECT_SOURCE_DIR}/${SYSTEM_FILE}
+    )
+add_executable(${PROJECT_NAME}.elf
+    ${SOURCES}
+    )
+target_include_directories(${PROJECT_NAME}.elf
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/target
+    ${PROJECT_SOURCE_DIR}/app
+    ${PROJECT_SOURCE_DIR}/app/app_common
+    ${PROJECT_SOURCE_DIR}/app/basic
+    ${PROJECT_SOURCE_DIR}/app/basic/conf
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_BSP
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_HAL
+    ${PROJECT_SOURCE_DIR}/lib/SPIFFS
+    ${PROJECT_SOURCE_DIR}/lib/Utilities
+    ${PROJECT_SOURCE_DIR}/lib/Utilities/baremetal
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/adv_tracer
+    ${PROJECT_SOURCE_DIR}/lib/GNSE_TRACER/tiny_printf
+    ${PROJECT_SOURCE_DIR}/lib/SHTC3
+    ${PROJECT_SOURCE_DIR}/lib/MX25R1635
+    ${PROJECT_SOURCE_DIR}/lib/LIS2DH12
+    ${PROJECT_SOURCE_DIR}/lib/BUZZER
+    ${PROJECT_SOURCE_DIR}/lib/ATECC608A-TNGLORA
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/calib
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/crypto/hashes
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/hal
+    ${PROJECT_SOURCE_DIR}/lib/cryptoauthlib/lib/host
+    )
+target_link_libraries(${PROJECT_NAME}.elf
+    PUBLIC
+    hal
+    )
