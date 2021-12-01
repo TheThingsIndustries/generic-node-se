@@ -62,9 +62,13 @@ set(MCU_DIR target)
 set(MCU_SPEC  cortex-m4)
 set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
 set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
-set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
+if (NOT LINKER_SCRIPT_MEM)
+	set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
+endif()
 # Adjust stm32wl55xx_flash.ld to app.ld or bootloader.ld when using a bootloader
-set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
+if (NOT LINKER_SCRIPT)
+	set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
+endif()
 #-------------------
 # HAL Setup
 #-------------------
