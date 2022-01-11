@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name node-lib-v1)(type Legacy)(uri ${KIPRJMOD}/../lib/node-lib.lib)(options "")(descr ""))
+  (lib (name "node-lib-v1")(type "KiCad")(uri "${KIPRJMOD}/../libs/node-lib-v1.kicad_sym")(options "")(descr ""))
+  (lib (name "pcb-stm32wl-rescue")(type "KiCad")(uri "${KIPRJMOD}/pcb-stm32wl-rescue.kicad_sym")(options "")(descr ""))
 )
