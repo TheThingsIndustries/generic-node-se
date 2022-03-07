@@ -13,9 +13,10 @@
 # Cmake Setup
 #-------------------
 cmake_minimum_required(VERSION 3.16.1)
-
+if (NOT HOSTMODE)
 if(NOT CMAKE_TOOLCHAIN_FILE)
     message(FATAL_ERROR "[ERRR] CMAKE_TOOLCHAIN_FILE not specified")
+endif()
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -57,40 +58,69 @@ endif()
 #-------------------
 # MCU Setup
 #-------------------
+if (NOT HOSTMODE)
+
 set(MCU STM32WL55xx)
 set(MCU_DIR target)
 set(MCU_SPEC  cortex-m4)
 set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
-set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
+
 if (NOT LINKER_SCRIPT_MEM)
 	set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
 endif()
+
 # Adjust stm32wl55xx_flash.ld to app.ld or bootloader.ld when using a bootloader
 if (NOT LINKER_SCRIPT)
 	set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
 endif()
+set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
+
+else()
+# Host mode
+
+if (NOT MCU_DIR)
+	set(MCU_DIR hostmode/target)
+endif()
+
+set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
+
+set(LORAWAN_DIR ${MCU_DIR}/../lib/STM32WLxx_LoRaWAN)
+
+endif()
+
+
 #-------------------
 # HAL Setup
 #-------------------
-set(HAL_DIR target/stm32wlxx_hal_driver)
+if (NOT HAL_DIR)
+	set(HAL_DIR ${MCU_DIR}/stm32wlxx_hal_driver)
+endif()
 #-------------------
 # LoRaWAN Setup
 #-------------------
-set(LORAWAN_DIR lib/STM32WLxx_LoRaWAN)
+if (NOT LORAWAN_DIR)
+	set(LORAWAN_DIR lib/STM32WLxx_LoRaWAN)
+endif()
 #-------------------
 # CMSIS Setup
 #-------------------
 # Set the path to the CMSIS folder
-set(CMSIS_DIR target/CMSIS)
+if (NOT CMSIS_DIR)
+	set(CMSIS_DIR ${MCU_DIR}/CMSIS)
+endif()
+
+
 #-------------------
 # General Flags
 #-------------------
+if (NOT OBJECT_GEN_FLAGS)
 set(OBJECT_GEN_FLAGS " \
 -fno-builtin \
 -Wall \
 -ffunction-sections -fdata-sections \
 -fomit-frame-pointer \
 " CACHE INTERNAL "Common flags for C/CXX/ASM/Linker")
+endif()
 #-------------------
 # CFLAGS
 #-------------------
@@ -137,6 +167,7 @@ endif()
 #-------------------
 # General Flags for cross
 #-------------------
+if (NOT HOSTMODE)
 string(APPEND OBJECT_GEN_FLAGS " \
 -mcpu=${MCU_SPEC} \
 -mthumb \
@@ -144,10 +175,17 @@ string(APPEND OBJECT_GEN_FLAGS " \
 -mabi=aapcs \
 ${FLOAT_SPEC} \
 ")
+endif()
 #-------------------
 # CFLAGS for cross
 #-------------------
 string(APPEND CMAKE_C_FLAGS " \
+${OBJECT_GEN_FLAGS} \
+")
+#-------------------
+# CXXFLAGS for cross
+#-------------------
+string(APPEND CMAKE_CXX_FLAGS " \
 ${OBJECT_GEN_FLAGS} \
 ")
 #-------------------
@@ -162,6 +200,9 @@ ${OBJECT_GEN_FLAGS} \
 string(APPEND CMAKE_EXE_LINKER_FLAGS " \
 ${OBJECT_GEN_FLAGS} \
 ")
+
+if (NOT HOSTMODE)
+
 find_file(LINKER_SCRIPT_PATH
 NAMES "${LINKER_SCRIPT}"
 PATHS
@@ -184,17 +225,23 @@ message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
 string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
 endif()
 
+endif()
+
 if("${SEMIHOSTING}" STREQUAL "1")
 string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
 else()
+if (NOT HOSTMODE)
 string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
+else()
+string(APPEND CMAKE_EXE_LINKER_FLAGS "")
+endif()
 endif()
 
 #-------------------
 # Build target application
 #-------------------
 if(TARGET_APP IN_LIST APP_LIST)
-    add_subdirectory(target)
+    add_subdirectory(${MCU_DIR})
     add_subdirectory(${APP_BUILD_DIR})
     target_compile_definitions(${PROJECT_NAME}.elf
     PUBLIC
@@ -202,6 +249,7 @@ if(TARGET_APP IN_LIST APP_LIST)
     SEMIHOSTING=${SEMIHOSTING}
     -DGNSE_APP_NAME="${TARGET_APP}"
     )
+    if (NOT HOSTMODE)
     # Create output in hex and binary format
     create_hex_output(${PROJECT_NAME} ${APP_BUILD_DIR})
     create_bin_output(${PROJECT_NAME} ${APP_BUILD_DIR})
@@ -211,6 +259,7 @@ if(TARGET_APP IN_LIST APP_LIST)
     "${APP_BUILD_DIR}/${PROJECT_NAME}.bin"
     "${APP_BUILD_DIR}/${PROJECT_NAME}.hex"
     )
+    endif()
 else()
     message(FATAL_ERROR "Given TARGET_APP unknown")
 endif()
