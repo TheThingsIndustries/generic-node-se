@@ -34,13 +34,9 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 # Project Setup
 #-------------------
 enable_language(C ASM)
+
 project(${TARGET_APP})
 
-if (NOT APP_BUILD_DIR)
-    set (APP_BUILD_DIR app/${TARGET_APP})
-else()
-    message(WARNING "[WARN] Using custom target app ${APP_BUILD_DIR}")
-endif()
 if (NOT APP_LIST)
     set (APP_LIST
     "app_template"
@@ -78,9 +74,19 @@ set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
 else()
 # Host mode
 
+set(MCU host)
+
 if (NOT MCU_DIR)
 	set(MCU_DIR hostmode/target)
 endif()
+
+if (NOT APP_BUILD_DIR)
+    set (APP_BUILD_DIR app/${TARGET_APP})
+else()
+    message(WARNING "[WARN] Using custom target app ${APP_BUILD_DIR}")
+endif()
+
+
 
 set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
 
@@ -173,6 +179,7 @@ string(APPEND OBJECT_GEN_FLAGS " \
 -mthumb \
 -mthumb-interwork \
 -mabi=aapcs \
+-fno-math-errno \
 ${FLOAT_SPEC} \
 ")
 endif()
@@ -231,11 +238,14 @@ if("${SEMIHOSTING}" STREQUAL "1")
 string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
 else()
 if (NOT HOSTMODE)
-string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
-else()
-string(APPEND CMAKE_EXE_LINKER_FLAGS "")
+ string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
 endif()
 endif()
+
+if (HOSTMODE)
+    set(EXTRA_LIBRARIES pthread intrhandler)
+endif()
+
 
 #-------------------
 # Build target application
