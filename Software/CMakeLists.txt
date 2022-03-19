@@ -74,7 +74,11 @@ set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
 else()
 # Host mode
 
-set(MCU host)
+if (NOT HOST_ARCH)
+    message(FATAL_ERROR "[ERRR] HOST_ARCH not specified")
+endif()
+
+set(MCU ${HOST_ARCH})
 
 if (NOT MCU_DIR)
 	set(MCU_DIR hostmode/target)
