@@ -145,11 +145,19 @@ set(CMAKE_ASM_FLAGS " \
 #-------------------
 # LFLAGS for cross
 #-------------------
+if (NOT HOSTMODE)
 set(CMAKE_EXE_LINKER_FLAGS " \
 -Wl,-Map=${PROJECT_NAME}.map \
 -Wl,--print-memory-usage \
 -Wl,--gc-sections \
 " CACHE INTERNAL "Linker options")
+elseif(APPLE)
+set(CMAKE_EXE_LINKER_FLAGS " \
+-Wl,-map,${PROJECT_NAME}.map \
+-fmemory-profile \
+-Wl,-dead_strip \
+" CACHE INTERNAL "Linker options")
+endif()
 #------------------
 # Debug Flags
 #------------------
