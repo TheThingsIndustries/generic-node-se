@@ -153,9 +153,11 @@ set(CMAKE_EXE_LINKER_FLAGS " \
 " CACHE INTERNAL "Linker options")
 elseif(APPLE)
 set(CMAKE_EXE_LINKER_FLAGS " \
--Wl,-map,${PROJECT_NAME}.map \
--fmemory-profile \
 -Wl,-dead_strip \
+" CACHE INTERNAL "Linker options")
+else()
+set(CMAKE_EXE_LINKER_FLAGS " \
+-Wl,--gc-sections \
 " CACHE INTERNAL "Linker options")
 endif()
 #------------------
