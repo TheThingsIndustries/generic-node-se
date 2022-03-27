@@ -13,10 +13,26 @@
 # Cmake Setup
 #-------------------
 cmake_minimum_required(VERSION 3.16.1)
-if (NOT HOSTMODE)
-if(NOT CMAKE_TOOLCHAIN_FILE)
-    message(FATAL_ERROR "[ERRR] CMAKE_TOOLCHAIN_FILE not specified")
+
+option(UAIR_HOST_MODE "Enables host mode support, in which the lib targets the host architecture.")
+option(UAIR_UNIT_TESTS "Enables support for unit-tests (assumes UAIR_HOST_MODE)." OFF)
+
+if (UAIR_HOST_MODE)
+    if (NOT (UAIR_HOST_MODE MATCHES "^(x86_64|i686)$"))
+        message(FATAL_ERROR "[ERRR] Invalid value for UAIR_HOST_MODE (valid values are 'x86_64' or 'i686').")
+    endif()
 endif()
+
+IF (UAIR_UNIT_TESTS AND NOT UAIR_HOST_MODE)
+    message(FATAL_ERROR "[ERRR] To enable unit-tests (UAIR_UNIT_TESTS) you must also enable host mode (UAIR_HOST_MODE).")
+endif()
+
+if (NOT UAIR_HOST_MODE)
+    if(NOT CMAKE_TOOLCHAIN_FILE)
+        message(FATAL_ERROR "[ERRR] CMAKE_TOOLCHAIN_FILE not specified")
+    endif()
+else()
+    message(STATUS "Compiling for hosts architecture: ${UAIR_HOST_MODE}")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -30,12 +46,32 @@ if(NOT TARGET_APP)
 endif()
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+
 #-------------------
 # Project Setup
 #-------------------
-enable_language(C ASM)
+enable_language(C CXX ASM)
 
 project(${TARGET_APP})
+
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+if (NOT UAIR_HOST_MODE)
+    set(LINKER_SCRIPT "mais/uair/Software/target/stm32wl55xx_uair_flash.ld")
+    set(OBJECT_GEN_FLAGS "-Werror -Wall -ffunction-sections -fdata-sections -fno-builtin -fomit-frame-pointer")
+else()
+    set(LINKER_SCRIPT "")
+    set(MCU_DIR "mais/uair/hostmode/target")
+    set(OBJECT_GEN_FLAGS "-DUAIR_HOST_MODE -fPIE -DPIE -Werror -Wall -ffunction-sections -fdata-sections -fno-builtin -fomit-frame-pointer")
+
+    if (UAIR_HOST_MODE STREQUAL "x86_64")
+        set(HOST_ARCH "x86_64")
+        string(APPEND OBJECT_GEN_FLAGS " -m64")
+    elseif (UAIR_HOST_MODE STREQUAL "i686")
+        set(HOST_ARCH "i686")
+        string(APPEND OBJECT_GEN_FLAGS " -m32")
+    endif()
+endif()
 
 if (NOT APP_LIST)
     set (APP_LIST
@@ -51,50 +87,49 @@ if (NOT APP_LIST)
     "sensors_lorawan"
     "basic_fuota")
 endif()
+
 #-------------------
 # MCU Setup
 #-------------------
-if (NOT HOSTMODE)
+if (NOT UAIR_HOST_MODE)
 
-set(MCU STM32WL55xx)
-set(MCU_DIR target)
-set(MCU_SPEC  cortex-m4)
-set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
+    set(MCU STM32WL55xx)
+    set(MCU_DIR target)
+    set(MCU_SPEC  cortex-m4)
+    set(STARTUP_FILE ${MCU_DIR}/startup_stm32wl55xx.s)
 
-if (NOT LINKER_SCRIPT_MEM)
-	set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
-endif()
+    if (NOT LINKER_SCRIPT_MEM)
+    	set(LINKER_SCRIPT_MEM ${MCU_DIR}/memory_map.ld)
+    endif()
 
-# Adjust stm32wl55xx_flash.ld to app.ld or bootloader.ld when using a bootloader
-if (NOT LINKER_SCRIPT)
-	set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
-endif()
-set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
+    # Adjust stm32wl55xx_flash.ld to app.ld or bootloader.ld when using a bootloader
+    if (NOT LINKER_SCRIPT)
+    	set(LINKER_SCRIPT ${MCU_DIR}/stm32wl55xx_flash.ld)
+    endif()
+    set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
 
 else()
-# Host mode
+    # Host mode
 
-if (NOT HOST_ARCH)
-    message(FATAL_ERROR "[ERRR] HOST_ARCH not specified")
-endif()
+    if (NOT HOST_ARCH)
+        message(FATAL_ERROR "[ERRR] HOST_ARCH not specified")
+    endif()
 
-set(MCU ${HOST_ARCH})
+    set(MCU ${HOST_ARCH})
 
-if (NOT MCU_DIR)
-	set(MCU_DIR hostmode/target)
-endif()
+    if (NOT MCU_DIR)
+    	set(MCU_DIR hostmode/target)
+    endif()
 
-if (NOT APP_BUILD_DIR)
-    set (APP_BUILD_DIR app/${TARGET_APP})
-else()
-    message(WARNING "[WARN] Using custom target app ${APP_BUILD_DIR}")
-endif()
+    if (NOT APP_BUILD_DIR)
+        set (APP_BUILD_DIR app/${TARGET_APP})
+    else()
+        message(WARNING "[WARN] Using custom target app ${APP_BUILD_DIR}")
+    endif()
 
+    set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
 
-
-set(SYSTEM_FILE  ${MCU_DIR}/system_stm32wlxx.c)
-
-set(LORAWAN_DIR ${MCU_DIR}/../lib/STM32WLxx_LoRaWAN)
+    set(LORAWAN_DIR ${MCU_DIR}/../lib/STM32WLxx_LoRaWAN)
 
 endif()
 
@@ -124,13 +159,14 @@ endif()
 # General Flags
 #-------------------
 if (NOT OBJECT_GEN_FLAGS)
-set(OBJECT_GEN_FLAGS " \
--fno-builtin \
--Wall \
--ffunction-sections -fdata-sections \
--fomit-frame-pointer \
-" CACHE INTERNAL "Common flags for C/CXX/ASM/Linker")
+    set(OBJECT_GEN_FLAGS " \
+    -fno-builtin \
+    -Wall \
+    -ffunction-sections -fdata-sections \
+    -fomit-frame-pointer \
+    " CACHE INTERNAL "Common flags for C/CXX/ASM/Linker")
 endif()
+
 #-------------------
 # CFLAGS
 #-------------------
@@ -187,15 +223,15 @@ endif()
 #-------------------
 # General Flags for cross
 #-------------------
-if (NOT HOSTMODE)
-string(APPEND OBJECT_GEN_FLAGS " \
--mcpu=${MCU_SPEC} \
--mthumb \
--mthumb-interwork \
--mabi=aapcs \
--fno-math-errno \
-${FLOAT_SPEC} \
-")
+if (NOT UAIR_HOST_MODE)
+    string(APPEND OBJECT_GEN_FLAGS " \
+        -mcpu=${MCU_SPEC} \
+        -mthumb \
+        -mthumb-interwork \
+        -mabi=aapcs \
+        -fno-math-errno \
+        ${FLOAT_SPEC} \
+    ")
 endif()
 #-------------------
 # CFLAGS for cross
@@ -222,44 +258,43 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS " \
 ${OBJECT_GEN_FLAGS} \
 ")
 
-if (NOT HOSTMODE)
+if (NOT UAIR_HOST_MODE)
 
-find_file(LINKER_SCRIPT_PATH
-NAMES "${LINKER_SCRIPT}"
-PATHS
-${CMAKE_CURRENT_LIST_DIR}
-)
-if(DEFINED LINKER_SCRIPT_PATH)
-message(STATUS "[INFO] Using linker file at ${LINKER_SCRIPT_PATH}")
-string(APPEND CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT_PATH} ")
-else()
-message(FATAL_ERROR "[ERRR] Could not find linker script ${LINKER_SCRIPT}")
-endif()
+    find_file(LINKER_SCRIPT_PATH
+        NAMES "${LINKER_SCRIPT}"
+        PATHS
+        ${CMAKE_CURRENT_LIST_DIR}
+    )
+    if(DEFINED LINKER_SCRIPT_PATH)
+        message(STATUS "[INFO] Using linker file at ${LINKER_SCRIPT_PATH}")
+        string(APPEND CMAKE_EXE_LINKER_FLAGS "-T${LINKER_SCRIPT_PATH} ")
+    else()
+        message(FATAL_ERROR "[ERRR] Could not find linker script ${LINKER_SCRIPT}")
+    endif()
 
-find_file(LINKER_SCRIPT_MEM_PATH
-NAMES "${LINKER_SCRIPT_MEM}"
-PATHS
-${CMAKE_CURRENT_LIST_DIR}
-)
-if(DEFINED LINKER_SCRIPT_MEM_PATH)
-message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
-string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
-endif()
+    find_file(LINKER_SCRIPT_MEM_PATH
+        NAMES "${LINKER_SCRIPT_MEM}"
+        PATHS
+        ${CMAKE_CURRENT_LIST_DIR}
+    )
+    if(DEFINED LINKER_SCRIPT_MEM_PATH)
+        message(STATUS "[INFO] Using memory map linker at ${LINKER_SCRIPT_MEM_PATH}")
+        string(APPEND CMAKE_EXE_LINKER_FLAGS "-L${PROJECT_SOURCE_DIR}/${MCU_DIR} ")
+    endif()
 
 endif()
 
 if("${SEMIHOSTING}" STREQUAL "1")
-string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
+    string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=rdimon.specs -lc -lrdimon ")
 else()
-if (NOT HOSTMODE)
- string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
-endif()
+    if (NOT UAIR_HOST_MODE)
+        string(APPEND CMAKE_EXE_LINKER_FLAGS "--specs=nosys.specs ")
+    endif()
 endif()
 
-if (HOSTMODE)
+if (UAIR_HOST_MODE)
     set(EXTRA_LIBRARIES pthread intrhandler)
 endif()
-
 
 #-------------------
 # Build target application
@@ -273,7 +308,7 @@ if(TARGET_APP IN_LIST APP_LIST)
     SEMIHOSTING=${SEMIHOSTING}
     -DGNSE_APP_NAME="${TARGET_APP}"
     )
-    if (NOT HOSTMODE)
+    if (NOT UAIR_HOST_MODE)
     # Create output in hex and binary format
     create_hex_output(${PROJECT_NAME} ${APP_BUILD_DIR})
     create_bin_output(${PROJECT_NAME} ${APP_BUILD_DIR})
