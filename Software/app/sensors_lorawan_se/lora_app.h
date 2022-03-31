@@ -40,7 +40,7 @@ extern "C" {
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_STATE                           LORAMAC_HANDLER_ADR_OFF
+#define LORAWAN_ADR_STATE                           LORAMAC_HANDLER_ADR_ON
 
 /*!
  * LoRaWAN default activation type

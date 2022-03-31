@@ -37,7 +37,7 @@ sensors_op_result_t sensors_init(void)
         APP_PPRINTF("\r\n Failed to initialize SHTC3 sensor \r\n");
         return SENSORS_OP_FAIL;
     }
-    APP_PPRINTF("\r\n Successfully intialized all sensors \r\n");
+    APP_PPRINTF("\r\nSuccessfully intialized all sensors \r\n");
     return SENSORS_OP_SUCCESS;
 }
 
@@ -51,7 +51,7 @@ sensors_op_result_t sensors_sample(sensors_t *sensor_data)
         APP_PPRINTF("\r\n Failed to read data from SHTC3 sensor, Error status: %d \r\n", status);
         return SENSORS_OP_FAIL;
     }
-    APP_PPRINTF("\r\n Successfully sampled sensors \r\n");
+    APP_PPRINTF("\r\nSuccessfully sampled sensors \r\n");
     return SENSORS_OP_SUCCESS;
 }
 

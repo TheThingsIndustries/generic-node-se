@@ -29,6 +29,8 @@
 
 static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
 
+volatile uint8_t button_press = 0; 
+
 /**
   * @brief LoRa State Machine states
   */
@@ -147,6 +149,13 @@ static UTIL_TIMER_Object_t RxLedTimer;
 void LoRaWAN_Init(void)
 {
   // User can add any indication here (LED manipulation or Buzzer)
+  GNSE_BSP_LED_Init(LED_BLUE);
+  GNSE_BSP_LED_Init(LED_RED);
+  GNSE_BSP_LED_Init(LED_GREEN);
+
+  GNSE_BSP_LED_On(LED_GREEN);
+
+  GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI); // each button press will call the HAL_GPIO_EXTI_Callback
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), UTIL_SEQ_RFU, SendTxData);
@@ -172,6 +181,9 @@ void LoRaWAN_Init(void)
   {
     GNSE_BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
   }
+
+  HAL_Delay(1000);
+  GNSE_BSP_LED_Off(LED_GREEN);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -179,9 +191,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if (GPIO_Pin == BUTTON_SW1_PIN)
   {
     /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
+    button_press = 1;
     UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
   }
 }
+
+/*
+Downlink interval settings
+0x0A - 10 seconds
+0x3C - 60 seconds
+0x258 - 10 minutes
+0xE10 - 1 hour
+*/
 
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 {
@@ -211,6 +232,13 @@ static void SendTxData(void)
   sensors_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
+  if(button_press == 1){
+      GNSE_BSP_LED_On(LED_RED);
+  }else{
+      GNSE_BSP_LED_On(LED_BLUE);
+  }
+  
+
   sensors_sample(&sensor_data);
   APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "Sensor Readings (raw): VBAT = %d,  T:%d,  H:%d \r\n", sensor_data.battery_voltage, 
     sensor_data.temperature, sensor_data.humidity );
@@ -222,12 +250,13 @@ static void SendTxData(void)
   APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "Sensor Readings (fmt): VBAT = %d,  T:%d,  H:%d \r\n", vbat_uint, temp_uint-500, humidity_uint );
 
   AppData.Port = SENSORS_PAYLOAD_APP_PORT;
-  AppData.BufferSize = 5;
+  AppData.BufferSize = 6;
   AppData.Buffer[0] = vbat_uint;
   AppData.Buffer[1] = (uint8_t)(temp_uint >> 8);
   AppData.Buffer[2] = (uint8_t)(temp_uint & 0xFF);
   AppData.Buffer[3] = (uint8_t)(humidity_uint >> 8);
   AppData.Buffer[4] = (uint8_t)(humidity_uint & 0xFF);
+  AppData.Buffer[5] = button_press; 
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
@@ -237,6 +266,13 @@ static void SendTxData(void)
   {
     APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
   }
+  
+  if(button_press == 1){
+      GNSE_BSP_LED_Off(LED_RED);
+  }else{
+      GNSE_BSP_LED_Off(LED_BLUE);
+  }
+  button_press = 0; // clear the button press state
 }
 
 static void OnTxTimerEvent(void *context)
