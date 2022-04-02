@@ -31,6 +31,11 @@ static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
 
 volatile uint8_t button_press = 0; 
 
+static int32_t temp_fallback = 0;
+static int32_t humid_fallback = 0;
+
+// static uint8_t uplink_count_test = 0;
+
 /**
   * @brief LoRa State Machine states
   */
@@ -232,16 +237,39 @@ static void SendTxData(void)
   sensors_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
+  extern int32_t temp_fallback;
+  extern int32_t humid_fallback;
+//   extern uint8_t uplink_count_test;
+
   if(button_press == 1){
       GNSE_BSP_LED_On(LED_RED);
   }else{
       GNSE_BSP_LED_On(LED_BLUE);
   }
   
+  sensors_op_result_t rc = sensors_sample(&sensor_data);
 
-  sensors_sample(&sensor_data);
-  APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "Sensor Readings (raw): VBAT = %d,  T:%d,  H:%d \r\n", sensor_data.battery_voltage, 
-    sensor_data.temperature, sensor_data.humidity );
+//   // Simulate sensor failure every 4th uplink to check if fallback values work
+//   if(uplink_count_test % 4 == 0)
+//   {
+//     uplink_count_test = 0;
+//     rc = SENSORS_OP_FAIL;
+//   }
+//   uplink_count_test ++;
+
+  // Use the last reading of temperature and humidity in case sensor reading failed
+  if(rc != SENSORS_OP_SUCCESS)
+  {
+    APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H,"Sensors returned SENSORS_OP_FAIL \r\n");
+    sensor_data.temperature = temp_fallback;
+    sensor_data.humidity = humid_fallback;
+  }
+
+  temp_fallback = sensor_data.temperature;
+  humid_fallback = sensor_data.humidity;
+  APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "Temp fallback now: %d, Humid fallback now: %d \r\n", temp_fallback, humid_fallback);
+  APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_H, "Sensor Readings (raw): VBAT = %d,  T:%d,  H:%d \r\n",
+          sensor_data.battery_voltage, sensor_data.temperature, sensor_data.humidity );
 
   uint8_t vbat_uint = (uint8_t)(sensor_data.battery_voltage / 100);
   uint16_t temp_uint = (uint16_t)((sensor_data.temperature / 100) + 500); // negative temp offset
