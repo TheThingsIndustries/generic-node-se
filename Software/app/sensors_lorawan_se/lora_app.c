@@ -27,7 +27,7 @@
 #include "lora_info.h"
 #include "sensors.h"
 
-static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_S * 1000;
+static uint32_t sensors_tx_dutycycle = SENSORS_TX_DUTYCYCLE_DEFAULT_M * 60000;
 
 volatile uint8_t button_press = 0; 
 

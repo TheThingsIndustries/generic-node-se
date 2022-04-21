@@ -37,14 +37,14 @@
 #define SENSORS_PAYLOAD_APP_PORT        2
 
 /*! LoRaWAN application port where sensors transmission/uplink interval can be changed (via a downlink)
- *  @note Payload signifies the amount of seconds
+ *  @note Payload signifies the amount of minutes
  * */
 #define SENSORS_DOWNLINK_CONF_PORT        1
 
-/* Default, max, and min time interval of the TX dutycycle window in seconds */
-#define SENSORS_TX_DUTYCYCLE_DEFAULT_S 60
-#define SENSORS_DUTYCYCLE_CONF_MAX_S 8640
-#define SENSORS_DUTYCYCLE_CONF_MIN_S 5
+/* Default, max, and min time interval of the TX dutycycle window in minutes */
+#define SENSORS_TX_DUTYCYCLE_DEFAULT_M 10
+#define SENSORS_DUTYCYCLE_CONF_MAX_M 8640
+#define SENSORS_DUTYCYCLE_CONF_MIN_M 1
 
 /**
   * RX LED definitions

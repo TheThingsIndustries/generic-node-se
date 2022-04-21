@@ -66,10 +66,10 @@ uint32_t sensors_downlink_conf_check(LmHandlerAppData_t *appData)
         {
             rxbuffer += appData->Buffer[i] << (8 * (appData->BufferSize - 1 - i));
         }
-        if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_S && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_S)
+        if (rxbuffer <= SENSORS_DUTYCYCLE_CONF_MAX_M && rxbuffer >= SENSORS_DUTYCYCLE_CONF_MIN_M)
         {
-          APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld seconds \r\n", rxbuffer);
-          rxbuffer *= 1000; /* Time data has to be converted from s to ms */
+          APP_LOG(ADV_TRACER_TS_OFF, ADV_TRACER_VLEVEL_M, "\r\n RX time changed to %ld minutes \r\n", rxbuffer);
+          rxbuffer *= 60000; /* Time data has to be converted from m to ms */
           return rxbuffer;
         }
       }
