@@ -24,11 +24,11 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define GNSE_ADVANCED_TRACER_ENABLE 0
+#define GNSE_ADVANCED_TRACER_ENABLE 1
 
 /* if ON (=1) it enables the debugger plus 4 dbg pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
-#define DEBUGGER_ON       0
+#define DEBUGGER_ON       1
 
 /*!
  * LoRaWAN application port where sensors information can be retrieved by the application server

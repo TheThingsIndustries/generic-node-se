@@ -69,7 +69,7 @@ extern "C" {
 /**
   * @brief voltage of vdd tcxo.
   */
-#define TCXO_CTRL_VOLTAGE           TCXO_CTRL_1_7V
+#define TCXO_CTRL_VOLTAGE           TCXO_CTRL_3_0V
 
 #ifndef CRITICAL_SECTION_BEGIN
 /**
