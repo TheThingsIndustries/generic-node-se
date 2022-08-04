@@ -24,7 +24,7 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define GNSE_ADVANCED_TRACER_ENABLE 1
+#define GNSE_ADVANCED_TRACER_ENABLE 0
 
 /* if ON (=1) it enables the debugger plus 4 dbg pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
@@ -42,7 +42,7 @@
 #define SENSORS_DOWNLINK_CONF_PORT        1
 
 /* Default, max, and min time interval of the TX dutycycle window in seconds */
-#define SENSORS_TX_DUTYCYCLE_DEFAULT_S 10
+#define SENSORS_TX_DUTYCYCLE_DEFAULT_S 60
 #define SENSORS_DUTYCYCLE_CONF_MAX_S 8640
 #define SENSORS_DUTYCYCLE_CONF_MIN_S 5
 
@@ -57,6 +57,8 @@
 #define APPEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 #define DEVEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 #define APPKEY                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+
 
 /**
   * sequencer definitions

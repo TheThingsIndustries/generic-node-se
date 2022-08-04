@@ -46,6 +46,7 @@ set (APP_LIST
 "secure_element_lorawan"
 "basic_azurertos"
 "sensors_lorawan"
+"sensors_lorawan_se"
 "basic_fuota")
 #-------------------
 # MCU Setup
