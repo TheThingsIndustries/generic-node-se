@@ -24,11 +24,11 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define GNSE_ADVANCED_TRACER_ENABLE 1
+#define GNSE_ADVANCED_TRACER_ENABLE 0
 
 /* if ON (=1) it enables the debugger plus 4 dbg pins */
 /* if OFF (=0) the debugger is OFF (lower consumption) */
-#define DEBUGGER_ON       1
+#define DEBUGGER_ON       0
 
 /*!
  * LoRaWAN application port where sensors information can be retrieved by the application server
@@ -52,6 +52,17 @@
 #define SENSORS_LED_RX_PERIOD_MS 200
 #define SENSORS_LED_UNHANDLED_RX_PERIOD_MS 20
 #define SENSORS_LED_RX_TOGGLES 5
+
+#if !WITH_SECURE_ELEMENT
+/**
+  * Define keys here if not using the secure element
+  */
+/* LoRaWAN v1.0.2 software based OTAA activation information */
+#define APPEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define DEVEUI                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+#define APPKEY                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+#endif
 
 /**
   * sequencer definitions
