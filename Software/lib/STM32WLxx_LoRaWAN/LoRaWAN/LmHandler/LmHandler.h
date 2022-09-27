@@ -118,10 +118,6 @@ typedef struct LmHandlerParams_s
    */
   int8_t TxDatarate;
   /*!
-   * Strtup join datarate
-   */
-  int8_t JoinDatarate;
-  /*!
    * LoRaWAN ETSI duty cycle control enable/disable
    *
    * \remark Please note that ETSI mandates duty cycled transmissions. Use only for test purposes

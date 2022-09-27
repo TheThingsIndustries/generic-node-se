@@ -25,7 +25,6 @@
 #include "LIS2DH12.h"
 #include "sensors.h"
 
-static lis2dh12_int1_src_t acc_int_src;
 static stmdev_ctx_t dev_ctx;
 
 sensors_op_result_t sensors_init(void)

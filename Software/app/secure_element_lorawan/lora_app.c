@@ -16,13 +16,10 @@ static uint32_t temperature_tx_dutycycle = TEMPERATURE_TX_DUTYCYCLE_DEFAULT_S * 
 
 static void SendHeartBeatData(void);
 static void SendTemperatureData(void);
-static void SendAccelerometerData(void);
 
 static void JoinTimerEvent(void *context);
 static void HeartBeatTimerEvent(void *context);
 static void TemperatureTimerEvent(void *context);
-static void AccelerometerShakeEvent(void *context);
-static void AccelerometerFreeallEvent(void *context);
 static void BuzzerTimerEvent(void *context);
 
 static void OnTxTimerLedEvent(void *context);
@@ -58,7 +55,6 @@ static LmHandlerParams_t LmHandlerParams =
         .DefaultClass = LORAWAN_DEFAULT_CLASS,
         .AdrEnable = LORAWAN_ADR_STATE,
         .TxDatarate = LORAWAN_DEFAULT_DATA_RATE,
-        .JoinDatarate = LORAWAN_DEFAULT_JOIN_DATA_RATE,
         .PingPeriodicity = LORAWAN_DEFAULT_PING_SLOT_PERIODICITY};
 
 static UTIL_TIMER_Object_t JoinTxTimer;
@@ -171,11 +167,6 @@ static void SendHeartBeatData(void)
   {
     APP_LOG(ADV_TRACER_TS_ON, ADV_TRACER_VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
   }
-}
-
-void SendAccelerometerData(void)
-{
-  ACC_IT_Handler();
 }
 
 static void JoinTimerEvent(void *context)
