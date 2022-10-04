@@ -24,7 +24,8 @@
 #ifndef APP_CONF_H
 #define APP_CONF_H
 
-#define GNSE_TINY_TRACER_ENABLE 1
+#define GNSE_ADVANCED_TRACER_ENABLE 1
+// #define GNSE_TINY_TRACER_ENABLE 1
 #define APP_PRINT_DELAY 500U
 
 #endif /* APP_CONF_H */

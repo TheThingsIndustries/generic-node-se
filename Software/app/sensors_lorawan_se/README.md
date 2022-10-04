@@ -75,6 +75,8 @@ The device joins via OTAA using the on-board secure element and transmits the te
 
 ## Secure element usage
 
+By default the app is compiled without secure element, using keys from `conf/app_conf.h`.
+
 To compile the app with secure element support, use the `-DWITH_SECURE_ELEMENT=ON` flag
 when generating cmake configuration.
 
