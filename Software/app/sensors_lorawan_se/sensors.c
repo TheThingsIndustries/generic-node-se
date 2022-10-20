@@ -44,7 +44,13 @@ sensors_op_result_t sensors_init(void)
 sensors_op_result_t sensors_sample(sensors_t *sensor_data)
 {
     int16_t status = 0;
+
+     GNSE_BSP_BM_Enable();
+    HAL_Delay(50);
     sensor_data->battery_voltage = GNSE_BM_GetBatteryVoltage();
+    GNSE_BSP_BM_Disable();
+
+
     status = SHTC3_measure_blocking_read(&sensor_data->temperature, &sensor_data->humidity);
     if (status != SHTC3_STATUS_OK)
     {
