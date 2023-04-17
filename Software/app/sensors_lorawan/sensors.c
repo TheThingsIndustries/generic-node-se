@@ -31,7 +31,6 @@ sensors_op_result_t sensors_init(void)
         APP_PPRINTF("\r\n Failed to initialize battery monitor ADC \r\n");
         return SENSORS_OP_FAIL;
     }
-    GNSE_BSP_BM_Enable();
     if (SHTC3_probe() != SHTC3_STATUS_OK)
     {
         APP_PPRINTF("\r\n Failed to initialize SHTC3 sensor \r\n");
@@ -44,7 +43,12 @@ sensors_op_result_t sensors_init(void)
 sensors_op_result_t sensors_sample(sensors_t *sensor_data)
 {
     int16_t status = 0;
+
+    GNSE_BSP_BM_Enable();
+    HAL_Delay(50);
     sensor_data->battery_voltage = GNSE_BM_GetBatteryVoltage();
+    GNSE_BSP_BM_Disable();
+    
     status = SHTC3_measure_blocking_read(&sensor_data->temperature, &sensor_data->humidity);
     if (status != SHTC3_STATUS_OK)
     {
